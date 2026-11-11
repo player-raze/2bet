@@ -11,6 +11,8 @@ const mobileViewport = ref(false)
 const normalizedPath = computed(() => route.path.replace(/\/+$/, '') || '/')
 const cleanPath = computed(() => normalizedPath.value.replace(/^\/explore(?=\/|$)/, '') || '/')
 const isSportsPage = computed(() => /^\/sports(?:\/|$)/.test(cleanPath.value))
+const isLiveSportsPage = computed(() => /^\/sports\/live(?:\/|$)/.test(cleanPath.value))
+const isAboutUsPage = computed(() => cleanPath.value === '/about-us')
 const isCustomerServicePage = computed(() => (
   cleanPath.value === '/egames/customer-service'
   || cleanPath.value.startsWith('/egames/customer-service/')
@@ -92,6 +94,7 @@ const isMobileDevice = (): boolean => {
 }
 
 const shouldExpandRailByDefault = (): boolean => {
+  if ((isLiveSportsPage.value || isAboutUsPage.value) && !isMobileDevice()) return false
   return isAffiliatePage.value
     || isBonusesPage.value
     || isLivePlazaPage.value
@@ -181,6 +184,7 @@ const handleResize = (): void => {
   const nextMobile = window.innerWidth < 1024
   if (nextMobile !== mobileViewport.value) {
     mobileViewport.value = nextMobile
+    if (isLiveSportsPage.value || isAboutUsPage.value) railCollapsed.value = !shouldExpandRailByDefault()
     if (nextMobile) closeComments()
     else if (desktopShellKind.value === 'sports') openSportsComments()
     else closeComments()
@@ -210,6 +214,10 @@ onBeforeUnmount(() => {
     :class="{
       'site-shell--rail-collapsed': railCollapsed,
       'site-shell--sports-chat': showSportsSidebar,
+      'site-shell--sports-live': isLiveSportsPage,
+      'site-shell--about-us': isAboutUsPage,
+      'site-shell--download-app': cleanPath === '/download-app',
+      'site-shell--customer-service': cleanPath === '/egames/customer-service',
       'site-shell--desktop-reference': usesDesktopReferenceShell,
       'site-shell--desktop-content-reference': usesDesktopContentReferenceShell,
       'site-shell--bonuses': isBonusesPage,
@@ -490,6 +498,79 @@ onBeforeUnmount(() => {
     align-items: start;
     gap: 8px;
   }
+
+  .site-shell--sports-live {
+    --header-height: 84px;
+    --desktop-top-overlap: 16px;
+    --content-gutter: 16px;
+    --comment-width: min(387px, 30vw);
+  }
+
+  .site-shell--sports-live.site-shell--rail-collapsed { --sidebar-width: 60px; }
+  .site-shell--sports-live .content-layout { gap: 4px; }
+  .site-shell--sports-live .page-content { padding-right: 12px; }
+  .site-shell--sports-live :deep(.app-header-shell) {
+    --header-control-size: 30px;
+    padding: 0 12px;
+  }
+  .site-shell--sports-live :deep(.brand img) { width: 100px; }
+  .site-shell--sports-live :deep(.header-glass-button--login) { min-width: 76px; }
+  .site-shell--sports-live :deep(.header-glass-button--signup) { min-width: 92px; }
+  .site-shell--sports-live :deep(.sidebar--collapsed .rail-pill) {
+    width: 60px;
+    margin: 0;
+    padding: 4px 9px;
+    border-radius: 14px 14px 0 0;
+    background: #1c1c1c;
+    gap: 0;
+  }
+  .site-shell--sports-live :deep(.sidebar--collapsed .rail-link),
+  .site-shell--sports-live :deep(.sidebar--collapsed .rail-submenu-link) { min-height: 52px; }
+  .site-shell--sports-live :deep(.sidebar--collapsed .rail-icon),
+  .site-shell--sports-live :deep(.sidebar--collapsed .rail-submenu-icon-image) { width: 22px; height: 22px; }
+  .site-shell--sports-live :deep(.sidebar--collapsed .rail-submenu-link[href='/sports/live']) { order: 1; }
+  .site-shell--sports-live :deep(.rail-toggle) { right: -8px; height: 64px; }
+  .site-shell--sports-live :deep(.comment-panel > div) { padding-right: 12px; }
+  .site-shell--sports-live :deep(.sports-preview) { border-radius: 12px; opacity: 1; }
+  .site-shell--sports-live :deep(.sports-preview #tv-title) {
+    padding: 6px 16px;
+    font-size: 16px;
+    line-height: 32px;
+  }
+  .site-shell--sports-live :deep(.sports-preview > .relative) { border-radius: 10px; }
+
+  .site-shell--about-us {
+    --desktop-content-max-width: 1360px;
+    --header-height: 80px;
+    --desktop-top-overlap: 16px;
+    --content-gutter: 16px;
+  }
+  .site-shell--about-us.site-shell--rail-collapsed { --sidebar-width: 60px; }
+  .site-shell--about-us .page-content { padding-right: 0; }
+  .site-shell--about-us .app-header-underlay { border-radius: 0 0 16px 16px; }
+  .site-shell--about-us :deep(.app-header-shell) {
+    --header-control-size: 30px;
+    height: 60px;
+    padding: 0 12px;
+  }
+  .site-shell--about-us :deep(.brand img) { width: 100px; }
+  .site-shell--about-us :deep(.header-actions > .roulette-entry) { display: none; }
+  .site-shell--about-us :deep(.header-glass-button--login) { min-width: 76px; }
+  .site-shell--about-us :deep(.header-glass-button--signup) { min-width: 92px; }
+  .site-shell--about-us :deep(.sidebar--collapsed .rail-pill) {
+    width: 60px;
+    margin: 0;
+    padding: 4px 9px;
+    border-radius: 16px;
+    gap: 0;
+  }
+  .site-shell--about-us :deep(.sidebar--collapsed .rail-submenu) { gap: 0; }
+  .site-shell--about-us :deep(.sidebar--collapsed .rail-link),
+  .site-shell--about-us :deep(.sidebar--collapsed .rail-submenu-link) { min-height: 52px; }
+  .site-shell--about-us :deep(.sidebar--collapsed .rail-icon),
+  .site-shell--about-us :deep(.sidebar--collapsed .rail-submenu-icon-image) { width: 20px; height: 20px; }
+  .site-shell--about-us :deep(.sidebar--collapsed .rail-submenu-link[href='/sports/live']) { order: 1; }
+  .site-shell--about-us :deep(.rail-toggle) { right: -8px; height: 64px; }
 }
 
 @media (max-width: 63.99rem) {
@@ -584,6 +665,49 @@ onBeforeUnmount(() => {
     padding: 0.5rem 3px;
     background: var(--page);
   }
+
+  .site-shell--sports-live .page-content {
+    margin-left: 0;
+    padding: 1px 5px 8px;
+  }
+
+  .site-shell--sports-live :deep(.app-header-shell) {
+    --header-action-gap: 4px;
+  }
+
+  .site-shell--sports-live :deep(.brand img) { width: 88px; }
+  .site-shell--sports-live :deep(.header-glass-button--login) { min-width: 68px; }
+  .site-shell--sports-live :deep(.header-glass-button--signup) { min-width: 80px; margin-left: 0; }
+
+  .site-shell--customer-service {
+    --content-sticky-top: 0px;
+    padding-top: 0;
+  }
+
+  .site-shell--customer-service > .app-header-shell,
+  .site-shell--customer-service > .app-header-underlay,
+  .site-shell--customer-service > .app-header-occlusion-plate,
+  .site-shell--customer-service :deep(.app-footer),
+  .site-shell--customer-service :deep(.mobile-bottom-nav) {
+    display: none;
+  }
+
+  .site-shell--customer-service .content-layout { margin-top: 0; }
+  .site-shell--customer-service .page-content {
+    min-height: 100dvh;
+    margin-left: 0;
+    padding: 0;
+    background: #000;
+  }
+
+  .site-shell--about-us { --content-sticky-top: 0px; }
+  .site-shell--about-us .page-content { margin-left: 0; }
+  .site-shell--about-us :deep(.mobile-bottom-nav) { display: none; }
+
+  .site-shell--download-app { --content-sticky-top: 0px; }
+  .site-shell--download-app .page-content { min-height: 100dvh; margin-left: 0; }
+  .site-shell--download-app :deep(.mobile-bottom-nav),
+  .site-shell--download-app :deep(.app-footer) { display: none; }
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {

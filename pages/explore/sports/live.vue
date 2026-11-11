@@ -2,10 +2,7 @@
 import { computed } from 'vue'
 import '~/assets/css/sports.css'
 import MobileSportsNav from '~/components/sports/MobileSportsNav.vue'
-import {
-  buildBybetRedirectUrl,
-  resolveSportsTabRedirectUrl,
-} from '~/utils/sportsRedirect'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const route = useRoute()
 const { locale, translate } = useSiteLocale()
@@ -27,7 +24,6 @@ useAppSeo({
 })
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
 const liveEsportsRedirectUrl = computed(() =>
   buildBybetRedirectUrl('sportEvents/liveGame/eSportBallGroup', rawRedirectUrl, bybetRedirectCode)
 )
@@ -36,15 +32,16 @@ const liveTabs = [
   { key: 'all', label: 'All', icon: '', to: '/sports/live' },
   { key: 'basketball', label: '', icon: '/icons/sports/basketball.webp', to: '/sports/live/basketball' },
   { key: 'soccer', label: '', icon: '/icons/sports/soccer.webp', to: '/sports/live/soccer' },
-  { key: 'tennis', label: '', icon: '/icons/sports/tennis.webp', to: '/sports/live/tennis' },
-  { key: 'baseball', label: '', icon: '/icons/sports/baseball.webp', to: '/sports/live/baseball' },
+  { key: 'tennis', label: '', icon: '/icons/sports/tennis.webp', to: buildBybetRedirectUrl('sportEvents/liveGame/tennis', rawRedirectUrl, bybetRedirectCode), external: true },
+  { key: 'table-tennis', label: '', icon: '/icons/sports/table-tennis.webp', to: buildBybetRedirectUrl('sportEvents/liveGame/tableTennis', rawRedirectUrl, bybetRedirectCode), external: true },
   {
     key: 'esports',
     label: '',
-    icon: '/icons/sports/egame.webp',
+    icon: '/icons/sports/esports.webp',
     to: liveEsportsRedirectUrl.value,
     external: true,
   },
+  { key: 'badminton', label: '', icon: '/icons/sports/badminton.webp', to: buildBybetRedirectUrl('sportEvents/liveGame/badminton', rawRedirectUrl, bybetRedirectCode), external: true },
 ]
 
 const currentSport = computed(() => {
@@ -68,44 +65,34 @@ const liveHeading = computed(() => {
     : 'Live Sports Betting'
 })
 
-const mobileModeTabs = [
-  { key: 'league', label: 'League' },
-  { key: 'inplay', label: 'In-Play' },
-  { key: 'upcoming', label: 'Upcoming' },
-  { key: 'pre-match', label: 'Pre-Match' },
-  { key: 'smart-pick', label: 'Parlay' },
-  { key: 'outright', label: 'Outright' },
+const mobileLiveTabs = [
+  { key: 'all', label: 'All', to: '/sports/live', external: false },
+  { key: 'basketball', label: 'Basketball', to: '/sports/live/basketball', external: false },
+  { key: 'soccer', label: 'Soccer', to: '/sports/live/soccer', external: false },
+  { key: 'tennis', label: 'Tennis', to: buildBybetRedirectUrl('sportEvents/liveGame/tennis', rawRedirectUrl, bybetRedirectCode), external: false },
+  { key: 'tennis', label: 'Table Tennis', to: buildBybetRedirectUrl('sportEvents/liveGame/tableTennis', rawRedirectUrl, bybetRedirectCode), external: false },
+  { key: 'tennis', label: 'eSports', to: buildBybetRedirectUrl('sportEvents/liveGame/eSportGameGroup', rawRedirectUrl, bybetRedirectCode), external: false },
+  { key: 'virtual', label: 'Virtual Sports', to: buildBybetRedirectUrl('sportEvents/liveGame/eSportBallGroup', rawRedirectUrl, bybetRedirectCode), external: true },
+  { key: 'badminton', label: 'Badminton', to: buildBybetRedirectUrl('sportEvents/liveGame/badminton', rawRedirectUrl, bybetRedirectCode), external: true },
 ]
-
-const isExternalModeTab = (key: string): boolean => key === 'smart-pick' || key === 'outright'
-
-const mobileModePath = (key: string): string => {
-  if (key === 'inplay') return route.path
-  if (isExternalModeTab(key)) {
-    const sport = currentSport.value === 'all' ? 'popular' : currentSport.value
-    return resolveSportsTabRedirectUrl(sport, key, rawRedirectUrl, bybetRedirectCode) ?? externalSiteUrl
-  }
-  const sport = currentSport.value === 'all' ? 'popular' : currentSport.value
-  return `/sports/${sport}/${key}`
-}
 </script>
 
 <template>
   <section class="sports-page live-page">
     <h1 class="sr-only">{{ liveHeading }}</h1>
     <!-- Sports Tabs Navigation: Sport Ball Icons -->
-    <div class="sticky-header-seal sticky top-[var(--content-sticky-top)] z-30 -mx-1 px-1 pb-1">
-      <MobileSportsNav />
-      <nav class="sports-tabs live-mobile-modes bg-[#1f1f1f]" aria-label="Sports categories">
+    <div class="sticky-header-seal live-navigation sticky top-[var(--content-sticky-top)] z-30 -mx-1 px-1 pb-1">
+      <MobileSportsNav class="live-mobile-icon-nav" />
+      <nav class="sports-tabs live-mobile-categories" :aria-label="translate('Live sports categories')">
         <NuxtLink
-          v-for="tab in mobileModeTabs"
+          v-for="tab in mobileLiveTabs"
           :key="tab.key"
-          :to="mobileModePath(tab.key)"
-          :external="tab.key === 'smart-pick' || tab.key === 'outright'"
-          :class="{ selected: tab.key === 'inplay' }"
-          :aria-current="tab.key === 'inplay' ? 'page' : undefined"
+          :to="tab.to"
+          :external="tab.external"
+          :class="{ selected: currentSport === tab.key }"
+          :aria-current="currentSport === tab.key ? 'page' : undefined"
         >
-          {{ tab.label }}
+          {{ translate(tab.label) }}
         </NuxtLink>
       </nav>
       <nav
@@ -141,10 +128,79 @@ const mobileModePath = (key: string): string => {
   min-width: 0;
 }
 
-.live-page .live-mobile-modes { display: none; }
+.live-page .live-mobile-categories { display: none; }
+
+@media (min-width: 64rem) {
+  .live-navigation {
+    margin: 0;
+    padding: 0;
+  }
+
+  .live-page .live-sports-tabs {
+    height: 64px;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 12px;
+    border-radius: 12px;
+  }
+
+  .live-page .live-sports-tabs a {
+    width: 36px;
+    min-height: 36px;
+    flex: 0 0 36px;
+    padding: 6px;
+    border-radius: 50%;
+    font-size: 14px;
+  }
+}
 
 @media (max-width: 63.99rem) {
+  .live-page { padding: 0; }
+  .live-navigation {
+    margin: 0;
+    padding: 0;
+    background: var(--page);
+  }
+
   .live-page .live-sports-tabs { display: none; }
-  .live-page .live-mobile-modes { display: flex; }
+  .live-page .live-mobile-categories {
+    display: flex;
+    height: 44px;
+    min-height: 44px;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 12px;
+    background: var(--surface);
+    overscroll-behavior-inline: contain;
+  }
+
+  .live-page .live-mobile-categories a {
+    height: 28px;
+    min-height: 28px;
+    padding: 0 8px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: .2px;
+  }
+
+  .live-page .live-mobile-categories a.selected { min-width: 52px; }
+
+  .live-mobile-icon-nav {
+    height: 52px;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 12px;
+    background: #1e241f;
+  }
+
+  .live-mobile-icon-nav :deep(.mobile-sports-nav__item) {
+    width: 44px;
+    height: 36px;
+    flex-basis: 44px;
+  }
+
+  .live-mobile-icon-nav :deep(.mobile-sports-nav__item--active) { background: transparent; }
+  .live-mobile-icon-nav :deep(.mobile-sports-nav__img) { max-width: 28px; max-height: 28px; }
 }
 </style>

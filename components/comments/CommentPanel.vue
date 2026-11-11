@@ -22,7 +22,7 @@ const { context } = useCommentPanel()
     aria-label="Sports TV"
   >
     <div class="flex h-full w-full min-h-0 min-w-0 flex-1 flex-col gap-[8px] p-0 sm:pb-2 sm:pr-2 text-white">
-      <SportsPreview class="w-full min-w-0 shrink-0" />
+      <SportsPreview class="sports-preview w-full min-w-0 shrink-0" />
       <SportsChat />
     </div>
   </aside>

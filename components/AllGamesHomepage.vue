@@ -156,12 +156,12 @@ onBeforeUnmount(() => {
         <HomepageContentSlider id="promotions" class="homepage-promotions-section" :title="translate('Promotions')" :description="translate('More to look forward to.')" view-all-to="/bonuses" :view-all-label="translate('View all promotions')" :item-count="promotions.length" :visible-cards="2" :items-per-slide="1" mobile-dots>
           <template #header>
           <header class="allgames-section-heading flex items-center justify-between gap-3">
-            <div class="allgames-heading-copy flex items-center"><div><h2 id="promotions-title"><Gift class="allgames-heading-symbol" :size="28" :stroke-width="1.6" aria-hidden="true" />{{ translate('Promotions') }}</h2><p>{{ translate('More to look forward to.') }}</p></div></div>
+            <div class="allgames-heading-copy flex items-center"><div><h2 id="promotions-title"><img src="/category-icons/gift.webp" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Promotions')" width="28" height="28" loading="lazy" decoding="async">{{ translate('Promotions') }}</h2><p>{{ translate('More to look forward to.') }}</p></div></div>
             <NuxtLink to="/bonuses" class="allgames-view-all">{{ translate('View all promotions') }} <ArrowRight :size="17" aria-hidden="true" /></NuxtLink>
           </header>
           </template>
             <NuxtLink v-for="promotion in promotions" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="allgames-promo relative overflow-hidden" :data-tone="promotion.tone">
-              <img :src="promotion.bannerImage" :alt="translate(promotion.title)" width="410" height="205" loading="lazy" decoding="async"><div class="relative"><p class="allgames-eyebrow">{{ translate(`${(promotion.category || '').toUpperCase()} REWARDS`.trim()) }}</p><h3>{{ translate(promotion.title) }}</h3><p>{{ translate(promotion.rate || '') }} <span>{{ translate('rewards to explore.') }}</span></p><span class="allgames-text-link">{{ translate('View promotion') }} <ArrowRight :size="16" /></span></div>
+              <img :src="promotion.bannerImage" :alt="translate(promotion.title)"  width="410" height="205" loading="lazy" decoding="async"><div class="relative"><p class="allgames-eyebrow">{{ translate(`${(promotion.category || '').toUpperCase()} REWARDS`.trim()) }}</p><h3>{{ translate(promotion.title) }}</h3><p>{{ translate(promotion.rate || '') }} <span>{{ translate('rewards to explore.') }}</span></p><span class="allgames-text-link">{{ translate('View promotion') }} <ArrowRight :size="16" /></span></div>
             </NuxtLink>
         </HomepageContentSlider>
 

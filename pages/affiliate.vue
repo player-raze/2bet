@@ -39,8 +39,8 @@ interface QuestionCategory {
 
 const runtimeConfig = useRuntimeConfig()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = runtimeConfig.public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
-const affiliateSystemUrl = 'https://partnerships.bybet.com/'
+const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/franchiseRegister?p=${bybetRedirectCode || 'xjSD'}`
+const affiliateSystemUrl = 'https://2bet1.vip/'
 
 const activeTab = ref<AffiliateTabId>('cooperation')
 const activeQuestionTab = ref<QuestionTabId>('information')
@@ -243,12 +243,24 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="affiliate-page">
+  <div class="affiliate-page" :class="{ 'affiliate-page--commission': activeTab === 'commission' }">
     <SubpageHeader
       title="Affiliate"
       back-to="/account/me"
       class="mb-1.5 sm:mb-2.5"
-    />
+    >
+      <template v-if="activeTab === 'commission'" #right>
+        <div class="commission-header-currency">
+          <BonusCurrencySelector
+            :model-value="selectedCurrency"
+            :currencies="affiliateCurrencies"
+            :aria-label="`Select affiliate currency: ${selectedCurrency}`"
+            options-label="Affiliate currencies"
+            @update:model-value="selectAffiliateCurrency"
+          />
+        </div>
+      </template>
+    </SubpageHeader>
 
     <div class="affiliate-content-container px-2 sm:px-0">
       <nav class="affiliate-tabs" aria-label="Affiliate sections" role="tablist">
@@ -359,7 +371,7 @@ onBeforeUnmount(() => {
             <h3 class="commission-intro-title">
               <span v-for="line in commissionProgram.title" :key="line" class="block">{{ line }}</span>
             </h3>
-            <p v-for="paragraph in commissionProgram.introduction" :key="paragraph">{{ paragraph }}</p>
+            <p v-for="paragraph in commissionProgram.introduction" :key="paragraph" class="commission-introduction">{{ paragraph }}</p>
 
             <h3>Commission Program</h3>
             <p>{{ AFFILIATE_COMMISSION_DESCRIPTION }}</p>
@@ -374,7 +386,7 @@ onBeforeUnmount(() => {
                 <tbody>
                   <tr v-for="tier in commissionProgram.tiers" :key="tier.validMembers">
                     <td>≥{{ tier.validMembers }}</td>
-                    <td>{{ formatAffiliateProfitRange(tier) }}</td>
+                    <td><template v-for="(bound, index) in formatAffiliateProfitRange(tier).split('~')" :key="index"><template v-if="index > 0">~<wbr></template>{{ bound }}</template></td>
                     <td>{{ tier.commission }}%</td>
                   </tr>
                 </tbody>
@@ -805,6 +817,9 @@ onBeforeUnmount(() => {
   padding: 14px 12px 12px;
 }
 
+.commission-header-currency { width: 32px; height: 32px; flex-shrink: 0; }
+.commission-header-currency :deep(.bonus-currency-trigger) { display: none; }
+
 .commission-intro-title {
   margin: 0;
   padding-inline: 40px;
@@ -1099,7 +1114,8 @@ onBeforeUnmount(() => {
   }
 
   .question-tabs button {
-    font-size: 10px;
+    font-size: 11px;
+    padding-inline: 0;
   }
 
   .question-tabs .question-tab--active::after {
@@ -1167,6 +1183,119 @@ onBeforeUnmount(() => {
     width: 154px;
     height: 55px;
   }
+}
+
+@media (max-width: 63.99rem) {
+  :global(.page-content:has(> .affiliate-page--commission)) { margin-left: 0; }
+  :global(.site-shell:has(.affiliate-page--commission) .mobile-bottom-nav) { display: none; }
+
+  .affiliate-page--commission :deep(.subpage-header) {
+    margin-bottom: 0;
+    box-shadow: none;
+  }
+  .affiliate-page--commission :deep(.subpage-header__title) { font-size: 16px; }
+  .affiliate-page--commission :deep(.subpage-header__back-btn) { width: 30px; height: 30px; }
+  .affiliate-page--commission .commission-header-currency :deep(.bonus-currency-trigger) {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    padding: 3px;
+  }
+
+  .affiliate-page--commission .affiliate-content-container { padding-inline: 7px; }
+  .affiliate-page--commission .affiliate-tabs {
+    height: 48px;
+    margin-top: 1px;
+    padding: 8px;
+    border-radius: 12px;
+  }
+  .affiliate-page--commission .affiliate-tabs button {
+    min-height: 32px;
+    padding: 6px 13px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .commission-panel {
+    min-width: 0;
+    padding: 12px;
+  }
+
+  .commission-flag {
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+  }
+
+  .affiliate-page--commission .commission-flag { display: none; }
+  .affiliate-page--commission .commission-panel { border-radius: 12px; background: #141414; }
+  .affiliate-page--commission .commission-intro-title {
+    font-size: 18px;
+    line-height: 26px;
+    text-wrap: wrap;
+  }
+  .affiliate-page--commission .commission-panel > p {
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .affiliate-page--commission .commission-panel > .commission-introduction {
+    margin: 20px 0 18px;
+    line-height: 21px;
+  }
+  .affiliate-page--commission .commission-panel > h3:not(.commission-intro-title) {
+    margin: 16px 0 5px;
+    line-height: 20px;
+  }
+  .affiliate-page--commission .commission-panel > h3:not(.commission-intro-title) + p { margin-top: 0; }
+  .affiliate-page--commission .commission-panel > .commission-tier-notice { margin-bottom: 6px; }
+
+  .commission-intro-title {
+    padding-inline: 0;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.45;
+    text-wrap: balance;
+  }
+
+  .commission-panel > p {
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+
+  .commission-table-wrap {
+    min-width: 0;
+    padding: 4px;
+    border-radius: 9px;
+  }
+
+  .commission-table {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+    border-spacing: 0 6px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .commission-table th,
+  .commission-table td {
+    padding: 10px 4px;
+    white-space: normal;
+    vertical-align: middle;
+  }
+
+  .commission-table th {
+    padding-block: 6px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .commission-table th:first-child { width: 26%; }
+  .commission-table th:nth-child(2) { width: 46%; }
+  .commission-table th:last-child { width: 28%; }
 }
 
 @media (max-width: 479px) {

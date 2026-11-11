@@ -21,6 +21,12 @@ const emit = defineEmits<{
 }>()
 
 const route = useRoute()
+const isLiveSportsRoute = computed(() => /^\/(?:explore\/)?sports\/live(?:\/|$)/.test(route.path))
+const isAboutUsRoute = computed(() => route.path.replace(/\/+$/, '') === '/about-us')
+const desktopLiveSports = [
+  { label: 'Badminton', image: '/icons/sports/badminton.webp', to: `${bybetRedirectUrl}/login?p=${bybetRedirectCode}` },
+  { label: 'Baseball', image: '/icons/sports/baseball.webp', to: '/sports/live/baseball' },
+]
 const nuxtLinkComponent = resolveComponent('NuxtLink')
 const activeItemLabel = ref('Home')
 const maintenanceOpen = ref(false)
@@ -272,6 +278,18 @@ onBeforeUnmount(() => {
               />
               <span>{{ translate(childItem.label) }}</span>
             </component>
+            <NuxtLink
+              v-for="sport in (isLiveSportsRoute || isAboutUsRoute) && item.label === 'Sports' ? desktopLiveSports : []"
+              :key="sport.label"
+              :to="isAboutUsRoute && sport.label === 'Baseball' ? '/sports/baseball' : sport.to"
+              :external="sport.to.startsWith('http')"
+              class="rail-submenu-link desktop-live-sport"
+              :title="translate(sport.label)"
+              :aria-label="translate(sport.label)"
+            >
+              <img :src="sport.image" :alt="translate(sport.label)" class="rail-submenu-icon-image" width="24" height="24">
+              <span>{{ translate(sport.label) }}</span>
+            </NuxtLink>
           </div>
 
           <div
@@ -330,6 +348,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.sidebar .rail-submenu .desktop-live-sport { display: none; }
+@media (min-width: 64rem) {
+  .sidebar .rail-submenu .desktop-live-sport { display: grid; }
+}
+
 .sidebar {
   position: fixed;
   z-index: 40;

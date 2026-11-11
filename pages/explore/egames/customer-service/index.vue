@@ -90,4 +90,93 @@ onMounted(() => {
 .service-row {
   user-select: none;
 }
+
+@media (max-width: 63.99rem) {
+  .customer-service-page {
+    position: relative;
+    isolation: isolate;
+    min-height: 100dvh;
+    padding: 0 5px;
+    background: #000;
+  }
+
+  .customer-service-page::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 auto;
+    height: 72px;
+    border-radius: 0 0 16px 16px;
+    background: var(--main-color);
+    pointer-events: none;
+  }
+
+  .customer-service-page :deep(.seo-header-sticky-wrapper) {
+    position: relative;
+    top: 0;
+    z-index: auto;
+    height: 46px;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .customer-service-page :deep(.seo-header) {
+    justify-content: center;
+    min-height: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .customer-service-page :deep(.seo-header button) { display: none; }
+  .customer-service-page :deep(.seo-header h1) {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
+  }
+
+  .welcome-card {
+    height: 78px;
+    gap: 8px;
+    margin: 0 0 8px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #141414;
+    box-shadow: none;
+  }
+
+  .logo-box {
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+
+  .welcome-info { min-width: 0; }
+  .welcome-info h2 { font-size: 16px; font-weight: 700; line-height: 20px; }
+  .welcome-info p { margin: 0; font-size: 12px; line-height: 16px; }
+
+  .services-card {
+    height: 56px;
+    padding: 0;
+    border-radius: 12px;
+    background: #141414;
+    box-shadow: none;
+  }
+
+  .service-row { height: 56px; padding: 12px; }
+  .service-row > div { min-width: 0; gap: 12px; }
+  .service-row > div > div { width: 32px; height: 32px; padding: 0; border-radius: 8px; }
+  .service-row span { font-size: 14px; font-weight: 400; line-height: 20px; }
+  .service-row > svg { width: 16px; height: 16px; }
+  .service-row:focus-visible { outline: 2px solid #48daa6; outline-offset: -2px; }
+  .divider { display: none; }
+}
 </style>

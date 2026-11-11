@@ -6,7 +6,6 @@ import InplayMatches from '~/components/sports/InplayMatches.vue'
 import SportsSkeleton from '~/components/sports/SportsSkeleton.vue'
 import Sort from '~/components/buttons/Sort.vue'
 import Collapse from '~/components/buttons/Collapse.vue'
-import Ai from '~/components/buttons/Ai.vue'
 import type { SportsEvent } from '~/types/sports'
 import '~/assets/css/sports.css'
 
@@ -28,8 +27,6 @@ const selectedSports = computed(() => {
   return ['Basketball', 'Soccer', 'Tennis', 'Baseball']
 })
 
-const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
 const { translate } = useSiteLocale()
 
 const search = ref('')
@@ -72,11 +69,8 @@ const filteredEvents = computed(() => {
 <template>
   <div class="results" :aria-busy="status === 'pending'">
     <div class="inplay-tab">
-      <!-- Toolbar identical to Inplay tab -->
+      <!-- Compact live toolbar -->
       <div class="toolbar">
-        <span class="sports-mobile-only">
-          <Ai :to="bybetRedirectUrl" title="Smart Pick AI" />
-        </span>
         <SportsMobileSportsRoulette />
         <label class="search">
           <span class="search-icons">
@@ -134,4 +128,50 @@ const filteredEvents = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+@media (min-width: 64rem) {
+  .live-page .toolbar {
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 12px;
+  }
+
+  .live-page .search {
+    height: 36px;
+    gap: 6px;
+    padding: 0 10px;
+    border-radius: 22px;
+    color: #959799;
+    background: #1f1f1f;
+  }
+
+  .live-page .search input { min-height: 36px; font-size: 14px; }
+  .live-page .search input::placeholder { color: #959799; opacity: 1; }
+  .live-page .search-icons :deep(svg) { width: 20px; height: 20px; stroke-width: 1.5; }
+  .live-page .toolbar :deep(.toolbar-circle-btn) {
+    width: 36px;
+    height: 36px;
+    color: #959799;
+    background: #1f1f1f;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  .live-page .inplay-tab .toolbar {
+    gap: 8px;
+    margin: 12px 0 16px;
+  }
+
+  .live-page .inplay-tab .search {
+    gap: 6px;
+    padding: 0 8px;
+    border-radius: 22px;
+    color: #959799;
+  }
+
+  .search-icons :deep(svg) { width: 20px; height: 20px; stroke-width: 1.5; }
+  .search input::placeholder { color: #9ca3af; opacity: 1; }
+}
+</style>
 

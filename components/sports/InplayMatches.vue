@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronDown } from 'lucide-vue-next'
+import { ChevronDown, ChevronRight } from 'lucide-vue-next'
 import InplayMatch from './InplayMatch.vue'
 import type { SportsEvent } from '~/types/sports'
 
@@ -42,6 +42,13 @@ const isExpanded = (key: string) => !collapsed.value.includes(key)
 function toggleTournament(key: string) {
   collapsed.value = isExpanded(key) ? [...collapsed.value, key] : collapsed.value.filter(item => item !== key)
 }
+function toggleCategory(events: SportsEvent[]) {
+  const keys = [...new Set(events.map(tournamentKey))]
+  const allClosed = keys.every(key => collapsed.value.includes(key))
+  collapsed.value = allClosed
+    ? collapsed.value.filter(key => !keys.includes(key))
+    : [...new Set([...collapsed.value, ...keys])]
+}
 function toggleAll() {
   collapsed.value = allCollapsed.value ? [] : [...tournamentKeys.value]
 }
@@ -61,7 +68,7 @@ const sportCategories = computed(() => {
   if (!props.groupBySport) {
     return [{
       key: 'all',
-      name: '',
+      name: props.events[0] ? SPORT_CATEGORIES[sportType(props.events[0])]?.name ?? '' : '',
       icon: '',
       events: props.events,
     }]
@@ -105,6 +112,20 @@ const sportCategories = computed(() => {
       class="sport-category"
       :aria-label="groupBySport ? category.name : undefined"
     >
+      <button
+        v-if="category.name"
+        class="live-category-heading"
+        type="button"
+        :aria-expanded="category.events.some(event => isExpanded(tournamentKey(event)))"
+        :aria-label="`${category.name}, ${category.events.length} live matches`"
+        @click="toggleCategory(category.events)"
+      >
+        <span>{{ category.name }}</span>
+        <span class="live-category-heading__count">
+          {{ category.events.length }}
+          <ChevronRight :size="16" aria-hidden="true" />
+        </span>
+      </button>
       <div class="league-matches-list">
         <article
           v-for="tournament in tournaments(category.events)"
@@ -145,6 +166,10 @@ const sportCategories = computed(() => {
 </template>
 
 <style scoped>
+.live-category-heading {
+  display: none;
+}
+
 .sport-category-list {
   display: grid;
   gap: 22px;
@@ -208,4 +233,108 @@ const sportCategories = computed(() => {
 .league-chevron--expanded {
   transform: rotate(180deg);
 }
+@media (max-width: 63.99rem) {
+  .live-page .sport-category-list {
+    gap: 12px;
+  }
+
+  .live-page .live-category-heading {
+    display: flex;
+    width: 100%;
+    min-height: 24px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 12px;
+    padding: 0;
+    border: 0;
+    color: #fff;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: left;
+  }
+
+  .live-page .live-category-heading__count {
+    display: flex;
+    min-width: 46px;
+    height: 24px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 6px 0 10px;
+    border-radius: 999px;
+    background: #292929;
+    color: #999;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .live-page .league-matches-list {
+    gap: 12px;
+  }
+
+  .live-page .league-preview {
+    border-radius: 12px;
+    background: #141414;
+  }
+
+  .live-page .league-preview-heading {
+    min-height: 46px;
+    padding: 10px 8px;
+    background: transparent;
+  }
+
+  .live-page .league-preview-heading .league-name {
+    color: #999;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .live-page .league-preview-heading > svg {
+    display: none;
+  }
+
+  .live-page .live-category-heading:focus-visible,
+  .live-page .league-preview-heading:focus-visible {
+    outline: 2px solid #48daa6;
+    outline-offset: -2px;
+  }
+}
+@media (min-width: 64rem) {
+  .live-page .sport-category-list,
+  .live-page .league-matches-list {
+    gap: 16px;
+  }
+
+  .live-page .league-preview {
+    border-radius: 12px;
+    background: #141414;
+  }
+
+  .live-page .league-preview-heading {
+    min-height: 46px;
+    padding: 10px 12px;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .live-page .league-preview-heading .league-name {
+    color: #999;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .live-page .league-preview-heading > svg {
+    color: #999;
+  }
+
+  .live-page .league-preview-heading:focus-visible {
+    outline: 2px solid #48daa6;
+    outline-offset: -2px;
+  }
+}
+
 </style>

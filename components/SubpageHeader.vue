@@ -53,12 +53,12 @@ const handleBack = (): void => {
         <button
           v-if="showBack"
           type="button"
-          class="subpage-header__back-btn"
+          class="subpage-header__back-btn text-[#FEDF00]"
           :aria-label="translate('Go back')"
           :title="translate('Go back')"
           @click="handleBack"
         >
-          <ChevronLeft :size="18" :stroke-width="2.6" />
+          <ChevronLeft :size="18" :stroke-width="2.6"  />
         </button>
         <div v-else class="subpage-header__spacer" aria-hidden="true" />
       </slot>
@@ -202,9 +202,9 @@ const handleBack = (): void => {
   border-radius: 9999px;
   background-color: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
   cursor: pointer;
   transition: background-color 150ms ease, transform 150ms ease;
+  box-shadow: inset 1px 1px #ffffff4d, inset -1px -1px #ffffff80, inset 2px 2px 4px #00000005, inset -4px -4px 8px #00000005, 0 0 4px #0000000a, 0 4px 8px #00000014;
 }
 
 .subpage-header__back-btn:hover {

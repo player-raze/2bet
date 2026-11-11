@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
 const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
-import { Share2, Star } from 'lucide-vue-next'
+import { ExternalLink, Star } from 'lucide-vue-next'
 import MatchVideoThumbnail from './MatchVideoThumbnail.vue'
 import type { SportsEvent } from '~/types/sports'
 import ShareMatchModal from '~/components/modals/ShareMatchModal.vue'
@@ -133,6 +133,28 @@ const isOutcomeValid = (outcome: { price?: number }): boolean => {
   return formatted !== '—' && formatted !== '-' && formatted !== ''
 }
 
+// Mobile live cards show the main two-way market, preferring a supplied handicap.
+const mobileMarkets = computed(() => {
+  const spreads = teamMarkets.value.map(row => row.markets[0]!)
+  if (props.fullMarkets && spreads.every(isMarketValid)) {
+    return spreads.map(market => ({
+      key: market.key,
+      name: market.name,
+      label: typeof market.label === 'number' && market.label > 0 ? `+${market.label}` : String(market.label),
+      price: market.outcome!.price.toFixed(2),
+      valid: true,
+    }))
+  }
+  return outcomes.value.map(outcome => ({
+    key: 'h2h',
+    name: outcome.name,
+    label: outcome.label,
+    price: formatDecimalOdds(outcome.price),
+    valid: isOutcomeValid(outcome),
+  }))
+})
+const marketCount = computed(() => props.match.bookmakers?.[0]?.markets.length ?? 0)
+
 const isFullDateSport = computed(() => {
   return props.fullMarkets === true
 })
@@ -168,6 +190,109 @@ const copyMatchLink = async (): Promise<void> => {
 
 <template>
   <article :id="`match-${match.id}`" class="winner-match">
+    <div class="desktop-live-summary">
+      <time class="desktop-live-status" :datetime="match.commence_time">{{ liveClock }}</time>
+      <div class="desktop-live-teams">
+        <span :title="match.home_team ?? undefined">{{ match.home_team }}</span>
+        <span :title="match.away_team ?? undefined">{{ match.away_team }}</span>
+      </div>
+      <div class="desktop-live-scores" aria-label="Live score">
+        <strong>{{ score('home') }}</strong>
+        <strong>{{ score('away') }}</strong>
+      </div>
+      <div class="desktop-live-actions">
+        <MatchVideoThumbnail
+          v-if="match.thumbnail || match.sources?.length"
+          :thumbnail="match.thumbnail"
+          :sources="match.sources"
+          :label="`${match.home_team} vs ${match.away_team}`"
+        />
+        <button
+          type="button"
+          aria-label="Share match"
+          title="Share match"
+          @click="isShareModalOpen = true"
+        >
+          <ExternalLink :size="15" aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          aria-label="Favorite match"
+          title="Favorite match"
+          @click="navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+        >
+          <Star :size="17" aria-hidden="true" />
+        </button>
+        <a
+          v-if="marketCount"
+          :href="bybetRedirectUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="desktop-live-market-count"
+          :aria-label="`${marketCount} markets for ${match.home_team} vs ${match.away_team}`"
+        >{{ marketCount }}</a>
+      </div>
+    </div>
+    <div
+      class="desktop-live-markets"
+      :class="{ 'desktop-live-markets--soccer': soccer }"
+      role="group"
+      :aria-label="`${match.home_team} vs ${match.away_team}, match winner`"
+    >
+      <button
+        v-for="outcome in outcomes"
+        :key="outcome.label"
+        type="button"
+        class="desktop-live-price"
+        :disabled="!isOutcomeValid(outcome)"
+        :aria-label="`${outcome.name}, implied decimal odds ${formatDecimalOdds(outcome.price)}`"
+        :aria-pressed="selectedOutcome === outcome.name"
+        @click="emit('select', outcome.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+      >
+        <span>{{ outcome.label }}</span>
+        <strong>{{ formatDecimalOdds(outcome.price) }}</strong>
+      </button>
+    </div>
+    <div class="mobile-live-summary">
+      <time class="mobile-live-status" :datetime="match.commence_time">{{ liveClock }}</time>
+      <div class="mobile-live-teams">
+        <span :title="match.home_team ?? undefined">{{ match.home_team }}</span>
+        <span :title="match.away_team ?? undefined">{{ match.away_team }}</span>
+      </div>
+      <div class="mobile-live-scores" aria-label="Live score">
+        <strong>{{ score('home') }}</strong>
+        <strong>{{ score('away') }}</strong>
+      </div>
+      <div v-if="marketCount || match.thumbnail || match.sources?.length" class="mobile-live-media">
+        <span v-if="marketCount" :aria-label="`${marketCount} markets`">{{ marketCount }}</span>
+        <MatchVideoThumbnail
+          v-if="match.thumbnail || match.sources?.length"
+          :thumbnail="match.thumbnail"
+          :sources="match.sources"
+          :label="`${match.home_team} vs ${match.away_team}`"
+        />
+      </div>
+    </div>
+    <div
+      class="mobile-live-markets"
+      :class="{ 'mobile-live-markets--soccer': soccer }"
+      role="group"
+      :aria-label="`${match.home_team} vs ${match.away_team}, match markets`"
+    >
+      <button
+        v-for="market in mobileMarkets"
+        :key="market.name"
+        type="button"
+        class="mobile-live-price"
+        :disabled="!market.valid"
+        :aria-label="`${market.name}, ${market.label}, decimal odds ${market.price}`"
+        :aria-pressed="(market.key === 'h2h' ? selectedOutcome : selectedMarkets[market.key]) === market.name"
+        @click="selectMarket(market.key, market.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+      >
+        <span>{{ market.label }}</span>
+        <strong>{{ market.price }}</strong>
+      </button>
+    </div>
     <div class="winner-header">
       <time v-if="soccer" class="winner-date text-[12px]" :datetime="match.commence_time">
         <span>{{ liveClock }}</span>
@@ -294,6 +419,16 @@ const copyMatchLink = async (): Promise<void> => {
 </template>
 
 <style scoped>
+.desktop-live-summary,
+.desktop-live-markets {
+  display: none;
+}
+
+.mobile-live-summary,
+.mobile-live-markets {
+  display: none;
+}
+
 .winner-match {
   padding: 0.5rem 16px 16px;
   scroll-margin-top: calc(var(--content-sticky-top) + 16px);
@@ -501,4 +636,298 @@ const copyMatchLink = async (): Promise<void> => {
     padding: 10px;
   }
 }
+@media (max-width: 63.99rem) {
+  .live-page .winner-match {
+    padding: 7px 8px 10px;
+  }
+
+  .live-page .winner-match:hover {
+    background: transparent;
+  }
+
+  .live-page .winner-match + .winner-match {
+    padding-top: 16px;
+    border-top: 1px dashed #2a2a2a;
+  }
+
+  .live-page .winner-header,
+  .live-page .team-markets,
+  .live-page .winner-markets {
+    display: none;
+  }
+
+  .live-page .mobile-live-summary {
+    display: flex;
+    min-width: 0;
+    min-height: 48px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+
+  .live-page .mobile-live-status {
+    display: block;
+    max-width: 76px;
+    flex: 0 0 auto;
+    white-space: pre-line;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .live-page .mobile-live-teams,
+  .live-page .mobile-live-scores {
+    display: grid;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .live-page .mobile-live-teams {
+    min-width: 0;
+    flex: 1 1 0;
+    padding-left: 8px;
+    border-left: 1px solid #2c2c2c;
+  }
+
+  .live-page .mobile-live-teams > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .live-page .mobile-live-scores {
+    flex: 0 0 auto;
+    text-align: right;
+    font-size: 14px;
+  }
+
+  .live-page .mobile-live-scores strong {
+    font-weight: 700;
+  }
+
+  .live-page .mobile-live-media {
+    display: flex;
+    min-width: 29px;
+    min-height: 46px;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding-left: 8px;
+    border-left: 1px solid #2c2c2c;
+    color: #999;
+    font-size: 12px;
+  }
+
+  .live-page .mobile-live-markets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .live-page .mobile-live-markets--soccer {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .live-page .mobile-live-price {
+    display: flex;
+    min-width: 0;
+    min-height: 36px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px;
+    border: 0;
+    border-radius: 8px;
+    background: #242424;
+    color: #999;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .live-page .mobile-live-price strong {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .live-page .mobile-live-price:disabled {
+    cursor: default;
+  }
+
+  .live-page .mobile-live-price[aria-pressed='true'] {
+    background: var(--main-highlight);
+  }
+
+  .live-page .mobile-live-price:focus-visible {
+    outline: 2px solid #48daa6;
+    outline-offset: -2px;
+  }
+}
+@media (min-width: 64rem) {
+  .live-page .winner-match {
+    padding: 4px 12px 10px;
+  }
+
+  .live-page .winner-match:hover {
+    background: transparent;
+  }
+
+  .live-page .winner-match + .winner-match {
+    padding-top: 12px;
+    border-top: 1px dashed #303030;
+  }
+
+  .live-page .winner-header,
+  .live-page .team-markets,
+  .live-page .winner-markets {
+    display: none;
+  }
+
+  .live-page .desktop-live-summary {
+    display: flex;
+    min-width: 0;
+    min-height: 44px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+
+  .live-page .desktop-live-status {
+    display: block;
+    min-width: 46px;
+    max-width: 84px;
+    flex: 0 0 auto;
+    white-space: pre-line;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .live-page .desktop-live-teams,
+  .live-page .desktop-live-scores {
+    display: grid;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .live-page .desktop-live-teams {
+    min-width: 0;
+    flex: 1 1 0;
+    padding-left: 12px;
+    border-left: 1px solid #303030;
+    font-size: 12px;
+  }
+
+  .live-page .desktop-live-teams > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .live-page .desktop-live-scores {
+    flex: 0 0 auto;
+    text-align: right;
+    font-size: 11px;
+  }
+
+  .live-page .desktop-live-scores strong {
+    font-weight: 700;
+  }
+
+  .live-page .desktop-live-actions {
+    display: flex;
+    min-height: 46px;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    padding-left: 12px;
+    border-left: 1px solid #303030;
+    color: #999;
+  }
+
+  .live-page .desktop-live-actions button {
+    display: grid;
+    width: 24px;
+    height: 28px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #999;
+  }
+
+  .live-page .desktop-live-actions button:hover,
+  .live-page .desktop-live-market-count:hover {
+    color: #fff;
+  }
+
+  .live-page .desktop-live-market-count {
+    display: grid;
+    min-width: 36px;
+    height: 28px;
+    place-items: center;
+    border: 1px solid #303030;
+    border-radius: 8px;
+    color: #999;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .live-page .desktop-live-markets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .live-page .desktop-live-markets--soccer {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .live-page .desktop-live-price {
+    display: flex;
+    min-width: 0;
+    min-height: 36px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: #242424;
+    color: #999;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .live-page .desktop-live-price strong {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .live-page .desktop-live-price:hover:enabled {
+    background: #303030;
+  }
+
+  .live-page .desktop-live-price[aria-pressed='true'] {
+    background: var(--main-highlight);
+  }
+
+  .live-page .desktop-live-price:disabled {
+    cursor: default;
+  }
+
+  .live-page .desktop-live-actions button:focus-visible,
+  .live-page .desktop-live-market-count:focus-visible,
+  .live-page .desktop-live-price:focus-visible {
+    outline: 2px solid #48daa6;
+    outline-offset: 2px;
+  }
+}
+
 </style>
