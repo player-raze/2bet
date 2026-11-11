@@ -21,7 +21,7 @@ const trigger = ref<HTMLButtonElement | null>(null)
 const dialog = ref<HTMLDivElement | null>(null)
 const titleId = useId()
 const triggerCurrency = computed(() => {
-  const code = props.modelValue === 'all' ? 'BRL' : props.modelValue
+  const code = props.modelValue || 'all'
   return props.currencies.find(currency => currency.code === code) || getBonusCurrency(code)
 })
 const triggerAriaLabel = computed(() => props.ariaLabel || `Select bonus currency: ${
