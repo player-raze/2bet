@@ -96,6 +96,7 @@ onBeforeUnmount(() => {
   <footer id="support" class="app-footer w-full text-[#8e9491] light:text-[#5d7066] light:bg-[#edf4f0] select-none border-t border-white/[0.04] light:border-[#d8e2dc] mt-1 sm:mt-4 px-3 sm:px-0">
     <div class="footer-inner max-w-5xl mx-auto bg-[#141414] light:bg-white rounded-xl px-4 sm:px-6 pb-20 sm:pb-12 border border-white/5 light:border-[#d8e2dc] light:shadow-sm">
       <!-- Section 1: Special Promotion -->
+       <!-- sample test -->
       <div class="footer-accordion-item border-b border-white/[0.06] light:border-[#eef2f0] py-3.5">
         <button
           type="button"
