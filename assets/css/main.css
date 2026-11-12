@@ -79,6 +79,9 @@ html[data-theme='dark'] {
 
 html {
   min-width: 20rem;
+  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-height) + 0.65rem);
   background: var(--page);
@@ -101,6 +104,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   overflow-x: clip;
+  overscroll-behavior-x: none;
   color: var(--text);
   background: var(--page);
   font-family: inherit;

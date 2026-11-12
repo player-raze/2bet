@@ -250,7 +250,7 @@ onBeforeUnmount(() => {
     <div class="content-layout">
       <div class="content-main-area">
         <MobileAccountHeader v-if="cleanPath === '/account/me'" />
-        <main ref="pageContentElement" class="page-content pt-0 ml-1.5  sm:ml-0">
+        <main ref="pageContentElement" class="page-content pt-0">
           <MobileLivePlazaHeader v-if="isLivePlazaPage && cleanPath !== '/live-plaza/experts'" />
           <slot />
         </main>
