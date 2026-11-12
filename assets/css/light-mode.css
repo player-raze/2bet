@@ -47,19 +47,18 @@ html[data-theme='light']:not(#_) .rail-submenu-link {
 html[data-theme='light']:not(#_) .rail-link:hover,
 html[data-theme='light']:not(#_) .rail-submenu-link:hover {
   color: var(--main-color);
-  background: rgba(3, 98, 66, 0.08);
 }
 
 html[data-theme='light']:not(#_) .rail-link--active,
-html[data-theme='light']:not(#_) .rail-link--active:hover,
 html[data-theme='light']:not(#_) .rail-submenu-link--active,
+html[data-theme='light']:not(#_) .rail-link--active:hover,
 html[data-theme='light']:not(#_) .rail-submenu-link--active:hover {
-  color: #ffffff;
-  background: var(--main-color);
+  color: #ffffff!important;
+  background: var(--main-color)!important;
 }
 
 html[data-theme='light']:not(#_) .rail-link--active .rail-icon {
-  color: #ffffff;
+  color: #ffffff!important;
 }
 
 html[data-theme='light']:not(#_) .rail-submenu--panel {
@@ -213,11 +212,10 @@ html[data-theme='light']:not(#_) .homepage-hero__markers button.is-active span {
 
 html[data-theme='light']:not(#_) .homepage-hero .homepage-hero__counter {
   color: var(--heading);
-  text-shadow: none;
 }
 
 html[data-theme='light']:not(#_) .homepage-hero__counter span {
-  color: var(--secondary);
+  color: var(--main-color);
 }
 
 html[data-theme='light']:not(#_) .homepage-hero__thumbnail {

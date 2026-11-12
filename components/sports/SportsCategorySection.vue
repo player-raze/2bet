@@ -36,13 +36,13 @@ const toggleExpanded = (): void => {
     <button
       v-if="shouldShowBanner"
       type="button"
-      class="sports-category-banner bg-[#051a16] light:bg-[#eaf5ee] text-white light:text-[#10261c]"
+      class="sports-category-banner bg-[#051a16] light:bg-[#eaf5ee] text-white light:text-white"
       :style="{ backgroundImage: `url(${banner}), url(${background})` }"
       :aria-expanded="expanded"
       :aria-controls="panelId"
       @click="toggleExpanded"
     >
-      <span class="light:text-[#10261c]">{{ title }}</span>
+      <span class="light:text-white">{{ title }}</span>
       <span class="sports-category-banner__toggle bg-white/20 border border-white/20 text-white light:bg-white light:border-[#d8e2dc] light:text-[#10261c] light:shadow-sm" aria-hidden="true">
         <ChevronDown :size="17" :class="{ 'rotate-180': expanded }" />
       </span>

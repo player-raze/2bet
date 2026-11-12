@@ -265,7 +265,7 @@ export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string)
     sectionId: null,
     children: [
       { label: 'Live Casino', iconImage: '/icons/entertainment/live-casino.webp', to: '/entertainment/live-casino', accentColor: '#e2c37b' },
-      { label: 'Gaming', iconImage: '/icons/entertainment/gaming.webp', to: '/entertainment/gaming', accentColor: '#777cff', underMaintenance: true },
+      { label: 'Gaming', iconImage: '/icons/entertainment/gaming.webp', to: `${bybetRedirectUrl}/sportEvents/eSport?p=${redirectCode}`, accentColor: '#777cff' },
       { label: 'Poker', iconImage: '/icons/entertainment/poker.webp', to: '/entertainment/poker', accentColor: '#e2c37b' },
     ],
   },
