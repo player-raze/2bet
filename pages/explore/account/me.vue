@@ -502,7 +502,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
             :href="loginUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="bg-[#2b2b2b] rounded-lg border border-[#1fa779] px-4 py-1 text-[12px] font-semibold text-[#1fa779] hover:bg-[#252525] transition-colors"
+            class="bg-[#2b2b2b] rounded-lg border border-[#1fa779] px-4 py-1 text-[12px] font-semibold text-[#1fa779] hover:bg-[#252525] transition-colors light:text-[#1fa779]"
           >
             {{ translate('Login') }}
           </a>

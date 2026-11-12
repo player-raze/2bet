@@ -60,7 +60,7 @@ const registerUrl = `${bybetBaseUrl}/registered?p=${bybetRedirectCode}`
         <Headphones :size="20" :stroke-width="2" />
       </NuxtLink>
       <a
-        class="header-glass-button header-glass-button--login"
+        class="header-glass-button header-glass-button--login light:text-white"
         :href="loginUrl"
         target="_blank"
         rel="nofollow noopener noreferrer"
@@ -68,7 +68,7 @@ const registerUrl = `${bybetBaseUrl}/registered?p=${bybetRedirectCode}`
         {{ translate('Login') }}
       </a>
       <a
-        class="header-glass-button header-glass-button--signup"
+        class="header-glass-button header-glass-button--signup light:text-white"
         :href="registerUrl"
         target="_blank"
         rel="nofollow noopener noreferrer"
