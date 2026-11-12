@@ -227,7 +227,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="live-plaza-page">
+  <div class="live-plaza-page text-white light:text-[#10261c]">
     <SeoHeader
       sticky
       title="Live Plaza"
@@ -235,14 +235,14 @@ onBeforeUnmount(() => {
       :show-flag="false"
     />
 
-    <section class="popular-panel" aria-labelledby="popular-games-title">
-      <div class="panel-heading">
-        <h2 id="popular-games-title">{{ translate('Popular Games') }}</h2>
+    <section class="popular-panel bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" aria-labelledby="popular-games-title">
+      <div class="panel-heading border-b border-[#2b2b2b] light:border-b-[#eef2f0]">
+        <h2 id="popular-games-title" class="text-[#f7f7f7] light:text-[#10261c]">{{ translate('Popular Games') }}</h2>
         <div ref="popularSortControl" class="popular-sort-control">
           <button
             ref="popularSortButton"
             type="button"
-            class="panel-action panel-action--popular-sort"
+            class="panel-action panel-action--popular-sort bg-[#242424] text-[#e8e8e8] light:bg-[#edf4f0] light:text-[#2a3c33] light:border light:border-[#d8e2dc]"
             :class="{ 'panel-action--open': popularSortMenuOpen }"
             aria-haspopup="menu"
             :aria-expanded="popularSortMenuOpen"
@@ -257,17 +257,17 @@ onBeforeUnmount(() => {
             <div
               v-if="popularSortMenuOpen"
               id="popular-game-sort-menu"
-              class="popular-sort-menu"
+              class="popular-sort-menu bg-[#171717] text-[#eeeeee] border border-white/5 light:bg-white light:text-[#10261c] light:border-[#d8e2dc] light:shadow-xl"
               role="menu"
               :aria-label="translate('Sort popular games')"
             >
-              <span class="popular-sort-menu__label">{{ translate('Sort') }}</span>
+              <span class="popular-sort-menu__label text-[#eeeeee] light:text-[#10261c]">{{ translate('Sort') }}</span>
               <div class="popular-sort-menu__options">
                 <button
                   v-for="option in popularGameSortOptions"
                   :key="option.value"
                   type="button"
-                  class="popular-sort-menu__option"
+                  class="popular-sort-menu__option bg-[#202322] text-[#eeeeee] border-[#565b58] light:bg-[#edf4f0] light:text-[#2a3c33] light:border-[#d8e2dc] [&.popular-sort-menu__option--active]:!bg-[#007653] [&.popular-sort-menu__option--active]:!text-white"
                   :class="{ 'popular-sort-menu__option--active': popularGameSort === option.value }"
                   role="menuitemradio"
                   :aria-checked="popularGameSort === option.value"
@@ -285,26 +285,26 @@ onBeforeUnmount(() => {
         <LivePlazaSportFilters v-model="popularSport" />
       </div>
 
-      <div class="popular-games-wrap">
+      <div class="popular-games-wrap border-t border-[#2b2b2b] light:border-t-[#eef2f0]">
         <div ref="carouselContainer" class="popular-games-list">
           <button
             v-for="game in filteredPopularGames"
             :key="game.id"
             type="button"
-            class="popular-game"
+            class="popular-game border-r border-[#2b2b2b] light:border-r-[#d8e2dc] text-white light:text-[#10261c] hover:bg-white/[0.025] light:hover:bg-[#f4f8f5]"
             @click="handleGameClick(game)"
           >
             <span class="popular-game__topline">
-              <span class="popular-game__meta">{{ game.date }} {{ game.time }}&nbsp; {{ game.league }}</span>
-              <span class="popular-game__predict">{{ translate('Predict') }} {{ game.predictCount }}</span>
+              <span class="popular-game__meta text-[#7f827f] light:text-[#5d7066]">{{ game.date }} {{ game.time }}&nbsp; {{ game.league }}</span>
+              <span class="popular-game__predict bg-[#2a2a2a] text-[#eeeeee] light:bg-[#eaf5ee] light:text-[#019440] light:border light:border-emerald-500/20">{{ translate('Predict') }} {{ game.predictCount }}</span>
             </span>
 
             <span class="popular-game__teams">
-              <span class="popular-game__team">
+              <span class="popular-game__team text-[#f3f3f3] light:text-[#10261c]">
                 <img :src="game.homeTeam.logo" :alt="game.homeTeam.name" width="18" height="18">
                 <span>{{ game.homeTeam.name }}</span>
               </span>
-              <span class="popular-game__team">
+              <span class="popular-game__team text-[#f3f3f3] light:text-[#10261c]">
                 <img :src="game.awayTeam.logo" :alt="game.awayTeam.name" width="18" height="18">
                 <span>{{ game.awayTeam.name }}</span>
               </span>
@@ -314,7 +314,7 @@ onBeforeUnmount(() => {
 
         <button
           type="button"
-          class="popular-games-next"
+          class="popular-games-next bg-[#242424] text-[#eeeeee] border border-white/10 light:bg-white light:text-[#10261c] light:border-[#d8e2dc]"
           :aria-label="translate('Show more popular games')"
           @click="scrollCarousel"
         >
@@ -324,10 +324,10 @@ onBeforeUnmount(() => {
     </section>
 
     <section class="predictions-block" aria-label="Expert Predictions">
-      <div class="predictions-toolbar">
-        <div class="panel-heading">
-          <h2 id="expert-predictions-title">{{ translate('Expert Predictions') }}</h2>
-          <button type="button" class="panel-action" @click="togglePredictionSort">
+      <div class="predictions-toolbar bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm">
+        <div class="panel-heading border-b border-[#2b2b2b] light:border-b-[#eef2f0]">
+          <h2 id="expert-predictions-title" class="text-[#f7f7f7] light:text-[#10261c]">{{ translate('Expert Predictions') }}</h2>
+          <button type="button" class="panel-action bg-[#242424] text-[#e8e8e8] light:bg-[#edf4f0] light:text-[#2a3c33] light:border light:border-[#d8e2dc]" @click="togglePredictionSort">
             <span>{{ translate(predictionSort === 'win-streak' ? 'Win Streak' : 'Hit Rate') }}</span>
             <MoreHorizontal :size="15" aria-hidden="true" />
           </button>
@@ -338,13 +338,19 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <div v-if="predictionStatus === 'pending'" class="predictions-empty">
+      <div v-if="predictionStatus === 'pending'" class="predictions-empty bg-[#141414] text-[#858985] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]">
         {{ translate('Loading expert predictions…') }}
       </div>
 
-      <div v-else-if="predictionError" class="predictions-empty predictions-empty--error">
+      <div v-else-if="predictionError" class="predictions-empty predictions-empty--error bg-[#141414] text-[#858985] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]">
         <span>{{ translate('Expert predictions are temporarily unavailable.') }}</span>
-        <button type="button" @click="refreshPredictions()">{{ translate('Try again') }}</button>
+        <button
+          type="button"
+          class="bg-[#202322] text-white border border-[#087d5c] light:bg-[#edf4f0] light:text-[#2a3c33] light:border-[#d8e2dc] px-3.5 py-1.5 rounded-full cursor-pointer"
+          @click="refreshPredictions()"
+        >
+          {{ translate('Try again') }}
+        </button>
       </div>
 
       <div v-else-if="filteredPredictions.length" class="predictions-grid">
@@ -358,7 +364,7 @@ onBeforeUnmount(() => {
         />
       </div>
 
-      <div v-else class="predictions-empty">
+      <div v-else class="predictions-empty bg-[#141414] text-[#858985] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]">
         {{ translate('No predictions are available right now.') }}
       </div>
     </section>
@@ -371,15 +377,12 @@ onBeforeUnmount(() => {
   min-width: 0;
   padding-top: 0;
   padding-bottom: 2rem;
-  color: #ffffff;
 }
 
 .popular-panel,
 .predictions-toolbar {
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.025);
   border-radius: 12px;
-  background: #141414;
 }
 
 .popular-panel {
@@ -393,12 +396,10 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
-  border-bottom: 1px solid #2b2b2b;
 }
 
 .panel-heading h2 {
   margin: 0;
-  color: #f7f7f7;
   font-size: 16px;
   font-weight: 800;
   line-height: 1;
@@ -410,19 +411,12 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   padding: 0 12px;
-  border: 0;
   border-radius: 999px;
-  color: #e8e8e8;
   font-size: 11px;
   font-weight: 500;
-  background: #242424;
   cursor: pointer;
   gap: 4px;
   transition: background-color 150ms ease;
-}
-
-.panel-action:hover {
-  background: #303030;
 }
 
 .popular-sort-control {
@@ -444,10 +438,7 @@ onBeforeUnmount(() => {
   width: 165px;
   flex-direction: column;
   padding: 8px 12px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.025);
   border-radius: 14px;
-  color: #eeeeee;
-  background: #171717;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42);
 }
 
@@ -468,27 +459,22 @@ onBeforeUnmount(() => {
   width: 125px;
   height: 33px;
   padding: 0 12px;
-  border: 1px solid #565b58;
   border-radius: 999px;
-  color: #eeeeee;
   font: inherit;
   font-size: 12px;
   font-weight: 500;
   line-height: 1;
-  background: #202322;
   cursor: pointer;
   transition: border-color 140ms ease, background-color 140ms ease;
 }
 
 .popular-sort-menu__option:hover {
   border-color: #008965;
-  background: #252a28;
 }
 
 .popular-sort-menu__option--active,
 .popular-sort-menu__option--active:hover {
   border-color: #007653;
-  background: #007653;
 }
 
 .sort-menu-enter-active,
@@ -512,7 +498,6 @@ onBeforeUnmount(() => {
 
 .popular-games-wrap {
   position: relative;
-  border-top: 1px solid #2b2b2b;
 }
 
 .popular-games-list {
@@ -536,17 +521,11 @@ onBeforeUnmount(() => {
   align-items: stretch;
   padding: 14px 12px 12px;
   border: 0;
-  border-right: 1px solid #2b2b2b;
-  color: #ffffff;
   text-align: left;
   background: transparent;
   cursor: pointer;
   gap: 13px;
   transition: background-color 150ms ease;
-}
-
-.popular-game:hover {
-  background: rgba(255, 255, 255, 0.025);
 }
 
 .popular-game__topline,
@@ -564,7 +543,6 @@ onBeforeUnmount(() => {
 .popular-game__meta {
   overflow: hidden;
   min-width: 0;
-  color: #7f827f;
   font-size: 10px;
   line-height: 1;
   text-overflow: ellipsis;
@@ -575,11 +553,9 @@ onBeforeUnmount(() => {
   flex: 0 0 auto;
   padding: 3px 5px;
   border-radius: 4px;
-  color: #eeeeee;
   font-size: 10px;
   font-weight: 800;
   line-height: 1;
-  background: #2a2a2a;
 }
 
 .popular-game__teams {
@@ -589,7 +565,6 @@ onBeforeUnmount(() => {
 }
 
 .popular-game__team {
-  color: #f3f3f3;
   font-size: 13px;
   font-weight: 500;
   line-height: 1;
@@ -620,10 +595,7 @@ onBeforeUnmount(() => {
   place-items: center;
   padding: 0;
   transform: translateY(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
-  color: #eeeeee;
-  background: #242424;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.42);
   cursor: pointer;
 }
@@ -653,9 +625,7 @@ onBeforeUnmount(() => {
   min-height: 212px;
   place-items: center;
   border-radius: 12px;
-  color: #858985;
   font-size: 12px;
-  background: #141414;
 }
 
 .predictions-empty--error {
@@ -665,10 +635,7 @@ onBeforeUnmount(() => {
 
 .predictions-empty--error button {
   padding: 7px 14px;
-  border: 1px solid #087d5c;
   border-radius: 999px;
-  color: #ffffff;
-  background: #202322;
   cursor: pointer;
 }
 

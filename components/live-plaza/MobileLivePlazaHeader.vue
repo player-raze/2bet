@@ -17,8 +17,8 @@ const backTo = computed(() => path.value.endsWith('/streamer/all')
 </script>
 
 <template>
-  <header class="mobile-live-plaza-header">
-    <NuxtLink :to="backTo" class="mobile-live-plaza-header__back" :aria-label="translate('Go back')">
+  <header class="mobile-live-plaza-header bg-[var(--main-color)] text-white light:bg-white light:text-[#10261c] light:border-b light:border-[#d8e2dc] light:shadow-sm">
+    <NuxtLink :to="backTo" class="mobile-live-plaza-header__back bg-white/15 text-white light:bg-[#eaf5ee] light:text-[#019440] light:border light:border-[#d8e2dc]" :aria-label="translate('Go back')">
       <ChevronLeft :size="20" aria-hidden="true" />
     </NuxtLink>
     <h1>{{ translate(title) }}</h1>
@@ -38,8 +38,6 @@ const backTo = computed(() => path.value.endsWith('/streamer/all')
     align-items: center;
     height: 52px;
     padding: 0 14px;
-    background: var(--main-color);
-    color: #fff;
   }
   h1 { margin: 0; text-align: center; font-size: 16px; font-weight: 800; }
   .mobile-live-plaza-header__back {
@@ -49,7 +47,6 @@ const backTo = computed(() => path.value.endsWith('/streamer/all')
     height: 30px;
     border: 0;
     border-radius: 50%;
-    background: #ffffff26;
     box-shadow: inset 1px 1px #ffffff4d, inset -1px -1px #ffffff80, inset 2px 2px 4px #00000005, inset -4px -4px 8px #00000005, 0 0 4px #0000000a, 0 4px 8px #00000014;
   }
 }

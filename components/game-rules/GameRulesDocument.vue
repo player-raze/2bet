@@ -5,10 +5,10 @@ defineProps<{ html: string }>()
 </script>
 
 <template>
-  <div class="game-rules-page mx-auto max-w-5xl px-2 pb-16 text-white sm:px-4">
+  <div class="game-rules-page mx-auto max-w-5xl px-2 pb-16 text-white light:text-[#10261c] sm:px-4">
     <GameRulesNav />
-    <article class="game-rules-card mt-4 overflow-x-auto rounded-2xl border border-white/5 bg-[#141414] p-4 shadow-xl sm:p-8">
-      <div class="game-rules-content" v-html="html" />
+    <article class="game-rules-card mt-4 overflow-x-auto rounded-2xl border border-white/5 bg-[#141414] p-4 shadow-xl sm:p-8 light:bg-white light:border-[#d8e2dc] light:shadow-sm">
+      <div class="game-rules-content light:text-[#24382e]" v-html="html" />
     </article>
   </div>
 </template>

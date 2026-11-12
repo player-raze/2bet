@@ -88,10 +88,10 @@ useAppSeo({
 </script>
 
 <template>
-  <div class="bonuses-page">
+  <div class="bonuses-page text-[#f5f5f5] light:text-[#10261c]">
     <MobileBonusListing :category="category" />
     <div class="bonuses-desktop">
-    <div class="bonuses-sticky sticky-header-seal">
+    <div class="bonuses-sticky sticky-header-seal bg-black light:bg-[#f4f8f5]">
       <SeoHeader
         title="Bonuses"
         meta-title="2bet Bônus de Cassino e Promoções Exclusivas"
@@ -104,11 +104,12 @@ useAppSeo({
         </template>
       </SeoHeader>
 
-      <nav class="category-nav" :aria-label="translate('Promotion categories')">
+      <nav class="category-nav bg-[#171817] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" :aria-label="translate('Promotion categories')">
         <NuxtLink
           v-for="category in visibleCategories"
           :key="category.key"
           :to="categoryPath(category.key)"
+          class="text-[#c3c5c4] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c] hover:bg-white/5 light:hover:bg-[#eaf5ee] [&.category-nav__button--active]:!text-white [&.category-nav__button--active]:!bg-[var(--main-color)]"
           :class="{ 'category-nav__button--active': (featuredPromotions.length ? selectedCategory : 'all') === category.key }"
           :aria-current="(featuredPromotions.length ? selectedCategory : 'all') === category.key ? 'page' : undefined"
         >
@@ -123,7 +124,7 @@ useAppSeo({
       <button
         v-if="featuredPromotions.length > 1"
         type="button"
-        class="featured-promotions__arrow featured-promotions__arrow--left"
+        class="featured-promotions__arrow featured-promotions__arrow--left light:bg-white light:text-[#10261c] light:shadow-md"
         :aria-label="translate('Previous promotions')"
         @click="scrollFeatured(-1)"
       >
@@ -135,10 +136,10 @@ useAppSeo({
           v-for="promotion in featuredPromotions"
           :key="promotion.id"
           :to="`/bonus/${promotion.slug}`"
-          class="featured-card"
+          class="featured-card bg-[#073f30] light:bg-[#015D25] light:border-emerald-600/20 light:shadow-sm"
           @click="markAsViewed(promotion.slug)"
         >
-          <div class="featured-card__media">
+          <div class="featured-card__media light:bg-[#dce8e1]">
             <img
               :src="getPromoBannerUrl(promotion.bannerImage)"
               :alt="translate(promotion.title)"
@@ -146,12 +147,12 @@ useAppSeo({
               loading="eager"
               decoding="async"
             >
-            <span v-if="promotion.showSaveBadge" class="featured-card__save">◎ {{ translate('Save') }}</span>
+            <span v-if="promotion.showSaveBadge" class="featured-card__save text-white bg-[#ef174c]">◎ {{ translate('Save') }}</span>
           </div>
 
-          <div class="featured-card__copy">
-            <strong>{{ translate(promotion.title) }}</strong>
-            <span>{{ translate(getFeaturedMeta(promotion)) }}</span>
+          <div class="featured-card__copy bg-[#015D25]">
+            <strong class="text-white">{{ translate(promotion.title) }}</strong>
+            <span class="text-white/70">{{ translate(getFeaturedMeta(promotion)) }}</span>
           </div>
         </NuxtLink>
       </div>
@@ -159,7 +160,7 @@ useAppSeo({
       <button
         v-if="featuredPromotions.length > 1"
         type="button"
-        class="featured-promotions__arrow featured-promotions__arrow--right"
+        class="featured-promotions__arrow featured-promotions__arrow--right light:bg-white light:text-[#10261c] light:shadow-md"
         :aria-label="translate('Next promotions')"
         @click="scrollFeatured(1)"
       >
@@ -171,14 +172,14 @@ useAppSeo({
       <section
         v-for="section in visibleSections"
         :key="section.id"
-        class="promotion-group"
+        class="promotion-group bg-[#151515] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm"
       >
         <NuxtLink
           :to="categoryPath(section.category)"
-          class="promotion-group__heading"
+          class="promotion-group__heading text-[#f5f5f5] light:text-[#10261c]"
         >
           <span>{{ translate(section.title) }}</span>
-          <ChevronRight :size="16" aria-hidden="true" />
+          <ChevronRight :size="16" aria-hidden="true" class="text-[#808481] light:text-[#5d7066]" />
         </NuxtLink>
 
         <div class="promotion-group__list">
@@ -186,11 +187,11 @@ useAppSeo({
             v-for="promotion in section.items"
             :key="`${section.id}-${promotion.id}`"
             :to="`/bonus/${promotion.slug}`"
-            class="promotion-row"
+            class="promotion-row hover:bg-white/5 light:hover:bg-[#f4f8f5]"
             @click="markAsViewed(promotion.slug)"
           >
             <img
-              class="promotion-row__thumbnail"
+              class="promotion-row__thumbnail bg-[#242624] light:bg-[#eaf5ee]"
               :src="promotion.thumbnailImage || PROMOTION_PLACEHOLDER_IMAGES.thumbnail"
               :alt="translate(promotion.title)"
               loading="lazy"
@@ -198,11 +199,11 @@ useAppSeo({
             >
 
             <span class="promotion-row__copy">
-              <strong>{{ translate(promotion.title) }}</strong>
-              <small>{{ translate(promotion.description) }}</small>
+              <strong class="text-[#efefef] light:text-[#10261c]">{{ translate(promotion.title) }}</strong>
+              <small class="text-[#959799] light:text-[#5d7066]">{{ translate(promotion.description) }}</small>
             </span>
 
-            <span class="promotion-row__details">{{ translate('Details') }}</span>
+            <span class="promotion-row__details bg-[#222322] light:bg-[#eaf5ee] text-[#a3a6a4] light:text-[#019440]">{{ translate('Details') }}</span>
           </NuxtLink>
         </div>
       </section>
@@ -222,7 +223,6 @@ useAppSeo({
   width: 100%;
   min-width: 0;
   padding: 0;
-  color: #f5f5f5;
 }
 
 .bonuses-sticky {
@@ -231,7 +231,6 @@ useAppSeo({
   top: var(--content-sticky-top);
   margin: 0 -0.05rem 0;
   padding: 0 0.05rem 0.28rem;
-  background: #000000;
   border-radius: 50px 50px 0  0 ;
 }
 
@@ -241,7 +240,6 @@ useAppSeo({
   padding: 0.26rem 0.45rem;
   border: 1px solid rgba(255, 255, 255, 0.035);
   border-radius: 0.48rem;
-  background: #171817;
 }
 
 .philippines-badge {
@@ -265,7 +263,6 @@ useAppSeo({
   padding: 0.22rem 0.38rem;
   border: 1px solid rgba(255, 255, 255, 0.035);
   border-radius: 0.48rem;
-  background: #171817;
   scrollbar-width: none;
   gap: 0.2rem;
 }
@@ -284,7 +281,6 @@ useAppSeo({
   padding: 0 0.62rem;
   border: 0;
   border-radius: 999px;
-  color: #c3c5c4;
   font-size: 0.58rem;
   font-weight: 700;
   text-align: center;
@@ -328,7 +324,6 @@ useAppSeo({
   border-radius: 0.46rem;
   color: inherit;
   text-decoration: none;
-  background: #073f30;
   scroll-snap-align: start;
   transition: border-color 150ms ease, transform 150ms ease;
 }
@@ -342,7 +337,6 @@ useAppSeo({
   position: relative;
   overflow: hidden;
   aspect-ratio: 2.08 / 1;
-  background: #1b1c1b;
 }
 
 .featured-card__media img {
@@ -358,10 +352,8 @@ useAppSeo({
   left: 0.28rem;
   padding: 0.12rem 0.3rem;
   border-radius: 999px;
-  color: #ffffff;
   font-size: 0.44rem;
   font-weight: 800;
-  background: #ef174c;
   box-shadow: 0 0.12rem 0.3rem rgba(0, 0, 0, 0.32);
 }
 
@@ -372,7 +364,6 @@ useAppSeo({
   flex-direction: column;
   justify-content: center;
   padding: 0.26rem 0.42rem 0.32rem;
-  background: #015D25;
 }
 
 .featured-card__copy strong,
@@ -383,7 +374,6 @@ useAppSeo({
 }
 
 .featured-card__copy strong {
-  color: #ffffff;
   font-size: 0.58rem;
   font-weight: 800;
   line-height: 1.25;
@@ -391,7 +381,6 @@ useAppSeo({
 
 .featured-card__copy span {
   margin-top: 0.08rem;
-  color: rgba(255, 255, 255, 0.65);
   font-size: 0.46rem;
 }
 
@@ -428,9 +417,7 @@ useAppSeo({
 
 .promotion-group {
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.035);
   border-radius: 0.48rem;
-  background: #151515;
 }
 
 .promotion-group__heading {
@@ -441,7 +428,6 @@ useAppSeo({
   justify-content: space-between;
   padding: 0.28rem 0.48rem;
   border: 0;
-  color: #f5f5f5;
   font-size: 0.68rem;
   font-weight: 800;
   text-align: left;
@@ -470,17 +456,12 @@ useAppSeo({
   transition: background-color 140ms ease;
 }
 
-.promotion-row:hover {
-  background: rgba(255, 255, 255, 0.028);
-}
-
 .promotion-row__thumbnail {
   display: block;
   width: 2.35rem;
   height: 2.35rem;
   border-radius: 0.34rem;
   object-fit: cover;
-  background: #242624;
 }
 
 .promotion-row__copy {
@@ -498,7 +479,6 @@ useAppSeo({
 }
 
 .promotion-row__copy strong {
-  color: #efefef;
   font-size: 0.6rem;
   font-weight: 750;
   line-height: 1.25;
@@ -506,7 +486,6 @@ useAppSeo({
 
 .promotion-row__copy small {
   margin-top: 0.08rem;
-  color: #959799;
   font-size: 0.45rem;
   line-height: 1.2;
 }
@@ -515,7 +494,6 @@ useAppSeo({
   min-width: 2.6rem;
   padding: 0.28rem 0.45rem;
   border-radius: 0.32rem;
-  color: #a3a6a4;
   font-size: 0.45rem;
   font-weight: 600;
   text-align: center;

@@ -202,12 +202,12 @@ onBeforeUnmount(() => {
     :aria-label="translate('Main navigation')"
   >
     <div class="rail-viewport">
-      <nav id="rail-navigation" class="rail-pill">
+      <nav id="rail-navigation" class="rail-pill light:bg-white/80 light:border-[#d8e2dc] light:shadow-sm">
         <template v-for="(item, itemIndex) in railItems" :key="`${item.label}-${itemIndex}`">
           <component
             :is="item.to ? nuxtLinkComponent : item.sectionId && !isExpandable(item) ? 'a' : 'button'"
             v-bind="getItemAttributes(item)"
-            class="rail-link"
+            class="rail-link text-[#a9bdb4] light:text-[#2a3c33] light:hover:text-[var(--main-color)] light:hover:bg-emerald-800/10"
             :class="{
               'rail-link--active': isItemActive(item),
               'rail-link--surface': item.surface,
@@ -222,7 +222,7 @@ onBeforeUnmount(() => {
           >
             <component
               :is="item.icon"
-              class="rail-icon"
+              class="rail-icon text-current light:text-[#20372c]"
               :size="17"
               :stroke-width="2"
               aria-hidden="true"
@@ -247,7 +247,7 @@ onBeforeUnmount(() => {
               v-for="childItem in item.children"
               :key="childItem.to"
               v-bind="getSubmenuItemAttributes(childItem)"
-              class="rail-submenu-link"
+              class="rail-submenu-link text-[#8ca89a] hover:text-white light:text-[#43574c] light:hover:text-[var(--main-color)] light:hover:bg-emerald-800/10"
               :class="{
                 'rail-submenu-link--active': isSubmenuItemActive(childItem),
                 'rail-submenu-link--maintenance': childItem.underMaintenance,
@@ -283,7 +283,7 @@ onBeforeUnmount(() => {
               :key="sport.label"
               :to="isAboutUsRoute && sport.label === 'Baseball' ? '/sports/baseball' : sport.to"
               :external="sport.to.startsWith('http')"
-              class="rail-submenu-link desktop-live-sport"
+              class="rail-submenu-link desktop-live-sport text-[#8ca89a] hover:text-white light:text-[#43574c] light:hover:text-[var(--main-color)] light:hover:bg-emerald-800/10"
               :title="translate(sport.label)"
               :aria-label="translate(sport.label)"
             >
@@ -294,14 +294,14 @@ onBeforeUnmount(() => {
 
           <div
             v-else-if="item.control === 'language' && isExpanded(item)"
-            class="rail-submenu rail-submenu--panel language-options"
+            class="rail-submenu rail-submenu--panel language-options light:bg-white/80 light:border-[#d8e2dc] light:shadow-sm"
             :aria-label="translate('Select language')"
           >
             <button
               v-for="language in languageOptions"
               :key="language.code"
               type="button"
-              class="language-option"
+              class="language-option text-white light:bg-[#edf4f0] light:text-[#31443a]"
               :class="{ 'language-option--active': locale === language.code }"
               @click="selectLanguage(language)"
             >
@@ -314,13 +314,14 @@ onBeforeUnmount(() => {
 
           <div
             v-else-if="item.control === 'theme' && isExpanded(item)"
-            class="rail-submenu rail-submenu--panel theme-options"
+            class="rail-submenu rail-submenu--panel theme-options light:bg-white/80 light:border-[#d8e2dc] light:shadow-sm"
             :aria-label="translate('Color theme')"
           >
             <button
               v-for="preference in (['auto', 'light', 'dark'] as ThemePreference[])"
               :key="preference"
               type="button"
+              class="theme-option text-white light:bg-[#edf4f0] light:text-[#31443a]"
               :class="{ 'theme-option--active': themePreference === preference }"
               @click="selectTheme(preference)"
             >
@@ -332,7 +333,7 @@ onBeforeUnmount(() => {
 
       <button
         type="button"
-        class="rail-toggle"
+        class="rail-toggle light:bg-gradient-to-r light:from-[#05714e] light:via-[#0ca171] light:to-[#05714e] light:text-white"
         :aria-expanded="!collapsed"
         aria-controls="rail-navigation"
         :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
@@ -445,7 +446,6 @@ onBeforeUnmount(() => {
   padding: 0 0.55rem;
   border: 0;
   border-radius: 0.5rem;
-  color: #fff;
   font-size: 0.52rem;
   font-weight: 500;
   text-align: left;
@@ -457,7 +457,6 @@ onBeforeUnmount(() => {
   width: 18px;
   height: 18px;
   flex: 0 0 auto;
-  color: #fff;
 }
 
 .rail-link:hover {

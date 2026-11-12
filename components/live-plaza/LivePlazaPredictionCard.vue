@@ -80,7 +80,7 @@ const isPredictedOption = (option: PredictionOption): boolean => {
 
 <template>
   <article
-    class="prediction-card"
+    class="prediction-card bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c] hover:bg-[#161616] light:hover:bg-[#f4f8f5]"
     role="link"
     tabindex="0"
     :aria-label="`Open ${prediction.predictorName}'s prediction on 2Bet`"
@@ -100,21 +100,21 @@ const isPredictedOption = (option: PredictionOption): boolean => {
           @error="handleAvatarError"
         >
         <div class="prediction-card__identity">
-          <strong>{{ prediction.predictorName }}</strong>
+          <strong class="text-white light:text-[#10261c]">{{ prediction.predictorName }}</strong>
         </div>
       </div>
 
-      <div class="prediction-card__hit-rate">
+      <div class="prediction-card__hit-rate text-[#838783] light:text-[#5d7066]">
         <span>{{ translate('Hit Rate') }}</span>
-        <strong>{{ formattedHitRate }}<small>%</small></strong>
+        <strong>{{ formattedHitRate }}<small class="text-[#f2f2f2] light:text-[#10261c]">%</small></strong>
       </div>
     </div>
 
     <div class="prediction-card__status-row">
-      <span class="prediction-card__published">{{ prediction.publishedAgo }}</span>
+      <span class="prediction-card__published text-[#787c79] light:text-[#5d7066]">{{ prediction.publishedAgo }}</span>
       <button
         type="button"
-        class="prediction-card__unlock"
+        class="prediction-card__unlock border-[var(--main-color)] text-[#f5f5f5] bg-[#1f2321] light:bg-[#eaf5ee] light:text-[#019440]"
         :class="{ 'prediction-card__unlock--active': unlocked }"
         @click="emit('unlock', prediction)"
       >
@@ -124,10 +124,10 @@ const isPredictedOption = (option: PredictionOption): boolean => {
       </button>
     </div>
 
-    <div class="match-box">
+    <div class="match-box bg-[#151515] light:bg-[#f8faf9] border border-[#303330] light:border-[#d8e2dc]">
       <div class="match-box__meta-row">
         <div class="match-box__meta">
-          <span class="match-box__market">{{ translate(prediction.marketType) }}</span>
+          <span class="match-box__market text-white bg-[var(--main-color)]">{{ translate(prediction.marketType) }}</span>
           <img
             :src="sportIcon"
             :alt="prediction.sport || 'Sport'"
@@ -138,19 +138,19 @@ const isPredictedOption = (option: PredictionOption): boolean => {
             decoding="async"
             aria-hidden="true"
           >
-          <span class="match-box__league">{{ prediction.league }}</span>
-          <span class="match-box__time">{{ prediction.matchTime }}</span>
+          <span class="match-box__league text-[#858985] light:text-[#5d7066]">{{ prediction.league }}</span>
+          <span class="match-box__time text-[#858985] light:text-[#5d7066]">{{ prediction.matchTime }}</span>
         </div>
-        <span class="match-box__arrow" aria-hidden="true">
+        <span class="match-box__arrow bg-[#292929] text-[#d5d7d5] light:bg-[#eaf5ee] light:text-[#019440]" aria-hidden="true">
           <ChevronRight :size="14" :stroke-width="2.6" />
         </span>
       </div>
 
-      <div class="match-box__teams">
+      <div class="match-box__teams text-[#f3f3f3] light:text-[#10261c]">
         <span class="match-box__team-col">
           <strong>{{ prediction.homeTeam }}</strong>
         </span>
-        <span class="match-box__vs">vs</span>
+        <span class="match-box__vs text-[#dddddd] light:text-[#768b80]">vs</span>
         <span class="match-box__team-col">
           <strong>{{ prediction.awayTeam }}</strong>
         </span>
@@ -164,11 +164,12 @@ const isPredictedOption = (option: PredictionOption): boolean => {
           v-for="option in prediction.options"
           :key="`${option.label}-${option.odd}`"
           type="button"
-          :class="{ 'match-box__odd--predicted': isPredictedOption(option) }"
+          class="bg-[#252525] light:bg-white text-[#929592] light:text-[#5d7066] border border-transparent light:border-[#d8e2dc] hover:text-white light:hover:text-[#10261c] hover:bg-[#2d2d2d] light:hover:bg-[#eaf5ee]"
+          :class="{ '!border-[#00a676] !bg-[#073628] light:!bg-[#d9ede1] !text-white light:!text-[#017a35]': isPredictedOption(option) }"
           @click="emit('selectOdd', prediction, option)"
         >
           <span>{{ option.label }}</span>
-          <strong>{{ option.odd }}</strong>
+          <strong class="text-[#f7f7f7] light:text-[#10261c]">{{ option.odd }}</strong>
         </button>
       </div>
     </div>
@@ -182,17 +183,13 @@ const isPredictedOption = (option: PredictionOption): boolean => {
   min-height: 212px;
   flex-direction: column;
   padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.025);
   border-radius: 12px;
-  color: #ffffff;
-  background: #141414;
   cursor: pointer;
   transition: border-color 150ms ease, background-color 150ms ease;
 }
 
 .prediction-card:hover {
   border-color: rgba(255, 255, 255, 0.1);
-  background: #161616;
 }
 
 .prediction-card:focus-visible {
@@ -254,7 +251,6 @@ const isPredictedOption = (option: PredictionOption): boolean => {
   display: flex;
   flex: 0 0 auto;
   align-items: baseline;
-  color: #838783;
   gap: 5px;
 }
 
@@ -272,7 +268,6 @@ const isPredictedOption = (option: PredictionOption): boolean => {
 
 .prediction-card__hit-rate small {
   margin-left: 2px;
-  color: #f2f2f2;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0;
@@ -286,7 +281,6 @@ const isPredictedOption = (option: PredictionOption): boolean => {
 
 .prediction-card__published {
   overflow: hidden;
-  color: #787c79;
   font-size: 10px;
   line-height: 1;
   text-overflow: ellipsis;
@@ -302,10 +296,8 @@ const isPredictedOption = (option: PredictionOption): boolean => {
   padding: 0 10px;
   border: 1px solid var(--main-color);
   border-radius: 8px;
-  color: #f5f5f5;
   font-size: 12px;
   font-weight: 700;
-  background: #1f2321;
   cursor: pointer;
   gap: 5px;
   transition: background-color 150ms ease, color 150ms ease;
@@ -319,9 +311,7 @@ const isPredictedOption = (option: PredictionOption): boolean => {
   flex-direction: column;
   justify-content: space-between;
   padding: 8px;
-  border: 1px solid #303330;
   border-radius: 11px;
-  background: #151515;
   gap: 7px;
 }
 
@@ -336,11 +326,9 @@ const isPredictedOption = (option: PredictionOption): boolean => {
   flex: 0 0 auto;
   padding: 2px 6px;
   border-radius: 4px;
-  color: #ffffff;
   font-size: 9px;
   font-weight: 800;
   line-height: 1.2;
-  background: var(--main-color);
 }
 
 .match-box__sport {
@@ -352,7 +340,6 @@ const isPredictedOption = (option: PredictionOption): boolean => {
 
 .match-box__league,
 .match-box__time {
-  color: #858985;
   font-size: 11px;
   line-height: 1;
   white-space: nowrap;
@@ -375,15 +362,12 @@ const isPredictedOption = (option: PredictionOption): boolean => {
   place-items: center;
   margin-left: 6px;
   border-radius: 50%;
-  color: #d5d7d5;
-  background: #292929;
 }
 
 .match-box__teams {
   display: grid;
   min-width: 0;
   grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr);
-  color: #f3f3f3;
   font-size: 12px;
   line-height: 1.2;
   text-align: center;
@@ -408,7 +392,6 @@ const isPredictedOption = (option: PredictionOption): boolean => {
 .match-box__vs {
   display: grid;
   place-items: center;
-  color: #dddddd;
   font-size: 11px;
   font-weight: 600;
 }
@@ -430,22 +413,12 @@ const isPredictedOption = (option: PredictionOption): boolean => {
   padding: 0 10px;
   border: 1px solid transparent;
   border-radius: 9px;
-  color: #929592;
   font-size: 12px;
   font-weight: 600;
-  background: #252525;
   cursor: pointer;
   gap: 6px;
   transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
 }
-
-.match-box__odds button:hover {
-  color: #ffffff;
-  background: #2d2d2d;
-}
-
-
-
 
 .match-box__odds span {
   overflow: hidden;
@@ -455,7 +428,6 @@ const isPredictedOption = (option: PredictionOption): boolean => {
 
 .match-box__odds strong {
   flex: 0 0 auto;
-  color: #f7f7f7;
 }
 
 @media (max-width: 40rem) {

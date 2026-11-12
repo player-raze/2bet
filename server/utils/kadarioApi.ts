@@ -1,6 +1,39 @@
 import type { SportsEvent } from '~/types/sports'
 import type { LiveStream, LiveStreamCatalog } from '~/types/livestream'
 
+const LIVE_CACHE_TTL_MS = 5000
+const LIVE_CACHE_MAX_ENTRIES = 32
+const liveCache = new Map<string, { data: unknown; expiresAt: number }>()
+const liveRequests = new Map<string, Promise<unknown>>()
+
+function cachedLiveRequest<T>(key: string, load: () => Promise<T>): Promise<T> {
+  const cached = liveCache.get(key)
+  if (cached && cached.expiresAt > Date.now()) return Promise.resolve(cached.data as T)
+  if (cached) liveCache.delete(key)
+
+  const pending = liveRequests.get(key)
+  if (pending) return pending as Promise<T>
+
+  // Share both the upstream work and its normalized result across simultaneous callers.
+  const request = Promise.resolve().then(load).then(data => {
+    const now = Date.now()
+    for (const [cacheKey, entry] of liveCache) {
+      if (entry.expiresAt <= now) liveCache.delete(cacheKey)
+    }
+    liveCache.set(key, { data, expiresAt: now + LIVE_CACHE_TTL_MS })
+    while (liveCache.size > LIVE_CACHE_MAX_ENTRIES) {
+      const oldestKey = liveCache.keys().next().value
+      if (oldestKey !== undefined) liveCache.delete(oldestKey)
+    }
+    return data
+  }).finally(() => {
+    liveRequests.delete(key)
+  })
+
+  liveRequests.set(key, request)
+  return request
+}
+
 interface ApiResponse<T> {
   code: number
   data: T
@@ -166,6 +199,17 @@ export async function getKadarioCatalog(
   liveSports: readonly string[] = ['basketball'],
   livestreamApiUrl?: string,
 ): Promise<LiveStreamCatalog> {
+  const key = JSON.stringify(['catalog', api, site, previews, liveSports, livestreamApiUrl])
+  return cachedLiveRequest(key, () => fetchKadarioCatalog(api, site, previews, liveSports, livestreamApiUrl))
+}
+
+async function fetchKadarioCatalog(
+  api: string,
+  site: string,
+  previews: boolean,
+  liveSports: readonly string[],
+  livestreamApiUrl?: string,
+): Promise<LiveStreamCatalog> {
   const baseURL = `${api.replace(/\/+$/, '').replace(/\/api\/v1$/, '')}/api/v1`
 
   async function request<T>(path: string, query?: Record<string, string>): Promise<T> {
@@ -277,6 +321,15 @@ interface KadarioScoresResponse {
 }
 
 export async function getLiveInplayEvents(
+  api: string,
+  site: string,
+  inplayApiUrl?: string,
+): Promise<SportsEvent[]> {
+  const key = JSON.stringify(['inplay', api, site, inplayApiUrl])
+  return cachedLiveRequest(key, () => fetchLiveInplayEvents(api, site, inplayApiUrl))
+}
+
+async function fetchLiveInplayEvents(
   api: string,
   site: string,
   inplayApiUrl?: string,

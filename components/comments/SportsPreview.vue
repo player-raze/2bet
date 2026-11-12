@@ -95,8 +95,8 @@ const tabs = [
 </script>
 
 <template>
-  <section class="overflow-hidden rounded-2xl bg-[#1f1f1f] opacity-90 ">
-    <div id="tv-title" class="flex min-w-0 items-center justify-between px-3 py-2 text-[13px] font-semibold text-white">
+  <section class="sports-preview-card overflow-hidden rounded-2xl bg-[#1f1f1f] opacity-90 light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm">
+    <div id="tv-title" class="flex min-w-0 items-center justify-between px-3 py-2 text-[13px] font-semibold text-white light:text-[#10261c]">
       <div class="flex min-w-0 flex-1 items-center justify-center gap-2 truncate">
         <template v-if="selectedStream">
           <span class="min-w-0 truncate text-right" :title="selectedStream.home?.name">{{ selectedStream.home?.name }}</span>
@@ -109,7 +109,7 @@ const tabs = [
       </div>
       
     </div>
-    <div class="relative aspect-[16/9] overflow-hidden rounded-xl bg-[#14261d]">
+    <div class="live-video-player relative aspect-[16/9] overflow-hidden rounded-xl bg-[#14261d] light:bg-[#eaf5ee] light:border light:border-emerald-500/15">
       <template v-if="selectedStream">
         <!-- Live Video Player (Playing) -->
         <div v-if="isPlaying" class="relative h-full w-full">
@@ -144,7 +144,7 @@ const tabs = [
         <!-- Thumbnail Picture with Play Button in Middle -->
         <div
           v-else
-          class="group relative flex h-full w-full cursor-pointer items-center justify-center overflow-hidden bg-gradient-to-br from-[#0b1712] via-[#10241b] to-[#07130e] select-none"
+          class="group relative flex h-full w-full cursor-pointer items-center justify-center overflow-hidden bg-gradient-to-br from-[#0b1712] via-[#10241b] to-[#07130e] select-none light:from-[#eef5f1] light:via-[#e2ece6] light:to-[#dce8e1]"
           role="button"
           tabindex="0"
           :aria-label="`Play ${streamTitle}`"
@@ -180,8 +180,8 @@ const tabs = [
         </div>
       </template>
       <div v-else class="flex h-full flex-col items-center justify-center px-5 text-center" role="status">
-        <Video :size="26" class="mb-2 text-white/60" aria-hidden="true" />
-        <p class="text-[14px] font-semibold text-white">
+        <Video :size="26" class="mb-2 text-white/60 light:text-[#10261c]/60" aria-hidden="true" />
+        <p class="text-[14px] font-semibold text-white light:text-[#10261c]">
           {{ previewMode === 'court' ? 'Match radar unavailable' : status === 'pending' ? 'Loading live streams…' : 'Stream unavailable' }}
         </p>
         <button v-if="previewMode === 'court'" type="button" class="mt-2 text-[12px] text-[#48daa6]" @click="previewMode = 'video'">Watch live video</button>

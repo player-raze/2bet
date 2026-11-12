@@ -1,8 +1,19 @@
 import type { Config } from 'tailwindcss'
-import plugin from 'tailwindcss/plugin'
+import plugin from 'tailwindcss/plugin.js'
 
 export default {
-  content: [],
+  content: [
+    './components/**/*.{vue,js,ts}',
+    './layouts/**/*.vue',
+    './pages/**/*.vue',
+    './composables/**/*.{js,ts}',
+    './plugins/**/*.{js,ts}',
+    './data/**/*.{js,ts}',
+    './utils/**/*.{js,ts}',
+    './app.vue',
+    './error.vue',
+  ],
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
@@ -29,7 +40,14 @@ export default {
   },
   plugins: [
     plugin(({ addVariant }) => {
-      addVariant('light', ['[data-theme="light"] &', '&[data-theme="light"]'])
+      // `:not(#_):not(#_)` boosts specificity to (2,2,1) so `light:*` utilities on a template
+      // always beat scoped component CSS and the global light-mode.css overrides (1,2,1).
+      addVariant('light', [
+        'html[data-theme="light"]:not(#_):not(#_) &',
+        '.light:not(#_):not(#_) &',
+        '&[data-theme="light"]',
+        '&.light',
+      ])
     }),
   ],
 } satisfies Config

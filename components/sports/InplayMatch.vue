@@ -189,7 +189,7 @@ const copyMatchLink = async (): Promise<void> => {
 </script>
 
 <template>
-  <article :id="`match-${match.id}`" class="winner-match">
+  <article :id="`match-${match.id}`" class="winner-match border-b border-[#292929] last:border-b-0 light:border-[#d8e2dc] text-white light:text-[#10261c]">
     <div class="desktop-live-summary">
       <time class="desktop-live-status" :datetime="match.commence_time">{{ liveClock }}</time>
       <div class="desktop-live-teams">
@@ -200,7 +200,7 @@ const copyMatchLink = async (): Promise<void> => {
         <strong>{{ score('home') }}</strong>
         <strong>{{ score('away') }}</strong>
       </div>
-      <div class="desktop-live-actions">
+      <div class="desktop-live-actions border-l border-[#303030] light:border-[#d8e2dc]">
         <MatchVideoThumbnail
           v-if="match.thumbnail || match.sources?.length"
           :thumbnail="match.thumbnail"
@@ -209,6 +209,7 @@ const copyMatchLink = async (): Promise<void> => {
         />
         <button
           type="button"
+          class="text-[#999] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
           aria-label="Share match"
           title="Share match"
           @click="isShareModalOpen = true"
@@ -217,6 +218,7 @@ const copyMatchLink = async (): Promise<void> => {
         </button>
         <button
           type="button"
+          class="text-[#999] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
           aria-label="Favorite match"
           title="Favorite match"
           @click="navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
@@ -228,7 +230,7 @@ const copyMatchLink = async (): Promise<void> => {
           :href="bybetRedirectUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="desktop-live-market-count"
+          class="desktop-live-market-count border border-[#303030] light:border-[#d8e2dc] text-[#999] light:text-[#5d7066] hover:text-white light:hover:text-[#10261c] bg-transparent light:bg-[#edf4f0]"
           :aria-label="`${marketCount} markets for ${match.home_team} vs ${match.away_team}`"
         >{{ marketCount }}</a>
       </div>
@@ -243,18 +245,18 @@ const copyMatchLink = async (): Promise<void> => {
         v-for="outcome in outcomes"
         :key="outcome.label"
         type="button"
-        class="desktop-live-price"
+        class="desktop-live-price bg-[#242424] hover:bg-[#303030] text-[#999] light:bg-[#f4f8f5] light:hover:bg-[#eaf5ee] light:text-[#5d7066] border border-transparent light:border-[#d8e2dc]"
         :disabled="!isOutcomeValid(outcome)"
         :aria-label="`${outcome.name}, implied decimal odds ${formatDecimalOdds(outcome.price)}`"
         :aria-pressed="selectedOutcome === outcome.name"
         @click="emit('select', outcome.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
       >
-        <span>{{ outcome.label }}</span>
-        <strong>{{ formatDecimalOdds(outcome.price) }}</strong>
+        <span class="text-[#999] light:text-[#5d7066]">{{ outcome.label }}</span>
+        <strong class="text-white light:text-[#10261c]">{{ formatDecimalOdds(outcome.price) }}</strong>
       </button>
     </div>
     <div class="mobile-live-summary">
-      <time class="mobile-live-status" :datetime="match.commence_time">{{ liveClock }}</time>
+      <time class="mobile-live-status text-white light:text-[#10261c]" :datetime="match.commence_time">{{ liveClock }}</time>
       <div class="mobile-live-teams">
         <span :title="match.home_team ?? undefined">{{ match.home_team }}</span>
         <span :title="match.away_team ?? undefined">{{ match.away_team }}</span>
@@ -263,7 +265,7 @@ const copyMatchLink = async (): Promise<void> => {
         <strong>{{ score('home') }}</strong>
         <strong>{{ score('away') }}</strong>
       </div>
-      <div v-if="marketCount || match.thumbnail || match.sources?.length" class="mobile-live-media">
+      <div v-if="marketCount || match.thumbnail || match.sources?.length" class="mobile-live-media border-l border-[#2c2c2c] light:border-[#d8e2dc] text-[#999] light:text-[#5d7066]">
         <span v-if="marketCount" :aria-label="`${marketCount} markets`">{{ marketCount }}</span>
         <MatchVideoThumbnail
           v-if="match.thumbnail || match.sources?.length"
@@ -283,14 +285,14 @@ const copyMatchLink = async (): Promise<void> => {
         v-for="market in mobileMarkets"
         :key="market.name"
         type="button"
-        class="mobile-live-price"
+        class="mobile-live-price bg-[#242424] text-[#999] light:bg-[#f4f8f5] light:text-[#5d7066] border border-transparent light:border-[#d8e2dc]"
         :disabled="!market.valid"
         :aria-label="`${market.name}, ${market.label}, decimal odds ${market.price}`"
         :aria-pressed="(market.key === 'h2h' ? selectedOutcome : selectedMarkets[market.key]) === market.name"
         @click="selectMarket(market.key, market.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
       >
-        <span>{{ market.label }}</span>
-        <strong>{{ market.price }}</strong>
+        <span class="text-[#999] light:text-[#5d7066]">{{ market.label }}</span>
+        <strong class="text-white light:text-[#10261c]">{{ market.price }}</strong>
       </button>
     </div>
     <div class="winner-header">
@@ -663,7 +665,6 @@ const copyMatchLink = async (): Promise<void> => {
     align-items: center;
     gap: 8px;
     margin-bottom: 10px;
-    color: #fff;
   }
 
   .live-page .mobile-live-status {
@@ -671,7 +672,6 @@ const copyMatchLink = async (): Promise<void> => {
     max-width: 76px;
     flex: 0 0 auto;
     white-space: pre-line;
-    color: #fff;
     font-size: 12px;
     line-height: 1.5;
   }
@@ -719,7 +719,6 @@ const copyMatchLink = async (): Promise<void> => {
     gap: 3px;
     padding-left: 8px;
     border-left: 1px solid #2c2c2c;
-    color: #999;
     font-size: 12px;
   }
 
@@ -741,16 +740,12 @@ const copyMatchLink = async (): Promise<void> => {
     justify-content: space-between;
     gap: 6px;
     padding: 8px;
-    border: 0;
     border-radius: 8px;
-    background: #242424;
-    color: #999;
     font-size: 14px;
     line-height: 1.3;
   }
 
   .live-page .mobile-live-price strong {
-    color: #fff;
     font-size: 14px;
     font-weight: 700;
   }
@@ -795,7 +790,6 @@ const copyMatchLink = async (): Promise<void> => {
     align-items: center;
     gap: 12px;
     margin-bottom: 10px;
-    color: #fff;
   }
 
   .live-page .desktop-live-status {
@@ -848,7 +842,6 @@ const copyMatchLink = async (): Promise<void> => {
     gap: 8px;
     padding-left: 12px;
     border-left: 1px solid #303030;
-    color: #999;
   }
 
   .live-page .desktop-live-actions button {
@@ -859,12 +852,6 @@ const copyMatchLink = async (): Promise<void> => {
     padding: 0;
     border: 0;
     background: transparent;
-    color: #999;
-  }
-
-  .live-page .desktop-live-actions button:hover,
-  .live-page .desktop-live-market-count:hover {
-    color: #fff;
   }
 
   .live-page .desktop-live-market-count {
@@ -872,9 +859,7 @@ const copyMatchLink = async (): Promise<void> => {
     min-width: 36px;
     height: 28px;
     place-items: center;
-    border: 1px solid #303030;
     border-radius: 8px;
-    color: #999;
     font-size: 12px;
     text-align: center;
   }
@@ -897,21 +882,13 @@ const copyMatchLink = async (): Promise<void> => {
     justify-content: space-between;
     gap: 8px;
     padding: 8px 12px;
-    border: 0;
     border-radius: 8px;
-    background: #242424;
-    color: #999;
     font-size: 14px;
     line-height: 1.4;
   }
 
   .live-page .desktop-live-price strong {
-    color: #fff;
     font-weight: 700;
-  }
-
-  .live-page .desktop-live-price:hover:enabled {
-    background: #303030;
   }
 
   .live-page .desktop-live-price[aria-pressed='true'] {

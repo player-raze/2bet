@@ -137,24 +137,25 @@ const copyMatchLink = async (): Promise<void> => {
 <template>
   <article
     :id="`match-${match.id}`"
-    class="winner-match"
+    class="winner-match bg-[#131313] light:bg-white text-white light:text-[#10261c] border-b border-[#292929] last:border-b-0 light:border-[#d8e2dc]"
     :class="{ 'winner-match--compact': compact && !fullMarkets }"
   >
     <div class="winner-header">
-      <time v-if="!fullMarkets" class="winner-date text-[12px]" :datetime="match.commence_time" >
+      <time v-if="!fullMarkets" class="winner-date text-[12px] text-[#eee] light:text-[#5d7066]" :datetime="match.commence_time" >
         <span>{{ matchDate }}</span>
         <span>{{ matchTime }}</span>
       </time>
-      <time v-else class="winner-date text-[12px]" :datetime="match.commence_time" >
+      <time v-else class="winner-date text-[12px] text-[#eee] light:text-[#5d7066]" :datetime="match.commence_time" >
         <span>{{ matchDate }} {{ matchTime }}</span>
       </time>
-      <div v-if="!fullMarkets" class="winner-teams border-l border-[#e5e7eb33] pr-2">
-        <span class="winner-home-team text-[12px]">{{ match.home_team }}</span>
-        <span class="winner-away-team text-[12px]">{{ match.away_team }}</span>
+      <div v-if="!fullMarkets" class="winner-teams border-l border-[#e5e7eb33] light:border-[#d8e2dc] pr-2">
+        <span class="winner-home-team text-[12px] text-[#f5f5f5] light:text-[#10261c]">{{ match.home_team }}</span>
+        <span class="winner-away-team text-[12px] text-[#f5f5f5] light:text-[#10261c]">{{ match.away_team }}</span>
       </div>
       <div class="winner-actions">
         <button
           type="button"
+          class="text-[#b6b9bb] light:text-[#5d7066]"
           aria-label="Copy match link to share"
           title="Share match"
           @click="isShareModalOpen = true"
@@ -163,6 +164,7 @@ const copyMatchLink = async (): Promise<void> => {
         </button>
         <button
           type="button"
+          class="text-[#b6b9bb] light:text-[#5d7066]"
           aria-label="Unstar match"
           title="Unstar match"
           @click=" navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
@@ -172,7 +174,7 @@ const copyMatchLink = async (): Promise<void> => {
         <button
           v-if="compact && !fullMarkets"
           type="button"
-          class="winner-market-count"
+          class="winner-market-count text-[#b6b9bb] light:text-[#5d7066]"
           aria-label="More match markets"
           title="More match markets"
           @click="navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
@@ -218,9 +220,9 @@ const copyMatchLink = async (): Promise<void> => {
           @click="selectMarket(market.key, market.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
         >
           <template v-if="isMarketValid(market)">
-            <span class="text-[#999]">{{ market.label }}</span>
+            <span class="text-[#999] light:text-[#5d7066]">{{ market.label }}</span>
             <br>
-            <strong>{{ market.outcome!.price.toFixed(2) }}</strong>
+            <strong class="text-white light:text-[#10261c]">{{ market.outcome!.price.toFixed(2) }}</strong>
           </template>
           <span v-else class="flex items-center justify-center w-full h-full py-2">
             <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-neutral-400 opacity-70" aria-hidden="true"><path d="M10.0003 18.3332C13.222 18.3332 15.8337 15.7215 15.8337 12.4998C15.8337 9.27818 13.222 6.6665 10.0003 6.6665C6.77866 6.6665 4.16699 9.27818 4.16699 12.4998C4.16699 15.7215 6.77866 18.3332 10.0003 18.3332Z" stroke="currentColor" stroke-width="1.4" class="stroke-dividers-1"></path><path d="M12.9163 7.49984V4.58317C12.9163 2.97234 11.6105 1.6665 9.99967 1.6665C8.38884 1.6665 7.08301 2.97234 7.08301 4.58317V7.49984" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" class="stroke-dividers-1"></path><path d="M10 10.8335V14.1668" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="stroke-dividers-1"></path></svg>
@@ -240,7 +242,7 @@ const copyMatchLink = async (): Promise<void> => {
         v-for="outcome in outcomes"
         :key="outcome.label"
         type="button"
-        class="winner-price"
+        class="winner-price bg-[#232323] light:bg-[#f4f8f5] text-[#f5f5f5] light:text-[#10261c] border border-transparent light:border-[#d8e2dc]"
         :class="{ 'winner-price--locked': !isOutcomeValid(outcome) }"
         :disabled="!isOutcomeValid(outcome)"
         :aria-label="`${outcome.name}, odds ${outcome.price ?? 'unavailable'}`"
@@ -248,8 +250,8 @@ const copyMatchLink = async (): Promise<void> => {
         @click="emit('select', outcome.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
       >
         <template v-if="isOutcomeValid(outcome)">
-          <span>{{ outcome.label }}</span>
-          <strong>{{ outcome.price!.toFixed(2) }}</strong>
+          <span class="text-[#999] light:text-[#5d7066]">{{ outcome.label }}</span>
+          <strong class="text-white light:text-[#10261c]">{{ outcome.price!.toFixed(2) }}</strong>
         </template>
         <span v-else class="flex items-center justify-center w-full h-full py-2">
           <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-neutral-400 opacity-70" aria-hidden="true"><path d="M10.0003 18.3332C13.222 18.3332 15.8337 15.7215 15.8337 12.4998C15.8337 9.27818 13.222 6.6665 10.0003 6.6665C6.77866 6.6665 4.16699 9.27818 4.16699 12.4998C4.16699 15.7215 6.77866 18.3332 10.0003 18.3332Z" stroke="currentColor" stroke-width="1.4" class="stroke-dividers-1"></path><path d="M12.9163 7.49984V4.58317C12.9163 2.97234 11.6105 1.6665 9.99967 1.6665C8.38884 1.6665 7.08301 2.97234 7.08301 4.58317V7.49984" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" class="stroke-dividers-1"></path><path d="M10 10.8335V14.1668" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="stroke-dividers-1"></path></svg>
@@ -423,15 +425,6 @@ const copyMatchLink = async (): Promise<void> => {
 
 .winner-match--compact {
   padding: 8px 8px 10px;
-  background: #131313;
-}
-
-.winner-match--compact:hover {
-  background: #131313;
-}
-
-.winner-match--compact + .winner-match--compact {
-  border-top: 1px dashed #292929;
 }
 
 .winner-match--compact .winner-header {
@@ -444,7 +437,6 @@ const copyMatchLink = async (): Promise<void> => {
   width: 49px;
   gap: 0;
   padding-right: 8px;
-  color: #eee;
   font-size: 12px;
   line-height: 16px;
 }
@@ -453,8 +445,6 @@ const copyMatchLink = async (): Promise<void> => {
   gap: 0;
   padding-right: 8px;
   padding-left: 8px;
-  border-color: #2b2b2b;
-  color: #f5f5f5;
   font-size: 12px;
   line-height: 24px;
 }
@@ -463,13 +453,11 @@ const copyMatchLink = async (): Promise<void> => {
   min-height: 40px;
   gap: 5px;
   padding-left: 8px;
-  border-left: 1px solid #2b2b2b;
 }
 
 .winner-match--compact .winner-actions button {
   width: 28px;
   height: 28px;
-  color: #b6b9bb;
 }
 
 .winner-match--compact .winner-actions button:first-child svg {
@@ -479,9 +467,7 @@ const copyMatchLink = async (): Promise<void> => {
 
 .winner-match--compact .winner-actions button.winner-market-count {
   width: 36px;
-  border: 1px solid #2b2b2b;
   border-radius: 8px;
-  color: #999;
   font-size: 12px;
 }
 
@@ -494,14 +480,8 @@ const copyMatchLink = async (): Promise<void> => {
   height: 36px;
   padding: 0 8px;
   border-radius: 8px;
-  background: #232323;
-  color: #f5f5f5;
   font-size: 14px;
   line-height: 20px;
-}
-
-.winner-match--compact .winner-price > span {
-  color: #959799;
 }
 
 .winner-match--compact .winner-price strong {

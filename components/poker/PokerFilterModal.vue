@@ -127,7 +127,7 @@ onBeforeUnmount(() => {
               :key="provider.key"
               type="button"
               class="poker-filter-option"
-              :class="{ 'poker-filter-option--active': isOptionActive(provider.key) }"
+              :class="{ 'poker-filter-option--active text-white': isOptionActive(provider.key) }"
               :aria-pressed="isOptionActive(provider.key)"
               :aria-label="provider.key === 'all' ? translate('All') : provider.label"
               @click="draft.provider = provider.key"
@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
               :key="option.key"
               type="button"
               class="poker-filter-option"
-              :class="{ 'poker-filter-option--active': draft.sort === option.key }"
+              :class="{ 'poker-filter-option--active text-white': draft.sort === option.key }"
               :aria-pressed="draft.sort === option.key"
               @click="draft.sort = option.key"
             >
@@ -163,7 +163,7 @@ onBeforeUnmount(() => {
 
       <footer class="poker-filter-actions">
         <button type="button" class="poker-filter-reset" @click="reset">{{ translate('Reset') }}</button>
-        <button type="button" class="poker-filter-apply" @click="apply">{{ translate('Apply') }}</button>
+        <button type="button" class="poker-filter-apply text-white" @click="apply">{{ translate('Apply') }}</button>
       </footer>
     </dialog>
   </Teleport>
@@ -289,7 +289,6 @@ legend {
 .poker-filter-option--active,
 .poker-filter-option--active:hover {
   border-color: var(--main-color);
-  color: #fff;
   background: var(--main-color);
 }
 
@@ -321,7 +320,6 @@ legend {
 
 .poker-filter-apply {
   border-color: var(--main-color) !important;
-  color: #fff;
   background: var(--main-color);
 }
 

@@ -72,13 +72,14 @@ const filteredEvents = computed(() => {
       <!-- Compact live toolbar -->
       <div class="toolbar">
         <SportsMobileSportsRoulette />
-        <label class="search">
+        <label class="search bg-[#1f1f1f] light:bg-white text-[#959799] light:text-[#5d7066] border border-transparent light:border-[#d8e2dc] light:shadow-sm">
           <span class="search-icons">
             <Search :size="16" aria-hidden="true" />
           </span>
           <input
             v-model="search"
             type="search"
+            class="text-white light:text-[#10261c] placeholder:text-[#959799] light:placeholder:text-[#8c918f] bg-transparent outline-none"
             :placeholder="translate('Search league or team')"
             :aria-label="translate('Search league or team')"
           >
@@ -86,11 +87,13 @@ const filteredEvents = computed(() => {
 
         <Sort
           v-model="sortBy"
+          class="light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]"
         />
 
         <Collapse
           :model-value="matchList?.allCollapsed ?? false"
           :title="translate('Collapse all matches')"
+          class="light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]"
           @toggle="matchList?.toggleAll()"
         />
       </div>
@@ -142,18 +145,14 @@ const filteredEvents = computed(() => {
     gap: 6px;
     padding: 0 10px;
     border-radius: 22px;
-    color: #959799;
-    background: #1f1f1f;
   }
 
   .live-page .search input { min-height: 36px; font-size: 14px; }
-  .live-page .search input::placeholder { color: #959799; opacity: 1; }
+  .live-page .search input::placeholder { opacity: 1; }
   .live-page .search-icons :deep(svg) { width: 20px; height: 20px; stroke-width: 1.5; }
   .live-page .toolbar :deep(.toolbar-circle-btn) {
     width: 36px;
     height: 36px;
-    color: #959799;
-    background: #1f1f1f;
   }
 }
 
@@ -167,11 +166,9 @@ const filteredEvents = computed(() => {
     gap: 6px;
     padding: 0 8px;
     border-radius: 22px;
-    color: #959799;
   }
 
   .search-icons :deep(svg) { width: 20px; height: 20px; stroke-width: 1.5; }
-  .search input::placeholder { color: #9ca3af; opacity: 1; }
 }
 </style>
 

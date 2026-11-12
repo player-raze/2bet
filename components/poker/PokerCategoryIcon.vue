@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <span class="poker-cat-icon-wrap" aria-hidden="true">
+  <span class="poker-cat-icon-wrap " aria-hidden="true">
     <!-- Popular -->
     <svg
       v-if="name === 'popular'"

@@ -80,7 +80,7 @@ if (!props.disableSeo) {
     <div class="coming-soon-card">
       <span class="status-icon" aria-hidden="true">
         <Clock3 :size="30" />
-        <Sparkles :size="14" />
+        <Sparkles :size="14" class="text-[#ffe56a]" />
       </span>
       <nav :aria-label="translate('Breadcrumb')">
         <NuxtLink to="/">{{ translate('Home') }}</NuxtLink>
@@ -93,11 +93,11 @@ if (!props.disableSeo) {
         {{ translate('This experience is being prepared. Check back soon for something new.') }}
       </p>
       <div class="page-actions">
-        <NuxtLink to="/">
+        <NuxtLink to="/" class="text-white bg-[#076f4c] hover:bg-[#065e40]">
           <Home :size="15" aria-hidden="true" />
           {{ translate('Back to Home') }}
         </NuxtLink>
-        <button type="button" @click="router.back()">
+        <button type="button" class="text-white/90 bg-transparent hover:text-white" @click="router.back()">
           <ArrowLeft :size="15" aria-hidden="true" />
           {{ translate('Go Back') }}
         </button>
@@ -146,7 +146,6 @@ if (!props.disableSeo) {
   position: absolute;
   top: 0.25rem;
   right: 0.1rem;
-  color: #ffe56a;
 }
 
 .coming-soon-card nav {
@@ -203,16 +202,13 @@ if (!props.disableSeo) {
   padding: 0 1rem;
   border: 1px solid rgba(50, 212, 154, 0.35);
   border-radius: 0.55rem;
-  color: white;
   font-size: 0.78rem;
   font-weight: 700;
-  background: #076f4c;
   gap: 0.45rem;
 }
 
 .page-actions button {
-  color: var(--text);
-  background: transparent;
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .page-actions a:hover,

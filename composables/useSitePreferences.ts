@@ -17,6 +17,8 @@ export type LocaleCode =
 export type ThemePreference = 'auto' | 'light' | 'dark'
 export type EffectiveTheme = 'light' | 'dark'
 
+export const DEFAULT_THEME_PREFERENCE: ThemePreference = 'dark'
+
 export interface LanguageOption {
   label: string
   code: LocaleCode
@@ -2478,12 +2480,12 @@ export const useSitePreferences = useSiteLocale
 
 export const useSiteTheme = () => {
   const themeCookie = useCookie<ThemePreference>('2bet-theme', {
-    default: () => 'auto',
+    default: () => DEFAULT_THEME_PREFERENCE,
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 365,
   })
   const themePreference = useState<ThemePreference>('2bet-theme-preference', () => {
-    return isThemePreference(themeCookie.value) ? themeCookie.value : 'auto'
+    return isThemePreference(themeCookie.value) ? themeCookie.value : DEFAULT_THEME_PREFERENCE
   })
   const effectiveTheme = useState<EffectiveTheme>('2bet-effective-theme', () => {
     return themePreference.value === 'light' ? 'light' : 'dark'

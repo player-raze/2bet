@@ -30,12 +30,12 @@ const filters: Array<{
       v-for="filter in filters"
       :key="filter.id"
       type="button"
-      class="sport-filter"
-      :class="{ 'sport-filter--active': modelValue === filter.id }"
+      class="sport-filter text-white/95 hover:bg-white/[0.055] light:text-[#5d7066] light:hover:text-[#10261c] light:hover:bg-[#eaf5ee]"
+      :class="{ 'sport-filter--active !text-white !bg-[var(--main-color)]': modelValue === filter.id }"
       :aria-pressed="modelValue === filter.id"
       @click="emit('update:modelValue', filter.id)"
     >
-      <span v-if="filter.id === 'all'" class="sport-filter__all-icon" aria-hidden="true">
+      <span v-if="filter.id === 'all'" class="sport-filter__all-icon text-white bg-[#ffad2f]" aria-hidden="true">
         <Star :size="10" :stroke-width="2.6" />
       </span>
       <img
@@ -77,7 +77,6 @@ const filters: Array<{
   padding: 0.18rem 0.44rem;
   border: 0;
   border-radius: 0.55rem;
-  color: rgba(255, 255, 255, 0.94);
   font-size: 0.58rem;
   font-weight: 700;
   line-height: 1;
@@ -87,14 +86,8 @@ const filters: Array<{
   transition: color 150ms ease, background-color 150ms ease;
 }
 
-.sport-filter:hover {
-  background: rgba(255, 255, 255, 0.055);
-}
-
 .sport-filter--active,
 .sport-filter--active:hover {
-  color: #ffffff;
-  background: var(--main-color);
 }
 
 .sport-filter__all-icon {
@@ -104,8 +97,6 @@ const filters: Array<{
   flex: 0 0 auto;
   place-items: center;
   border-radius: 50%;
-  color: #ffffff;
-  background: #ffad2f;
 }
 
 .sport-filter__all-icon :deep(svg) {

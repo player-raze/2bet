@@ -114,14 +114,14 @@ const sportCategories = computed(() => {
     >
       <button
         v-if="category.name"
-        class="live-category-heading"
+        class="live-category-heading text-white light:text-[#10261c]"
         type="button"
         :aria-expanded="category.events.some(event => isExpanded(tournamentKey(event)))"
         :aria-label="`${category.name}, ${category.events.length} live matches`"
         @click="toggleCategory(category.events)"
       >
         <span>{{ category.name }}</span>
-        <span class="live-category-heading__count">
+        <span class="live-category-heading__count bg-[#292929] text-[#999] light:bg-[#eaf5ee] light:text-[#019440] light:border light:border-emerald-500/20">
           {{ category.events.length }}
           <ChevronRight :size="16" aria-hidden="true" />
         </span>
@@ -130,7 +130,7 @@ const sportCategories = computed(() => {
         <article
           v-for="tournament in tournaments(category.events)"
           :key="tournament.key"
-          class="league-preview"
+          class="league-preview bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm"
         >
           <button
             :id="`inplay-trigger-${tournament.key}`"
@@ -140,8 +140,8 @@ const sportCategories = computed(() => {
             :aria-controls="`inplay-panel-${tournament.key}`"
             @click="toggleTournament(tournament.key)"
           >
-            <span class="league-name truncate text-[12px] text-[#999]" :title="tournament.title">{{ tournament.title }}</span>
-            <ChevronDown :size="16" class="shrink-0" :class="{ 'rotate-180': isExpanded(tournament.key) }" aria-hidden="true" />
+            <span class="league-name truncate text-[12px] text-[#999] light:text-[#5d7066]" :title="tournament.title">{{ tournament.title }}</span>
+            <ChevronDown :size="16" class="shrink-0 text-[#999] light:text-[#5d7066]" :class="{ 'rotate-180': isExpanded(tournament.key) }" aria-hidden="true" />
           </button>
           <div
             v-show="isExpanded(tournament.key)"
@@ -248,7 +248,6 @@ const sportCategories = computed(() => {
     margin: 0 0 12px;
     padding: 0;
     border: 0;
-    color: #fff;
     background: transparent;
     font-size: 18px;
     font-weight: 700;
@@ -266,8 +265,6 @@ const sportCategories = computed(() => {
     gap: 3px;
     padding: 0 6px 0 10px;
     border-radius: 999px;
-    background: #292929;
-    color: #999;
     font-size: 12px;
     font-weight: 600;
   }
@@ -278,7 +275,6 @@ const sportCategories = computed(() => {
 
   .live-page .league-preview {
     border-radius: 12px;
-    background: #141414;
   }
 
   .live-page .league-preview-heading {
@@ -288,7 +284,6 @@ const sportCategories = computed(() => {
   }
 
   .live-page .league-preview-heading .league-name {
-    color: #999;
     font-size: 12px;
     font-weight: 400;
   }
@@ -311,7 +306,6 @@ const sportCategories = computed(() => {
 
   .live-page .league-preview {
     border-radius: 12px;
-    background: #141414;
   }
 
   .live-page .league-preview-heading {
@@ -322,13 +316,11 @@ const sportCategories = computed(() => {
   }
 
   .live-page .league-preview-heading .league-name {
-    color: #999;
     font-size: 12px;
     font-weight: 400;
   }
 
   .live-page .league-preview-heading > svg {
-    color: #999;
   }
 
   .live-page .league-preview-heading:focus-visible {

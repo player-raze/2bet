@@ -44,7 +44,7 @@ export const useJackpotWinners = () => {
 
   const scheduleRandomWinner = (): void => {
     if (!import.meta.client) return
-    const delay = Math.floor(Math.random() * (60_000 - 5_000 + 1)) + 5_000
+    const delay = 3_000
     winnerTimer = setTimeout(() => {
       addNewWinner()
       scheduleRandomWinner()

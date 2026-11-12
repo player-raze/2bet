@@ -30,6 +30,11 @@ const isIndexFollow = environment?.INDEX_FOLLOW === 'true'
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   buildDir: environment?.NODE_ENV === 'production' && !isPrepare ? 'node_modules/.cache/2bet-nuxt-build' : '.nuxt',
+  ignore: [
+    '**/data/*.json',
+    '**/data/*.sqlite*',
+    '**/data/*.log',
+  ],
   devtools: { enabled: false },
   runtimeConfig: {
     oddsApi: environment?.SPORTS_API || 'https://api.the-odds-api.com/v4',
@@ -89,6 +94,10 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'pt' },
       meta: [
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover',
+        },
         { name: 'theme-color', content: '#080D0B' },
         {
           name: 'robots',

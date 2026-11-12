@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
   <Teleport to="body">
     <dialog
       ref="dialog"
-      class="reminder-modal mobile-modal-slide-up prompt-sheet"
+      class="reminder-modal mobile-modal-slide-up prompt-sheet bg-[#1e1e1e] text-white light:bg-white light:text-[#10261c] border border-transparent light:border-[#d8e2dc] light:shadow-2xl"
       aria-labelledby="reminder-title"
       aria-describedby="reminder-description"
       @cancel.prevent="emit('close')"
@@ -54,10 +54,10 @@ onBeforeUnmount(() => {
       <div class="reminder-content">
         <div class="reminder-symbol" aria-hidden="true">!</div>
         <div id="reminder-title" class="reminder-title" role="heading" aria-level="2">{{ translate(title) }}</div>
-        <p id="reminder-description">
+        <p id="reminder-description" class="text-[#e5e7eb] light:text-[#5d7066]">
           {{ translate(message) }}
         </p>
-        <button type="button" autofocus @click="handleOk">{{ translate('OK') }}</button>
+        <button type="button" class="text-white hover:bg-[#087957]" autofocus @click="handleOk">{{ translate('OK') }}</button>
       </div>
     </dialog>
   </Teleport>
@@ -75,8 +75,6 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   border: 0;
   border-radius: 11px;
-  color: #fff;
-  background: #1e1e1e;
   text-align: center;
   box-shadow: 0 16px 48px rgb(0 0 0 / 30%);
 }
@@ -115,7 +113,6 @@ p {
   margin: 6px auto 16px;
   font-size: 14px;
   line-height: 18px;
-  color: #e5e7eb;
 }
 
 button {
@@ -124,16 +121,11 @@ button {
   padding: 12px;
   border: 0;
   border-radius: 13px;
-  color: #fff;
   background: var(--main-highlight);
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 150ms ease;
-}
-
-button:hover {
-  background: #087957;
 }
 
 button:focus-visible {

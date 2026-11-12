@@ -328,7 +328,7 @@ onBeforeUnmount(() => {
 <template>
   <section
     id="game-providers"
-    class="providers-glass-section"
+    class="providers-glass-section light:bg-white/90 light:border-black/[0.08] light:shadow-md"
     aria-labelledby="providers-section-title"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -343,15 +343,15 @@ onBeforeUnmount(() => {
         </div>
         <div class="flex flex-col">
           <div class="flex items-center gap-2">
-            <h2 id="providers-section-title" class="section-title">
+            <h2 id="providers-section-title" class="section-title text-white light:text-[#111827]">
               {{ translate('Featured Providers') }}
             </h2>
-            <span class="partners-badge hidden sm:inline-flex items-center gap-1">
+            <span class="partners-badge hidden sm:inline-flex items-center gap-1 text-[#e5e7eb] light:text-[#374151] bg-[#019440]/15 light:bg-black/[0.04] border border-[#019440]/30 light:border-black/[0.08]">
               <Sparkles :size="11" class="text-[#32d49a]" />
               16 {{ translate('Official Partners') }}
             </span>
           </div>
-          <p class="section-subtitle">
+          <p class="section-subtitle text-[#94a39b] light:text-[#6b7280]">
             {{ translate('World-class gaming studios powering 2Bet') }}
           </p>
         </div>
@@ -372,12 +372,12 @@ onBeforeUnmount(() => {
           v-for="(provider, index) in duplicatedProviders"
           :key="`${provider.id}-${index}`"
           :to="provider.to"
-          class="provider-glass-card group"
+          class="provider-glass-card group light:bg-white/75 light:hover:bg-white/95 light:border-black/[0.08] light:shadow-sm"
           :aria-label="`${provider.name} - ${provider.category} (${provider.gamesCount})`"
         >
           <!-- Card Header Pill -->
           <div class="card-glass-top flex items-center justify-between">
-            <span class="category-pill flex items-center gap-1.5" :data-tone="provider.categoryTone">
+            <span class="category-pill flex items-center gap-1.5 text-[#d1d5db] light:text-[#4b5563] bg-black/65 light:bg-black/[0.03] border border-[#019440]/25 light:border-black/[0.06]" :data-tone="provider.categoryTone">
               <span class="status-dot" aria-hidden="true" />
               {{ translate(provider.category) }}
             </span>
@@ -399,8 +399,8 @@ onBeforeUnmount(() => {
 
           <!-- Card Glass Footer -->
           <div class="card-glass-footer flex items-center justify-between">
-            <span class="provider-title truncate">{{ provider.name }}</span>
-            <span class="games-count-pill hidden sm:block">{{ provider.gamesCount }}</span>
+            <span class="provider-title truncate text-[#f3f4f6] light:text-[#111827]">{{ provider.name }}</span>
+            <span class="games-count-pill hidden sm:block text-[#9ca3af] light:text-[#4b5563] bg-black/50 light:bg-black/[0.04] border border-[#019440]/15 light:border-black/[0.06]">{{ provider.gamesCount }}</span>
           </div>
 
           <!-- Subtle Diagonal Light Reflection -->
@@ -448,7 +448,6 @@ onBeforeUnmount(() => {
   font-size: clamp(20px, 2.2vw, 24px);
   font-weight: 400;
   letter-spacing: -0.01em;
-  color: #ffffff;
   line-height: 1.2;
 }
 
@@ -457,7 +456,6 @@ onBeforeUnmount(() => {
   border-radius: 999px;
   background: rgba(1, 148, 64, 0.14);
   border: 1px solid rgba(1, 148, 64, 0.32);
-  color: #e5e7eb;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -465,7 +463,6 @@ onBeforeUnmount(() => {
 
 .section-subtitle {
   font-size: 12px;
-  color: #94a39b;
   margin-top: 2px;
 }
 
@@ -643,14 +640,12 @@ onBeforeUnmount(() => {
 .provider-title {
   font-size: 12px;
   font-weight: 700;
-  color: #f3f4f6;
   max-width: 110px;
 }
 
 .games-count-pill {
   font-size: 10px;
   font-weight: 600;
-  color: #9ca3af;
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(1, 148, 64, 0.15);
   padding: 1px 6px;
@@ -675,20 +670,6 @@ html[data-theme='light']:not(#_) .providers-glass-section {
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.06),
     inset 0 1px 1px rgba(255, 255, 255, 1);
-}
-
-html[data-theme='light']:not(#_) .section-title {
-  color: #111827;
-}
-
-html[data-theme='light']:not(#_) .section-subtitle {
-  color: #6b7280;
-}
-
-html[data-theme='light']:not(#_) .partners-badge {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.08);
-  color: #374151;
 }
 
 html[data-theme='light']:not(#_) .glass-control-btn {
@@ -718,16 +699,6 @@ html[data-theme='light']:not(#_) .provider-glass-card:hover {
   box-shadow:
     0 12px 28px rgba(1, 148, 64, 0.14),
     inset 0 1px 1px #ffffff;
-}
-
-html[data-theme='light']:not(#_) .provider-title {
-  color: #111827;
-}
-
-html[data-theme='light']:not(#_) .category-pill {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.06);
-  color: #4b5563;
 }
 
 html[data-theme='light']:not(#_) .card-glass-footer {

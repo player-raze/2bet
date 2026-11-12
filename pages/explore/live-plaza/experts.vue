@@ -152,7 +152,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="experts-page">
+  <div class="experts-page text-white light:text-[#10261c]">
     <SubpageHeader
       title="All Experts"
       back-to="/live-plaza/expert-predictions"
@@ -163,7 +163,7 @@ onBeforeUnmount(() => {
           <button
             ref="sortButton"
             type="button"
-            class="experts-sort__button"
+            class="experts-sort__button bg-[#0a402d] text-white light:bg-white light:text-[#019440] light:border light:border-[#d8e2dc]"
             :class="{ 'experts-sort__button--open': sortMenuOpen }"
             aria-haspopup="menu"
             :aria-expanded="sortMenuOpen"
@@ -178,16 +178,16 @@ onBeforeUnmount(() => {
             <div
               v-if="sortMenuOpen"
               id="expert-sort-menu"
-              class="experts-sort__menu"
+              class="experts-sort__menu bg-[#171717] text-[#eeeeee] border border-white/5 light:bg-white light:text-[#10261c] light:border-[#d8e2dc] light:shadow-xl"
               role="menu"
               :aria-label="translate('Sort experts')"
             >
-              <span class="experts-sort__label">{{ translate('Sort') }}</span>
+              <span class="experts-sort__label text-[#eeeeee] light:text-[#10261c]">{{ translate('Sort') }}</span>
               <button
                 v-for="option in sortOptions"
                 :key="option.value"
                 type="button"
-                class="experts-sort__option"
+                class="experts-sort__option bg-[#202322] text-[#eeeeee] border-[#565b58] light:bg-[#edf4f0] light:text-[#2a3c33] light:border-[#d8e2dc] [&.experts-sort__option--active]:!bg-[#007653] [&.experts-sort__option--active]:!text-white"
                 :class="{ 'experts-sort__option--active': expertSort === option.value }"
                 role="menuitemradio"
                 :aria-checked="expertSort === option.value"
@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
     </SubpageHeader>
 
     <div class="experts-content-container px-2.5 sm:px-0">
-      <section class="experts-filter-bar" :aria-label="translate('Filter experts')">
+      <section class="experts-filter-bar bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" :aria-label="translate('Filter experts')">
         <LivePlazaSportFilters v-model="selectedSport" />
       </section>
 
@@ -210,7 +210,7 @@ onBeforeUnmount(() => {
       <NuxtLink
         v-for="expert in displayedExperts"
         :key="expert.id"
-        class="expert-card"
+        class="expert-card bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c] hover:bg-[#181918] light:hover:bg-[#f4f8f5]"
         :to="bybetRedirectUrl"
         external
       >
@@ -226,8 +226,8 @@ onBeforeUnmount(() => {
             @error="handleAvatarError"
           >
           <span class="expert-card__details">
-            <strong>{{ expert.predictorName }}</strong>
-            <span v-if="expert.winStreak" class="expert-card__streak">
+            <strong class="text-white light:text-[#10261c]">{{ expert.predictorName }}</strong>
+            <span v-if="expert.winStreak" class="expert-card__streak text-[#f33549] bg-[#fff4f5]">
               {{ expert.winStreak }}
             </span>
           </span>
@@ -236,13 +236,13 @@ onBeforeUnmount(() => {
         <span class="expert-card__stats">
           <span
             v-if="expert.currentPredictions"
-            class="expert-card__current-predictions"
+            class="expert-card__current-predictions text-[#858985] light:text-[#5d7066]"
           >
             {{ translate('Current') }} {{ expert.currentPredictions }} {{ translate('predictions') }}
           </span>
-          <span class="expert-card__hit-rate">
+          <span class="expert-card__hit-rate text-[#858985] light:text-[#5d7066]">
             <span>{{ translate('Hit Rate') }}</span>
-            <strong>{{ formatHitRate(expert.hitRate) }}<small>%</small></strong>
+            <strong class="text-[#13ae7d] light:text-[#009440]">{{ formatHitRate(expert.hitRate) }}<small class="text-[#f2f2f2] light:text-[#10261c]">%</small></strong>
           </span>
         </span>
       </NuxtLink>
@@ -255,7 +255,7 @@ onBeforeUnmount(() => {
       aria-hidden="true"
     />
 
-    <div v-if="!visibleExperts.length" class="experts-empty">
+    <div v-if="!visibleExperts.length" class="experts-empty bg-[#141414] text-[#858985] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]">
       {{ translate('No experts are available for this sport.') }}
     </div>
     </div>
@@ -268,7 +268,6 @@ onBeforeUnmount(() => {
   min-width: 0;
   padding-top: 0;
   padding-bottom: 3rem;
-  color: #ffffff;
 }
 
 .experts-sort {
@@ -283,12 +282,9 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
-  color: #ffffff;
   font-size: 11.5px;
   font-weight: 500;
-  background: #0a402d;
   cursor: pointer;
   gap: 4px;
   transition: border-color 150ms ease, background-color 150ms ease;
@@ -297,7 +293,6 @@ onBeforeUnmount(() => {
 .experts-sort__button:hover,
 .experts-sort__button--open {
   border-color: rgba(255, 255, 255, 0.25);
-  background: #0d4d37;
 }
 
 .experts-sort__menu {
@@ -308,10 +303,7 @@ onBeforeUnmount(() => {
   right: 0;
   width: 150px;
   padding: 9px 11px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 14px;
-  color: #eeeeee;
-  background: #171717;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
   gap: 5px;
 }
@@ -324,12 +316,9 @@ onBeforeUnmount(() => {
 .experts-sort__option {
   min-height: 32px;
   padding: 0 12px;
-  border: 1px solid #565b58;
   border-radius: 999px;
-  color: #eeeeee;
   font-size: 12px;
   font-weight: 500;
-  background: #202322;
   cursor: pointer;
 }
 
@@ -339,7 +328,6 @@ onBeforeUnmount(() => {
 
 .experts-sort__option--active {
   border-color: #007653;
-  background: #007653;
 }
 
 .sort-menu-enter-active,
@@ -360,9 +348,7 @@ onBeforeUnmount(() => {
   align-items: center;
   margin-bottom: 8px;
   padding: 0 11px;
-  border: 1px solid rgba(255, 255, 255, 0.025);
   border-radius: 12px;
-  background: #141414;
 }
 
 .experts-grid {
@@ -379,18 +365,14 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   padding: 9px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.025);
   border-radius: 12px;
-  color: #ffffff;
   text-decoration: none;
-  background: #141414;
   gap: 12px;
   transition: border-color 150ms ease, background-color 150ms ease;
 }
 
 .expert-card:hover {
   border-color: rgba(31, 167, 121, 0.45);
-  background: #181918;
 }
 
 .expert-card__identity {
@@ -431,11 +413,9 @@ onBeforeUnmount(() => {
 .expert-card__streak {
   padding: 2px 7px;
   border-radius: 4px;
-  color: #f33549;
   font-size: 9px;
   font-weight: 800;
   line-height: 1.2;
-  background: #fff4f5;
 }
 
 .expert-card__stats {
@@ -448,7 +428,6 @@ onBeforeUnmount(() => {
 }
 
 .expert-card__current-predictions {
-  color: #858985;
   font-size: 9px;
   line-height: 1;
   white-space: nowrap;
@@ -458,7 +437,6 @@ onBeforeUnmount(() => {
   display: flex;
   flex: 0 0 auto;
   align-items: baseline;
-  color: #858985;
   gap: 5px;
 }
 
@@ -467,7 +445,6 @@ onBeforeUnmount(() => {
 }
 
 .expert-card__hit-rate strong {
-  color: #13ae7d;
   font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -476,7 +453,6 @@ onBeforeUnmount(() => {
 
 .expert-card__hit-rate small {
   margin-left: 2px;
-  color: #f2f2f2;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0;
@@ -487,9 +463,7 @@ onBeforeUnmount(() => {
   min-height: 220px;
   place-items: center;
   border-radius: 12px;
-  color: #858985;
   font-size: 12px;
-  background: #141414;
 }
 
 .experts-load-more-trigger {

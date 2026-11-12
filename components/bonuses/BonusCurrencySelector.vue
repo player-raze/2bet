@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
 <template>
   <button
     ref="trigger"
-    class="bonus-currency-trigger"
+    class="bonus-currency-trigger bg-white/20"
     type="button"
     aria-haspopup="dialog"
     :aria-expanded="isOpen"
@@ -107,22 +107,22 @@ onBeforeUnmount(() => {
     <div v-if="isOpen" class="bonus-currency-overlay" @click.self="close">
       <div
         ref="dialog"
-        class="bonus-currency-dialog"
+        class="bonus-currency-dialog bg-[#202020] text-[#f5f5f5] light:bg-white light:text-[#10261c] light:border light:border-[#d8e2dc] light:shadow-2xl"
         role="dialog"
         aria-modal="true"
         :aria-labelledby="titleId"
       >
         <div class="bonus-currency-dialog__header">
-          <div :id="titleId" class="bonus-currency-dialog__title" role="heading" aria-level="2">{{ translate('Currency') }}</div>
-          <button class="bonus-currency-dialog__close" type="button" :aria-label="translate('Close currency selector')" @click="close">
+          <div :id="titleId" class="bonus-currency-dialog__title text-white light:text-[#10261c]" role="heading" aria-level="2">{{ translate('Currency') }}</div>
+          <button class="bonus-currency-dialog__close text-[#aaa] light:text-[#5d7066] hover:text-white light:hover:text-[#10261c]" type="button" :aria-label="translate('Close currency selector')" @click="close">
             <X :size="18" aria-hidden="true" />
           </button>
         </div>
-        <div class="bonus-currency-options" role="group" :aria-label="translate(optionsLabel)">
+        <div class="bonus-currency-options bg-[#333] light:bg-[#f4f8f5] light:border light:border-[#d8e2dc]" role="group" :aria-label="translate(optionsLabel)">
           <button
             v-for="currency in currencies"
             :key="currency.code"
-            class="bonus-currency-option"
+            class="bonus-currency-option text-[#f5f5f5] light:text-[#24382e] hover:bg-[#3e3e3e] light:hover:bg-[#eaf5ee] [&[aria-pressed=true]]:!border-[#00a845] [&[aria-pressed=true]]:!bg-[#2d4034] light:[&[aria-pressed=true]]:!bg-[#d9ede1] light:[&[aria-pressed=true]]:!text-[#017a35]"
             type="button"
             :aria-pressed="modelValue === currency.code"
             @click="selectCurrency(currency.code)"
@@ -146,7 +146,6 @@ onBeforeUnmount(() => {
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
   box-shadow: inset 1px 1px #ffffff4d, inset -1px -1px #ffffff80, inset 2px 2px 4px #00000005, inset -4px -4px 8px #00000005, 0 0 4px #0000000a, 0 4px 8px #00000014;
   cursor: pointer;
 }
@@ -183,8 +182,6 @@ onBeforeUnmount(() => {
   padding: 0 12px 20px;
   overflow: hidden;
   border-radius: 10px;
-  background: #202020;
-  color: #f5f5f5;
   font-family: 'Manrope', Arial, sans-serif;
 }
 
@@ -199,7 +196,6 @@ onBeforeUnmount(() => {
 .bonus-currency-dialog__header h2,
 .bonus-currency-dialog__title {
   margin: 0;
-  color: #fff;
   font-size: 16px;
   font-weight: 800;
   line-height: 1.4;
@@ -216,12 +212,8 @@ onBeforeUnmount(() => {
   place-items: center;
   border: 0;
   border-radius: 50%;
-  color: #aaa;
-  background: transparent;
   cursor: pointer;
 }
-
-.bonus-currency-dialog__close:hover { color: #fff; }
 
 .bonus-currency-options {
   max-height: min(680px, calc(100dvh - 104px));
@@ -229,7 +221,6 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   overscroll-behavior: contain;
   border-radius: 12px 0 0 12px;
-  background: #333;
   scrollbar-color: #c5c5c5 #f5f5f5;
   scrollbar-width: auto;
 }
@@ -251,8 +242,6 @@ onBeforeUnmount(() => {
   padding: 10px 11px;
   border: 1px solid transparent;
   border-radius: 12px;
-  color: #f5f5f5;
-  background: transparent;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.4;
@@ -263,12 +252,5 @@ onBeforeUnmount(() => {
 .bonus-currency-option:hover,
 .bonus-currency-option:focus-visible {
   outline: none;
-  background: #3e3e3e;
-}
-
-.bonus-currency-option[aria-pressed='true'] {
-  border-color: #00a845;
-  background: #2d4034;
-  font-weight: 700;
 }
 </style>

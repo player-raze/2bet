@@ -92,7 +92,7 @@ watch(activeCategory, (category) => {
         <template v-for="item in LIVE_CASINO_CATEGORIES" :key="item.key">
           <NuxtLink
             :to="`/entertainment/live-casino/${item.key}`"
-            class="casino-category-button"
+            class="casino-category-button bg-[#282828] text-[#959799] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc] light:shadow-sm"
             :class="{ 'casino-category-button--active': activeCategory === item.key }"
             :aria-label="item.label"
             :aria-current="activeCategory === item.key ? 'page' : undefined"
@@ -101,7 +101,7 @@ watch(activeCategory, (category) => {
             <LiveCasinoCategoryIcon :name="item.key" />
             <span v-if="activeCategory === item.key">{{ item.label }}</span>
           </NuxtLink>
-          <a v-if="item.key === 'baccarat' && isBaccarat" :href="bybetRedirectUrl" class="casino-multitable-button" aria-label="Open Multi-table">
+          <a v-if="item.key === 'baccarat' && isBaccarat" :href="bybetRedirectUrl" class="casino-multitable-button bg-[#282828] text-[#959799] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc] light:shadow-sm" aria-label="Open Multi-table">
             <LiveCasinoCategoryIcon name="multi-table" /><span>Multi-table</span>
           </a>
         </template>
@@ -111,6 +111,7 @@ watch(activeCategory, (category) => {
           v-for="item in tableTypes"
           :key="item.key"
           type="button"
+          class="text-[#929292] hover:text-[#d0d0d0] light:text-[#5d7066] light:hover:text-[#10261c]"
           :class="{ 'casino-table-filter--active': tableType === item.key }"
           :aria-pressed="tableType === item.key"
           @click="tableType = item.key"
@@ -149,12 +150,12 @@ watch(activeCategory, (category) => {
     </div>
     <template v-else-if="isGoodRoad">
       <div class="casino-section-heading" :class="{ 'casino-section-heading--filters-open': roadFiltersOpen }">
-        <h1>Good Road <span>{{ filteredTables.length }}</span></h1>
+        <h1>Good Road <span class="text-[#8c8c8c] light:text-[#718279]">{{ filteredTables.length }}</span></h1>
         <div class="casino-view-controls">
           <LiveCasinoRoadFilters v-model="roadType" @update:open="roadFiltersOpen = $event" />
-          <div class="casino-view-switch" role="group" aria-label="Table card view">
-            <button type="button" :class="{ 'casino-view-button--active': tableLayout === 'horizontal' }" :aria-pressed="tableLayout === 'horizontal'" aria-label="Show side-by-side tables and roadmaps" @click="tableLayout = 'horizontal'"><Rows2 :size="14" aria-hidden="true" /></button>
-            <button type="button" :class="{ 'casino-view-button--active': tableLayout === 'vertical' }" :aria-pressed="tableLayout === 'vertical'" aria-label="Show tables above roadmaps" @click="tableLayout = 'vertical'"><Grid2X2 :size="14" aria-hidden="true" /></button>
+          <div class="casino-view-switch bg-[#222] light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm" role="group" aria-label="Table card view">
+            <button type="button" class="text-[#969696] light:text-[#5d7066]" :class="{ 'casino-view-button--active': tableLayout === 'horizontal' }" :aria-pressed="tableLayout === 'horizontal'" aria-label="Show side-by-side tables and roadmaps" @click="tableLayout = 'horizontal'"><Rows2 :size="14" aria-hidden="true" /></button>
+            <button type="button" class="text-[#969696] light:text-[#5d7066] border-l border-[#3d3d3d] light:border-l-[#d8e2dc]" :class="{ 'casino-view-button--active': tableLayout === 'vertical' }" :aria-pressed="tableLayout === 'vertical'" aria-label="Show tables above roadmaps" @click="tableLayout = 'vertical'"><Grid2X2 :size="14" aria-hidden="true" /></button>
           </div>
         </div>
       </div>
@@ -200,7 +201,7 @@ watch(activeCategory, (category) => {
 .casino-lobby-navigation { position: sticky; z-index: 30; top: var(--content-sticky-top); }
 .casino-category-nav { display: flex; min-height: 60px; align-items: center; gap: 12px; padding: 8px; overflow-x: auto; border-radius: 12px 12px 0 0; background: var(--page); scrollbar-width: none; }
 .casino-category-nav::-webkit-scrollbar { display: none; }
-.casino-category-button, .casino-multitable-button { display: inline-flex; width: 44px; height: 44px; flex: 0 0 auto; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 50%; color: #959799; background: #282828; text-decoration: none; cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
+.casino-category-button, .casino-multitable-button { display: inline-flex; width: 44px; height: 44px; flex: 0 0 auto; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 50%; text-decoration: none; cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
 .casino-category-button :deep(svg), .casino-category-button :deep(img), .casino-multitable-button :deep(svg) { width: 24px; height: 24px; flex: 0 0 auto; }
 .casino-category-button--active { position: relative; z-index: 1; width: auto; min-width: 44px; padding: 0 12px; border-radius: 24px; color: #fff; background: var(--main-color); }
 .casino-category-button span, .casino-multitable-button span { font-size: 14px; font-weight: 700; white-space: nowrap; }
@@ -208,8 +209,7 @@ watch(activeCategory, (category) => {
 .casino-multitable-button :deep(svg) { width: 20px; height: 20px; }
 .casino-category-button:focus-visible, .casino-multitable-button:focus-visible, .casino-table-filters button:focus-visible, .casino-view-switch button:focus-visible { outline: 2px solid var(--main-color); outline-offset: 2px; }
 .casino-table-filters { display: flex; gap: 8px; min-height: 44px; align-items: center; padding: 5px 8px; border-radius: 10px; background: var(--surface); }
-.casino-table-filters button { display: inline-flex; min-height: 29px; align-items: center; gap: 4px; padding: 3px 7px; border-radius: 7px; color: #929292; font-size: 13px; line-height: 20px; cursor: pointer; transition: color 150ms ease, background-color 150ms ease; }
-.casino-table-filters button:hover:not(.casino-table-filter--active) { color: #d0d0d0; }
+.casino-table-filters button { display: inline-flex; min-height: 29px; align-items: center; gap: 4px; padding: 3px 7px; border-radius: 7px; font-size: 13px; line-height: 20px; cursor: pointer; transition: color 150ms ease, background-color 150ms ease; }
 .casino-table-filters button em { font-style: normal; flex-shrink: 0; }
 .casino-table-filters button :deep(svg) { display: block; max-width: 100%; max-height: 100%; }
 .casino-table-filters button :deep(path) { fill: currentColor; transition: fill 150ms ease; }
@@ -217,11 +217,10 @@ watch(activeCategory, (category) => {
 .casino-section-list { min-width: 0; padding-top: 16px; }
 .casino-section-heading { display: flex; min-height: 50px; align-items: center; justify-content: space-between; gap: 12px; }
 .casino-section-heading h1 { display: flex; min-width: 0; align-items: center; gap: 9px; margin: 0; color: var(--heading); font-size: 16px; font-weight: 600; line-height: 22px; }
-.casino-section-heading h1 span { color: #8c8c8c; font-size: 12px; }
+.casino-section-heading h1 span { font-size: 12px; }
 .casino-view-controls { display: flex; flex-shrink: 0; align-items: center; gap: 5px; }
-.casino-view-switch { display: flex; min-height: 32px; align-items: center; padding: 0 3px; border-radius: 18px; background: #222; }
-.casino-view-switch button { display: grid; width: 31px; height: 25px; place-items: center; color: #969696; cursor: pointer; }
-.casino-view-switch button + button { border-left: 1px solid #3d3d3d; }
+.casino-view-switch { display: flex; min-height: 32px; align-items: center; padding: 0 3px; border-radius: 18px; }
+.casino-view-switch button { display: grid; width: 31px; height: 25px; place-items: center; cursor: pointer; }
 .casino-view-switch .casino-view-button--active { color: var(--main-color); }
 .casino-table-grid { display: grid; min-width: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-items: start; }
 @media (min-width: 640px) { .casino-table-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

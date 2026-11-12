@@ -12,13 +12,13 @@ const { translate } = useSiteLocale()
 </script>
 
 <template>
-  <header class="mobile-bonus-header">
-    <NuxtLink :to="backTo" class="mobile-bonus-header__back" :aria-label="translate('Go back')">
+  <header class="mobile-bonus-header text-white bg-[var(--main-color)]">
+    <NuxtLink :to="backTo" class="mobile-bonus-header__back bg-white/15 text-white" :aria-label="translate('Go back')">
       <ChevronLeft :size="20" aria-hidden="true" />
     </NuxtLink>
     <h1>{{ translate('Bonuses') }}</h1>
     <BonusCurrencySelector v-if="currencySelector" v-model="selectedCurrency" />
-    <NuxtLink v-else to="/account/language" class="mobile-bonus-header__flag" :aria-label="translate('Select language')">
+    <NuxtLink v-else to="/account/language" class="mobile-bonus-header__flag bg-white/15 text-white" :aria-label="translate('Select language')">
       <img src="/icons/PHP.webp" alt="Brazil" width="24" height="24">
     </NuxtLink>
   </header>
@@ -36,7 +36,6 @@ const { translate } = useSiteLocale()
     align-items: center;
     height: 52px;
     padding: 0 14px;
-    color: #fff;
     background: var(--main-color);
   }
   h1 { margin: 0; text-align: center; font-size: 16px; font-weight: 800; }
@@ -47,7 +46,6 @@ const { translate } = useSiteLocale()
     height: 30px;
     border: 0;
     border-radius: 50%;
-    background: #ffffff26;
     box-shadow: inset 1px 1px #ffffff4d, inset -1px -1px #ffffff80, inset 2px 2px 4px #00000005, inset -4px -4px 8px #00000005, 0 0 4px #0000000a, 0 4px 8px #00000014;
   }
   img { width: 24px; height: 24px; object-fit: contain; }

@@ -12,7 +12,7 @@ const { translate } = useSiteLocale()
 </script>
 
 <template>
-  <div class="vip-benefits" :class="{ 'vip-benefits--program': program }" lang="pt-BR">
+  <div class="vip-benefits text-white light:text-[#14251d]" :class="{ 'vip-benefits--program': program }" lang="pt-BR">
     <div class="vip-benefits__scroller" tabindex="0" role="region" :aria-label="translate('Tabela de cashback VIP, rolável horizontalmente')">
       <div class="vip-benefits__rebates">
         <table v-for="tier in rebates" :key="tier.level" class="vip-rebate-table">
@@ -80,7 +80,6 @@ const { translate } = useSiteLocale()
   width: 100%;
   min-width: 0;
   margin-top: 14px;
-  color: #fff;
 }
 
 .vip-benefits__scroller {
@@ -214,10 +213,6 @@ const { translate } = useSiteLocale()
 .vip-benefits--program .vip-rebate-table__slots-column,
 .vip-benefits--program .vip-rebate-table__cap-column { width: 25%; }
 .vip-benefits__header-icon { display: block; margin-bottom: 2px; line-height: 1; }
-
-:global(html[data-theme='light']) .vip-benefits {
-  color: #14251d;
-}
 
 @media (max-width: 63.99rem) {
   .vip-benefits__note,

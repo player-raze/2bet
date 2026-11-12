@@ -156,7 +156,7 @@ const handleContentClick = (event: MouseEvent): void => {
 </script>
 
 <template>
-  <div class="bonus-detail-page" :class="{ 'bonus-detail-page--with-action': bonus.hasJoinButton }" :style="{ '--bonus-accent': bonus.accentColor || '#087653' }">
+  <div class="bonus-detail-page text-[#e8e9e8] light:text-[#10261c]" :class="{ 'bonus-detail-page--with-action': bonus.hasJoinButton }" :style="{ '--bonus-accent': bonus.accentColor || '#087653' }">
     <MobileBonusHeader back-to="/bonuses" currency-selector />
     <SeoHeader
       class="bonus-detail-desktop-header"
@@ -175,8 +175,8 @@ const handleContentClick = (event: MouseEvent): void => {
     </SeoHeader>
 
     <main class="bonus-detail-content">
-      <section class="promotion-banner h-[250px] sm:h-[235px]" :aria-label="`${bonus.title} banner`">
-        <span v-if="PROMOTIONS.find(item => item.slug === bonus.slug)?.showSaveBadge" class="promotion-banner__save">◎ Save</span>
+      <section class="promotion-banner h-[250px] sm:h-[235px] bg-[#171817] light:bg-[#dce8e1] border border-white/5 light:border-[#d8e2dc]" :aria-label="`${bonus.title} banner`">
+        <span v-if="PROMOTIONS.find(item => item.slug === bonus.slug)?.showSaveBadge" class="promotion-banner__save text-white bg-[#ed174b]">◎ Save</span>
         <picture v-if="!bannerImageError">
           <source media="(max-width: 63.99rem)" :srcset="bonusBannerImageSrc">
           <img
@@ -192,7 +192,7 @@ const handleContentClick = (event: MouseEvent): void => {
         </div>
       </section>
 
-      <article class="promotion-sheet" :lang="bonus.language || 'zh-Hant'">
+      <article class="promotion-sheet bg-[#151515] light:bg-white border border-white/5 light:border-[#d8e2dc] text-[#e8e9e8] light:text-[#10261c] light:shadow-sm" :lang="bonus.language || 'zh-Hant'">
         <div
           v-if="bonus.contentHtml"
           class="promotion-custom-content"
@@ -226,27 +226,27 @@ const handleContentClick = (event: MouseEvent): void => {
               >
             </div>
             <div>
-              <h1>{{ bonus.title }}</h1>
-              <p>{{ bonus.subtitle }}</p>
+              <h1 class="text-[#f6f6f6] light:text-[#10261c]">{{ bonus.title }}</h1>
+              <p class="text-[#a2a5a3] light:text-[#5d7066]">{{ bonus.subtitle }}</p>
             </div>
           </header>
 
           <section
             v-if="bonus.showRequirements && bonus.requirements?.items.length"
-            class="requirements-panel"
+            class="requirements-panel bg-black light:bg-[#f0f5f2] border border-white/5 light:border-[#d8e2dc]"
             aria-labelledby="requirements-title"
           >
             <div class="requirements-panel__heading">
-              <h2 id="requirements-title">{{ translate('Requirements') }}:</h2>
-              <button type="button" @click="handleProgressClick">
+              <h2 id="requirements-title" class="text-[#f1f1f1] light:text-[#10261c]">{{ translate('Requirements') }}:</h2>
+              <button type="button" class="text-[#888c89] light:text-[#5d7066]" @click="handleProgressClick">
                 {{ translate('View Progress') }}
                 <ChevronRight :size="13" />
               </button>
             </div>
 
             <ul>
-              <li v-for="requirement in bonus.requirements.items" :key="requirement.text">
-                <span class="requirement-check" :class="{ 'requirement-check--complete': requirement.completed }">
+              <li v-for="requirement in bonus.requirements.items" :key="requirement.text" class="text-[#d0d1d0] light:text-[#24382e]">
+                <span class="requirement-check border border-[#707370] light:border-[#a3b8ad] text-white" :class="{ 'requirement-check--complete': requirement.completed }">
                   {{ requirement.completed ? '✓' : '' }}
                 </span>
                 {{ translate(requirement.text) }}
@@ -255,8 +255,8 @@ const handleContentClick = (event: MouseEvent): void => {
           </section>
 
           <section class="period-section" aria-labelledby="period-title">
-            <h2 id="period-title">{{ translate('Period') }}:</h2>
-            <p>{{ bonus.period }}</p>
+            <h2 id="period-title" class="text-[#747875] light:text-[#5d7066]">{{ translate('Period') }}:</h2>
+            <p class="text-[#747875] light:text-[#5d7066]">{{ bonus.period }}</p>
           </section>
 
           <section
@@ -264,24 +264,24 @@ const handleContentClick = (event: MouseEvent): void => {
             class="qualifications-section"
             aria-labelledby="qualifications-title"
           >
-            <h2 id="qualifications-title">{{ translate('Qualifications') }}:</h2>
-            <dl class="qualification-table">
-              <div v-for="qualification in bonus.qualifications" :key="qualification.label">
-                <dt>{{ translate(qualification.label) }}</dt>
-                <dd>{{ translate(qualification.value) }}</dd>
+            <h2 id="qualifications-title" class="text-[#ececec] light:text-[#10261c]">{{ translate('Qualifications') }}:</h2>
+            <dl class="qualification-table border border-white/20 light:border-[#d8e2dc]">
+              <div v-for="qualification in bonus.qualifications" :key="qualification.label" class="border-t border-white/20 light:border-[#d8e2dc]">
+                <dt class="text-white bg-[var(--main-color)]">{{ translate(qualification.label) }}</dt>
+                <dd class="text-[#d9d9d9] light:text-[#24382e] light:bg-white">{{ translate(qualification.value) }}</dd>
               </div>
             </dl>
           </section>
 
           <section class="reward-section" aria-labelledby="reward-content-title">
             <div class="reward-section__heading">
-              <h2 id="reward-content-title">{{ translate('Event Content') }}:</h2>
-              <span v-if="bonus.eventContent.badge">{{ translate(bonus.eventContent.badge) }}</span>
+              <h2 id="reward-content-title" class="text-[#ececec] light:text-[#10261c]">{{ translate('Event Content') }}:</h2>
+              <span v-if="bonus.eventContent.badge" class="rounded-[0.18rem] px-[0.35rem] py-[0.12rem] text-[#d4f6e8] bg-[var(--bonus-accent,#087653)]">{{ translate(bonus.eventContent.badge) }}</span>
             </div>
 
             <p
               v-if="bonus.eventContent.description || bonus.eventContent.descriptionParts?.length"
-              class="reward-section__description"
+              class="reward-section__description text-[#d0d1d0] light:text-[#24382e]"
               :class="{ 'reward-section__description--white': bonus.eventContent.descriptionTone === 'white' }"
             >
               <template v-if="bonus.eventContent.descriptionParts?.length">
@@ -294,7 +294,7 @@ const handleContentClick = (event: MouseEvent): void => {
               <template v-else>{{ bonus.eventContent.description }}</template>
             </p>
 
-            <div v-if="bonus.eventContent.paragraphs?.length" class="reward-paragraphs">
+            <div v-if="bonus.eventContent.paragraphs?.length" class="reward-paragraphs text-white light:text-[#24382e]">
               <p v-for="paragraph in bonus.eventContent.paragraphs" :key="paragraph">{{ paragraph }}</p>
             </div>
 
@@ -306,7 +306,7 @@ const handleContentClick = (event: MouseEvent): void => {
               :program="bonus.eventContent.vipTableVariant === 'program'"
             />
 
-            <div v-if="bonus.eventContent.linkedParagraphs?.length" class="reward-linked-paragraphs">
+            <div v-if="bonus.eventContent.linkedParagraphs?.length" class="reward-linked-paragraphs text-white light:text-[#24382e]">
               <p v-for="(paragraph, paragraphIndex) in bonus.eventContent.linkedParagraphs" :key="paragraphIndex">
                 <template v-for="(part, partIndex) in paragraph.parts" :key="`${paragraphIndex}-${partIndex}`">
                   <a v-if="part.href" :href="part.href" target="_blank" rel="noopener noreferrer">{{ part.text }}</a>
@@ -315,24 +315,24 @@ const handleContentClick = (event: MouseEvent): void => {
               </p>
             </div>
 
-            <h3 v-if="bonus.eventContent.tableHeading" class="reward-section__table-heading">
+            <h3 v-if="bonus.eventContent.tableHeading" class="reward-section__table-heading text-white light:text-[#10261c]">
               {{ bonus.eventContent.tableHeading }}
             </h3>
 
-            <div v-if="bonus.eventContent.methodCard" class="method-card">
-              <strong>{{ bonus.eventContent.methodCard.title }}</strong>
-              <span>{{ bonus.eventContent.methodCard.content }}</span>
+            <div v-if="bonus.eventContent.methodCard" class="method-card border border-white/20 light:border-[#d8e2dc]">
+              <strong class="text-white bg-[var(--bonus-accent,#087653)]">{{ bonus.eventContent.methodCard.title }}</strong>
+              <span class="text-[#d4d5d4] light:text-[#24382e] light:bg-[#f8faf9]">{{ bonus.eventContent.methodCard.content }}</span>
             </div>
 
             <div v-if="bonus.eventContent.callouts?.length" class="reward-callouts">
-              <div v-for="callout in bonus.eventContent.callouts" :key="callout.label" class="reward-callout">
+              <div v-for="callout in bonus.eventContent.callouts" :key="callout.label" class="reward-callout text-[#f4f4f4] light:text-[#10261c]">
                 <strong>{{ callout.label }}</strong>
-                <span v-if="callout.badge">{{ callout.badge }}</span>
+                <span v-if="callout.badge" class="rounded-[0.22rem] px-[0.38rem] py-[0.18rem] text-[#d9fff1] bg-[#087653]">{{ callout.badge }}</span>
               </div>
             </div>
 
             <div v-if="bonus.eventContent.tierCards?.length" class="vip-tier-cards">
-              <article v-for="tier in bonus.eventContent.tierCards" :key="tier.level" class="vip-tier-card">
+              <article v-for="tier in bonus.eventContent.tierCards" :key="tier.level" class="vip-tier-card border-2 border-[#429bdb] text-white light:text-[#10261c] bg-[#151515] light:bg-white">
                 <strong class="vip-tier-card__level">👑 {{ tier.level }}</strong>
                 <div class="vip-tier-card__benefits">
                   <div><span>🎯<br>{{ translate('Turnover Requirement') }}</span><strong>{{ tier.turnover }}</strong></div>
@@ -351,13 +351,13 @@ const handleContentClick = (event: MouseEvent): void => {
                 :class="{ 'reward-table--outline': table.variant === 'outline', 'reward-table--filled': table.variant === 'filled', 'reward-table--compact': table.compact }"
                 :style="{ '--reward-table-accent': table.accentColor || '#429bdb' }"
               >
-                <div v-if="table.headerTitle" class="reward-table__title">
+                <div v-if="table.headerTitle" class="reward-table__title text-white bg-[var(--bonus-accent,#087653)]">
                   {{ table.headerTitle }}
                 </div>
-                <div v-if="table.subHeaderTitle" class="reward-table__subtitle">
+                <div v-if="table.subHeaderTitle" class="reward-table__subtitle text-[#d4d5d4] light:text-[#24382e]">
                   {{ table.subHeaderTitle }}
                 </div>
-                <p v-if="table.introText" class="reward-table__intro">{{ table.introText }}</p>
+                <p v-if="table.introText" class="reward-table__intro text-white light:text-[#24382e]">{{ table.introText }}</p>
 
                 <div class="reward-table__scroller">
                   <table>
@@ -366,6 +366,7 @@ const handleContentClick = (event: MouseEvent): void => {
                         <th
                           v-for="column in table.columns"
                           :key="column.key"
+                          class="text-white bg-[#087653]"
                           :style="column.width ? { width: column.width } : undefined"
                         >
                           <span v-if="column.icon">{{ column.icon }}</span>
@@ -374,11 +375,12 @@ const handleContentClick = (event: MouseEvent): void => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(row, rowIndex) in table.rows" :key="rowIndex">
+                      <tr v-for="(row, rowIndex) in table.rows" :key="rowIndex" class="border-t border-white/20 light:border-[#d8e2dc]">
                         <template v-for="column in table.columns" :key="column.key">
                           <td
                             v-if="!table.rowSpans?.[column.key] || rowIndex === 0"
                             :rowspan="rowIndex === 0 ? table.rowSpans?.[column.key] : undefined"
+                            class="text-[#d7d8d7] light:text-[#24382e]"
                             :class="{ 'reward-table__cell--highlight': table.highlightColumns?.includes(column.key) }"
                           >
                             {{ row[column.key] }}
@@ -389,44 +391,44 @@ const handleContentClick = (event: MouseEvent): void => {
                   </table>
                 </div>
 
-                <p v-if="table.footnote" class="reward-table__footnote">{{ table.footnote }}</p>
+                <p v-if="table.footnote" class="reward-table__footnote text-[#8e918f] light:text-[#5d7066] border-t border-white/20 light:border-[#d8e2dc]">{{ table.footnote }}</p>
               </div>
             </div>
 
-            <div v-if="bonus.eventContent.notes?.length" class="reward-notes">
+            <div v-if="bonus.eventContent.notes?.length" class="reward-notes text-white light:text-[#24382e]">
               <p v-for="note in bonus.eventContent.notes" :key="note">{{ note }}</p>
             </div>
 
-            <div v-if="bonus.eventContent.afterTableParagraphs?.length" class="reward-after-table-paragraphs">
+            <div v-if="bonus.eventContent.afterTableParagraphs?.length" class="reward-after-table-paragraphs text-white light:text-[#24382e]">
               <p v-for="paragraph in bonus.eventContent.afterTableParagraphs" :key="paragraph">{{ paragraph }}</p>
             </div>
 
-            <ul v-if="bonus.eventContent.bullets?.length" class="promotion-list">
+            <ul v-if="bonus.eventContent.bullets?.length" class="promotion-list text-[#d0d1d0] light:text-[#24382e]">
               <li v-for="bullet in bonus.eventContent.bullets" :key="bullet">{{ bullet }}</li>
             </ul>
           </section>
 
           <section v-if="bonus.promotionTerms" class="text-section">
-            <h2>{{ translate('Promotion T&C') }}:</h2>
+            <h2 class="text-[#ececec] light:text-[#10261c]">{{ translate('Promotion T&C') }}:</h2>
             <div v-if="Array.isArray(bonus.promotionTerms)" class="text-section__stack">
-              <p v-for="term in bonus.promotionTerms" :key="term">{{ term }}</p>
+              <p v-for="term in bonus.promotionTerms" :key="term" class="text-[#d0d1d0] light:text-[#24382e]">{{ term }}</p>
             </div>
-            <p v-else>{{ bonus.promotionTerms }}</p>
+            <p v-else class="text-[#d0d1d0] light:text-[#24382e]">{{ bonus.promotionTerms }}</p>
           </section>
 
           <section class="text-section">
-            <h2>{{ translate('Rules') }}:</h2>
-            <ul class="promotion-list" :class="{ 'promotion-list--plain': bonus.rulesStyle === 'plain' }">
+            <h2 class="text-[#ececec] light:text-[#10261c]">{{ translate('Rules') }}:</h2>
+            <ul class="promotion-list text-[#d0d1d0] light:text-[#24382e]" :class="{ 'promotion-list--plain': bonus.rulesStyle === 'plain' }">
               <li v-for="(rule, index) in bonus.rules" :key="rule">{{ bonus.rulesStyle === 'plain' ? `${index + 1}.${rule}` : rule }}</li>
             </ul>
           </section>
 
           <section v-if="bonus.withdrawalTerms" class="text-section">
-            <h2>{{ translate('Withdrawal Terms') }}:</h2>
-            <p>{{ bonus.withdrawalTerms }}</p>
+            <h2 class="text-[#ececec] light:text-[#10261c]">{{ translate('Withdrawal Terms') }}:</h2>
+            <p class="text-[#d0d1d0] light:text-[#24382e]">{{ bonus.withdrawalTerms }}</p>
           </section>
 
-          <NuxtLink :to="promotionTermsPath" class="promotion-terms-link">
+          <NuxtLink :to="promotionTermsPath" class="promotion-terms-link text-[#79a600] light:text-[#019440]">
             {{ translate('Terms and Conditions for Promotion') }}
           </NuxtLink>
         </template>
@@ -434,8 +436,8 @@ const handleContentClick = (event: MouseEvent): void => {
     </main>
 
 
-    <div v-if="bonus.hasJoinButton" class="join-bar">
-      <button type="button" @click="handleJoinNow">{{ translate('Join Now') }}</button>
+    <div v-if="bonus.hasJoinButton" class="join-bar bg-black/90 light:bg-white/95 border-t border-transparent light:border-[#d8e2dc] shadow-md">
+      <button type="button" class="text-white bg-[var(--bonus-accent,#087653)] hover:bg-[#0a8960] light:hover:bg-[#0a8960]" @click="handleJoinNow">{{ translate('Join Now') }}</button>
     </div>
 
     <ReminderModal
@@ -456,7 +458,6 @@ const handleContentClick = (event: MouseEvent): void => {
 .bonus-detail-page {
   width: 100%;
   min-width: 0;
-  color: #e8e9e8;
 }
 
 /* A transformed ancestor makes position: fixed relative to that ancestor.
@@ -483,7 +484,6 @@ const handleContentClick = (event: MouseEvent): void => {
   padding: 0.26rem 0.45rem;
   border: 1px solid rgba(255, 255, 255, 0.035);
   border-radius: 0.48rem;
-  background: #171817;
 }
 
 .philippines-badge {
@@ -512,7 +512,6 @@ const handleContentClick = (event: MouseEvent): void => {
   aspect-ratio: 5 / 1;
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0.48rem;
-  background: #171817;
 }
 
 .promotion-banner > picture,
@@ -533,10 +532,8 @@ const handleContentClick = (event: MouseEvent): void => {
   left: 0.35rem;
   padding: 0.13rem 0.36rem;
   border-radius: 999px;
-  color: #ffffff;
   font-size: 0.47rem;
   font-weight: 800;
-  background: #ed174b;
   box-shadow: 0 0.12rem 0.35rem rgba(0, 0, 0, 0.34);
 }
 
@@ -565,7 +562,6 @@ const handleContentClick = (event: MouseEvent): void => {
   padding: 0.72rem 0.62rem 0.85rem;
   border: 1px solid rgba(255, 255, 255, 0.035);
   border-radius: 0.48rem;
-  background: #151515;
 }
 
 .promotion-custom-content {
@@ -792,64 +788,64 @@ const handleContentClick = (event: MouseEvent): void => {
   object-fit: contain;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content {
+html[data-theme='light'] .promotion-custom-content {
   color: #14251d;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-button-8) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-button-8) {
   color: #14251d;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-text-4) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-text-4) {
   color: #5d7066;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-text-2) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-text-2) {
   color: #14251d;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.border-button-8) {
+html[data-theme='light'] .promotion-custom-content :deep(.border-button-8) {
   border-color: rgba(3, 98, 66, 0.14);
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-green-1) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-green-1) {
   color: var(--main-color);
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(._component-treasure-box__grid-common_1eql6_1) {
+html[data-theme='light'] .promotion-custom-content :deep(._component-treasure-box__grid-common_1eql6_1) {
   background-color: #f0f5f2;
   border-color: rgba(3, 98, 66, 0.12);
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(._tableColumn_1k2zb_1) {
+html[data-theme='light'] .promotion-custom-content :deep(._tableColumn_1k2zb_1) {
   background-color: #ffffff;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.bg-layer-12) {
+html[data-theme='light'] .promotion-custom-content :deep(.bg-layer-12) {
   background-color: #f0f5f2;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.bg-icon-5) {
+html[data-theme='light'] .promotion-custom-content :deep(.bg-icon-5) {
   background-color: #e2e8e5;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-button-11) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-button-11) {
   color: #5d7066;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-primary-text) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-primary-text) {
   color: var(--main-color);
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.border-dividers-7) {
+html[data-theme='light'] .promotion-custom-content :deep(.border-dividers-7) {
   border-color: rgba(3, 98, 66, 0.14);
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-dividers-7) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-dividers-7) {
   color: #22332a;
 }
 
-:global(html[data-theme='light']) .promotion-custom-content :deep(.text-black-1) {
+html[data-theme='light'] .promotion-custom-content :deep(.text-black-1) {
   color: #14251d;
 }
 
@@ -898,7 +894,6 @@ const handleContentClick = (event: MouseEvent): void => {
 
 .promotion-title h1 {
   margin: 0;
-  color: #f6f6f6;
   font-size: 0.82rem;
   font-weight: 800;
   line-height: 1.2;
@@ -906,7 +901,6 @@ const handleContentClick = (event: MouseEvent): void => {
 
 .promotion-title p {
   margin: 0.12rem 0 0;
-  color: #a2a5a3;
   font-size: 0.58rem;
   line-height: 1.25;
 }
@@ -915,7 +909,6 @@ const handleContentClick = (event: MouseEvent): void => {
   margin-bottom: 0.78rem;
   padding: 0.52rem 0.55rem 0.58rem;
   border-radius: 0.42rem;
-  background: #000000;
 }
 
 .requirements-panel__heading {
@@ -933,7 +926,6 @@ const handleContentClick = (event: MouseEvent): void => {
 }
 
 .requirements-panel h2 {
-  color: #f1f1f1;
   font-weight: 800;
 }
 
@@ -942,7 +934,6 @@ const handleContentClick = (event: MouseEvent): void => {
   align-items: center;
   padding: 0;
   border: 0;
-  color: #888c89;
   background: transparent;
   cursor: pointer;
   gap: 0.08rem;
@@ -959,7 +950,6 @@ const handleContentClick = (event: MouseEvent): void => {
   display: flex;
   align-items: center;
   min-height: 1.25rem;
-  color: #d0d1d0;
   font-size: 0.54rem;
   gap: 0.34rem;
 }
@@ -988,7 +978,6 @@ const handleContentClick = (event: MouseEvent): void => {
 .period-section h2,
 .period-section p {
   margin: 0;
-  color: #747875;
   font-size: 0.56rem;
   font-weight: 500;
   line-height: 1.35;
@@ -1004,7 +993,6 @@ const handleContentClick = (event: MouseEvent): void => {
 .reward-section h2,
 .text-section h2 {
   margin: 0 0 0.5rem;
-  color: #ececec;
   font-size: 0.72rem;
   font-weight: 800;
 }
@@ -1012,7 +1000,7 @@ const handleContentClick = (event: MouseEvent): void => {
 .qualification-table {
   overflow: hidden;
   margin: 0;
-  border: 1px solid #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.38rem;
 }
 
@@ -1023,7 +1011,7 @@ const handleContentClick = (event: MouseEvent): void => {
 }
 
 .qualification-table > div + div {
-  border-top: 1px solid #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .qualification-table dt,
@@ -1037,15 +1025,12 @@ const handleContentClick = (event: MouseEvent): void => {
 
 .qualification-table dt {
   justify-content: center;
-  color: #ffffff;
   font-weight: 800;
   text-align: center;
-  background: var(--main-color);
 }
 
 .qualification-table dd {
   justify-content: center;
-  color: #d9d9d9;
   white-space: pre-line;
 }
 
@@ -1061,17 +1046,12 @@ const handleContentClick = (event: MouseEvent): void => {
 }
 
 .reward-section__heading > span {
-  padding: 0.12rem 0.35rem;
-  border-radius: 0.18rem;
-  color: #d4f6e8;
   font-size: 0.46rem;
-  background: var(--bonus-accent, #087653);
 }
 
 .reward-section__description,
 .text-section p,
 .promotion-list li {
-  color: #d0d1d0;
   font-size: 0.55rem;
   line-height: 1.42;
 }
@@ -1086,14 +1066,12 @@ const handleContentClick = (event: MouseEvent): void => {
 }
 
 .reward-section__description--white {
-  color: #ffffff;
   padding: 0.7rem 1rem;
   text-align: center;
   font-weight: 700;
 }
 
 .reward-paragraphs {
-  color: #ffffff;
   font-size: 0.52rem;
   line-height: 1.35;
 }
@@ -1109,7 +1087,6 @@ const handleContentClick = (event: MouseEvent): void => {
 
 .reward-linked-paragraphs {
   margin-bottom: 0.65rem;
-  color: #ffffff;
   font-size: 0.52rem;
   line-height: 1.35;
 }
@@ -1125,7 +1102,6 @@ const handleContentClick = (event: MouseEvent): void => {
 
 .reward-section__table-heading {
   margin: 0 0 0.45rem;
-  color: #ffffff;
   font-size: 0.55rem;
   font-weight: 800;
 }
@@ -1140,7 +1116,6 @@ const handleContentClick = (event: MouseEvent): void => {
 .reward-callout {
   display: flex;
   align-items: center;
-  color: #f4f4f4;
   font-size: 0.72rem;
   gap: 0.4rem;
 }
@@ -1150,11 +1125,7 @@ const handleContentClick = (event: MouseEvent): void => {
 }
 
 .reward-callout span {
-  padding: 0.18rem 0.38rem;
-  border-radius: 0.22rem;
-  color: #d9fff1;
   font-size: 0.52rem;
-  background: #087653;
 }
 
 .vip-tier-cards {
@@ -1170,8 +1141,6 @@ const handleContentClick = (event: MouseEvent): void => {
   grid-template-columns: 20% minmax(0, 80%);
   border: 2px solid #429bdb;
   border-radius: 0.38rem;
-  color: #ffffff;
-  background: #151515;
 }
 
 .vip-tier-card__level {
@@ -1206,7 +1175,6 @@ const handleContentClick = (event: MouseEvent): void => {
   display: grid;
   place-items: center;
   padding: 0.32rem 0.2rem;
-  color: #ffffff;
   font-size: 0.5rem;
   line-height: 1.25;
 }
@@ -1219,7 +1187,7 @@ const handleContentClick = (event: MouseEvent): void => {
 .method-card,
 .reward-table {
   overflow: hidden;
-  border: 1px solid #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.38rem;
 }
 
@@ -1233,17 +1201,14 @@ const handleContentClick = (event: MouseEvent): void => {
 .method-card strong,
 .reward-table__title {
   padding: 0.36rem 0.45rem;
-  color: #ffffff;
   font-size: 0.54rem;
   font-weight: 800;
   text-align: center;
-  background: var(--bonus-accent, #087653);
 }
 
 .method-card span,
 .reward-table__subtitle {
   padding: 0.42rem 0.5rem;
-  color: #d4d5d4;
   font-size: 0.54rem;
   text-align: center;
 }
@@ -1268,25 +1233,18 @@ const handleContentClick = (event: MouseEvent): void => {
 .reward-table td {
   min-width: 5.5rem;
   padding: 0.43rem 0.46rem;
-  color: #d7d8d7;
   font-size: 0.53rem;
   font-weight: 500;
   text-align: center;
 }
 
 .reward-table th {
-  color: #ffffff;
   font-weight: 800;
-  background: #087653;
-}
-
-.reward-table--filled th {
-  background: var(--reward-table-accent, #087653);
 }
 
 .reward-table tbody tr + tr,
 .reward-table tbody tr:first-child {
-  border-top: 1px solid #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .reward-table td:not(:first-child) {
@@ -1296,21 +1254,18 @@ const handleContentClick = (event: MouseEvent): void => {
 .reward-table__footnote {
   margin: 0;
   padding: 0.35rem 0.48rem;
-  border-top: 1px solid #fff;
-  color: #8e918f;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 0.48rem;
 }
 
 .reward-table--outline .reward-table__footnote {
   padding-inline: 0;
   border-top: 0;
-  color: #ffffff;
   font-style: italic;
 }
 
 .reward-table__intro {
   margin: 0 0 0.5rem;
-  color: #ffffff;
   font-size: 0.52rem;
   line-height: 1.35;
 }
@@ -1347,7 +1302,6 @@ const handleContentClick = (event: MouseEvent): void => {
 .reward-table--compact .reward-table__subtitle {
   padding-top: 0;
   padding-bottom: 0.5rem;
-  color: #fff;
   font-weight: 700;
 }
 
@@ -1363,7 +1317,6 @@ const handleContentClick = (event: MouseEvent): void => {
 
 .reward-notes {
   margin-top: 0.55rem;
-  color: #ffffff;
   font-size: 0.52rem;
   line-height: 1.35;
 }
@@ -1374,7 +1327,6 @@ const handleContentClick = (event: MouseEvent): void => {
 
 .reward-after-table-paragraphs {
   margin-top: 0.7rem;
-  color: #ffffff;
   font-size: 0.52rem;
   line-height: 1.35;
 }
@@ -1406,7 +1358,7 @@ const handleContentClick = (event: MouseEvent): void => {
 .promotion-list li::before {
   position: absolute;
   left: 0;
-  content: '•';
+  content: "•";
 }
 
 .promotion-list--plain li {
@@ -1430,23 +1382,9 @@ const handleContentClick = (event: MouseEvent): void => {
 .promotion-terms-link {
   display: inline-block;
   margin-top: 0.8rem;
-  color: #79a600;
   font-size: 0.54rem;
   text-decoration: underline;
   text-underline-offset: 0.09rem;
-}
-
-:global(html[data-theme='light']) .requirements-panel {
-  background: #f0f5f2;
-  border-color: rgba(3, 98, 66, 0.14);
-}
-
-:global(html[data-theme='light']) .requirements-panel h2 {
-  color: #14251d;
-}
-
-:global(html[data-theme='light']) .requirements-panel li {
-  color: #14251d;
 }
 
 .join-bar {
@@ -1457,7 +1395,6 @@ const handleContentClick = (event: MouseEvent): void => {
   bottom: 0;
   left: var(--sidebar-width);
   padding: 0.38rem 0.58rem;
-  background: rgba(0, 0, 0, 0.92);
   backdrop-filter: blur(12px);
 }
 
@@ -1466,15 +1403,9 @@ const handleContentClick = (event: MouseEvent): void => {
   min-height: 2.15rem;
   border: 0;
   border-radius: 0.46rem;
-  color: #ffffff;
   font-size: 0.64rem;
   font-weight: 800;
-  background: var(--bonus-accent, #087653);
   cursor: pointer;
-}
-
-.join-bar button:hover {
-  background: #0a8960;
 }
 
 @media (min-width: 64rem) {
@@ -1602,7 +1533,6 @@ const handleContentClick = (event: MouseEvent): void => {
     bottom: 0;
     left: 0;
     padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom));
-    background: rgba(0, 0, 0, 0.95);
     box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);

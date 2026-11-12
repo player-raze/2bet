@@ -489,7 +489,7 @@ watch(
   }
 }
 
-:global(html[data-theme='light']) .reference-game {
+html[data-theme='light'] .reference-game {
   border-color: rgba(3, 98, 66, 0.15);
   background:
     linear-gradient(132deg, transparent 0 45%, rgba(0, 45, 31, 0.2) 45.5% 69%, transparent 69.5%),

@@ -722,15 +722,15 @@ const selectChoice = (id: string): void => {
 
 <template>
   <section
-    class="game-tutorial-page"
+    class="game-tutorial-page text-[#f4f4f4] light:text-[#10261c]"
     :class="{ 'game-tutorial-page--lesson': activeMode === 'tutorial' }"
   >
     <SubpageHeader mobile-tabs back-to="/account/me" class="mb-2">
       <template #center>
-        <div class="tutorial-pill-group" role="tablist">
+        <div class="tutorial-pill-group bg-[#0a402d] light:bg-[#eaf5ee]" role="tablist">
           <NuxtLink
             to="/tutorial/mock-betting"
-            class="tutorial-pill"
+            class="tutorial-pill text-white/80 light:text-[#5d7066] hover:text-white light:hover:text-[#10261c] lg:bg-[#6c6d6c] lg:text-[#f3f3f3] lg:hover:bg-[#7b7c7b] lg:hover:text-white light:lg:bg-[#edf4f0] light:lg:text-[#2a3c33] [&.tutorial-pill--active]:!bg-white [&.tutorial-pill--active]:!text-[var(--main-color)] lg:[&.tutorial-pill--active]:!bg-[var(--main-color)] lg:[&.tutorial-pill--active]:!text-white"
             :class="{ 'tutorial-pill--active': activeMode === 'mock-betting' }"
             role="tab"
             :aria-selected="activeMode === 'mock-betting'"
@@ -739,7 +739,7 @@ const selectChoice = (id: string): void => {
           </NuxtLink>
           <NuxtLink
             to="/tutorial"
-            class="tutorial-pill"
+            class="tutorial-pill text-white/80 light:text-[#5d7066] hover:text-white light:hover:text-[#10261c] lg:bg-[#6c6d6c] lg:text-[#f3f3f3] lg:hover:bg-[#7b7c7b] lg:hover:text-white light:lg:bg-[#edf4f0] light:lg:text-[#2a3c33] [&.tutorial-pill--active]:!bg-white [&.tutorial-pill--active]:!text-[var(--main-color)] lg:[&.tutorial-pill--active]:!bg-[var(--main-color)] lg:[&.tutorial-pill--active]:!text-white"
             :class="{ 'tutorial-pill--active': activeMode === 'tutorial' }"
             role="tab"
             :aria-selected="activeMode === 'tutorial'"
@@ -751,12 +751,12 @@ const selectChoice = (id: string): void => {
     </SubpageHeader>
 
     <div class="tutorial-content-container px-2 sm:px-0">
-      <nav class="market-tabs sticky-header-seal" aria-label="Betting markets">
+      <nav class="market-tabs sticky-header-seal bg-[#1c1d1c] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" aria-label="Betting markets">
       <button
         v-for="market in markets"
         :key="market.key"
         type="button"
-        class="market-tab"
+        class="market-tab text-[#ececec] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c] hover:bg-white/5 light:hover:bg-[#eaf5ee]"
         :class="{ 'market-tab--active': activeMarketKey === market.key }"
         :aria-pressed="activeMarketKey === market.key"
         @click="selectMarket(market.key)"
@@ -792,19 +792,20 @@ const selectChoice = (id: string): void => {
         </div>
       </div>
 
-      <div class="market-panel" :class="{ 'market-panel--outright': isOutright }">
+      <div class="market-panel bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" :class="{ 'market-panel--outright': isOutright }">
         <div v-if="isOutright" class="outright-heading">
-          <h1>Spanish LaLiga</h1>
-          <p>Real Madrid wins the championship, Barcelona is the runner-up, and Atletico Madrid is third place</p>
+          <h1 class="text-[#f4f4f4] light:text-[#10261c]">Spanish LaLiga</h1>
+          <p class="text-[#eeeeee] light:text-[#5d7066]">Real Madrid wins the championship, Barcelona is the runner-up, and Atletico Madrid is third place</p>
         </div>
 
         <div class="market-panel-heading">
-          <h2 v-if="!isOutright" class="market-panel-title">{{ activeMarket.panelTitle }}</h2>
-          <h2 v-else class="market-panel-title">{{ activeMarket.panelTitle }}</h2>
+          <h2 v-if="!isOutright" class="market-panel-title text-[#969696] light:text-[#10261c]">{{ activeMarket.panelTitle }}</h2>
+          <h2 v-else class="market-panel-title text-[#969696] light:text-[#10261c]">{{ activeMarket.panelTitle }}</h2>
 
           <div v-if="activeMarketKey === 'correct-score'" class="correct-score-filters" aria-label="Correct score selections">
             <button
               type="button"
+              class="border-[#858585] text-[#979797] light:border-[#d8e2dc] light:text-[#5d7066] light:hover:text-[#10261c] light:hover:border-[#019440]"
               :class="{ 'correct-score-filter--active': correctScoreFilter === 'popular' }"
               :aria-pressed="correctScoreFilter === 'popular'"
               @click="correctScoreFilter = 'popular'"
@@ -813,6 +814,7 @@ const selectChoice = (id: string): void => {
             </button>
             <button
               type="button"
+              class="border-[#858585] text-[#979797] light:border-[#d8e2dc] light:text-[#5d7066] light:hover:text-[#10261c] light:hover:border-[#019440]"
               :class="{ 'correct-score-filter--active': correctScoreFilter === 'all' }"
               :aria-pressed="correctScoreFilter === 'all'"
               @click="correctScoreFilter = 'all'"
@@ -827,22 +829,22 @@ const selectChoice = (id: string): void => {
             v-for="item in activeMarket.choices"
             :key="item.id"
             type="button"
-            class="bet-choice"
+            class="bet-choice bg-black light:bg-[#edf4f0] text-[#939393] light:text-[#2a3c33] border-transparent light:border-[#d8e2dc] hover:text-[#dedede] light:hover:text-[#10261c]"
             :class="{ 'bet-choice--selected': selectedChoiceId === item.id }"
             :aria-pressed="selectedChoiceId === item.id"
             @click="selectChoice(item.id)"
           >
             <span>{{ item.label }}</span>
-            <strong>{{ item.odds }}</strong>
+            <strong class="text-[#f1f1f1] light:text-[#10261c]">{{ item.odds }}</strong>
           </button>
         </div>
       </div>
 
       <Transition name="result-card">
-        <article v-if="selectedChoice" class="betting-result" aria-live="polite">
+        <article v-if="selectedChoice" class="betting-result bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" aria-live="polite">
           <div class="betting-result-copy">
-            <h2>Betting Result</h2>
-            <p>{{ selectedChoice.selection }} @{{ selectedChoice.odds }}</p>
+            <h2 class="text-[#f4f4f4] light:text-[#10261c]">Betting Result</h2>
+            <p class="text-[#f0f0f0] light:text-[#5d7066]">{{ selectedChoice.selection }} @{{ selectedChoice.odds }}</p>
           </div>
           <div class="result-stamp" :class="`result-stamp--${selectedChoice.outcome.toLowerCase().replace('_', '-')}`">
             <img
@@ -853,17 +855,17 @@ const selectChoice = (id: string): void => {
               height="44"
             />
           </div>
-          <p class="result-explanation">{{ selectedChoice.explanation }}</p>
+          <p class="result-explanation text-[#eeeeee] light:text-[#24382e] border-[#4a4a4a] light:border-[#d8e2dc]">{{ selectedChoice.explanation }}</p>
         </article>
       </Transition>
     </div>
 
     <div v-else class="tutorial-content">
-      <p v-if="activeTutorial.intro" class="tutorial-intro">
+      <p v-if="activeTutorial.intro" class="tutorial-intro bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] text-[#eeeeee] light:text-[#24382e]">
         {{ activeTutorial.intro }}
       </p>
 
-      <span v-if="activeTutorial.title" class="tutorial-section-title">
+      <span v-if="activeTutorial.title" class="tutorial-section-title text-[#f4f4f4] light:text-[#10261c]">
         {{ activeTutorial.title }}
       </span>
 
@@ -881,7 +883,7 @@ const selectChoice = (id: string): void => {
           :key="group.title"
           class="tutorial-group"
         >
-          <h2>{{ group.title }}</h2>
+          <h2 class="text-[#f4f4f4] light:text-[#10261c]">{{ group.title }}</h2>
           <div class="tutorial-group-cards">
             <TutorialScenarioCard
               v-for="(scenario, index) in group.scenarios"
@@ -909,7 +911,6 @@ const selectChoice = (id: string): void => {
   min-height: calc(100vh - var(--header-height));
   flex-direction: column;
   margin: 0 auto;
-  color: #f4f4f4;
 }
 
 .game-tutorial-page--lesson {
@@ -919,7 +920,6 @@ const selectChoice = (id: string): void => {
 .tutorial-pill-group {
   display: inline-flex;
   align-items: center;
-  background-color: #0a402d;
   border-radius: 9999px;
   padding: 2.5px;
   gap: 2px;
@@ -933,19 +933,12 @@ const selectChoice = (id: string): void => {
   border-radius: 9999px;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.82);
   transition: all 150ms ease;
   text-decoration: none;
   line-height: 1.2;
 }
 
-.tutorial-pill:hover {
-  color: #ffffff;
-}
-
 .tutorial-pill--active {
-  background-color: #ffffff;
-  color: var(--main-color);
   font-weight: 700;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
@@ -963,23 +956,10 @@ const selectChoice = (id: string): void => {
     height: 32px;
     padding: 0 22px;
     border-radius: 8px;
-    color: #f3f3f3;
     font-size: 14px;
     font-weight: 700;
     line-height: 1;
-    background: #6c6d6c;
     box-shadow: none;
-  }
-
-  .tutorial-pill:hover {
-    color: #ffffff;
-    background: #7b7c7b;
-  }
-
-  .tutorial-pill--active,
-  .tutorial-pill--active:hover {
-    color: #ffffff;
-    background: var(--main-color);
   }
 }
 
@@ -987,7 +967,6 @@ const selectChoice = (id: string): void => {
   display: flex;
   align-items: center;
   border-radius: 12px;
-  background: #1c1d1c;
 }
 
 /* market-tabs sticky position */
@@ -1043,17 +1022,12 @@ const selectChoice = (id: string): void => {
   padding: 0 13px;
   border: 0;
   border-radius: 16px;
-  color: #ececec;
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
   background: transparent;
   cursor: pointer;
   transition: color 150ms ease, background-color 150ms ease;
-}
-
-.market-tab:hover {
-  background: rgba(255, 255, 255, 0.06);
 }
 
 .market-tab--active,
@@ -1165,7 +1139,6 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 .market-panel,
 .betting-result {
   border-radius: 13px;
-  background: #141414;
 }
 
 .market-panel {
@@ -1178,14 +1151,12 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 
 .market-panel-title {
   margin: 0;
-  color: #969696;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.2;
 }
 
 .market-panel--outright .market-panel-title {
-  color: #f2f2f2;
   font-size: 16px;
   font-weight: 700;
 }
@@ -1242,7 +1213,6 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 
 .outright-heading h1 {
   margin: 0 0 2px;
-  color: #f4f4f4;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.2;
@@ -1250,7 +1220,6 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 
 .outright-heading p {
   margin: 0;
-  color: #eeeeee;
   font-size: 12px;
   line-height: 1.45;
 }
@@ -1272,12 +1241,9 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
   align-items: center;
   justify-content: space-between;
   padding: 0 9px;
-  border: 1px solid transparent;
   border-radius: 8px;
-  color: #939393;
   font-size: 14px;
   text-align: left;
-  background: #000;
   cursor: pointer;
   transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease;
   gap: 12px;
@@ -1285,12 +1251,10 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 
 .bet-choice:hover {
   border-color: rgba(0, 166, 116, 0.45);
-  color: #dedede;
 }
 
 .bet-choice strong {
   flex: 0 0 auto;
-  color: #f1f1f1;
   font-size: 14px;
   font-weight: 700;
 }
@@ -1298,8 +1262,6 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 .bet-choice--selected,
 .bet-choice--selected:hover {
   border-color: #007d5b;
-  color: #eeeeee;
-  background: #0c1d17;
 }
 
 .betting-result {
@@ -1312,7 +1274,6 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 
 .betting-result-copy h2 {
   margin: 0 0 1px;
-  color: #f4f4f4;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.2;
@@ -1320,7 +1281,6 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
 
 .betting-result-copy p {
   margin: 0;
-  color: #f0f0f0;
   font-size: 13px;
   line-height: 1.35;
 }
@@ -1371,8 +1331,6 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
   grid-column: 1 / -1;
   margin: 9px 0 0;
   padding-top: 10px;
-  border-top: 1px solid #4a4a4a;
-  color: #eeeeee;
   font-size: 13px;
   line-height: 1.35;
 }
@@ -1396,15 +1354,12 @@ html[data-theme='light']:not(#_) .game-tutorial-page .match-score{
   margin: 0 0 12px;
   padding: 11px 13px;
   border-radius: 11px;
-  color: #eeeeee;
   font-size: 12px;
   line-height: 1.45;
-  background: #141414;
 }
 
 .tutorial-section-title,
 .tutorial-group h2 {
-  color: #f4f4f4;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.25;

@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
     </Transition>
     <div class="homepage-hero__shade" aria-hidden="true" />
 
-    <div class="homepage-hero__markers flex" :aria-label="translate('Choose a featured category')">
+    <div class="homepage-hero__markers flex hidden sm:block" :aria-label="translate('Choose a featured category')">
       <button
         v-for="(item, index) in slides"
         :key="item.id"
@@ -226,7 +226,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div class="homepage-hero__preview">
+    <div class="homepage-hero__preview hidden sm:flex">
       <p class="homepage-hero__counter" aria-hidden="true">{{ slideNumber }} <span>/ {{ String(slides.length).padStart(2, '0') }}</span></p>
       <div class="homepage-hero__preview-row flex">
         <button type="button" class="homepage-hero__thumbnail overflow-hidden" :aria-label="translate(nextSlide.category)" aria-controls="homepage-hero-content" @click="changeSlide(1)">
@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
         <span class="homepage-hero__scroll-icon" aria-hidden="true"><ArrowDown :size="17" /></span>
         <span class="homepage-hero__scroll-label">{{ translate('Scroll to explore') }}</span>
       </a>
-      <button type="button" class="homepage-hero__playback inline-flex items-center" :aria-label="translate(autoplayPaused ? 'Resume hero autoplay' : 'Pause hero autoplay')" :aria-pressed="autoplayPaused" @click="toggleAutoplay">
+      <button type="button" class="homepage-hero__playback inline-flex items-center light:bg-white/10 light:text-white light:border-white hidden sm:flex" :aria-label="translate(autoplayPaused ? 'Resume hero autoplay' : 'Pause hero autoplay')" :aria-pressed="autoplayPaused" @click="toggleAutoplay">
         <Play v-if="autoplayPaused" :size="15" aria-hidden="true" /><Pause v-else :size="15" aria-hidden="true" />
         <span>{{ translate(autoplayPaused ? 'Play slideshow' : 'Pause slideshow') }}</span>
       </button>
@@ -344,6 +344,12 @@ onBeforeUnmount(() => {
   .homepage-hero__markers { left: 3%; }
 }
 @media (max-width: 767px) {
+  .homepage-hero{
+    padding: 20px!important;
+  }
+  .homepage-hero__copy-content{
+    max-width: 200px;
+  }
   .homepage-hero { display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; min-height: 430px; max-height: none; padding: 84px 22px 24px; aspect-ratio: auto; border-radius: 8px; }
   .homepage-hero__photo { object-position: 88% top; transform-origin: 88% 20%; }
   .homepage-hero__photo img { object-position: 72% top; }
@@ -356,7 +362,7 @@ onBeforeUnmount(() => {
   .homepage-hero .homepage-hero__action { max-width: 100%; min-height: 44px; margin-top: 20px; padding: 12px 16px; gap: 10px; font-size: var(--homepage-mobile-control-font-size,12px); }
   .homepage-hero__markers { top: 15px; bottom: auto; left: 12px; flex-direction: row; gap: 0; }
   .homepage-hero__markers button { height: 44px; width: 44px; }
-  .homepage-hero__preview { position: relative; inset: auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; }
+  .homepage-hero__preview { position: relative; inset: auto;  align-items: center; justify-content: space-between; gap: 16px; width: 100%; }
   .homepage-hero .homepage-hero__counter { margin: 0; font-size: 14px; }
   .homepage-hero__preview-row { min-height: 44px; aspect-ratio: auto; }
   .homepage-hero__thumbnail { display: none; }

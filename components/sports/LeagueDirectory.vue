@@ -329,7 +329,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
         <!-- Popular Leagues Section (Collapsible) -->
         <section
           v-if="popularLeaguesList.length"
-          class="rounded-[12px] bg-[#181a19]  overflow-hidden"
+          class="rounded-[12px] bg-[#181a19] overflow-hidden light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm"
         >
           <button
             type="button"
@@ -337,7 +337,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
             :aria-expanded="isGroupExpanded('__popular__')"
             @click="toggleGroup('__popular__')"
           >
-            <span class="text-[15px] font-semibold text-white">{{ translate('Popular Leagues') }}</span>
+            <span class="text-[15px] font-semibold text-white light:text-[#10261c]">{{ translate('Popular Leagues') }}</span>
             <ChevronDown
               :size="18"
               class="text-neutral-400 transition-transform duration-200"
@@ -355,7 +355,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
                 v-for="league in popularLeaguesList"
                 :key="league.key"
                 :to="leaguePath(league.key)"
-                class="flex flex-col items-center justify-top min-w-[72px] max-w-[72px] h-[70px] sm:h-[88px] p-1 rounded-lg bg-[#252827] transition text-center shrink-0 group"
+                class="flex flex-col items-center justify-top min-w-[72px] max-w-[72px] h-[70px] sm:h-[88px] p-1 rounded-lg bg-[#252827] light:bg-[#f4f8f5] light:border light:border-[#d8e2dc] transition text-center shrink-0 group"
               >
                 <!-- Tournament logo with small sport ball at bottom right -->
                 <div class="relative w-5 h-5 flex items-center justify-center shrink-0 ">
@@ -373,7 +373,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
                   />
                 </div>
 
-                <span class="text-[11px] font-medium text-[#ccc] leading-tight line-clamp-2 mt-2">
+                <span class="text-[11px] font-medium text-[#ccc] light:text-[#10261c] leading-tight line-clamp-2 mt-2">
                   {{ league.title }}
                 </span>
               </NuxtLink>
@@ -386,7 +386,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
           <section
             v-for="section in sections"
             :key="section.title"
-            class="rounded-[12px] bg-[#181a19] overflow-hidden"
+            class="rounded-[12px] bg-[#181a19] overflow-hidden light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm"
           >
             <!-- Group Accordion Header -->
             <button
@@ -413,7 +413,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
                   aria-hidden="true"
                 />
 
-                <span class="text-[15px] font-semibold text-white">{{ translate(section.title) }}</span>
+                <span class="text-[15px] font-semibold text-white light:text-[#10261c]">{{ translate(section.title) }}</span>
               </div>
 
               <ChevronDown
@@ -427,7 +427,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
             <!-- Group Accordion Body: League Rows -->
             <div
               v-show="isGroupExpanded(section.title)"
-              class="divide-y divide-[#222524] "
+              class="divide-y divide-[#222524] light:divide-[#eef2f0]"
             >
               <NuxtLink
                 v-for="league in section.leagues"
@@ -448,7 +448,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
                   </div>
 
                   <!-- Title -->
-                  <span class="text-[13.5px] text-[#e0e2e1] truncate">
+                  <span class="text-[13.5px] text-[#e0e2e1] truncate light:text-[#10261c]">
                     {{ league.title }}
                   </span>
                 </div>
@@ -457,7 +457,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
                 <div class="flex items-center gap-2.5 shrink-0">
                   <span
                     v-if="league.inplay"
-                    class="bg-[#093E2C] text-white text-[12px] px-2 py-0.5 rounded-md whitespace-nowrap"
+                    class="bg-[#093E2C] text-white light:!text-white text-[12px] px-2 py-0.5 rounded-md whitespace-nowrap"
                   >
                     {{ translate('In-Play') }}
                   </span>

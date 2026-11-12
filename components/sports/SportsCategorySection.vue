@@ -36,14 +36,14 @@ const toggleExpanded = (): void => {
     <button
       v-if="shouldShowBanner"
       type="button"
-      class="sports-category-banner"
+      class="sports-category-banner bg-[#051a16] light:bg-[#eaf5ee] text-white light:text-[#10261c]"
       :style="{ backgroundImage: `url(${banner}), url(${background})` }"
       :aria-expanded="expanded"
       :aria-controls="panelId"
       @click="toggleExpanded"
     >
-      <span>{{ title }}</span>
-      <span class="sports-category-banner__toggle" aria-hidden="true">
+      <span class="light:text-[#10261c]">{{ title }}</span>
+      <span class="sports-category-banner__toggle bg-white/20 border border-white/20 text-white light:bg-white light:border-[#d8e2dc] light:text-[#10261c] light:shadow-sm" aria-hidden="true">
         <ChevronDown :size="17" :class="{ 'rotate-180': expanded }" />
       </span>
     </button>
@@ -71,11 +71,9 @@ const toggleExpanded = (): void => {
   padding: 8px 10px 8px 12px;
   border: 0;
   border-radius: 10px 10px 0 0;
-  background-color: #051a16;
   background-position: right center, center;
   background-repeat: no-repeat;
   background-size: auto 100%, cover;
-  color: #fff;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.2;
@@ -99,15 +97,20 @@ const toggleExpanded = (): void => {
   content: '';
 }
 
+[data-theme="light"] .sports-category-banner::before,
+.light .sports-category-banner::before,
+[data-theme="light"] .sports-category-banner::after,
+.light .sports-category-banner::after {
+  display: none;
+}
+
 .sports-category-banner__toggle {
   display: grid;
   width: 30px;
   height: 30px;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, .22);
   border-radius: 999px;
-  background: rgba(255, 255, 255, .18);
   box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
 }
 

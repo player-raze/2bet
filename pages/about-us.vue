@@ -19,40 +19,40 @@ useAppSeo({
 </script>
 
 <template>
-  <div class="about-us-page">
+  <div class="about-us-page text-[#f4f4f4] light:text-[#10261c]">
     <SubpageHeader title="About Us" back-to="/account/me" class="about-us-header" />
 
-    <article class="about-us-card" aria-label="About Us">
-      <h2>About Us</h2>
+    <article class="about-us-card bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#24382e]" aria-label="About Us">
+      <h2 class="bg-black text-white light:bg-[#eaf5ee] light:text-[#10261c]">About Us</h2>
       <p>
         2bet is committed to meeting the demands of entertainment consumers and sports betting enthusiasts worldwide. With integrity, reliability, and exceptional service at the core of our principles, we’re here to serve you.<br>
         Good luck from 2bet!
       </p>
 
-      <h2>Trusted Reputation</h2>
+      <h2 class="bg-black text-white light:bg-[#eaf5ee] light:text-[#10261c]">Trusted Reputation</h2>
       <p>
         At 2bet, trust and service are our hallmarks. We stand by our reputation as the best in the industry, providing pragmatic and professional brand services. So, choosing 2bet guarantees your satisfaction.
       </p>
 
-      <h2>Game Variety</h2>
+      <h2 class="bg-black text-white light:bg-[#eaf5ee] light:text-[#10261c]">Game Variety</h2>
       <p>
         2bet offers a wide range of sports betting options, including European odds, Hong Kong odds, Malay odds, Indonesian odds, and more.<br>
         In-Play: Bet live 24/7. For most sports, we provide over 30 markets per event, including options like corners, yellow cards, and free kicks.<br>
         Casino: Our platform features live casino games, slots, lotteries, poker, horse racing, and more, giving you the full gaming experience.
       </p>
 
-      <h2>Deposits &amp; Withdrawals</h2>
+      <h2 class="bg-black text-white light:bg-[#eaf5ee] light:text-[#10261c]">Deposits &amp; Withdrawals</h2>
       <p>
         Deposit: Support deposits via USDT and other major cryptocurrencies for fast, secure, and reliable transactions.<br>
         Withdrawal: Automatically reviewed and processed on time with a transparent process and fast payouts.<br>
         Note: Visit Deposit or Withdrawal page for more payment methods and detailed instructions.
       </p>
 
-      <h2>Customer Support</h2>
+      <h2 class="bg-black text-white light:bg-[#eaf5ee] light:text-[#10261c]">Customer Support</h2>
       <p>2bet offers 24/7 customer support via phone and Gmail, ensuring full support whenever you need it.</p>
-      <NuxtLink to="/egames/customer-service" class="about-us-contact">Contact CS</NuxtLink>
+      <NuxtLink to="/egames/customer-service" class="about-us-contact text-white">Contact CS</NuxtLink>
 
-      <h2 class="about-us-contact-title">About Us</h2>
+      <h2 class="about-us-contact-title bg-black text-white light:bg-[#eaf5ee] light:text-[#10261c]">About Us</h2>
       <p class="about-us-email">Email:<br><a href="mailto:2bet.kf@2bet.la">2bet.kf@2bet.la</a></p>
     </article>
   </div>
@@ -61,7 +61,6 @@ useAppSeo({
 <style scoped>
 .about-us-page {
   min-width: 0;
-  color: #f4f4f4;
   opacity: 1 !important;
   transform: none !important;
 }
@@ -71,7 +70,6 @@ useAppSeo({
 .about-us-card {
   padding: 16px;
   border-radius: 12px;
-  background: #141414;
   font-size: 14px;
   line-height: 21px;
   overflow-wrap: break-word;
@@ -84,8 +82,6 @@ useAppSeo({
   margin: 0;
   padding: 10px 12px;
   border-radius: 10px;
-  color: #fff;
-  background: #000;
   font-size: 12px;
   font-weight: 700;
   line-height: 20px;
@@ -101,7 +97,6 @@ useAppSeo({
   justify-content: center;
   padding: 12px;
   border-radius: 12px;
-  color: #fff;
   background: var(--main-color);
   font-size: 16px;
   font-weight: 700;

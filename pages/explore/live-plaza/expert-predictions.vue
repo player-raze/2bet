@@ -204,7 +204,7 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
 </script>
 
 <template>
-  <div class="expert-predictions-page">
+  <div class="expert-predictions-page text-white light:text-[#10261c]">
     <SeoHeader
       sticky
       title="Predict"
@@ -212,25 +212,25 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
       :show-flag="false"
     />
 
-    <section class="predictor-panel" :aria-label="translate('Prediction experts')">
+    <section class="predictor-panel bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" :aria-label="translate('Prediction experts')">
       <div class="predictor-rail">
         <NuxtLink
           to="/live-plaza/experts"
-          class="predictor-item predictor-item--all"
+          class="predictor-item predictor-item--all text-[#eee] light:text-[#10261c] after:bg-[#2b2b2b] light:after:bg-[#d8e2dc]"
           :class="{ 'predictor-item--active': selectedPredictorId === null }"
           :aria-label="translate('View all experts')"
         >
-          <span class="predictor-item__all-icon">
+          <span class="predictor-item__all-icon bg-[#383a39] text-[#777a78] light:bg-[#edf4f0] light:text-[#5d7066]">
             <LayoutGrid :size="25" :stroke-width="0" fill="currentColor" aria-hidden="true" />
           </span>
-          <span class="predictor-item__name">{{ translate('All') }}</span>
+          <span class="predictor-item__name text-[#efefef] light:text-[#10261c]">{{ translate('All') }}</span>
         </NuxtLink>
 
         <button
           v-for="predictor in visiblePredictors"
           :key="predictor.id"
           type="button"
-          class="predictor-item"
+          class="predictor-item text-[#eee] light:text-[#10261c]"
           :class="{ 'predictor-item--active': selectedPredictorId === predictor.id }"
           :aria-pressed="selectedPredictorId === predictor.id"
           @click="redirectTo2Bet"
@@ -246,24 +246,24 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
               decoding="async"
               @error="handleAvatarError"
             >
-            <span v-if="predictor.currentPredictions" class="predictor-item__badge">
+            <span v-if="predictor.currentPredictions" class="predictor-item__badge text-[#ef3348] bg-white border border-white">
               {{ predictor.currentPredictions }}
             </span>
           </span>
-          <span class="predictor-item__name">{{ predictor.predictorName }}</span>
+          <span class="predictor-item__name text-[#efefef] light:text-[#10261c]">{{ predictor.predictorName }}</span>
         </button>
       </div>
     </section>
 
     <section class="predictions-block" aria-labelledby="expert-predictions-title">
-      <div class="predictions-toolbar">
-        <div class="panel-heading">
-          <h2 id="expert-predictions-title">{{ translate('Expert Predictions') }}</h2>
+      <div class="predictions-toolbar bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm">
+        <div class="panel-heading border-b border-[#2b2b2b] light:border-b-[#eef2f0]">
+          <h2 id="expert-predictions-title" class="text-[#f7f7f7] light:text-[#10261c]">{{ translate('Expert Predictions') }}</h2>
           <div ref="sortControl" class="sort-control">
             <button
               ref="sortButton"
               type="button"
-              class="panel-action"
+              class="panel-action bg-[#202322] text-[#e8e8e8] border-[#087d5c] light:bg-[#edf4f0] light:text-[#2a3c33] light:border-[#d8e2dc]"
               :class="{ 'panel-action--open': sortMenuOpen }"
               aria-haspopup="menu"
               :aria-expanded="sortMenuOpen"
@@ -278,17 +278,17 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
               <div
                 v-if="sortMenuOpen"
                 id="prediction-sort-menu"
-                class="sort-menu"
+                class="sort-menu bg-[#171717] text-[#eeeeee] border border-white/5 light:bg-white light:text-[#10261c] light:border-[#d8e2dc] light:shadow-xl"
                 role="menu"
                 :aria-label="translate('Sort predictions')"
               >
-                <span class="sort-menu__label">{{ translate('Sort') }}</span>
+                <span class="sort-menu__label text-[#eeeeee] light:text-[#10261c]">{{ translate('Sort') }}</span>
                 <div class="sort-menu__options">
                   <button
                     v-for="option in predictionSortOptions"
                     :key="option.value"
                     type="button"
-                    class="sort-menu__option"
+                    class="sort-menu__option bg-[#202322] text-[#eeeeee] border-[#565b58] light:bg-[#edf4f0] light:text-[#2a3c33] light:border-[#d8e2dc] [&.sort-menu__option--active]:!bg-[#007653] [&.sort-menu__option--active]:!text-white"
                     :class="{ 'sort-menu__option--active': predictionSort === option.value }"
                     role="menuitemradio"
                     :aria-checked="predictionSort === option.value"
@@ -307,13 +307,19 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
         </div>
       </div>
 
-      <div v-if="predictionStatus === 'pending'" class="predictions-empty">
+      <div v-if="predictionStatus === 'pending'" class="predictions-empty bg-[#141414] text-[#858985] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]">
         {{ translate('Loading expert predictions…') }}
       </div>
 
-      <div v-else-if="predictionError" class="predictions-empty predictions-empty--error">
+      <div v-else-if="predictionError" class="predictions-empty predictions-empty--error bg-[#141414] text-[#858985] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]">
         <span>{{ translate('Expert predictions are temporarily unavailable.') }}</span>
-        <button type="button" @click="refreshPredictions()">{{ translate('Try again') }}</button>
+        <button
+          type="button"
+          class="bg-[#202322] text-white border border-[#087d5c] light:bg-[#edf4f0] light:text-[#2a3c33] light:border-[#d8e2dc]"
+          @click="refreshPredictions()"
+        >
+          {{ translate('Try again') }}
+        </button>
       </div>
 
       <div v-else-if="visiblePredictions.length" class="predictions-grid">
@@ -327,7 +333,7 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
         />
       </div>
 
-      <div v-else class="predictions-empty">
+      <div v-else class="predictions-empty bg-[#141414] text-[#858985] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc]">
         {{ translate('No predictions are available for this expert yet.') }}
       </div>
     </section>
@@ -340,14 +346,11 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   min-width: 0;
   padding-top: 0;
   padding-bottom: 2rem;
-  color: #ffffff;
 }
 
 .predictor-panel,
 .predictions-toolbar {
-  border: 1px solid rgba(255, 255, 255, 0.025);
   border-radius: 12px;
-  background: #141414;
 }
 
 .predictor-panel {
@@ -377,7 +380,6 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   align-items: center;
   padding: 0;
   border: 0;
-  color: #eeeeee;
   text-decoration: none;
   background: transparent;
   cursor: pointer;
@@ -397,7 +399,6 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   right: 0;
   width: 1px;
   height: 79px;
-  background: #2b2b2b;
   content: '';
 }
 
@@ -413,8 +414,6 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: #777a78;
-  background: #383a39;
 }
 
 .predictor-item__all-icon :deep(svg) {
@@ -432,7 +431,6 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   border: 2px solid #777b79;
   border-radius: 50%;
   object-fit: cover;
-  background: #242424;
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
@@ -444,19 +442,15 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   width: 19px;
   height: 19px;
   place-items: center;
-  border: 1px solid #ffffff;
   border-radius: 50%;
-  color: #ef3348;
   font-size: 10px;
   font-weight: 800;
   line-height: 1;
-  background: #ffffff;
 }
 
 .predictor-item__name {
   overflow: hidden;
   width: 100%;
-  color: #efefef;
   font-size: 10px;
   font-weight: 700;
   line-height: 1.2;
@@ -492,12 +486,10 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
-  border-bottom: 1px solid #2b2b2b;
 }
 
 .panel-heading h2 {
   margin: 0;
-  color: #f7f7f7;
   font-size: 16px;
   font-weight: 800;
   line-height: 1;
@@ -509,12 +501,9 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   align-items: center;
   justify-content: center;
   padding: 0 12px;
-  border: 1px solid #087d5c;
   border-radius: 999px;
-  color: #e8e8e8;
   font-size: 11px;
   font-weight: 500;
-  background: #202322;
   cursor: pointer;
   gap: 4px;
   transition: border-color 150ms ease, background-color 150ms ease;
@@ -523,7 +512,6 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
 .panel-action:hover,
 .panel-action--open {
   border-color: #00a676;
-  background: #272a29;
 }
 
 .sort-control {
@@ -540,10 +528,7 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   width: 165px;
   flex-direction: column;
   padding: 8px 12px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.025);
   border-radius: 14px;
-  color: #eeeeee;
-  background: #171717;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42);
 }
 
@@ -564,27 +549,22 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   width: 125px;
   height: 33px;
   padding: 0 12px;
-  border: 1px solid #565b58;
   border-radius: 999px;
-  color: #eeeeee;
   font: inherit;
   font-size: 12px;
   font-weight: 500;
   line-height: 1;
-  background: #202322;
   cursor: pointer;
   transition: border-color 140ms ease, background-color 140ms ease;
 }
 
 .sort-menu__option:hover {
   border-color: #008965;
-  background: #252a28;
 }
 
 .sort-menu__option--active,
 .sort-menu__option--active:hover {
   border-color: #007653;
-  background: #007653;
 }
 
 .sort-menu-enter-active,
@@ -618,9 +598,7 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
   min-height: 212px;
   place-items: center;
   border-radius: 12px;
-  color: #858985;
   font-size: 12px;
-  background: #141414;
 }
 
 .predictions-empty--error {
@@ -630,10 +608,7 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
 
 .predictions-empty--error button {
   padding: 7px 14px;
-  border: 1px solid #087d5c;
   border-radius: 999px;
-  color: #ffffff;
-  background: #202322;
   cursor: pointer;
 }
 

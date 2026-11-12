@@ -36,7 +36,7 @@ const filteredTimeZones = computed(() => {
 </script>
 
 <template>
-  <section class="preference-page timezone-page w-full min-w-0 pb-16 text-white">
+  <section class="preference-page timezone-page w-full min-w-0 pb-16 text-white bg-black light:bg-[#f4f8f5] light:text-[#10261c]">
     <SubpageHeader
       title="Time Zone"
       back-to="/account/me"
@@ -44,24 +44,24 @@ const filteredTimeZones = computed(() => {
     />
 
     <div class="px-2.5 sm:px-0">
-      <label class="search-box mb-2 flex min-h-[40px] items-center gap-2 rounded-xl px-3">
+      <label class="search-box mb-2 flex min-h-[40px] items-center gap-2 rounded-xl px-3 bg-[#151515] border border-white/5 light:bg-white light:border-[#d8e2dc] light:shadow-sm">
         <Search class="h-[18px] w-[18px] shrink-0 text-[#919694]" aria-hidden="true" />
         <span class="sr-only">{{ translate('Search country or city') }}</span>
         <input
           v-model="searchQuery"
           type="search"
-          class="w-full bg-transparent text-[14px] text-white outline-none placeholder:text-[#919694]"
+          class="w-full bg-transparent text-[14px] text-white outline-none placeholder:text-[#919694] light:text-[#10261c] light:placeholder:text-[#8c918f]"
           :placeholder="translate('Search country or city')"
           autocomplete="off"
         >
       </label>
 
-      <div class="preference-list overflow-hidden rounded-xl">
+      <div class="preference-list overflow-hidden rounded-xl bg-[#141414] border border-white/5 light:bg-white light:border-[#d8e2dc] light:shadow-sm">
         <button
           v-for="option in filteredTimeZones"
           :key="option.timeZone"
           type="button"
-          class="preference-row flex w-full items-center justify-between gap-4 px-3 text-left"
+          class="preference-row flex w-full items-center justify-between gap-4 px-3 text-left border-b border-[#414141] last:border-b-0 light:border-b-[#eef2f0] hover:bg-white/[0.045] focus-visible:bg-white/[0.045] light:hover:bg-[#f4f8f5] light:focus-visible:bg-[#f4f8f5]"
           :class="{ 'preference-row--selected': timeZone === option.timeZone }"
           :aria-current="timeZone === option.timeZone ? 'true' : undefined"
           @click="setTimeZone(option.timeZone)"
@@ -69,7 +69,7 @@ const filteredTimeZones = computed(() => {
           <span class="min-w-0">
             <span
               class="block truncate text-[14px] leading-[18px]"
-              :class="timeZone === option.timeZone ? 'font-bold text-[#20c997]' : 'text-[#f0f1f1]'"
+              :class="timeZone === option.timeZone ? 'font-bold text-[#20c997]' : 'text-[#f0f1f1] light:text-[#10261c]'"
             >
               {{ option.city }}
             </span>
@@ -80,7 +80,7 @@ const filteredTimeZones = computed(() => {
           <span class="shrink-0 text-right">
             <span
               class="block text-[14px] leading-[18px]"
-              :class="timeZone === option.timeZone ? 'font-bold text-[#20c997]' : 'text-[#eceeed]'"
+              :class="timeZone === option.timeZone ? 'font-bold text-[#20c997]' : 'text-[#eceeed] light:text-[#10261c]'"
             >
               {{ option.offset }}
             </span>
@@ -105,32 +105,6 @@ const filteredTimeZones = computed(() => {
 <style scoped>
 .preference-page {
   min-height: calc(100vh - var(--header-height));
-  background:
-    linear-gradient(180deg, rgba(3, 98, 66, 0.96) 0, rgba(3, 98, 66, 0.96) 1.45rem, #000 1.45rem, #000 100%);
-}
-
-.preference-header {
-  border: 1px solid rgba(255, 255, 255, 0.02);
-  color: #f5f7f6;
-  background: linear-gradient(180deg, #1b1e1d, #181a19);
-}
-
-.back-button {
-  color: #13b982;
-  background: #101413;
-  transition: color 140ms ease, background-color 140ms ease;
-}
-
-.back-button:hover,
-.back-button:focus-visible {
-  color: #35d8a2;
-  background: #242826;
-  outline: none;
-}
-
-.search-box {
-  border: 1px solid rgba(255, 255, 255, 0.035);
-  background: #151515;
 }
 
 .search-box:focus-within {
@@ -138,14 +112,8 @@ const filteredTimeZones = computed(() => {
   box-shadow: 0 0 0 2px rgba(32, 201, 151, 0.08);
 }
 
-.preference-list {
-  border: 1px solid rgba(255, 255, 255, 0.035);
-  background: #141414;
-}
-
 .preference-row {
   min-height: 60px;
-  border-bottom: 1px solid #414141;
   transition: background-color 140ms ease;
 }
 
@@ -155,7 +123,6 @@ const filteredTimeZones = computed(() => {
 
 .preference-row:hover,
 .preference-row:focus-visible {
-  background: rgba(255, 255, 255, 0.045);
   outline: none;
 }
 </style>

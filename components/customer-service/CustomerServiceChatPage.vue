@@ -30,7 +30,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="customer-service-chat-page text-white">
+  <div class="customer-service-chat-page text-white light:text-[#10261c]">
     <SeoHeader
       sticky
       title="24/7 Services"
@@ -39,13 +39,13 @@ onMounted(() => {
       back-to="/egames/customer-service"
     />
 
-    <section class="customer-service-chat-stage" :aria-label="`24/7 Services ${serviceNumber} chat`">
+    <section class="customer-service-chat-stage bg-[#141414] light:bg-[#f4f8f5] light:border light:border-[#d8e2dc]" :aria-label="`24/7 Services ${serviceNumber} chat`">
       <iframe
         title="customerService"
         allow="microphone"
         sandbox="allow-scripts allow-forms allow-pointer-lock allow-popups allow-same-origin allow-top-navigation"
         :src="chatUrl"
-        class="customer-service-chat-frame"
+        class="customer-service-chat-frame bg-[#232323] light:bg-white light:border light:border-[#d8e2dc]"
       />
     </section>
   </div>
@@ -69,7 +69,6 @@ onMounted(() => {
   margin-top: 0.35rem;
   padding: 1rem 0;
   border-radius: 0.5rem 0.5rem 0 0;
-  background: #141414;
 }
 
 .customer-service-chat-frame {
@@ -80,7 +79,6 @@ onMounted(() => {
   flex: 0 1 auto;
   border: 0;
   border-radius: 0.5rem;
-  background: #232323;
   box-shadow: 0 0.45rem 1.25rem rgba(0, 0, 0, 0.28);
 }
 
@@ -92,7 +90,6 @@ onMounted(() => {
   .customer-service-chat-stage {
     margin-top: 0.2rem;
     padding: 0.35rem 0;
-    background: #141414;
   }
 
   .customer-service-chat-frame {

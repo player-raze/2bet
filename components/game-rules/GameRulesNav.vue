@@ -126,7 +126,7 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-  <div class="game-rules-sticky-wrapper sticky-header-seal sticky top-0 lg:top-[var(--content-sticky-top)] z-30 bg-[#000000] -mx-2 sm:-mx-4 pb-2 mb-2 sm:mb-3 rounded-t-2xl">
+  <div class="game-rules-sticky-wrapper sticky-header-seal sticky top-0 lg:top-[var(--content-sticky-top)] z-30 bg-[#000000] light:bg-[#f4f8f5] -mx-2 sm:-mx-4 pb-2 mb-2 sm:mb-3 rounded-t-2xl">
     <header class="game-rules-header-wrapper">
       <!-- Universal Emerald Subpage Header with AA text scaler -->
       <SubpageHeader
@@ -136,13 +136,13 @@ watch(() => route.path, () => {
         class="mb-2"
       >
         <template #center>
-          <p class="subpage-header__title m-0 max-w-[240px] truncate text-[16px] font-bold leading-[1.25] tracking-[-0.01em] text-white min-[480px]:max-w-[360px] min-[480px]:text-[17px]">{{ translate('Game Rules') }}</p>
+          <p class="subpage-header__title m-0 max-w-[240px] truncate text-[16px] font-bold leading-[1.25] tracking-[-0.01em] text-white light:text-[#10261c] min-[480px]:max-w-[360px] min-[480px]:text-[17px]">{{ translate('Game Rules') }}</p>
         </template>
         <template #right>
           <div ref="textSizePickerRef" class="relative flex items-center">
             <button
               type="button"
-              class="game-rules-aa flex items-baseline justify-center px-2 py-1 text-[#1fa779] hover:text-[#32d49a] transition-colors cursor-pointer select-none bg-transparent border-0"
+              class="game-rules-aa flex items-baseline justify-center px-2 py-1 text-[#1fa779] hover:text-[#32d49a] light:text-[#019440] light:hover:text-[#017a35] transition-colors cursor-pointer select-none bg-transparent border-0"
               :title="`Text size: ${textSizeLevel}`"
               aria-label="Adjust font size"
               :aria-expanded="isPickerOpen"
@@ -156,7 +156,7 @@ watch(() => route.path, () => {
             <Transition name="rules-popover-fade">
               <div
                 v-if="isPickerOpen"
-                class="text-size-popover"
+                class="text-size-popover bg-black light:bg-white border border-white/10 light:border-[#d8e2dc] shadow-2xl light:shadow-md"
                 role="menu"
                 aria-label="Font size selector"
                 @click.stop
@@ -166,7 +166,7 @@ watch(() => route.path, () => {
 
                 <button
                   type="button"
-                  class="text-size-btn"
+                  class="text-size-btn text-[#9ca3af] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
                   :class="{ 'text-size-btn--active': textSizeLevel === '80%' }"
                   role="menuitem"
                   @click="selectTextSize('80%')"
@@ -174,11 +174,11 @@ watch(() => route.path, () => {
                   80%
                 </button>
 
-                <div class="popover-divider" aria-hidden="true" />
+                <div class="popover-divider bg-white/15 light:bg-[#d8e2dc]" aria-hidden="true" />
 
                 <button
                   type="button"
-                  class="text-size-btn"
+                  class="text-size-btn text-[#9ca3af] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
                   :class="{ 'text-size-btn--active': textSizeLevel === '100%' }"
                   role="menuitem"
                   @click="selectTextSize('100%')"
@@ -186,11 +186,11 @@ watch(() => route.path, () => {
                   100%
                 </button>
 
-                <div class="popover-divider" aria-hidden="true" />
+                <div class="popover-divider bg-white/15 light:bg-[#d8e2dc]" aria-hidden="true" />
 
                 <button
                   type="button"
-                  class="text-size-btn"
+                  class="text-size-btn text-[#9ca3af] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
                   :class="{ 'text-size-btn--active': textSizeLevel === '120%' }"
                   role="menuitem"
                   @click="selectTextSize('120%')"
@@ -206,7 +206,7 @@ watch(() => route.path, () => {
       <!-- Category Navigation Tabs (cornered layout matching screenshot) -->
       <nav
         ref="navContainerRef"
-        class="game-rules-category-nav flex items-center gap-2 overflow-x-auto py-1 px-2 sm:px-4 scrollbar-none"
+        class="game-rules-category-nav flex items-center gap-2 overflow-x-auto py-1 px-2 sm:px-4 scrollbar-none bg-[#1c1d1c] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm"
         aria-label="Game Rules Categories"
       >
         <NuxtLink
@@ -216,7 +216,7 @@ watch(() => route.path, () => {
           class="game-rules-tab shrink-0 text-xs sm:text-sm font-semibold uppercase transition-all whitespace-nowrap select-none px-4 py-1.5 rounded-full border border-white/5"
           :class="isActive(tab.to)
             ? 'tab-pill--active bg-[var(--main-color)] text-white shadow font-bold'
-            : 'bg-[#242625] text-[#8e9491] hover:text-white'"
+            : 'bg-[#242625] text-[#8e9491] hover:text-white light:bg-[#eaf5ee] light:text-[#10261c] light:border-emerald-500/20'"
         >
           {{ tab.label }}
         </NuxtLink>
@@ -249,7 +249,6 @@ watch(() => route.path, () => {
     margin: 0 8px;
     padding: 8px 12px;
     border-radius: 12px;
-    background: #141414;
     gap: 8px;
   }
   .game-rules-category-nav .game-rules-tab {
@@ -286,31 +285,16 @@ watch(() => route.path, () => {
     padding: 5px 12px;
     border: 1px solid rgba(255, 255, 255, 0.035);
     border-radius: 11px;
-    color: #ececec;
-    background: #1c1d1c;
     gap: 7px;
   }
 
   .game-rules-tab {
     min-height: 30px;
     padding: 5px 13px;
-    border-color: transparent;
     border-radius: 16px;
-    color: #ececec;
     font-size: 14px;
     line-height: 20px;
-    background: transparent;
     box-shadow: none;
-  }
-
-  .game-rules-tab:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.06);
-  }
-
-  .game-rules-tab.tab-pill--active {
-    color: #ffffff;
-    background: var(--main-color);
   }
 }
 
@@ -318,16 +302,10 @@ watch(() => route.path, () => {
   display: flex;
   align-items: baseline;
   gap: 0.5px;
-  color: #1fa779;
-  background: transparent;
   padding: 2px 6px;
   border: 0;
   cursor: pointer;
   transition: color 150ms ease, opacity 150ms ease;
-}
-
-.game-rules-aa:hover {
-  color: #32d49a;
 }
 
 /* Text Size Popover Menu matching user mockup */
@@ -338,8 +316,6 @@ watch(() => route.path, () => {
   z-index: 60;
   display: flex;
   align-items: center;
-  background-color: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
   user-select: none;
@@ -356,10 +332,14 @@ watch(() => route.path, () => {
   border-bottom: 6px solid #000000;
 }
 
+[data-theme="light"] .popover-arrow,
+.light .popover-arrow {
+  border-bottom-color: #ffffff;
+}
+
 .popover-divider {
   width: 1px;
   height: 22px;
-  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .text-size-btn {
@@ -367,16 +347,11 @@ watch(() => route.path, () => {
   font-size: 15px;
   font-weight: 600;
   line-height: 1;
-  color: #9ca3af;
   background: transparent;
   border: 0;
   cursor: pointer;
   white-space: nowrap;
   transition: color 150ms ease;
-}
-
-.text-size-btn:hover {
-  color: #ffffff;
 }
 
 .text-size-btn--active {

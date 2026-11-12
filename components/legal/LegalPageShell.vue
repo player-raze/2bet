@@ -19,7 +19,7 @@ withDefaults(
 </script>
 
 <template>
-  <div class="legal-doc-page max-w-4xl mx-auto pb-16 text-white">
+  <div class="legal-doc-page max-w-4xl mx-auto pb-16 text-white light:text-[#10261c]">
     <!-- Top Universal Emerald Subpage Header -->
     <SubpageHeader
       :title="title"
@@ -29,7 +29,7 @@ withDefaults(
 
     <div class="px-2.5 sm:px-4">
       <!-- Main Content Card -->
-      <div class="doc-card rounded-2xl bg-[#141414] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-md">
+      <div class="doc-card rounded-2xl bg-[#141414] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-md light:bg-white light:border-[#d8e2dc] light:shadow-sm">
         <!-- Top Hero Banner -->
         <div class="hero-banner-wrapper mb-6 overflow-hidden rounded-2xl">
           <img
@@ -41,12 +41,12 @@ withDefaults(
         </div>
 
         <!-- Centered Document Title -->
-        <h2 v-if="showDocumentTitle" class="text-center font-bold text-base sm:text-lg text-white mb-6">
+        <h2 v-if="showDocumentTitle" class="text-center font-bold text-base sm:text-lg text-white mb-6 light:text-[#10261c]">
           {{ title }}
         </h2>
 
         <!-- Document Body Content -->
-        <div class="doc-body text-[#959799] text-xs sm:text-[13.5px] leading-relaxed space-y-4">
+        <div class="doc-body text-[#959799] text-xs sm:text-[13.5px] leading-relaxed space-y-4 light:text-[#24382e]">
           <slot />
         </div>
       </div>

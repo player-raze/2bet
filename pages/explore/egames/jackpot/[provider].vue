@@ -18,7 +18,7 @@ import JackpotWinnersCard from '~/components/jackpot/JackpotWinnersCard.vue'
 import { SLOTS, getStandaloneJackpotGames, normalizeSlotProvider } from '~/data/slots'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
 
-const JACKPOT_REFRESH_INTERVAL_MS = 60_000
+const JACKPOT_REFRESH_INTERVAL_MS = 3_000
 
 const JACKPOT_CHARACTER_IMAGES: Record<JackpotSection['jackpotCharacter'], string> = {
   dragon: '/images/jackpot/jili-jackpot.webp',
@@ -273,13 +273,13 @@ watch(
 </script>
 
 <template>
-  <div class="jackpot-page w-full min-w-0 pb-16">
+  <div class="jackpot-page w-full min-w-0 pb-16 text-white light:text-[#10261c]">
     <h1 class="sr-only">{{ providerName === 'Todos os Provedores' ? translate('Jackpots') : `Jackpot ${providerName}` }}</h1>
     <!-- Sticky Header (Top Nav Tabs Bar) -->
     <div class="sticky-header sticky-header-seal sticky top-[var(--content-sticky-top)] z-50 -mx-1 px-0 sm:px-1 pb-2">
       <!-- Top Nav Tabs Bar (777, JILI, JDB, CQ9 + Chat) -->
-      <header class="top-nav-bar flex items-center justify-between gap-2 overflow-hidden rounded-lg bg-[#202020] py-0 sm:py-1 shadow-sm">
-        <div class="provider-nav-track no-scrollbar flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto bg-[#141414] px-2.5 sm:px-1 py-4 sm:py-1.5 shadow-sm">
+      <header class="top-nav-bar flex items-center justify-between gap-2 overflow-hidden rounded-lg bg-[#202020] light:bg-white light:border light:border-[#d8e2dc] py-0 sm:py-1 shadow-sm">
+        <div class="provider-nav-track no-scrollbar flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto bg-[#141414] light:bg-white px-2.5 sm:px-1 py-4 sm:py-1.5 shadow-sm">
           <RouletteEntryButton style="--roulette-entry-size: 33px; border: 0" class="block sm:hidden" />
           <button
             v-for="tab in JACKPOT_NAV_TABS"
@@ -345,7 +345,7 @@ watch(
 
         <div
           v-if="section.showCounter"
-          class="jackpot-counter-track"
+          class="jackpot-counter-track bg-[#5d5d5d] light:bg-[#edf4f0] border border-transparent light:border-[#d8e2dc] light:shadow-sm"
           role="status"
           aria-live="polite"
           :aria-label="getJackpotLabel(section)"
@@ -355,7 +355,7 @@ watch(
               v-for="(character, index) in getJackpotCharacters(section)"
               :key="`${section.id}-${jackpotRevision}-${index}-${character}`"
             >
-              <span v-if="/\d/.test(character)" class="jackpot-counter-character">
+              <span v-if="/\d/.test(character)" class="jackpot-counter-character border border-[#848484]/80 light:border-[#d8e2dc] bg-gradient-to-b from-[#4b4b4b] via-[#333] to-[#3e3e3e] light:from-[#ffffff] light:via-[#f4f8f5] light:to-[#eaf5ee]">
                 <img
                   v-if="getJackpotDigitImage(character)"
                   :src="getJackpotDigitImage(character)"
@@ -379,7 +379,7 @@ watch(
         <div class="jackpot-provider-count">
           <NuxtLink
             :to="`/egames/jackpot/${section.id}`"
-            class="count-badge flex items-center gap-0.5 rounded-full bg-[#202220] hover:bg-[#282a29] px-2.5 py-0.5 text-[11px] font-medium text-[#8e9491] hover:text-white transition-colors cursor-pointer"
+            class="count-badge flex items-center gap-0.5 rounded-full bg-[#202220] hover:bg-[#282a29] light:bg-[#edf4f0] light:text-[#2a3c33] light:hover:text-[#019440] light:border light:border-[#d8e2dc] px-2.5 py-0.5 text-[11px] font-medium text-[#8e9491] hover:text-white transition-colors cursor-pointer"
           >
             <span>{{ section.count }}</span>
             <ChevronRight class="h-3 w-3" />
@@ -420,14 +420,14 @@ watch(
         <NuxtLink
           id="standalone-jackpot-title"
           to="/egames/jackpot/standalone"
-          class="flex min-w-0 items-center gap-1.5 text-[15px] font-bold text-white transition-colors hover:text-[var(--main-color)]"
+          class="flex min-w-0 items-center gap-1.5 text-[15px] font-bold text-white light:text-[#10261c] transition-colors hover:text-[var(--main-color)]"
         >
           <span aria-hidden="true">🎰</span>
           <span class="truncate">{{ translate('Standalone Jackpot Game') }}</span>
         </NuxtLink>
         <NuxtLink
           to="/egames/jackpot/standalone"
-          class="flex shrink-0 items-center gap-0.5 rounded-full bg-[#202220] px-2.5 py-0.5 text-[11px] font-medium text-[#8e9491] transition-colors hover:bg-[#282a29] hover:text-white"
+          class="flex shrink-0 items-center gap-0.5 rounded-full bg-[#202220] px-2.5 py-0.5 text-[11px] font-medium text-[#8e9491] light:bg-[#edf4f0] light:text-[#2a3c33] light:hover:text-[#019440] light:border light:border-[#d8e2dc] transition-colors hover:bg-[#282a29] hover:text-white"
           aria-label="View all standalone jackpot games"
         >
           <span>{{ standaloneJackpotGames.length }}</span>
@@ -553,7 +553,6 @@ watch(
   align-items: center;
   justify-content: center;
   border-radius: 7px;
-  background: #5d5d5d;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     inset 0 -1px 0 rgba(0, 0, 0, 0.28);
@@ -575,9 +574,7 @@ watch(
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid rgba(132, 132, 132, 0.82);
   border-radius: 5px;
-  background: linear-gradient(180deg, #4b4b4b 0%, #333 48%, #3e3e3e 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 2px 3px rgba(0, 0, 0, 0.4);

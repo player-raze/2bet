@@ -132,7 +132,7 @@ const isEGamesItemActive = (item: { label: string; to: string }): boolean => {
   if (item.label === 'Jackpot') {
     return isPathActive('/egames/jackpot') || isPathActive('/explore/egames/jackpot')
   }
-  return isPathActive(item.to)
+  return isPathActive(item.to) || isPathActive(`/explore${item.to}`)
 }
 
 const isSportsActive = computed(() => {
@@ -352,7 +352,7 @@ const handleNavCell = (cell: NavCell): void => {
 <template>
   <nav
     v-show="!isBonusDetailPage && !isCustomerServiceChatPage"
-    class="mobile-bottom-nav"
+    class="mobile-bottom-nav bg-[#111111] text-[#8c8c8c] light:bg-white light:text-[#5d7066] light:border-t light:border-[#d8e2dc] light:shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"
     :class="{
       'mobile-bottom-nav--hidden': !showNavigation,
       'mobile-bottom-nav--live-plaza': displayedNavMode === 'live-plaza',
@@ -387,7 +387,7 @@ const handleNavCell = (cell: NavCell): void => {
           :class="[
             cell.key === 'door'
               ? ['mobile-bottom-nav__switch', displayedNavMode === 'primary' ? 'mobile-bottom-nav__switch--home' : 'mobile-bottom-nav__switch--back']
-              : 'mobile-bottom-nav__item',
+              : 'mobile-bottom-nav__item text-[#8d8d8d] light:text-[#5d7066]',
             {
               'mobile-bottom-nav__item--active': cell.active,
               'mobile-bottom-nav__item--plaza': cell.key !== 'door' && displayedNavMode === 'live-plaza',
@@ -399,7 +399,7 @@ const handleNavCell = (cell: NavCell): void => {
           :aria-current="cell.active && cell.to ? 'page' : undefined"
           @click="handleNavCell(cell)"
         >
-          <span v-if="cell.key === 'door'" class="mobile-bottom-nav__switch-circle" aria-hidden="true">
+          <span v-if="cell.key === 'door'" class="mobile-bottom-nav__switch-circle bg-[#101010] text-[#f4f7f5] light:bg-white light:text-[#10261c] light:border light:border-[#d8e2dc] light:shadow-sm" aria-hidden="true">
             <span v-for="mode in navModes" :key="mode" v-show="mode === displayedNavMode" class="mobile-bottom-nav__door-art">
               <MobileBottomNavIcon :name="mode === 'primary' ? 'primary-door' : mode + '-back'" />
             </span>
@@ -439,8 +439,6 @@ const handleNavCell = (cell: NavCell): void => {
     overflow: visible;
     border: 0;
     border-radius: 20px 20px 0 0;
-    color: #8c8c8c;
-    background: rgba(17, 17, 17, 0.98);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.34);
     backdrop-filter: blur(18px) saturate(1.12);
     -webkit-backdrop-filter: blur(18px) saturate(1.12);
@@ -462,7 +460,6 @@ const handleNavCell = (cell: NavCell): void => {
   .mobile-bottom-nav--live-plaza {
     min-height: calc(58px + env(safe-area-inset-bottom));
     border-radius: 20px 20px 0 0;
-    background: #141414;
   }
 
   .mobile-bottom-nav--live-plaza .mobile-bottom-nav__row {
@@ -515,7 +512,6 @@ const handleNavCell = (cell: NavCell): void => {
   .mobile-bottom-nav__switch--plaza .mobile-bottom-nav__switch-circle {
     width: 38px;
     height: 38px;
-    background: #101010;
   }
 
   .mobile-bottom-nav__row--primary {
@@ -545,7 +541,6 @@ const handleNavCell = (cell: NavCell): void => {
     justify-content: center;
     flex-direction: column;
     padding: 6px 2px 5px;
-    color: #8d8d8d;
     font-size: 12px;
     font-weight: 500;
     line-height: 1;
@@ -625,18 +620,17 @@ const handleNavCell = (cell: NavCell): void => {
     height: 58px;
     align-self: end;
     place-items: center;
-    color: #f4f7f5;
     background: var(--main-color);
   }
 
   .mobile-bottom-nav__switch--home {
     padding-right: 8px;
-    border-radius: 0 31px 31px 0;
+    border-radius: 20px 31px 31px 0;
   }
 
   .mobile-bottom-nav__switch--back {
     padding: 0 10px 0 10px;
-    border-radius: 31px 31px 0 31px;
+    border-radius: 31px 20px 0 31px;
   }
 
   .mobile-bottom-nav__switch-circle {
@@ -646,14 +640,7 @@ const handleNavCell = (cell: NavCell): void => {
     place-items: center;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 50%;
-    color: #f4f7f5;
-    background: #101010;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.38);
-  }
-
-  .mobile-bottom-nav__switch--back .mobile-bottom-nav__switch-circle {
-    color: #f4f7f5;
-    background: #141414;
   }
 
   .mobile-bottom-nav__inplay-icon {
@@ -688,7 +675,6 @@ const handleNavCell = (cell: NavCell): void => {
     font-weight: 700;
     line-height: 1;
     background: var(--main-color);
-    box-shadow: 0 0 0 2px #111111;
   }
 
   @media (max-width: 22rem) {

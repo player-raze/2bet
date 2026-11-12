@@ -39,7 +39,7 @@ const handleBack = (): void => {
 
 <template>
   <header
-    class="subpage-header"
+    class="subpage-header bg-[var(--main-color)] text-white lg:bg-gradient-to-b lg:from-[#202221] lg:to-[#1b1c1b] light:bg-white light:border-b light:border-[#d8e2dc] light:text-[#10261c] light:shadow-sm"
     :class="[
       sticky ? 'subpage-header--sticky sticky-header-seal' : 'relative',
       customClass,
@@ -53,7 +53,7 @@ const handleBack = (): void => {
         <button
           v-if="showBack"
           type="button"
-          class="subpage-header__back-btn text-[#FEDF00]"
+          class="subpage-header__back-btn bg-white/15 border border-white/10 text-[#FEDF00] lg:text-[#16a27b] lg:bg-[#111514] lg:border-0 hover:bg-white/25 lg:hover:bg-[#151b19] light:bg-[#eaf5ee] light:text-[#019440] light:border-[#d8e2dc] light:hover:bg-[#d8eee1]"
           :aria-label="translate('Go back')"
           :title="translate('Go back')"
           @click="handleBack"
@@ -67,7 +67,7 @@ const handleBack = (): void => {
     <!-- Center: Title or custom content (e.g. segmented tabs) -->
     <div class="subpage-header__center">
       <slot name="center">
-        <h1 v-if="title" class="subpage-header__title">
+        <h1 v-if="title" class="subpage-header__title text-white light:text-[#10261c]">
           {{ translate(title) }}
         </h1>
       </slot>
@@ -135,8 +135,6 @@ const handleBack = (): void => {
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
-  background-color: var(--main-color);
-  color: #ffffff;
   user-select: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
@@ -175,7 +173,6 @@ const handleBack = (): void => {
 
 .subpage-header__title {
   margin: 0;
-  color: #ffffff;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.25;
@@ -200,15 +197,9 @@ const handleBack = (): void => {
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   cursor: pointer;
   transition: background-color 150ms ease, transform 150ms ease;
   box-shadow: inset 1px 1px #ffffff4d, inset -1px -1px #ffffff80, inset 2px 2px 4px #00000005, inset -4px -4px 8px #00000005, 0 0 4px #0000000a, 0 4px 8px #00000014;
-}
-
-.subpage-header__back-btn:hover {
-  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .subpage-header__back-btn:active {
@@ -230,7 +221,6 @@ const handleBack = (): void => {
     border: 1px solid rgba(255, 255, 255, 0.035);
     border-radius: 11px;
     margin-bottom: 8px;
-    background: linear-gradient(180deg, #202221 0%, #1b1c1b 100%);
     box-shadow: none;
     gap: 8px;
   }
@@ -255,12 +245,6 @@ const handleBack = (): void => {
 
   .subpage-header__back-btn {
     border: 0;
-    color: #16a27b;
-    background: #111514;
-  }
-
-  .subpage-header__back-btn:hover {
-    background: #151b19;
   }
 
   .subpage-header--sticky {

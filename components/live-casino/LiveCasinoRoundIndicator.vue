@@ -34,13 +34,13 @@ const timerColor = computed(() => {
             class="casino-round-progress"
           />
         </svg>
-        <span class="casino-round-seconds">{{ state.secondsRemaining }}</span>
+        <span class="casino-round-seconds text-white">{{ state.secondsRemaining }}</span>
       </span>
 
       <span v-else key="dealing" class="casino-round-dealing">
         <span class="casino-round-gold-card">
           <span class="casino-round-card-face">
-            <svg class="casino-round-card-mark" viewBox="0 0 12 17" fill="none">
+            <svg class="casino-round-card-mark text-white/90" viewBox="0 0 12 17" fill="none">
               <path d="m2.2 7.1 2.4 1.3-2.4 1.2m3.1-2.4 1.4 2.3 1.4-2.3m2.1.1-1.3 1.2 1.3 1.2" stroke="currentColor" stroke-width=".85" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </span>
@@ -91,7 +91,6 @@ const timerColor = computed(() => {
 
 .casino-round-seconds {
   position: relative;
-  color: #fff;
   font-family: Arial, sans-serif;
   font-size: 10px;
   font-weight: 700;
@@ -133,7 +132,6 @@ const timerColor = computed(() => {
   inset: -1px;
   width: 12px;
   height: 17px;
-  color: rgb(255 255 255 / 88%);
 }
 
 .casino-round-card-fold {

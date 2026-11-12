@@ -16,17 +16,32 @@ useHead(() => ({
   },
   meta: [
     {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover',
+    },
+    {
       name: 'theme-color',
       content: effectiveTheme.value === 'light' ? '#eef5f1' : '#080D0B',
     },
   ],
 }))
 
+let teardownDisableZoom: (() => void) | undefined
+
 onMounted(() => {
-  restoreLocale()
-  restoreTimeZone()
-  applyTheme()
-  checkAssetsAndDismiss()
+  try {
+    restoreLocale()
+    restoreTimeZone()
+    applyTheme()
+  } finally {
+    checkAssetsAndDismiss()
+    teardownDisableZoom = setupDisableZoom()
+  }
+})
+
+onBeforeUnmount(() => {
+  teardownDisableZoom?.()
+  teardownDisableZoom = undefined
 })
 
 const nuxtApp = useNuxtApp()

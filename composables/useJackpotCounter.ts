@@ -36,8 +36,8 @@ interface ActiveTicker {
   timer: ReturnType<typeof setTimeout> | null
 }
 
-const DEFAULT_DELAY_MS = [50_000, 70_000] as const
-const DEFAULT_INITIAL_DELAY_MS = [15_000, 30_000] as const
+const DEFAULT_DELAY_MS = [3_000, 3_000] as const
+const DEFAULT_INITIAL_DELAY_MS = [3_000, 3_000] as const
 const TWEEN_MAX_DURATION_MS = 1_500
 
 // One ticker per key, so several components sharing a counter don't double-increment it.
@@ -102,8 +102,8 @@ export const MEGA_JACKPOT_COUNTER: JackpotCounterOptions = {
   step: [12, 85],
   decreaseStep: [8, 65],
   increaseProbability: 0.6,
-  delayMs: [50_000, 70_000],
-  initialDelayMs: [15_000, 30_000],
+  delayMs: [3_000, 3_000],
+  initialDelayMs: [3_000, 3_000],
 }
 
 export const JDB_JACKPOT_COUNTER: JackpotCounterOptions = {
@@ -114,8 +114,8 @@ export const JDB_JACKPOT_COUNTER: JackpotCounterOptions = {
   step: [0.5, 6],
   decreaseStep: [0.3, 4.5],
   increaseProbability: 0.6,
-  delayMs: [50_000, 75_000],
-  initialDelayMs: [15_000, 30_000],
+  delayMs: [3_000, 3_000],
+  initialDelayMs: [3_000, 3_000],
 }
 
 export const JILI_JACKPOT_COUNTER: JackpotCounterOptions = {
@@ -126,8 +126,8 @@ export const JILI_JACKPOT_COUNTER: JackpotCounterOptions = {
   step: [1, 15],
   decreaseStep: [0.8, 11],
   increaseProbability: 0.6,
-  delayMs: [50_000, 75_000],
-  initialDelayMs: [16_000, 32_000],
+  delayMs: [3_000, 3_000],
+  initialDelayMs: [3_000, 3_000],
 }
 
 export const CQ9_JACKPOT_COUNTER: JackpotCounterOptions = {
@@ -138,8 +138,8 @@ export const CQ9_JACKPOT_COUNTER: JackpotCounterOptions = {
   step: [1, 12],
   decreaseStep: [0.7, 9],
   increaseProbability: 0.6,
-  delayMs: [55_000, 80_000],
-  initialDelayMs: [18_000, 35_000],
+  delayMs: [3_000, 3_000],
+  initialDelayMs: [3_000, 3_000],
 }
 
 export const GRAND_JACKPOT_COUNTER: JackpotCounterOptions = {
@@ -150,8 +150,8 @@ export const GRAND_JACKPOT_COUNTER: JackpotCounterOptions = {
   step: [6, 45],
   decreaseStep: [4, 35],
   increaseProbability: 0.6,
-  delayMs: [50_000, 75_000],
-  initialDelayMs: [18_000, 35_000],
+  delayMs: [3_000, 3_000],
+  initialDelayMs: [3_000, 3_000],
 }
 
 export const MAJOR_JACKPOT_COUNTER: JackpotCounterOptions = {
@@ -162,8 +162,8 @@ export const MAJOR_JACKPOT_COUNTER: JackpotCounterOptions = {
   step: [3, 22],
   decreaseStep: [2, 18],
   increaseProbability: 0.6,
-  delayMs: [55_000, 80_000],
-  initialDelayMs: [20_000, 40_000],
+  delayMs: [3_000, 3_000],
+  initialDelayMs: [3_000, 3_000],
 }
 
 export const MINOR_JACKPOT_COUNTER: JackpotCounterOptions = {
@@ -174,8 +174,8 @@ export const MINOR_JACKPOT_COUNTER: JackpotCounterOptions = {
   step: [1, 8],
   decreaseStep: [0.5, 6.5],
   increaseProbability: 0.6,
-  delayMs: [55_000, 80_000],
-  initialDelayMs: [22_000, 45_000],
+  delayMs: [3_000, 3_000],
+  initialDelayMs: [3_000, 3_000],
 }
 
 export const useJackpotCounter = (options: JackpotCounterOptions) => {

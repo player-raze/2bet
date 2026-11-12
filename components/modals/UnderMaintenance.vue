@@ -36,19 +36,19 @@ onBeforeUnmount(() => {
   <Teleport to="body">
     <dialog
       ref="dialog"
-      class="maintenance-modal mobile-modal-slide-up prompt-sheet"
+      class="maintenance-modal mobile-modal-slide-up prompt-sheet bg-[#1e1e1e] text-white light:bg-white light:text-[#10261c] border border-transparent light:border-[#d8e2dc] light:shadow-2xl"
       aria-labelledby="maintenance-title"
       aria-describedby="maintenance-description"
       @cancel.prevent="emit('close')"
       @click="handleBackdropClick"
     >
       <div class="maintenance-content">
-        <div class="maintenance-symbol" aria-hidden="true">!</div>
-        <div id="maintenance-title" class="maintenance-title" role="heading" aria-level="2">{{ translate(title) }}</div>
-        <p id="maintenance-description">
+        <div class="maintenance-symbol text-white bg-[var(--main-color)]" aria-hidden="true">!</div>
+        <div id="maintenance-title" class="maintenance-title text-white light:text-[#10261c]" role="heading" aria-level="2">{{ translate(title) }}</div>
+        <p id="maintenance-description" class="text-[#e5e7eb] light:text-[#5d7066]">
           {{ translate(message) }}
         </p>
-        <button type="button" autofocus @click="emit('close')">{{ translate('OK') }}</button>
+        <button type="button" autofocus class="text-white bg-[var(--main-color)] hover:bg-[#047954]" @click="emit('close')">{{ translate('OK') }}</button>
       </div>
     </dialog>
   </Teleport>
@@ -66,8 +66,6 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   border: 0;
   border-radius: 11px;
-  color: #fff;
-  background: #1e1e1e;
   text-align: center;
   box-shadow: 0 16px 48px rgb(0 0 0 / 30%);
 }
@@ -89,8 +87,6 @@ onBeforeUnmount(() => {
   margin: 0 auto 12px;
   place-items: center;
   border-radius: 50%;
-  background: var(--main-color);
-  color: #fff;
   font-size: 30px;
   font-weight: 800;
   line-height: 1;
@@ -102,7 +98,6 @@ h2 {
   font-size: 18px;
   font-weight: 700;
   line-height: 25px;
-  color: #fff;
 }
 
 p {
@@ -110,7 +105,6 @@ p {
   margin: 8px auto 20px;
   font-size: 14px;
   line-height: 19px;
-  color: #e5e7eb;
 }
 
 button {
@@ -119,20 +113,14 @@ button {
   padding: 12px;
   border: 0;
   border-radius: 12px;
-  color: #fff;
-  background: var(--main-color);
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 150ms ease;
 }
 
-button:hover {
-  background: #047954;
-}
-
 button:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid currentColor;
   outline-offset: -3px;
 }
 </style>

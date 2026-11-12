@@ -17,7 +17,7 @@ const emit = defineEmits<{
       <div>
         <span class="heading-icon"><Radio :size="16" /></span>
         <h2 id="live-casino-title">Live Casino</h2>
-        <span class="live-pulse"><i /> Live now</span>
+        <span class="live-pulse text-[#7d8d85] light:text-[#5d7066]"><i /> Live now</span>
       </div>
       <a href="#live-casino">View All <ArrowUpRight :size="14" /></a>
     </div>
@@ -26,7 +26,7 @@ const emit = defineEmits<{
       <button
         v-if="games[0]"
         type="button"
-        class="live-card live-card--featured"
+        class="live-card live-card--featured text-white"
         :style="{ '--live-accent': games[0].accent }"
         @click="emit('launch-demo', games[0].title)"
       >
@@ -35,10 +35,10 @@ const emit = defineEmits<{
           <b>{{ games[0].symbol }}</b>
         </span>
         <span class="live-details">
-          <small><i /> LIVE</small>
+          <small class="text-[#ff9097]"><i /> LIVE</small>
           <strong>{{ games[0].title }}</strong>
-          <span>{{ games[0].provider }}</span>
-          <em><Users :size="12" /> {{ games[0].viewers }}</em>
+          <span class="text-white/60">{{ games[0].provider }}</span>
+          <em class="text-white/60"><Users :size="12" /> {{ games[0].viewers }}</em>
         </span>
       </button>
 
@@ -47,7 +47,7 @@ const emit = defineEmits<{
           v-for="game in games.slice(1)"
           :key="game.id"
           type="button"
-          class="live-card live-card--small"
+          class="live-card live-card--small text-white"
           :style="{ '--live-accent': game.accent }"
           @click="emit('launch-demo', game.title)"
         >
@@ -56,9 +56,9 @@ const emit = defineEmits<{
             <b>{{ game.symbol }}</b>
           </span>
           <span class="live-details">
-            <small><i /> LIVE</small>
+            <small class="text-[#ff9097]"><i /> LIVE</small>
             <strong>{{ game.title }}</strong>
-            <em><Users :size="11" /> {{ game.viewers }}</em>
+            <em class="text-white/60"><Users :size="11" /> {{ game.viewers }}</em>
           </span>
         </button>
       </div>
@@ -70,7 +70,6 @@ const emit = defineEmits<{
 .live-pulse {
   display: inline-flex;
   align-items: center;
-  color: #7d8d85;
   font-size: 0.58rem;
   font-weight: 650;
   gap: 0.3rem;
@@ -105,7 +104,6 @@ const emit = defineEmits<{
   overflow: hidden;
   border: 0;
   border-radius: var(--radius);
-  color: white;
   text-align: left;
   background:
     radial-gradient(circle at 60% 26%, color-mix(in srgb, var(--live-accent) 76%, white 8%), transparent 33%),
@@ -165,7 +163,6 @@ const emit = defineEmits<{
   display: inline-flex;
   align-items: center;
   margin-bottom: 0.45rem;
-  color: #ff9097;
   font-size: 0.52rem;
   font-style: normal;
   font-weight: 800;
@@ -180,7 +177,6 @@ const emit = defineEmits<{
 
 .live-details > span {
   margin-top: 0.15rem;
-  color: rgba(255, 255, 255, 0.56);
   font-size: 0.62rem;
 }
 
@@ -188,7 +184,6 @@ const emit = defineEmits<{
   display: flex;
   align-items: center;
   margin-top: 0.45rem;
-  color: rgba(255, 255, 255, 0.6);
   font-size: 0.57rem;
   font-style: normal;
   gap: 0.25rem;

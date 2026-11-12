@@ -109,38 +109,38 @@ onBeforeUnmount(unlockPage)
         @mousedown.self="close"
       >
         <section
-          class="slot-filter-modal"
+          class="slot-filter-modal bg-[#181919] light:bg-white text-[#f5f5f5] light:text-[#10261c] border-t border-white/10 light:border-[#d8e2dc] light:shadow-2xl"
           role="dialog"
           aria-modal="true"
           aria-labelledby="slot-filter-title"
         >
           <!-- Pull bar / Handle at the very top -->
           <div class="slot-filter-drag-handle" aria-hidden="true">
-            <span class="slot-filter-pill-handle" />
+            <span class="slot-filter-pill-handle bg-white/20 light:bg-[#d8e2dc]" />
           </div>
 
           <header class="slot-filter-header">
             <button
               ref="cancelButton"
               type="button"
-              class="slot-filter-cancel"
+              class="slot-filter-cancel text-[#c5cac7] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
               @click="close"
             >
               {{ translate('Cancel') }}
             </button>
-            <div id="slot-filter-title" class="slot-filter-title" role="heading" aria-level="2">{{ translate('Filter') }}</div>
+            <div id="slot-filter-title" class="slot-filter-title text-white light:text-[#10261c]" role="heading" aria-level="2">{{ translate('Filter') }}</div>
             <span class="slot-filter-header-spacer" aria-hidden="true" />
           </header>
 
           <div class="slot-filter-content no-scrollbar">
             <fieldset class="slot-filter-group">
-              <legend>{{ translate('Theme') }}</legend>
+              <legend class="text-white light:text-[#10261c]">{{ translate('Theme') }}</legend>
               <div class="slot-filter-grid">
                 <button
                   v-for="theme in themes"
                   :key="theme"
                   type="button"
-                  class="slot-filter-option"
+                  class="slot-filter-option bg-[#1e201f] text-[#e2e8e5] hover:bg-[#252726] hover:text-white light:bg-[#edf4f0] light:text-[#2a3c33] light:hover:bg-[#eaf5ee] light:hover:text-[#10261c] [&.slot-filter-option--active]:!bg-[#161817] light:[&.slot-filter-option--active]:!bg-[#eaf5ee] [&.slot-filter-option--active]:!border-[#009440] light:[&.slot-filter-option--active]:!text-[#009440]"
                   :class="{ 'slot-filter-option--active': draft.theme === theme }"
                   :aria-pressed="draft.theme === theme"
                   @click="draft.theme = theme"
@@ -151,13 +151,13 @@ onBeforeUnmount(unlockPage)
             </fieldset>
 
             <fieldset class="slot-filter-group">
-              <legend>{{ translate('Features') }}</legend>
+              <legend class="text-white light:text-[#10261c]">{{ translate('Features') }}</legend>
               <div class="slot-filter-grid">
                 <button
                   v-for="feature in features"
                   :key="feature"
                   type="button"
-                  class="slot-filter-option"
+                  class="slot-filter-option bg-[#1e201f] text-[#e2e8e5] hover:bg-[#252726] hover:text-white light:bg-[#edf4f0] light:text-[#2a3c33] light:hover:bg-[#eaf5ee] light:hover:text-[#10261c] [&.slot-filter-option--active]:!bg-[#161817] light:[&.slot-filter-option--active]:!bg-[#eaf5ee] [&.slot-filter-option--active]:!border-[#009440] light:[&.slot-filter-option--active]:!text-[#009440]"
                   :class="{ 'slot-filter-option--active': draft.feature === feature }"
                   :aria-pressed="draft.feature === feature"
                   @click="draft.feature = feature"
@@ -168,13 +168,13 @@ onBeforeUnmount(unlockPage)
             </fieldset>
 
             <fieldset class="slot-filter-group">
-              <legend>{{ translate('Winning Line') }}</legend>
+              <legend class="text-white light:text-[#10261c]">{{ translate('Winning Line') }}</legend>
               <div class="slot-filter-grid">
                 <button
                   v-for="line in winningLines"
                   :key="line"
                   type="button"
-                  class="slot-filter-option"
+                  class="slot-filter-option bg-[#1e201f] text-[#e2e8e5] hover:bg-[#252726] hover:text-white light:bg-[#edf4f0] light:text-[#2a3c33] light:hover:bg-[#eaf5ee] light:hover:text-[#10261c] [&.slot-filter-option--active]:!bg-[#161817] light:[&.slot-filter-option--active]:!bg-[#eaf5ee] [&.slot-filter-option--active]:!border-[#009440] light:[&.slot-filter-option--active]:!text-[#009440]"
                   :class="{ 'slot-filter-option--active': draft.winningLine === line }"
                   :aria-pressed="draft.winningLine === line"
                   @click="draft.winningLine = line"
@@ -185,11 +185,11 @@ onBeforeUnmount(unlockPage)
             </fieldset>
           </div>
 
-          <footer class="slot-filter-actions">
-            <button type="button" class="slot-filter-action slot-filter-reset" @click="reset">
+          <footer class="slot-filter-actions bg-[#181919] light:bg-white border-t border-white/10 light:border-[#d8e2dc]">
+            <button type="button" class="slot-filter-action slot-filter-reset bg-[#2a2c2b] text-white hover:bg-[#343735] light:bg-[#edf4f0] light:text-[#2a3c33] light:hover:bg-[#eaf5ee] light:border light:border-[#d8e2dc]" @click="reset">
               {{ translate('Reset') }}
             </button>
-            <button type="button" class="slot-filter-action slot-filter-ok" @click="apply">
+            <button type="button" class="slot-filter-action slot-filter-ok bg-[#009440] hover:bg-[#047a52] text-white font-bold" @click="apply">
               {{ translate('OK') }}
             </button>
           </footer>
@@ -220,9 +220,6 @@ onBeforeUnmount(unlockPage)
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  color: #f5f5f5;
-  background: #181919;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px 20px 0 0;
   box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.7);
 }
@@ -238,7 +235,6 @@ onBeforeUnmount(unlockPage)
   width: 36px;
   height: 4px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.22);
 }
 
 .slot-filter-header {
@@ -254,7 +250,6 @@ onBeforeUnmount(unlockPage)
 .slot-filter-title {
   grid-column: 2;
   margin: 0;
-  color: #ffffff;
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
@@ -267,7 +262,6 @@ onBeforeUnmount(unlockPage)
   min-width: 52px;
   margin: 0;
   padding: 6px 0;
-  color: #c5cac7;
   background: transparent;
   border: 0;
   border-radius: 6px;
@@ -278,10 +272,6 @@ onBeforeUnmount(unlockPage)
   text-align: left;
   cursor: pointer;
   transition: color 140ms ease;
-}
-
-.slot-filter-cancel:hover {
-  color: #ffffff;
 }
 
 .slot-filter-header-spacer {
@@ -318,7 +308,6 @@ onBeforeUnmount(unlockPage)
   width: 100%;
   margin: 0 0 10px;
   padding: 0;
-  color: #ffffff;
   font-size: 15px;
   font-weight: 700;
   line-height: 20px;
@@ -338,8 +327,6 @@ onBeforeUnmount(unlockPage)
   height: 42px;
   margin: 0;
   padding: 4px 6px;
-  color: #e2e8e5;
-  background: #1e201f;
   border: 1px solid transparent;
   border-radius: 10px;
   font: inherit;
@@ -351,33 +338,18 @@ onBeforeUnmount(unlockPage)
   transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease;
 }
 
-.slot-filter-option:hover {
-  background: #252726;
-  color: #ffffff;
-}
-
-.slot-filter-option--active {
-  background: #161817;
-  border-color: var(--main-color);
-  color: #ffffff;
-  font-weight: 500;
-}
-
 .slot-filter-actions {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   padding: 12px 16px max(16px, env(safe-area-inset-bottom));
-  background: #181919;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .slot-filter-action {
   height: 46px;
   margin: 0;
   padding: 0 12px;
-  color: #ffffff;
   border: 0;
   border-radius: 12px;
   font: inherit;
@@ -386,23 +358,6 @@ onBeforeUnmount(unlockPage)
   line-height: 20px;
   cursor: pointer;
   transition: background-color 140ms ease;
-}
-
-.slot-filter-reset {
-  background: #2a2c2b;
-}
-
-.slot-filter-reset:hover {
-  background: #343735;
-}
-
-.slot-filter-ok {
-  background: var(--main-color);
-  font-weight: 700;
-}
-
-.slot-filter-ok:hover {
-  background: #047a52;
 }
 
 .slot-filter-cancel:focus-visible,

@@ -84,13 +84,14 @@ watch(selectedCurrency, async () => {
 </script>
 
 <template>
-  <div class="mobile-bonuses">
-    <div class="mobile-bonuses__sticky">
+  <div class="mobile-bonuses bg-black text-[#f5f5f5] light:bg-[#eef5f1] light:text-[#10261c]">
+    <div class="mobile-bonuses__sticky bg-black light:bg-[#eef5f1]">
       <MobileBonusHeader :back-to="category === 'all' ? '/' : '/bonuses'" currency-selector />
-      <nav ref="categoryNav" class="mobile-bonuses__categories mx-1" :aria-label="translate('Bonus categories')">
+      <nav ref="categoryNav" class="mobile-bonuses__categories mx-1 bg-[#111] light:bg-white light:shadow-sm light:border light:border-[#d8e2dc]" :aria-label="translate('Bonus categories')">
         <NuxtLink
           v-for="item in visibleCategories" :key="item.key"
           :to="categoryPath(item.key)" :aria-current="activeCategory === item.key ? 'page' : undefined"
+          class="light:text-[#4a6357] light:aria-[current=page]:text-white"
         >{{ translate(item.label) }}</NuxtLink>
       </nav>
     </div>
@@ -99,8 +100,8 @@ watch(selectedCurrency, async () => {
 
     <section v-if="cards.length" class="mobile-bonuses__banners" :aria-label="category === 'all' ? translate('Featured bonuses') : `${translate(PROMO_CATEGORIES.find(item => item.key === category)?.label || '')} bonuses`">
       <div ref="track" :class="category === 'all' ? 'mobile-bonuses__carousel' : 'mobile-bonuses__stack'" @scroll.passive="updateSlide">
-        <NuxtLink v-for="(promotion, index) in cards" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="mobile-bonus-card" @click="markAsViewed(promotion.slug)">
-          <div class="mobile-bonus-card__image">
+        <NuxtLink v-for="(promotion, index) in cards" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="mobile-bonus-card light:text-white" @click="markAsViewed(promotion.slug)">
+          <div class="mobile-bonus-card__image light:bg-[#dce8e1]">
             <img :src="getPromoBannerUrl(promotion.bannerImage, promotion.slug)" :alt="translate(promotion.title)" :style="{ objectPosition: promotion.imagePosition || 'center' }" :loading="index < 2 ? 'eager' : 'lazy'" decoding="async">
             <span v-if="promotion.showSaveBadge" class="mobile-bonus-card__save">◎ {{ translate('Save') }}</span>
           </div>
@@ -111,22 +112,22 @@ watch(selectedCurrency, async () => {
         </NuxtLink>
       </div>
       <template v-if="category === 'all'">
-        <button v-if="activeSlide < cards.length - 1" class="mobile-bonuses__next" type="button" :aria-label="translate('Next featured bonus')" @click="goToSlide(activeSlide + 1)"><ChevronRight :size="20" /></button>
+        <button v-if="activeSlide < cards.length - 1" class="mobile-bonuses__next bg-[#141414] text-white light:bg-white light:text-[#10261c] light:shadow-md" type="button" :aria-label="translate('Next featured bonus')" @click="goToSlide(activeSlide + 1)"><ChevronRight :size="20" /></button>
         <div class="mobile-bonuses__dots" :aria-label="translate('Featured bonus slides')">
-          <button v-for="(promotion, index) in cards" :key="promotion.id" type="button" :aria-label="`Show ${translate(promotion.title)}`" :aria-pressed="activeSlide === index" @click="goToSlide(index)" />
+          <button v-for="(promotion, index) in cards" :key="promotion.id" type="button" class="light:bg-[#c8d6ce] light:aria-pressed:bg-[#019440]" :aria-label="`Show ${translate(promotion.title)}`" :aria-pressed="activeSlide === index" @click="goToSlide(index)" />
         </div>
       </template>
     </section>
 
     <div v-if="category === 'all' && sections.length" class="mobile-bonuses__groups">
-      <section v-for="section in sections" :key="section.id" class="mobile-bonuses__group">
+      <section v-for="section in sections" :key="section.id" class="mobile-bonuses__group bg-[#141414] light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm">
         <NuxtLink class="mobile-bonuses__heading" :to="categoryPath(section.category)">
-          <h2>{{ translate(section.title) }}</h2><ChevronRight :size="20" aria-hidden="true" />
+          <h2 class="text-white light:text-[#10261c]">{{ translate(section.title) }}</h2><ChevronRight :size="20" aria-hidden="true" class="text-[#888] light:text-[#5d7066]" />
         </NuxtLink>
         <NuxtLink v-for="promotion in section.items" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="mobile-bonus-row" @click="markAsViewed(promotion.slug)">
           <img :src="getPromoThumbnailUrl(promotion.thumbnailImage, promotion.slug)" :alt="translate(promotion.title)" loading="lazy" width="54" height="54">
-          <span class="mobile-bonus-row__copy"><strong>{{ translate(promotion.title) }}</strong><small>{{ translate(promotion.description) }}</small></span>
-          <span class="mobile-bonus-row__details">{{ translate('Details') }}</span>
+          <span class="mobile-bonus-row__copy"><strong class="text-white light:text-[#10261c]">{{ translate(promotion.title) }}</strong><small class="text-[#999] light:text-[#5d7066]">{{ translate(promotion.description) }}</small></span>
+          <span class="mobile-bonus-row__details bg-[#242424] text-white light:bg-[#eaf5ee] light:text-[#019440]">{{ translate('Details') }}</span>
         </NuxtLink>
       </section>
     </div>
@@ -140,9 +141,9 @@ watch(selectedCurrency, async () => {
 <style scoped>
 .mobile-bonuses { display: none; }
 @media (max-width: 63.99rem) {
-  .mobile-bonuses { display: block; color: #f5f5f5; background: #000; padding-bottom: 8px; }
-  .mobile-bonuses__sticky { position: sticky; top: 0; z-index: 40; background: #000; }
-  .mobile-bonuses__categories { position: relative; display: flex; gap: 8px; overflow-x: auto; align-items: center; height: 48px; padding: 8px; scrollbar-width: none; background: #111; border-radius: 12px; }
+  .mobile-bonuses { display: block; padding-bottom: 8px; }
+  .mobile-bonuses__sticky { position: sticky; top: 0; z-index: 40; }
+  .mobile-bonuses__categories { position: relative; display: flex; gap: 8px; overflow-x: auto; align-items: center; height: 48px; padding: 8px; scrollbar-width: none; border-radius: 12px; }
   .mobile-bonuses__categories::-webkit-scrollbar, .mobile-bonuses__carousel::-webkit-scrollbar { display: none; }
   .mobile-bonuses__categories a { flex: 0 0 auto; padding: 6px 12px; border-radius: 24px; font-size: 14px; font-weight: 700; white-space: nowrap; }
   .mobile-bonuses__categories a[aria-current="page"] { background: var(--main-color); }
@@ -157,23 +158,23 @@ watch(selectedCurrency, async () => {
   .mobile-bonus-card__copy { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px 10px; }
   .mobile-bonus-card__copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; font-weight: 800; line-height: 22px; }
   .mobile-bonus-card__copy span { font-size: 12px; line-height: 18px; }
-  .mobile-bonuses__next { position: absolute; top: 32%; right: 14px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #141414; }
+  .mobile-bonuses__next { position: absolute; top: 32%; right: 14px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; }
   .mobile-bonuses__dots { display: flex; align-items: center; justify-content: center; gap: 3px; height: 20px; }
   .mobile-bonuses__dots button { position: relative; width: 4px; height: 4px; border-radius: 4px; background: #292929; }
   .mobile-bonuses__dots button::after { position: absolute; content: ''; inset: -7px -1px; }
   .mobile-bonuses__dots button[aria-pressed="true"] { width: 12px; background: #777; }
   .mobile-bonuses__stack { display: flex; flex-direction: column; gap: 8px; padding: 0 10px; }
   .mobile-bonuses__groups { display: flex; flex-direction: column; gap: 8px; padding: 0 10px; }
-  .mobile-bonuses__group { background: #141414; border-radius: 12px; overflow: hidden; }
+  .mobile-bonuses__group { border-radius: 12px; overflow: hidden; }
   .mobile-bonuses__heading { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; }
   .mobile-bonuses__heading h2 { margin: 0; font-size: 18px; font-weight: 800; }
-  .mobile-bonuses__heading svg { color: #888; }
+  .mobile-bonuses__heading svg { }
   .mobile-bonus-row { display: grid; grid-template-columns: 54px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 78px; padding: 12px; }
   .mobile-bonus-row > img { width: 54px; height: 54px; object-fit: cover; border-radius: 8px; }
   .mobile-bonus-row__copy { display: flex; min-width: 0; flex-direction: column; }
   .mobile-bonus-row__copy strong, .mobile-bonus-row__copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mobile-bonus-row__copy strong { font-size: 16px; font-weight: 800; line-height: 22px; }
-  .mobile-bonus-row__copy small { color: #999; font-size: 12px; line-height: 18px; }
-  .mobile-bonus-row__details { padding: 7px 8px; border-radius: 8px; background: #242424; font-size: 12px; }
+  .mobile-bonus-row__copy small { font-size: 12px; line-height: 18px; }
+  .mobile-bonus-row__details { padding: 7px 8px; border-radius: 8px; font-size: 12px; }
 }
 </style>

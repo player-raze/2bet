@@ -113,7 +113,7 @@ const viewAllTarget = computed(() => {
 <template>
   <HomepageContentSlider
     id="sports"
-    class="homepage-sports-section"
+    class="homepage-sports-section text-[#f4f7f5] light:text-[#10261c]"
     :class="`homepage-sports-section--${activeSport}`"
     :title="translate('Sports')"
     :description="translate('Big games. Your front-row seat.')"
@@ -122,19 +122,20 @@ const viewAllTarget = computed(() => {
     :item-count="matches.length"
     :visible-cards="3"
     :items-per-slide="1"
+    :mobile-autoplay-ms="3000"
     :reset-key="`${activeSport}:${matches.length}`"
   >
     <template #header="{ firstVisible, atStart, atEnd, move }">
       <header class="sports-header flex items-center justify-between">
         <div class="sports-heading flex items-center min-w-0">
-          <h2 id="sports-title" class="flex items-center"><img src="/icons/sports/popular.webp" class="allgames-heading-symbol allgames-heading-image" alt="" width="28" height="28">{{ translate('Sports') }}</h2>
-          <p>{{ translate('Big games. Your front-row seat.') }}</p>
+          <h2 id="sports-title" class="flex items-center text-white light:text-[#10261c]"><img src="/icons/sports/popular.webp" class="allgames-heading-symbol allgames-heading-image" alt="" width="28" height="28">{{ translate('Sports') }}</h2>
+          <p class="text-[#a9bdb4] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Big games. Your front-row seat.') }}</p>
         </div>
-        <NuxtLink :to="viewAllTarget" class="sports-explore inline-flex items-center">{{ translate('Explore sports') }} <ArrowUpRight :size="18" aria-hidden="true" /></NuxtLink>
+        <NuxtLink :to="viewAllTarget" class="sports-explore inline-flex items-center text-[#F9C600] bg-white/[0.02] border border-white/10 hover:border-white/20 hover:bg-[#0c2a1d] light:bg-gradient-to-r light:from-white light:to-[#f0f9f4] light:border-[#009440]/25 light:text-[#009440] light:hover:bg-[#e4f5eb]">{{ translate('Explore sports') }} <ArrowUpRight :size="18" aria-hidden="true" class="text-[#F9C600] light:text-[#009440]" /></NuxtLink>
       </header>
 
       <aside class="sports-browse">
-        <span id="sports-browse-label" class="sports-browse-label">{{ translate('BROWSE SPORTS') }}</span>
+        <span id="sports-browse-label" class="sports-browse-label text-[#91aaa0] light:text-[#5d7066]">{{ translate('BROWSE SPORTS') }}</span>
         <div ref="filterRoot" class="sports-filter relative w-full" :class="{ 'sports-filter--open': filterOpen }" :data-sport="activeSport" @focusout="handleFilterFocusOut">
           <button
             id="homepage-sport-filter"
@@ -155,13 +156,13 @@ const viewAllTarget = computed(() => {
             <span id="sports-filter-count" class="sports-filter-count">{{ fixtureCount(activeSport) }}</span>
             <ChevronDown class="sports-filter-chevron shrink-0" :size="16" aria-hidden="true" />
           </button>
-          <div v-if="filterOpen" id="homepage-sport-options" ref="filterList" class="sports-filter-menu absolute inset-x-0" :class="{ 'sports-filter-menu--above': filterAbove }" role="listbox" aria-labelledby="sports-browse-label" @keydown="handleFilterKey">
+          <div v-if="filterOpen" id="homepage-sport-options" ref="filterList" class="sports-filter-menu absolute inset-x-0 bg-[#0c1c16] border border-[#345347] light:bg-white light:border-[#d8e2dc] light:shadow-xl" :class="{ 'sports-filter-menu--above': filterAbove }" role="listbox" aria-labelledby="sports-browse-label" @keydown="handleFilterKey">
             <button
               v-for="(filter, index) in filters"
               :key="filter.key"
               type="button"
               role="option"
-              class="sports-filter-option flex w-full items-center text-left"
+              class="sports-filter-option flex w-full items-center text-left text-[#dce8e1] light:text-[#24382e] hover:bg-white/[0.03] light:hover:bg-[#f4f8f5]"
               :aria-selected="activeSport === filter.key"
               :tabindex="focusedFilter === index ? 0 : -1"
               aria-controls="sports-track"
@@ -177,16 +178,16 @@ const viewAllTarget = computed(() => {
         </div>
         <div v-if="currentFixture(firstVisible)" class="sports-browse-league flex items-center" :class="{ 'sports-browse-league--nba': currentFixture(firstVisible)!.sport_key.includes('_nba') }">
           <img :src="getTournamentLogo(currentFixture(firstVisible)!.sport_key)" :alt="currentFixture(firstVisible)!.sport_title" width="30" height="42" loading="lazy">
-          <div class="min-w-0"><strong>{{ currentFixture(firstVisible)!.sport_title }}</strong><span>{{ translate(currentSport(firstVisible)) }}</span></div>
+          <div class="min-w-0"><strong class="text-white light:text-[#10261c]">{{ currentFixture(firstVisible)!.sport_title }}</strong><span class="text-[#8ca89a] light:text-[#5d7066]">{{ translate(currentSport(firstVisible)) }}</span></div>
         </div>
       </aside>
 
       <div class="sports-toolbar flex items-center justify-between">
-        <h3 class="sports-fixtures-title flex items-center"><strong>{{ currentFixture(firstVisible)?.sport_title || translate(sportLabel) }}</strong><span aria-hidden="true">·</span><span>{{ translate('In-Play') }}</span></h3>
+        <h3 class="sports-fixtures-title flex items-center text-[#e7efe9] light:text-[#10261c]"><strong>{{ currentFixture(firstVisible)?.sport_title || translate(sportLabel) }}</strong><span aria-hidden="true" class="text-[#8ca89a] light:text-[#718279]">·</span><span class="text-[#8ca89a] light:text-[#718279]">{{ translate('In-Play') }}</span></h3>
         <div class="sports-tools flex items-center">
           <div class="sports-controls flex items-center" :aria-label="translate('Sports slider controls')">
-            <button type="button" :disabled="atStart" :aria-label="translate('Previous Sports items')" aria-controls="sports-track" @click="move(-1)"><ChevronLeft :size="17" aria-hidden="true" /></button>
-            <button type="button" :disabled="atEnd" :aria-label="translate('Next Sports items')" aria-controls="sports-track" @click="move(1)"><ChevronRight :size="17" aria-hidden="true" /></button>
+            <button type="button" class="text-[#d1e5d9] border border-white/10 hover:bg-[#0b2a1b] light:text-[#5d7066] light:border-[#d8e2dc] light:bg-white light:hover:bg-[#eaf5ee]" :disabled="atStart" :aria-label="translate('Previous Sports items')" aria-controls="sports-track" @click="move(-1)"><ChevronLeft :size="17" aria-hidden="true" /></button>
+            <button type="button" class="text-[#d1e5d9] border border-white/10 hover:bg-[#0b2a1b] light:text-[#5d7066] light:border-[#d8e2dc] light:bg-white light:hover:bg-[#eaf5ee]" :disabled="atEnd" :aria-label="translate('Next Sports items')" aria-controls="sports-track" @click="move(1)"><ChevronRight :size="17" aria-hidden="true" /></button>
           </div>
         </div>
       </div>
@@ -201,7 +202,7 @@ const viewAllTarget = computed(() => {
       <div class="sports-slider-footer">
         <div class="sports-slider-status flex items-center justify-end">
           <span class="sports-progress" aria-hidden="true"><span :style="{ width: matches.length ? `${firstVisible / matches.length * 100}%` : '0%' }" /></span>
-          <span class="sports-position" aria-live="polite" aria-atomic="true"><span class="sr-only">{{ translate('Fixture ') }}</span>{{ String(matches.length ? firstVisible : 0).padStart(2, '0') }}<span aria-hidden="true"> / </span><span class="sr-only">{{ translate(' of ') }}</span>{{ String(matches.length).padStart(2, '0') }}</span>
+          <span class="sports-position text-[#b2c7bc] light:text-[#718279]" aria-live="polite" aria-atomic="true"><span class="sr-only">{{ translate('Fixture ') }}</span>{{ String(matches.length ? firstVisible : 0).padStart(2, '0') }}<span aria-hidden="true"> / </span><span class="sr-only">{{ translate(' of ') }}</span>{{ String(matches.length).padStart(2, '0') }}</span>
         </div>
         <NuxtLink :to="viewAllTarget" class="sports-explore-mobile w-full items-center justify-center">{{ translate('Explore sports') }}</NuxtLink>
       </div>
@@ -210,16 +211,14 @@ const viewAllTarget = computed(() => {
 </template>
 
 <style scoped>
-.homepage-sports-section { --sports-accent: #25d6a4; --sports-button: #00ac56; --sports-edge: #ffffff12; --sports-muted: #a9bdb4; --sports-surface: #091813; display: grid; grid-template-columns: minmax(0,1fr); row-gap: 10px; padding-bottom: 4px; color: #f4f7f5; }
+.homepage-sports-section { --sports-accent: #25d6a4; --sports-button: #00ac56; --sports-edge: #ffffff12; --sports-muted: #a9bdb4; --sports-surface: #091813; display: grid; grid-template-columns: minmax(0,1fr); row-gap: 10px; padding-bottom: 4px; }
 .sports-header { grid-column: 1 / -1; gap: 20px; min-height: 48px; margin-bottom: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--sports-edge); }
 .sports-heading { gap: 18px; }
 .sports-heading h2 { flex-shrink: 0; gap: 10px; font-size: var(--allgames-heading-size); font-weight: var(--homepage-display-weight); line-height: 1.2; letter-spacing: .01em; }
-.sports-heading p { padding-left: 18px; border-left: 1px solid #ffffff18; color: var(--sports-muted); font-size: 14px; line-height: 24px; }
-.homepage-sports-section .sports-explore { flex-shrink: 0; gap: 8px; min-height: 44px; padding: 0 12px; border: 1px solid #ffffff18; border-radius: 7px; color: #F9C600; background: #ffffff05; font-size: 13px; font-weight: 700; white-space: nowrap; }
-.sports-explore svg { color: #F9C600; }
-.homepage-sports-section .sports-explore:hover { border-color: #ffffff30; background: #0c2a1d; }
+.sports-heading p { padding-left: 18px; font-size: 14px; line-height: 24px; }
+.homepage-sports-section .sports-explore { flex-shrink: 0; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: 7px; font-size: 13px; font-weight: 700; white-space: nowrap; }
 .sports-browse { grid-column: 1; grid-row: 2; display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); align-items: center; gap: 8px 24px; min-width: 0; padding-bottom: 4px; }
-.sports-browse-label { grid-column: 1; display: block; color: #91aaa0; font-size: 10px; font-weight: 700; line-height: 1.4; letter-spacing: .08em; overflow-wrap: break-word; }
+.sports-browse-label { grid-column: 1; display: block; font-size: 10px; font-weight: 700; line-height: 1.4; letter-spacing: .08em; overflow-wrap: break-word; }
 .sports-filter { --sports-filter-accent: var(--sports-accent); --sports-filter-border: #25865c; --sports-filter-background: #0b2a1e; grid-column: 1; grid-row: 2; color: #e1e9e4; }
 .sports-filter--open { z-index: 30; }
 .sports-filter-value { min-height: 50px; gap: 10px; padding: 11px 14px; border: 1px solid var(--sports-filter-border); border-radius: 8px; background: var(--sports-filter-background); font-size: 14px; font-weight: 700; line-height: 1.4; }
@@ -228,9 +227,9 @@ const viewAllTarget = computed(() => {
 .sports-filter-name { overflow-wrap: anywhere; }
 .sports-filter-chevron { margin-left: 2px; color: var(--sports-filter-accent); transition: transform 160ms ease; }
 .sports-filter--open .sports-filter-chevron { transform: rotate(180deg); }
-.sports-filter-menu { top: calc(100% + 8px); z-index: 30; max-height: min(256px, 50dvh); overflow-y: auto; overscroll-behavior: contain; padding: 6px; border: 1px solid #345347; border-radius: 10px; background: #0c1c16; box-shadow: 0 14px 36px #0009, 0 2px 6px #0005; }
+.sports-filter-menu { top: calc(100% + 8px); z-index: 30; max-height: min(256px, 50dvh); overflow-y: auto; overscroll-behavior: contain; padding: 6px; border-radius: 10px; box-shadow: 0 14px 36px #0009, 0 2px 6px #0005; }
 .sports-filter-menu--above { top: auto; bottom: calc(100% + 8px); }
-.sports-filter-option { min-height: 52px; gap: 10px; padding: 8px 10px; border: 1px solid transparent; border-radius: 6px; color: #dce8e1; font-size: 14px; font-weight: 600; line-height: 1.4; }
+.sports-filter-option { min-height: 52px; gap: 10px; padding: 8px 10px; border: 1px solid transparent; border-radius: 6px; font-size: 14px; font-weight: 600; line-height: 1.4; }
 .sports-filter-option + .sports-filter-option { margin-top: 3px; }
 .sports-filter-option:hover { background: #ffffff08; }
 .sports-filter-option[aria-selected='true'] { border-color: #25d6a433; color: #f2fff8; background: #143d2c; }
@@ -248,17 +247,15 @@ const viewAllTarget = computed(() => {
 .sports-browse-league strong { display: block; font-size: 14px; font-weight: 800; line-height: 1.3; overflow-wrap: anywhere; }
 .sports-browse-league div > span { display: block; margin-top: 2px; color: var(--sports-muted); font-size: 12px; }
 .sports-toolbar { grid-column: 1; grid-row: 3; gap: 12px; min-width: 0; min-height: 28px; }
-.sports-fixtures-title { min-width: 0; gap: 10px; color: #e7efe9; font-size: 14px; line-height: 1.3; }
+.sports-fixtures-title { min-width: 0; gap: 10px; font-size: 14px; line-height: 1.3; }
 .sports-fixtures-title strong { overflow: hidden; max-width: 180px; font-size: 16px; font-weight: 800; white-space: nowrap; text-overflow: ellipsis; }
-.sports-fixtures-title > span:first-of-type { color: #8ca89a; }
 .sports-fixtures-title > span:last-child { white-space: nowrap; }
 .sports-tools { flex-shrink: 0; gap: 14px; }
 .sports-date-filter { position: relative; }
 .sports-date-filter select { width: 104px; min-height: 30px; padding: 5px 29px 5px 12px; appearance: none; border: 1px solid #ffffff20; border-radius: 5px; color: #e1eae5; background: #0a1914; font-size: 10px; font-weight: 700; cursor: pointer; }
 .sports-date-filter > svg { position: absolute; top: 50%; right: 10px; color: #c2d5cb; pointer-events: none; transform: translateY(-50%); }
 .sports-controls { gap: 6px; }
-.sports-controls button { display: grid; place-items: center; width: 29px; height: 29px; border: 1px solid #ffffff18; border-radius: 5px; color: #d1e5d9; background: transparent; }
-.sports-controls button:hover:enabled { border-color: #ffffff30; background: #0b2a1b; }
+.sports-controls button { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 5px; }
 .sports-controls button:disabled { opacity: .35; cursor: default; }
 .homepage-sports-section :deep(.allgames-game-track) { --allgames-row-gap: 12px; grid-column: 1; grid-row: 4; grid-auto-columns: calc((100% - 2 * var(--allgames-row-gap)) / 3); padding: 0; }
 .homepage-sports-section :deep(.allgames-game-track:has(.sports-empty)) { grid-auto-columns: 100%; }
@@ -269,7 +266,7 @@ const viewAllTarget = computed(() => {
 .sports-explore-mobile:is(:hover,:focus-visible) { border-color: var(--brand-hover); background: var(--brand-hover); color: #fff; }
 .sports-progress { display: block; width: 122px; height: 3px; overflow: hidden; border-radius: 2px; background: #1e3c30; }
 .sports-progress > span { display: block; height: 100%; border-radius: inherit; background: #009440; transition: width 180ms ease; }
-.sports-position { color: #b2c7bc; font-size: 10px; font-variant-numeric: tabular-nums; white-space: pre; }
+.sports-position { font-size: 10px; font-variant-numeric: tabular-nums; white-space: pre; }
 @media (max-width: 1199px) {
   .homepage-sports-section :deep(.allgames-game-track) { grid-auto-columns: calc((100% - var(--allgames-row-gap)) / 2); }
   .sports-fixtures-title { gap: 8px; font-size: 12px; }
@@ -289,6 +286,7 @@ const viewAllTarget = computed(() => {
   .sports-heading h2 img { width: 24px; height: 24px; }
   .sports-heading p { grid-column: 1 / -1; grid-row: 2; min-width: 0; padding: 0; border: 0; font-size: 13px; line-height: 1.6; text-wrap: pretty; }
   .homepage-sports-section .sports-explore { display: none; }
+  .homepage-sports-section :deep(.allgames-game-track) { grid-auto-columns: 100%; }
   .sports-slider-footer { display: flex; flex-direction: column; gap: 12px; }
   .sports-explore-mobile { display: flex; }
 }
@@ -304,7 +302,7 @@ const viewAllTarget = computed(() => {
   .sports-date-filter select { width: 90px; padding-left: 9px; }
   .sports-tools { gap: 7px; }
   .sports-controls button { width: 30px; height: 30px; }
-  .homepage-sports-section :deep(.allgames-game-track) { grid-auto-columns: 88%; }
+  .homepage-sports-section :deep(.allgames-game-track) { grid-auto-columns: 100%; }
 }
 @media (pointer: coarse) {
   .sports-controls button,.sports-date-filter select,.sports-explore { min-height: 44px; }

@@ -170,6 +170,11 @@ const initializeSectionMotion = (): void => {
   )
 
   sectionElements.forEach((sectionElement, index) => {
+    // Opacity reveal effects block the account card from blurring the shared background.
+    if (sectionElement.classList.contains('me-page')) {
+      return
+    }
+
     if (sectionElement.classList.contains('hero') || sectionElement.querySelector('.hero')) {
       return
     }
@@ -601,7 +606,6 @@ onBeforeUnmount(() => {
   .site-shell--me .content-main-area {
     position: relative;
     isolation: isolate;
-    background: #000;
   }
 
   .site-shell--me .content-main-area::before {
@@ -610,9 +614,7 @@ onBeforeUnmount(() => {
     inset: 0 0 auto;
     z-index: 0;
     height: 300px;
-    background: #0d6047 url('/images/me/me-bg.webp') right top / 100% auto no-repeat;
-    -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+    background: transparent url('/images/me/me-bg.webp') right top / 100% auto no-repeat;
     pointer-events: none;
   }
 
@@ -687,8 +689,7 @@ onBeforeUnmount(() => {
   .site-shell--customer-service > .app-header-shell,
   .site-shell--customer-service > .app-header-underlay,
   .site-shell--customer-service > .app-header-occlusion-plate,
-  .site-shell--customer-service :deep(.app-footer),
-  .site-shell--customer-service :deep(.mobile-bottom-nav) {
+  .site-shell--customer-service :deep(.app-footer) {
     display: none;
   }
 

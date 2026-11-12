@@ -189,7 +189,7 @@ const isBasketball = computed(() => {
 <template>
   <NuxtLink
     :to="destination"
-    class="sports-match-card"
+    class="sports-match-card text-[#f4f7f5] bg-[#061713] light:bg-gradient-to-b light:from-white light:via-[#f7fbf8] light:to-[#edf7f1] light:text-[#10261c] border border-white/[0.07] light:border-[#009440]/20 light:shadow-sm"
     :class="{
       'sports-match-card--highlighted': highlighted,
       'sports-match-card--basketball': isBasketball,
@@ -203,10 +203,10 @@ const isBasketball = computed(() => {
     }"
     :aria-label="`${fixture.home_team} ${translate('VS')} ${fixture.away_team} - ${fixture.sport_title}`"
   >
-    <div class="sports-match-heading flex items-center justify-between">
+    <div class="sports-match-heading flex items-center justify-between border-b border-white/[0.07] light:border-b-[#009440]/15 bg-gradient-to-b from-[#1a2b2b] to-[#0a1718] light:from-white light:to-[#eaf5ee]">
       <span class="sports-league flex items-center min-w-0">
         <img :src="getTournamentLogo(fixture.sport_key)" :class="{ 'sports-league-logo--nba': fixture.sport_key.includes('_nba') }" :alt="fixture.sport_title || sportName" width="18" height="26" loading="lazy" decoding="async">
-        <span class="sports-league-copy flex items-center min-w-0"><strong :title="fixture.sport_title">{{ fixture.sport_title }}</strong><span aria-hidden="true">&middot;</span><span class="sports-league-sport">{{ sportName }}</span></span>
+        <span class="sports-league-copy flex items-center min-w-0 text-[#e8eeeb] light:text-[#2a3c33]"><strong :title="fixture.sport_title">{{ fixture.sport_title }}</strong><span aria-hidden="true">&middot;</span><span class="sports-league-sport">{{ sportName }}</span></span>
       </span>
       <span class="sports-match-status inline-flex items-center" :class="{ 'sports-match-status--live': isLive }">
         <span aria-hidden="true" />
@@ -234,7 +234,7 @@ const isBasketball = computed(() => {
             >
             <span v-else class="sports-team-initials" aria-hidden="true">{{ teams[0]!.initials }}</span>
           </span>
-          <strong>{{ teams[0]!.name }}</strong>
+          <strong class="light:text-white">{{ teams[0]!.name }}</strong>
         </div>
 
         <div class="sports-match-center flex flex-col items-center">
@@ -248,9 +248,9 @@ const isBasketball = computed(() => {
             decoding="async"
           >
           <div v-if="hasLiveScore" class="sports-live-score flex flex-col items-center justify-center">
-            <span v-if="fixture.clock" class="sports-live-clock">{{ fixture.clock }}</span>
+            <span v-if="fixture.clock" class="sports-live-clock light:text-[#009440]">{{ fixture.clock }}</span>
             <strong class="sports-live-score-digits">{{ displayScore }}</strong>
-            <span class="sports-live-label">{{ translate('Live') }}</span>
+            <span class="sports-live-label light:text-[#009440]">{{ translate('Live') }}</span>
           </div>
           <template v-else>
             <span class="sports-versus" aria-hidden="true">{{ translate('VS') }}</span>
@@ -275,27 +275,27 @@ const isBasketball = computed(() => {
             >
             <span v-else class="sports-team-initials" aria-hidden="true">{{ teams[1]!.initials }}</span>
           </span>
-          <strong>{{ teams[1]!.name }}</strong>
+          <strong class="light:text-white">{{ teams[1]!.name }}</strong>
         </div>
       </div>
     </div>
 
-    <div class="sports-match-footer flex items-center justify-between">
-      <p class="sports-match-category">{{ sportName }}<span aria-hidden="true"> &middot; </span>{{ fixture.sport_title }}</p>
-      <span class="sports-preview inline-flex items-center justify-center">{{ translate('View match') }} <ArrowRight :size="16" :stroke-width="1.8" aria-hidden="true" /></span>
+    <div class="sports-match-footer flex items-center justify-between border-t border-white/[0.05] light:border-t-[#d8e2dc] bg-[#061713] light:bg-white">
+      <p class="sports-match-category text-[#b4c5bd] light:text-[#5d7066]">{{ sportName }}<span aria-hidden="true"> &middot; </span>{{ fixture.sport_title }}</p>
+      <span class="sports-preview inline-flex items-center justify-center text-white light:text-white">{{ translate('View match') }} <ArrowRight :size="16" :stroke-width="1.8" aria-hidden="true" /></span>
     </div>
   </NuxtLink>
 </template>
 
 <style scoped>
-.sports-match-card { --sports-hover-opacity: 0; --sports-hover-logo-scale: 1; position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; container-type: inline-size; border: 1px solid var(--sports-edge, #ffffff12); border-radius: 7px; color: #f4f7f5; background: #061713; transition: border-color 160ms ease; }
+.sports-match-card { --sports-hover-opacity: 0; --sports-hover-logo-scale: 1; position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; container-type: inline-size; border: 1px solid var(--sports-edge, #ffffff12); border-radius: 7px; transition: border-color 160ms ease; }
 .sports-match-card--highlighted { border-color: #ffffff18; }
 .sports-match-card:is(:hover,:focus-visible) { border-color: #ffffff30; }
-.sports-match-heading { min-height: 40px; gap: 10px; padding: 5px 12px; border-bottom: 1px solid #ffffff12; background: linear-gradient(180deg,#1a2b2b,#0a1718); }
+.sports-match-heading { min-height: 40px; gap: 10px; padding: 5px 12px; }
 .sports-league { gap: 7px; }
 .sports-league img { flex-shrink: 0; width: 15px; height: 26px; object-fit: contain; }
 .sports-league img.sports-league-logo--nba { object-fit: cover; }
-.sports-league-copy { gap: 5px; color: #e8eeeb; font-size: 10px; line-height: 1.3; }
+.sports-league-copy { gap: 5px; font-size: 10px; line-height: 1.3; }
 .sports-league strong { min-width: 0; overflow: hidden; max-width: 90px; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; }
 .sports-league-sport { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .sports-match-status { flex-shrink: 0; gap: 7px; min-height: 24px; padding: 3px 9px; border: 1px solid #fac80058; border-radius: 9px; color: #fac80097; background: #00291d80; font-size: 9px; line-height: 1.3; }
@@ -399,9 +399,9 @@ const isBasketball = computed(() => {
 .sports-live-clock { color: #fac800; font-size: clamp(9px,3cqw,11px); font-weight: 700; line-height: 1.1; }
 .sports-live-score-digits { font-size: clamp(16px,5.2cqw,20px); font-weight: 800; line-height: 1.1; letter-spacing: .02em; color: #fff; }
 .sports-live-label { margin-top: 2px; color: #00ea76; font-size: clamp(8px,2.5cqw,10px); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-.sports-match-footer { min-height: 56px; margin-top: auto; gap: 10px; padding: 10px 12px; border-top: 1px solid #ffffff0c; background: #061713; }
-.sports-match-category { min-width: 0; overflow: hidden; margin: 0; color: #b4c5bd; font-size: 10px; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
-.sports-preview { flex-shrink: 0; gap: 8px; width: 46%; max-width: 140px; min-height: 32px; border-radius: 5px; color: #fff; background: var(--sports-button, var(--brand)); font-size: 14px; font-weight: 800; white-space: nowrap; transition: background-color 160ms ease; }
+.sports-match-footer { min-height: 56px; margin-top: auto; gap: 10px; padding: 10px 12px; }
+.sports-match-category { min-width: 0; overflow: hidden; margin: 0; font-size: 10px; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
+.sports-preview { flex-shrink: 0; gap: 8px; width: 46%; max-width: 140px; min-height: 32px; border-radius: 5px; background: var(--sports-button, var(--brand)); font-size: 14px; font-weight: 800; white-space: nowrap; transition: background-color 160ms ease; }
 .sports-match-card:is(:hover,:focus-visible) .sports-preview { background: var(--brand-hover); }
 @container (max-width: 250px) {
   .sports-match-heading { gap: 6px; padding-inline: 9px; }

@@ -74,7 +74,7 @@ const label = computed(() => `${props.table.title} roadmap: ${totals.value.round
 </script>
 
 <template>
-  <div class="live-casino-roadmap" :class="{ 'live-casino-roadmap--compact': compact, 'live-casino-roadmap--horizontal': horizontal }" role="img" :aria-label="label">
+  <div class="live-casino-roadmap bg-[#111214] text-[#cfd3d8] light:bg-[#f4f8f5] light:text-[#10261c]" :class="{ 'live-casino-roadmap--compact': compact, 'live-casino-roadmap--horizontal': horizontal }" role="img" :aria-label="label">
     <svg :viewBox="`0 0 ${viewWidth} ${compact ? 68 : 112}`" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
       <g v-for="cell in cells" :key="cell.index" :transform="`translate(${cell.x} ${cell.y})`">
         <circle v-if="!cell.outcome" :r="compact ? .65 : 1.25" fill="#2c2d30" />
@@ -106,8 +106,6 @@ const label = computed(() => `${props.table.title} roadmap: ${totals.value.round
 .live-casino-roadmap {
   width: 100%;
   overflow: hidden;
-  color: #cfd3d8;
-  background: #111214;
 }
 
 .live-casino-roadmap svg {

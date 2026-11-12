@@ -66,9 +66,9 @@ useAppSeo({
 </script>
 
 <template>
-  <div class="promotion-terms-page">
+  <div class="promotion-terms-page text-white light:text-[#24382e]">
     <SubpageHeader :title="pageTitle" :back-to="backPath" />
-    <article class="promotion-terms-card" lang="en" aria-labelledby="promotion-terms-title">
+    <article class="promotion-terms-card bg-[#121212] light:bg-white border border-transparent light:border-[#d8e2dc] shadow-sm light:shadow-sm" lang="en" aria-labelledby="promotion-terms-title">
       <img
         class="promotion-terms-banner"
         src="/brand/about-hero-banner.webp"
@@ -77,11 +77,11 @@ useAppSeo({
         height="486"
         decoding="async"
       >
-      <h2 id="promotion-terms-title">{{ pageTitle }}</h2>
-      <ol class="promotion-terms-list">
+      <h2 id="promotion-terms-title" class="bg-[#242424] text-white light:bg-[#eaf5ee] light:text-[#10261c]">{{ pageTitle }}</h2>
+      <ol class="promotion-terms-list light:text-[#24382e]">
         <li v-for="(term, index) in terms" :key="term">
           <p>{{ term }}</p>
-          <ul v-if="index === terms.length - 1" class="promotion-abuse-clauses">
+          <ul v-if="index === terms.length - 1" class="promotion-abuse-clauses light:text-[#24382e]">
             <li v-for="clause in abuseClauses" :key="clause.text">
               <p>{{ clause.text }}</p>
               <ol v-if="clause.examples" class="promotion-abuse-examples">
@@ -96,11 +96,11 @@ useAppSeo({
 </template>
 
 <style scoped>
-.promotion-terms-page { width: 100%; min-width: 0; color: #f4f4f4; }
+.promotion-terms-page { width: 100%; min-width: 0; }
 .promotion-terms-page :deep(.subpage-header--sticky) { top: var(--content-sticky-top, 0px); }
-.promotion-terms-card { margin-top: 8px; padding: 36px 28px 28px; border-radius: 15px; background: #121212; }
+.promotion-terms-card { margin-top: 8px; padding: 36px 28px 28px; border-radius: 15px; }
 .promotion-terms-banner { display: block; width: 100%; height: auto; aspect-ratio: 4.55 / 1; object-fit: cover; border-radius: 12px; }
-.promotion-terms-card h2 { margin: 24px 0 22px; padding: 12px 16px; border-radius: 8px; color: #fff; background: #242424; font-size: 12px; font-weight: 600; line-height: 16px; }
+.promotion-terms-card h2 { margin: 24px 0 22px; padding: 12px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; line-height: 16px; }
 .promotion-terms-list { margin: 0; padding-left: 20px; list-style: decimal; }
 .promotion-terms-list, .promotion-abuse-clauses { font-size: 14px; font-weight: 400; line-height: 21px; text-align: justify; overflow-wrap: break-word; }
 .promotion-terms-list p { margin: 0; }

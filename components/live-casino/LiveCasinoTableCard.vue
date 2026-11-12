@@ -86,12 +86,12 @@ onMounted(syncImageState)
 </script>
 
 <template>
-  <button type="button" class="casino-table-card" :class="{ 'casino-table-card--compact': compact, 'casino-table-card--roadmap': hasRoadmap, 'casino-table-card--horizontal': layout === 'horizontal' && hasRoadmap }" :aria-label="`Open ${table.title}`" @click="emit('select', table)">
+  <button type="button" class="casino-table-card bg-[#111] text-[#f4f4f4] light:bg-white light:text-[#10261c] light:border light:border-[#d8e2dc] light:shadow-sm" :class="{ 'casino-table-card--compact': compact, 'casino-table-card--roadmap': hasRoadmap, 'casino-table-card--horizontal': layout === 'horizontal' && hasRoadmap }" :aria-label="`Open ${table.title}`" @click="emit('select', table)">
     <span class="casino-table-picture" :aria-busy="Boolean(imageSource) && !imageLoaded && !imageFailed">
-      <img class="casino-table-placeholder" src="/images/live-casino/dealer-loading.webp" alt="Loading dealer" aria-hidden="true" />
+      <img class="casino-table-placeholder bg-[#111] light:bg-[#edf4f0]" src="/images/live-casino/dealer-loading.webp" alt="Loading dealer" aria-hidden="true" />
       <img v-if="imageSource" ref="tableImage" :key="imageSource" class="casino-table-image" :class="{ 'casino-table-image--loaded': imageLoaded && !imageFailed }" :src="imageSource" :alt="table.title" loading="lazy" decoding="async" @load="imageLoaded = true" @error="imageFailed = true" />
       <span class="casino-picture-shade" aria-hidden="true" />
-      <span class="casino-table-caption">
+      <span class="casino-table-caption text-white">
         <component :is="titleTag" class="casino-table-title" :title="table.title">{{ table.title }}</component>
         <span class="casino-table-players"><User :size="10" aria-hidden="true" />{{ table.players.toLocaleString('en-US') }}</span>
       </span>
@@ -102,22 +102,22 @@ onMounted(syncImageState)
     <LiveCasinoRoadmap v-if="hasRoadmap && (showRoadmap || layout === 'horizontal')" :table="dynamicTable" :compact="compact && layout !== 'horizontal'" :layout="layout" />
 
     <span v-else-if="isRouletteLike && rouletteResults.length && showRoadmap" class="casino-roulette-results">
-      <span v-for="(number, index) in rouletteResults" :key="index" :style="compact ? { color: rouletteColor(number) } : { background: rouletteColor(number) }">{{ number }}</span>
+      <span v-for="(number, index) in rouletteResults" :key="index" class="text-white" :style="compact ? { color: rouletteColor(number) } : { background: rouletteColor(number) }">{{ number }}</span>
     </span>
 
-    <span v-else-if="table.category === 'sicbo' && sicboRounds.length && showRoadmap" class="casino-sicbo-results">
+    <span v-else-if="table.category === 'sicbo' && sicboRounds.length && showRoadmap" class="casino-sicbo-results light:bg-[#eef5f1]">
       <span v-for="(round, index) in sicboRounds" :key="index" class="casino-sicbo-round">
-        <span class="casino-dice-total">{{ round.total }}</span>
-        <span :class="round.bigSmall === 'B' ? 'casino-result-blue' : 'casino-result-red'">{{ round.bigSmall }}</span>
+        <span class="casino-dice-total text-[#ffd166] bg-[#23252b] light:bg-white light:text-amber-700 light:border light:border-[#d8e2dc]">{{ round.total }}</span>
+        <span :class="round.bigSmall === 'B' ? 'casino-result-blue text-white bg-[#347dce]' : 'casino-result-red text-white bg-[#df3449]'">{{ round.bigSmall }}</span>
       </span>
     </span>
 
     <span v-else-if="table.category === 'fan-tan' && fantanResults.length && showRoadmap" class="casino-fantan-results">
-      <span v-for="(value, index) in fantanResults" :key="index" :class="{ 'casino-result-red': index === 0 }">{{ value }}</span>
+      <span v-for="(value, index) in fantanResults" :key="index" :class="{ 'casino-result-red text-white bg-[#df3449]': index === 0 }">{{ value }}</span>
     </span>
 
-    <span v-else-if="table.category === 'blackjack' && blackjackSeats.length && showRoadmap" class="casino-blackjack-seats">
-      <User v-for="(occupied, index) in blackjackSeats" :key="index" :size="15" :class="{ 'casino-blackjack-seat--occupied': occupied }" aria-hidden="true" />
+    <span v-else-if="table.category === 'blackjack' && blackjackSeats.length && showRoadmap" class="casino-blackjack-seats text-[#555] light:text-[#888]">
+      <User v-for="(occupied, index) in blackjackSeats" :key="index" :size="15" :class="{ 'casino-blackjack-seat--occupied text-[#ddd] light:text-[#333]': occupied }" aria-hidden="true" />
     </span>
   </button>
 </template>
@@ -134,8 +134,6 @@ onMounted(syncImageState)
   overflow: hidden;
   border: 0;
   border-radius: 10px;
-  color: #f4f4f4;
-  background: #111;
   text-align: left;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -145,27 +143,27 @@ onMounted(syncImageState)
 .casino-table-card:focus-visible { outline: 2px solid var(--main-color); outline-offset: 2px; }
 .casino-table-picture { position: relative; display: block; width: 100%; aspect-ratio: 1.56; overflow: hidden; border-radius: 10px 10px 0 0; }
 .casino-table-picture > img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-.casino-table-placeholder { background: #111; }
+.casino-table-placeholder { }
 .casino-table-image { opacity: 0; transition: opacity 160ms ease; }
 .casino-table-image--loaded { opacity: 1; }
 .casino-picture-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 0 0 / 30%), transparent 33%, transparent 75%, rgb(0 0 0 / 35%)); pointer-events: none; }
-.casino-table-caption { position: absolute; top: 7px; right: 6px; left: 7px; display: flex; align-items: flex-start; justify-content: space-between; gap: 5px; color: #fff; font-family: Arial, sans-serif; text-shadow: 0 1px 3px #000; }
+.casino-table-caption { position: absolute; top: 7px; right: 6px; left: 7px; display: flex; align-items: flex-start; justify-content: space-between; gap: 5px; font-family: Arial, sans-serif; text-shadow: 0 1px 3px #000; }
 .casino-table-title { margin: 0; padding: 0; min-width: 0; overflow: hidden; font-family: inherit; font-size: 12px; font-weight: 500; line-height: 16px; text-overflow: ellipsis; white-space: nowrap; }
 .casino-table-players { display: inline-flex; flex-shrink: 0; align-items: center; gap: 2px; padding-top: 1px; font-size: 11px; line-height: 14px; }
 .casino-table-outcome { position: absolute; right: 7px; bottom: 5px; color: #fff3d6; font-family: Arial, sans-serif; font-size: 9px; font-weight: 700; line-height: 14px; text-shadow: 0 0 3px #663800, 0 0 5px #000; }
 .casino-table-outcome--b { color: #ffe7e7; text-shadow: 0 0 3px #ff394b, 0 0 5px #ac1425; }
 .casino-table-outcome--p { color: #e7f5ff; text-shadow: 0 0 3px #438cfa, 0 0 5px #1263b3; }
 .casino-roulette-results { display: grid; width: 100%; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; padding: 7px; }
-.casino-roulette-results > span { padding: 3px 0; border-radius: 3px; color: white; font-size: 11px; line-height: 16px; text-align: center; }
-.casino-sicbo-results { display: grid; width: 100%; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 3px; padding: 6px 4px; background: #16171a; }
+.casino-roulette-results > span { padding: 3px 0; border-radius: 3px; font-size: 11px; line-height: 16px; text-align: center; }
+.casino-sicbo-results { display: grid; width: 100%; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 3px; padding: 6px 4px; }
 .casino-sicbo-round { display: flex; min-width: 0; flex-direction: column; gap: 3px; font-family: Arial, sans-serif; font-size: 11px; line-height: 16px; text-align: center; font-weight: 700; }
-.casino-dice-total { display: block; border-radius: 4px; color: #ffd166; background: #23252b; }
-.casino-result-blue { display: block; border-radius: 4px; color: #fff; background: #347dce; }
-.casino-result-red { display: block; border-radius: 4px; color: #fff; background: #df3449; }
+.casino-dice-total { display: block; border-radius: 4px; }
+.casino-result-blue { display: block; border-radius: 4px; }
+.casino-result-red { display: block; border-radius: 4px; }
 .casino-fantan-results { display: flex; width: 100%; justify-content: space-around; padding: 8px 4px; }
 .casino-fantan-results > span { min-width: 18px; font-size: 12px; line-height: 18px; text-align: center; }
-.casino-blackjack-seats { display: flex; width: 100%; align-items: center; justify-content: center; gap: 7px; padding: 10px 5px; color: #555; }
-.casino-blackjack-seat--occupied { color: #ddd; }
+.casino-blackjack-seats { display: flex; width: 100%; align-items: center; justify-content: center; gap: 7px; padding: 10px 5px; }
+.casino-blackjack-seat--occupied { }
 .casino-table-card--compact.casino-table-card--roadmap .casino-table-picture { aspect-ratio: 1.9; }
 .casino-table-card--compact .casino-roulette-results { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0; padding: 5px 3px; background: #d9d9d9; }
 .casino-table-card--compact .casino-roulette-results > span { padding: 0; border-radius: 0; font-family: Arial, sans-serif; font-size: 8px; line-height: 16px; }

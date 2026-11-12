@@ -355,14 +355,14 @@ const resetFilters = (): void => {
       </header>
 
       <!-- Provider Filter Bar & Search / Filter Icons -->
-      <div v-if="!isSearchOpen" class="provider-filter-bar flex items-center justify-between gap-2 py-1.5 mb-1 shadow-sm bg-black">
+      <div v-if="!isSearchOpen" class="provider-filter-bar flex items-center justify-between gap-2 py-1.5 mb-1 shadow-sm bg-black light:bg-transparent">
         <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 min-w-0 flex-1">
           <button
             v-for="prov in BINGO_PROVIDERS"
             :key="prov.key"
             type="button"
             class="provider-pill px-4 py-1.5 rounded-full text-[12px] whitespace-nowrap transition-all cursor-pointer select-none border border-white/5 shrink-0"
-            :class="activeProvider === prov.key ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'bg-[#242625] text-[#8e9491] '"
+            :class="activeProvider === prov.key ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'bg-[#242625] text-[#8e9491] light:bg-[#eaf5ee] light:text-[#10261c] light:border-emerald-500/20'"
             @click="selectProvider(prov.key)"
           >
             {{ translate(prov.label) }}
@@ -372,7 +372,7 @@ const resetFilters = (): void => {
         <div class="flex items-center gap-1 shrink-0">
           <button
             type="button"
-            class="h-8 w-8 rounded-full bg-[#242625] text-[#8e9491] hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            class="h-8 w-8 rounded-full bg-[#242625] text-[#8e9491] hover:text-white flex items-center justify-center transition-colors cursor-pointer light:bg-[#eaf5ee] light:text-[#10261c] light:hover:text-[#019440]"
             :aria-label="translate('Search games')"
             @click="openSearch"
           >
@@ -380,7 +380,7 @@ const resetFilters = (): void => {
           </button>
           <button
             type="button"
-            class="h-8 w-8 rounded-full bg-[#242625] text-[#8e9491] hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            class="h-8 w-8 rounded-full bg-[#242625] text-[#8e9491] hover:text-white flex items-center justify-center transition-colors cursor-pointer light:bg-[#eaf5ee] light:text-[#10261c] light:hover:text-[#019440]"
             :aria-label="translate('Filter games')"
             @click="isFilterOpen = true"
           >

@@ -82,7 +82,7 @@ const mobileLiveTabs = [
     <h1 class="sr-only">{{ liveHeading }}</h1>
     <!-- Sports Tabs Navigation: Sport Ball Icons -->
     <div class="sticky-header-seal live-navigation sticky top-[var(--content-sticky-top)] z-30 -mx-1 px-1 pb-1">
-      <MobileSportsNav class="live-mobile-icon-nav" />
+      <MobileSportsNav class="live-mobile-icon-nav bg-[#1e241f] light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm" />
       <nav class="sports-tabs live-mobile-categories" :aria-label="translate('Live sports categories')">
         <NuxtLink
           v-for="tab in mobileLiveTabs"
@@ -96,7 +96,7 @@ const mobileLiveTabs = [
         </NuxtLink>
       </nav>
       <nav
-        class="sports-tabs live-sports-tabs bg-[#141414]"
+        class="sports-tabs live-sports-tabs bg-[#141414] light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm"
         aria-label="Live sports categories"
       >
         <NuxtLink
@@ -191,7 +191,6 @@ const mobileLiveTabs = [
     margin-bottom: 8px;
     padding: 8px;
     border-radius: 12px;
-    background: #1e241f;
   }
 
   .live-mobile-icon-nav :deep(.mobile-sports-nav__item) {

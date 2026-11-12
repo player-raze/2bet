@@ -91,9 +91,9 @@ html[data-theme='light']:not(#_) .theme-options .theme-option--active {
 }
 
 html[data-theme='light']:not(#_) .rail-toggle {
-  border: 1px solid rgba(3, 112, 76, 0.5);
-  color: #ffffff;
-  background: linear-gradient(90deg, #05714e 0%, #0ca171 52%, #05714e 100%);
+  border: 1px solid #E1E2E5;
+  color: #019440;
+  background: #E1E2E5;
 }
 
 html[data-theme='light']:not(#_) .mobile-bottom-nav {
@@ -158,6 +158,844 @@ html[data-theme='light']:not(#_) #conversation-ground stop:last-child {
 /* --------------------------------------------------------------------------
    2. Homepage & Reference Sections
    -------------------------------------------------------------------------- */
+html[data-theme='light']:not(#_) .allgames-main {
+  background-color: var(--page) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme='light']:not(#_) .poker-category-tab--active {
+  color: #fff!important;
+}
+
+html[data-theme='light']:not(#_) .allgames-welcome > p > span {
+  border-left-color: var(--border);
+  color: var(--secondary);
+}
+
+/* Homepage Hero Banner */
+html[data-theme='light']:not(#_) .homepage-hero {
+  border: 1px solid rgba(0, 148, 64, 0.18);
+  border-top: 1px solid rgba(0, 148, 64, 0.28);
+  background: linear-gradient(135deg, #ffffff 0%, #f4fbf7 50%, #eaf6ef 100%);
+  box-shadow: 0 6px 24px rgba(16, 38, 28, 0.06), 0 0 16px -4px rgba(0, 148, 64, 0.08);
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero__shade {
+  background:
+    linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.95) 28%, rgba(247, 252, 249, 0.82) 42%, rgba(234, 246, 239, 0.45) 60%, rgba(234, 246, 239, 0.1) 78%, transparent 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 40%, rgba(234, 246, 239, 0.6) 100%);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero .homepage-hero__eyebrow {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero h1 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero h1 span+span {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero .homepage-hero__description {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero__markers button span {
+  background: #a9bdb4;
+}
+
+html[data-theme='light']:not(#_) .homepage-hero__markers button.is-active span {
+  background: var(--hero-accent);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero .homepage-hero__counter {
+  color: var(--heading);
+  text-shadow: none;
+}
+
+html[data-theme='light']:not(#_) .homepage-hero__counter span {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .homepage-hero__thumbnail {
+  border-color: var(--border);
+  background: #f3f8f5;
+}
+
+html[data-theme='light']:not(#_) .homepage-hero__thumbnail span {
+  background: linear-gradient(transparent, rgba(16, 38, 28, 0.85));
+  color: #ffffff;
+}
+
+html[data-theme='light']:not(#_) .homepage-hero__scroll,
+html[data-theme='light']:not(#_) .homepage-hero__playback {
+  color: var(--secondary);
+}
+
+/* Category Navigation Pills */
+html[data-theme='light']:not(#_) .allgames-category-link {
+  border: 1px solid var(--border);
+  background: radial-gradient(ellipse at 22% 65%, rgb(var(--category-tint) / 0.1), transparent 64%), linear-gradient(115deg, #ffffff, #f2f7f4);
+  box-shadow: 0 2px 8px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .allgames-category-link.is-active,
+html[data-theme='light']:not(#_) .allgames-category-link:is(:hover, :focus-visible) {
+  background: radial-gradient(ellipse at 22% 65%, rgb(var(--category-tint) / 0.18), transparent 68%), linear-gradient(115deg, #f7faf8, #edf5f0);
+  box-shadow: 0 4px 12px rgba(16, 38, 28, 0.08);
+}
+
+html[data-theme='light']:not(#_) .allgames-category-copy strong {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .allgames-category-copy small {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .allgames-category-arrow {
+  background: rgba(3, 98, 66, 0.08);
+  color: var(--main-color);
+}
+
+/* Section Headings & General Controls */
+html[data-theme='light']:not(#_) .allgames-section-heading h2,
+html[data-theme='light']:not(#_) .allgames-section-title,
+html[data-theme='light']:not(#_) .featured-heading-copy h2,
+html[data-theme='light']:not(#_) .bingo-heading h2 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .allgames-section-heading p,
+html[data-theme='light']:not(#_) .featured-heading-copy p,
+html[data-theme='light']:not(#_) .bingo-heading > p {
+  color: var(--secondary);
+  border-left-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .allgames-view-all,
+html[data-theme='light']:not(#_) .allgames-section-actions .allgames-view-all,
+html[data-theme='light']:not(#_) .featured-section-actions > a,
+html[data-theme='light']:not(#_) .bingo-header .bingo-view-all {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .allgames-row-position {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .allgames-row-controls button,
+html[data-theme='light']:not(#_) .featured-row-controls button,
+html[data-theme='light']:not(#_) .bingo-controls button,
+html[data-theme='light']:not(#_) .slots-controls button,
+html[data-theme='light']:not(#_) .live-carousel-controls button,
+html[data-theme='light']:not(#_) .sports-controls button {
+  border: 1px solid rgba(0, 148, 64, 0.2);
+  background: linear-gradient(180deg, #ffffff 0%, #f4fbf7 100%);
+  color: #10261c;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .allgames-row-controls button:hover:enabled,
+html[data-theme='light']:not(#_) .featured-row-controls button:hover:enabled,
+html[data-theme='light']:not(#_) .bingo-controls button:hover:enabled,
+html[data-theme='light']:not(#_) .slots-controls button:hover:enabled,
+html[data-theme='light']:not(#_) .live-carousel-controls button:hover:enabled,
+html[data-theme='light']:not(#_) .sports-controls button:hover:enabled {
+  border-color: #009440;
+  background: linear-gradient(135deg, #01b04c 0%, #009440 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 148, 64, 0.28);
+}
+
+html[data-theme='light']:not(#_) .allgames-row-controls button:disabled,
+html[data-theme='light']:not(#_) .featured-row-controls button:disabled,
+html[data-theme='light']:not(#_) .bingo-controls button:disabled,
+html[data-theme='light']:not(#_) .slots-controls button:disabled,
+html[data-theme='light']:not(#_) .live-carousel-controls button:disabled,
+html[data-theme='light']:not(#_) .sports-controls button:disabled {
+  background: #f3f8f5;
+  color: var(--secondary);
+  border-color: rgba(16, 38, 28, 0.08);
+  opacity: 0.45;
+}
+
+html[data-theme='light']:not(#_) .homepage-slider-dots button > span,
+html[data-theme='light']:not(#_) .allgames-dots span {
+  background: rgba(0, 148, 64, 0.22);
+}
+
+html[data-theme='light']:not(#_) .homepage-slider-dots button[aria-current='true'] > span,
+html[data-theme='light']:not(#_) .allgames-dots .is-active span {
+  background: linear-gradient(90deg, #01b04c 0%, #009440 100%);
+  box-shadow: 0 1px 4px rgba(0, 148, 64, 0.35);
+}
+
+/* Homepage Sports Section */
+html[data-theme='light']:not(#_) .homepage-sports-section {
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .homepage-sports-section .sports-header {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .homepage-sports-section .sports-heading h2 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .homepage-sports-section .sports-heading p {
+  border-left-color: var(--border);
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .homepage-sports-section .sports-explore {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--main-color);
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.04);
+}
+
+html[data-theme='light']:not(#_) .homepage-sports-section .sports-explore:hover {
+  border-color: rgba(1, 148, 64, 0.35);
+  background: #edf4f0;
+}
+
+html[data-theme='light']:not(#_) .homepage-sports-section .sports-explore svg {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .sports-browse-label {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .sports-filter-value {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.04);
+}
+
+html[data-theme='light']:not(#_) .sports-filter-value:hover,
+html[data-theme='light']:not(#_) .sports-filter--open .sports-filter-value {
+  border-color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .sports-filter-name {
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .sports-filter-count {
+  border: 1px solid var(--border);
+  background: #edf4f0;
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .sports-filter-menu {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(16, 38, 28, 0.12);
+}
+
+html[data-theme='light']:not(#_) .sports-filter-option {
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .sports-filter-option:hover {
+  background: #f3f8f5;
+}
+
+html[data-theme='light']:not(#_) .sports-filter-option[aria-selected='true'] {
+  border-color: rgba(1, 148, 64, 0.25);
+  background: rgba(3, 98, 66, 0.08);
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .sports-browse-league strong {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .sports-browse-league div > span {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .sports-fixtures-title {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .sports-fixtures-title span {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .sports-position {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .sports-progress {
+  background: rgba(10, 62, 39, 0.1);
+}
+
+html[data-theme='light']:not(#_) .sports-progress > span {
+  background: var(--main-color);
+}
+
+/* Homepage Sports Card */
+html[data-theme='light']:not(#_) .sports-match-card {
+  border: 1px solid rgba(0, 148, 64, 0.18) !important;
+  border-top: 1px solid rgba(0, 148, 64, 0.28) !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbf8 55%, #edf7f1 100%) !important;
+  box-shadow: 0 3px 12px rgba(16, 38, 28, 0.06), 0 0 12px -2px rgba(0, 148, 64, 0.08);
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .sports-match-card:is(:hover, :focus-visible) {
+  border-color: rgba(0, 148, 64, 0.45) !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f2faf5 50%, #e5f4eb 100%) !important;
+  box-shadow: 0 6px 18px rgba(16, 38, 28, 0.1), 0 0 16px -2px rgba(0, 148, 64, 0.14);
+}
+
+html[data-theme='light']:not(#_) .sports-match-heading {
+  border-bottom: 1px solid rgba(0, 148, 64, 0.14);
+  background: linear-gradient(180deg, #ffffff 0%, #eaf5ee 100%);
+}
+
+html[data-theme='light']:not(#_) .sports-league-copy {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .sports-league-copy strong {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .sports-league-sport {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .sports-match-status {
+  border-color: rgba(250, 200, 0, 0.4);
+  background: #fffbe6;
+  color: #946f00;
+}
+
+html[data-theme='light']:not(#_) .sports-match-status--live {
+  border-color: rgba(0, 180, 90, 0.3);
+  background: #e6f8ef;
+  color: #008744;
+}
+
+html[data-theme='light']:not(#_) .sports-match-arena {
+  background: #f2f7f4;
+}
+
+html[data-theme='light']:not(#_) .sports-team strong {
+  color: var(--heading);
+  text-shadow: none;
+}
+
+html[data-theme='light']:not(#_) .sports-versus {
+  color: var(--secondary);
+  text-shadow: none;
+}
+
+html[data-theme='light']:not(#_) .sports-kickoff {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.06);
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .sports-kickoff strong {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .sports-kickoff > span {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .sports-live-score {
+  border: 1px solid rgba(1, 148, 64, 0.25);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.06);
+}
+
+html[data-theme='light']:not(#_) .sports-live-score-digits {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .sports-match-footer {
+  border-top: 1px solid var(--border);
+  background: #ffffff;
+}
+
+html[data-theme='light']:not(#_) .sports-match-category {
+  color: var(--secondary);
+}
+
+/* Homepage Slots Section */
+html[data-theme='light']:not(#_) .slots-header {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .slots-heading h2 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .slots-heading p {
+  border-left-color: var(--border);
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .slots-view-all {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .slots-tabs {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .slots-tabs button {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .slots-tabs button.is-active {
+  border-bottom-color: var(--main-color);
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .slots-provider-pills a {
+  border: 1px solid rgba(0, 148, 64, 0.18);
+  background: linear-gradient(180deg, #ffffff 0%, #f5fbf7 100%);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.04);
+}
+
+html[data-theme='light']:not(#_) .slots-provider-pills a:hover {
+  border-color: rgba(0, 148, 64, 0.35);
+  background: linear-gradient(135deg, #f0f9f4 0%, #e0f2e7 100%);
+  color: #009440;
+}
+
+html[data-theme='light']:not(#_) .slots-provider-pills a.is-active {
+  border-color: #009440;
+  background: linear-gradient(135deg, #01b04c 0%, #009440 100%);
+  color: #ffffff;
+}
+
+html[data-theme='light']:not(#_) .slots-game-art {
+  border: 1px solid rgba(0, 148, 64, 0.12);
+  background: linear-gradient(135deg, #f7fbf8 0%, #e8f5ee 100%);
+}
+
+html[data-theme='light']:not(#_) .slots-game-caption h3 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .slots-game-caption p {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .slots-favorite {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--secondary);
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.1);
+}
+
+html[data-theme='light']:not(#_) .slots-favorite.is-active {
+  color: #e7021a;
+}
+
+/* Homepage Jackpot Section */
+html[data-theme='light']:not(#_) .jackpot-header {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .jackpot-heading h2 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .jackpot-heading p {
+  border-left-color: var(--border);
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .jackpot-view-all {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .jdb-card {
+  border: 1px solid rgba(0, 148, 64, 0.22);
+  border-top: 1px solid rgba(0, 148, 64, 0.38);
+  background: linear-gradient(145deg, #ffffff 0%, #f4fbf7 45%, #e8f6ee 100%);
+  box-shadow: 0 8px 28px rgba(16, 38, 28, 0.08), 0 0 20px -4px rgba(0, 148, 64, 0.12);
+}
+
+html[data-theme='light']:not(#_) .jdb-ambient-glow {
+  opacity: 0.12;
+}
+
+html[data-theme='light']:not(#_) .jdb-provider-pill {
+  border-color: var(--border);
+  background: #f3f8f5;
+}
+
+html[data-theme='light']:not(#_) .jdb-provider-name {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .jdb-progressive-tag {
+  border-color: rgba(1, 148, 64, 0.3);
+  background: #edf4f0;
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .jdb-headline {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .jackpot-counter-box {
+  border: 1px solid var(--border);
+  background: #f7faf8;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .jackpot-char {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--heading);
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .winner-ticker {
+  border: 1px solid rgba(0, 148, 64, 0.18);
+  border-top: 1px solid rgba(0, 148, 64, 0.3);
+  background: linear-gradient(145deg, #ffffff 0%, #f7fbf8 50%, #edf7f1 100%);
+  box-shadow: 0 8px 28px rgba(16, 38, 28, 0.07), 0 0 16px -4px rgba(0, 148, 64, 0.08);
+}
+
+html[data-theme='light']:not(#_) .winner-ticker-title {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .winner-ticker-subtitle {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .winner-ticker-tag {
+  border-color: rgba(1, 148, 64, 0.3);
+  background: #edf4f0;
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .winner-item {
+  border-bottom-color: var(--border);
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .winner-username {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .winner-amount {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .winner-date {
+  color: var(--secondary);
+}
+
+/* Homepage Providers Section */
+html[data-theme='light']:not(#_) .providers-glass-section {
+  border: 1px solid rgba(0, 148, 64, 0.2);
+  border-top: 1px solid rgba(0, 148, 64, 0.35);
+  background: linear-gradient(180deg, #ffffff 0%, #f4fbf7 55%, #e8f6ee 100%);
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(0, 148, 64, 0.12) 0%, transparent 48%),
+    radial-gradient(circle at 90% 100%, rgba(0, 148, 64, 0.08) 0%, transparent 52%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 8px 28px rgba(16, 38, 28, 0.07), 0 0 20px -4px rgba(0, 148, 64, 0.1);
+}
+
+html[data-theme='light']:not(#_) .icon-orb {
+  border-color: rgba(0, 148, 64, 0.25);
+  background: linear-gradient(135deg, #f0f9f4 0%, #dcf2e5 100%);
+  color: #009440;
+  box-shadow: 0 2px 6px rgba(0, 148, 64, 0.12);
+}
+
+html[data-theme='light']:not(#_) .section-title {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .section-subtitle {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .partners-badge {
+  border-color: rgba(0, 148, 64, 0.22);
+  background: linear-gradient(180deg, #ffffff 0%, #f2faf5 100%);
+  color: #009440;
+}
+
+html[data-theme='light']:not(#_) .glass-control-btn {
+  border-color: rgba(0, 148, 64, 0.2);
+  background: linear-gradient(180deg, #ffffff 0%, #f5fbf7 100%);
+  color: #10261c;
+}
+
+html[data-theme='light']:not(#_) .glass-control-btn:hover {
+  border-color: #009440;
+  background: linear-gradient(135deg, #01b04c 0%, #009440 100%);
+  color: #ffffff;
+}
+
+html[data-theme='light']:not(#_) .provider-glass-card {
+  border: 1px solid rgba(0, 148, 64, 0.16);
+  border-top: 1px solid rgba(0, 148, 64, 0.28);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fcf9 60%, #eef7f2 100%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 2px 10px rgba(16, 38, 28, 0.05), 0 0 8px -2px rgba(0, 148, 64, 0.06);
+}
+
+html[data-theme='light']:not(#_) .provider-glass-card:hover {
+  border-color: rgba(0, 148, 64, 0.45);
+  background: linear-gradient(180deg, #f5fbf7 0%, #e2f4ea 100%);
+  box-shadow: 0 6px 20px rgba(16, 38, 28, 0.1), 0 0 16px -2px rgba(0, 148, 64, 0.16);
+}
+
+html[data-theme='light']:not(#_) .provider-title {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .category-pill,
+html[data-theme='light']:not(#_) .tag-pill,
+html[data-theme='light']:not(#_) .games-count-pill {
+  border-color: var(--border);
+  background: #f3f8f5;
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .glass-reflection {
+  display: none;
+}
+
+/* Homepage Live Casino Section */
+html[data-theme='light']:not(#_) .live-section-header {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .live-heading h2 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .live-heading > p {
+  border-left-color: var(--border);
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .live-view-all {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .live-table-directory {
+  border: 1px solid rgba(0, 148, 64, 0.18);
+  border-top: 1px solid rgba(0, 148, 64, 0.28);
+  background: linear-gradient(135deg, #ffffff 0%, #f2faf5 50%, #e4f4eb 100%);
+  box-shadow: 0 4px 16px rgba(16, 38, 28, 0.06), 0 0 14px -3px rgba(0, 148, 64, 0.08);
+}
+
+html[data-theme='light']:not(#_) .live-table-directory h3 {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .live-table-links > a {
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .live-table-links > a:is(:hover, :focus-visible) {
+  border-color: rgba(0, 148, 64, 0.25);
+  background: linear-gradient(135deg, #e8f5ee 0%, #d8eee1 100%);
+  color: #009440;
+}
+
+html[data-theme='light']:not(#_) .live-dealer-card {
+  border: 1px solid rgba(0, 148, 64, 0.16);
+  border-top: 1px solid rgba(0, 148, 64, 0.25);
+  background: linear-gradient(180deg, #ffffff 0%, #f6fbf8 65%, #e8f6ee 100%);
+  box-shadow: 0 4px 16px rgba(16, 38, 28, 0.06), 0 0 12px -2px rgba(0, 148, 64, 0.06);
+}
+
+html[data-theme='light']:not(#_) .live-dealer-card:is(:hover, :focus-visible) {
+  border-color: rgba(0, 148, 64, 0.42);
+  box-shadow: 0 8px 24px rgba(16, 38, 28, 0.1), 0 0 18px -2px rgba(0, 148, 64, 0.15);
+}
+
+html[data-theme='light']:not(#_) .live-dealer-art {
+  background: linear-gradient(135deg, #f3faf6 0%, #e5f4ec 100%);
+}
+
+html[data-theme='light']:not(#_) .live-dealer-caption {
+  border-top: 1px solid rgba(0, 148, 64, 0.14);
+  background: linear-gradient(180deg, #ffffff 0%, #f0f8f3 100%);
+}
+
+html[data-theme='light']:not(#_) .live-dealer-caption h3 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .live-dealer-caption p {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .live-dealer-arrow {
+  border-color: rgba(0, 148, 64, 0.28);
+  background: linear-gradient(135deg, #f0f9f4 0%, #dcf2e5 100%);
+  color: #009440;
+}
+
+html[data-theme='light']:not(#_) .live-mobile-header {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .live-mobile-header h2 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .live-mobile-header p {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .live-mobile-card {
+  border: 1px solid rgba(0, 148, 64, 0.15);
+  border-top: 1px solid rgba(0, 148, 64, 0.24);
+  background: linear-gradient(180deg, #ffffff 0%, #f5fbf7 60%, #eaf6ef 100%);
+  box-shadow: 0 2px 8px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .live-mobile-art {
+  background: linear-gradient(135deg, #f3faf6 0%, #e6f4ed 100%);
+}
+
+html[data-theme='light']:not(#_) .live-mobile-card h3 {
+  color: var(--heading);
+}
+
+/* Homepage Promotions Section */
+html[data-theme='light']:not(#_) .homepage-promotions-section #promotions-title {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .homepage-promotions-section .allgames-heading-copy p {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .homepage-promotions-section > header > .allgames-view-all {
+  color: var(--main-color);
+}
+
+/* Homepage Getting Started & FAQs */
+html[data-theme='light']:not(#_) .homepage-start-panel,
+html[data-theme='light']:not(#_) .getting-started-faq {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 38, 28, 0.05);
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .help-eyebrow {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .getting-started-intro {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .getting-started-card {
+  border: 1px solid rgba(0, 148, 64, 0.18);
+  border-top: 1px solid rgba(0, 148, 64, 0.28);
+  background: linear-gradient(135deg, #ffffff 0%, #f4fbf7 50%, #e6f4ec 100%);
+  box-shadow: 0 3px 12px rgba(16, 38, 28, 0.05), 0 0 10px -2px rgba(0, 148, 64, 0.06);
+}
+
+html[data-theme='light']:not(#_) .getting-started-card:is(:hover, :focus-visible) {
+  border-color: rgba(0, 148, 64, 0.42);
+  background: linear-gradient(135deg, #f0f9f4 0%, #dcf1e4 100%);
+  box-shadow: 0 6px 18px rgba(16, 38, 28, 0.09), 0 0 16px -2px rgba(0, 148, 64, 0.12);
+}
+
+html[data-theme='light']:not(#_) .getting-started-number {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .getting-started-card-copy > strong {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .getting-started-card-copy > p {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .getting-started-card-arrow {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-heading h2 {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .getting-started-all-faqs {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-list details {
+  border-bottom: 1px solid var(--border);
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-list summary {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-list p {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .getting-started-actions {
+  border-top-color: var(--border);
+}
+
+html[data-theme='light']:not(#_) .getting-started-actions > p {
+  color: var(--secondary);
+}
+
+/* Homepage Service Strip */
+html[data-theme='light']:not(#_) .allgames-service-strip {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 38, 28, 0.05);
+  color: var(--text);
+}
+
+html[data-theme='light']:not(#_) .allgames-service-strip strong {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .allgames-service-strip small {
+  color: var(--secondary);
+}
+
+html[data-theme='light']:not(#_) .allgames-service-strip svg {
+  color: var(--main-color);
+}
+
+html[data-theme='light']:not(#_) .allgames-service-strip > a {
+  color: var(--main-color);
+}
+
 html[data-theme='light']:not(#_) .promotions-section h2 {
   color: var(--heading);
   background: none;
@@ -431,37 +1269,257 @@ html[data-theme='light']:not(#_) .text-white\/30 {
 /* --------------------------------------------------------------------------
    4. Sportsbook (sports.css & Sports Components)
    -------------------------------------------------------------------------- */
-html[data-theme='light']:not(#_) .sports-page .sports-tabs {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05);
+
+/* Sports Tabs & Navigation */
+html[data-theme='light']:not(#_) .sports-page .sports-tabs,
+html[data-theme='light']:not(#_) .sports-page--popular .sports-tabs {
+  border: 1px solid var(--border) !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
 }
 
-html[data-theme='light']:not(#_) .sports-page .sports-tabs a {
-  color: var(--text);
+html[data-theme='light']:not(#_) .sports-page .sports-tabs a,
+html[data-theme='light']:not(#_) .sports-page--popular .sports-tabs a {
+  color: var(--text) !important;
 }
 
-html[data-theme='light']:not(#_) .sports-page .sports-tabs a.selected {
-  color: #ffffff;
-  background: var(--main-highlight);
+html[data-theme='light']:not(#_) .sports-page .sports-tabs a.selected,
+html[data-theme='light']:not(#_) .sports-page--popular .sports-tabs a.selected {
+  border-color: var(--main-color) !important;
+  background: var(--main-color) !important;
+  color: #ffffff !important;
+}
+
+@media (max-width: 63.99rem) {
+  html[data-theme='light']:not(#_) .sports-page--popular .sports-tabs {
+    border: none !important;
+    background: transparent !important;
+  }
+
+  html[data-theme='light']:not(#_) .sports-page--popular .sports-tabs > a {
+    border: 1px solid var(--border) !important;
+    background: #ffffff !important;
+    color: var(--text) !important;
+  }
+
+  html[data-theme='light']:not(#_) .sports-page--popular .sports-tabs > a.selected {
+    border-color: var(--main-color) !important;
+    background: var(--main-color) !important;
+    color: #ffffff !important;
+  }
+}
+
+html[data-theme='light']:not(#_) .mobile-sports-nav {
+  border: 1px solid var(--border) !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+}
+
+html[data-theme='light']:not(#_) .mobile-sports-nav__search {
+  color: var(--text) !important;
 }
 
 html[data-theme='light']:not(#_) .sports-page .search,
 html[data-theme='light']:not(#_) .sports-page select,
 html[data-theme='light']:not(#_) .sports-page .refresh,
 html[data-theme='light']:not(#_) .sports-page .toolbar-circle-btn,
+html[data-theme='light']:not(#_) .sports-page:not(.sports-page--popular) .toolbar .search,
+html[data-theme='light']:not(#_) .sports-page:not(.sports-page--popular) .toolbar-circle-btn {
+  border: 1px solid var(--border) !important;
+  background: #ffffff !important;
+  color: var(--text) !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.04);
+}
+
+/* Time & Date Filters */
+html[data-theme='light']:not(#_) .sports-page--popular .time-filter,
+html[data-theme='light']:not(#_) .sports-page .sports-time-filters .time-filter {
+  border: 1px solid var(--border) !important;
+  background: #ffffff !important;
+  color: var(--text) !important;
+}
+
+html[data-theme='light']:not(#_) .sports-page--popular .time-filter[aria-pressed='true'],
+html[data-theme='light']:not(#_) .sports-page .sports-time-filters .time-filter[aria-pressed='true'] {
+  border-color: var(--main-color) !important;
+  background: var(--main-color) !important;
+  color: #ffffff !important;
+}
+
+/* Sportsbook Match & League Cards - strictly white background */
+html[data-theme='light']:not(#_) .league-preview,
+html[data-theme='light']:not(#_) .sports-page .league-preview,
+html[data-theme='light']:not(#_) .sports-page--popular .league-preview,
+html[data-theme='light']:not(#_) .live-page .league-preview,
 html[data-theme='light']:not(#_) .sports-page .league-card,
 html[data-theme='light']:not(#_) .sports-page .event-card,
 html[data-theme='light']:not(#_) .sports-page .outright-accordion,
-html[data-theme='light']:not(#_) .league-preview {
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.04);
+html[data-theme='light']:not(#_) .winner-match,
+html[data-theme='light']:not(#_) .winner-match--compact {
+  border: 1px solid var(--border) !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+  color: var(--text) !important;
 }
 
 html[data-theme='light']:not(#_) .sports-page .league-preview .league-card,
 html[data-theme='light']:not(#_) .sports-page .outright-accordion .league-card {
-  border: 0;
-  box-shadow: none;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='light']:not(#_) .sports-page .league-preview-heading,
+html[data-theme='light']:not(#_) .sports-page--popular .league-preview-heading,
+html[data-theme='light']:not(#_) .live-page .league-preview-heading {
+  border-radius: 0;
+  border-bottom: 1px solid var(--border) !important;
+  background: #ffffff !important;
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .sports-page .league-name,
+html[data-theme='light']:not(#_) .sports-page--popular .league-preview-heading .league-name,
+html[data-theme='light']:not(#_) .live-page .league-preview-heading .league-name,
+html[data-theme='light']:not(#_) .league-preview-heading .league-name {
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .sports-page .league-preview-heading > svg,
+html[data-theme='light']:not(#_) .live-page .league-preview-heading > svg {
+  color: var(--secondary) !important;
+}
+
+html[data-theme='light']:not(#_) .live-page .live-category-heading {
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .live-category-heading__count {
+  color: var(--secondary) !important;
+}
+
+/* Match Rows & Internal Dividers */
+html[data-theme='light']:not(#_) .winner-match + .winner-match,
+html[data-theme='light']:not(#_) .winner-match--compact + .winner-match--compact,
+html[data-theme='light']:not(#_) .sports-page .outright-panel {
+  border-top: 1px solid var(--border) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-match:hover,
+html[data-theme='light']:not(#_) .winner-match--compact:hover {
+  background: #f7faf8 !important;
+}
+
+html[data-theme='light']:not(#_) .winner-date {
+  color: var(--secondary) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-teams {
+  border-color: var(--border) !important;
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-teams strong,
+html[data-theme='light']:not(#_) .market-team-name {
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .team-market-headings {
+  color: var(--secondary) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-actions {
+  border-left-color: var(--border) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-actions button {
+  color: var(--secondary) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-actions button.winner-market-count {
+  border-color: var(--border) !important;
+  background: #edf4f0 !important;
+  color: var(--secondary) !important;
+}
+
+/* Odds Buttons on White Sports Cards */
+html[data-theme='light']:not(#_) .winner-price,
+html[data-theme='light']:not(#_) .winner-match--compact .winner-price,
+html[data-theme='light']:not(#_) .live-page .mobile-live-price,
+html[data-theme='light']:not(#_) .sports-page .odds > div,
+html[data-theme='light']:not(#_) .sports-page .odds > button,
+html[data-theme='light']:not(#_) .sports-page .scores > div {
+  border: 1px solid var(--border) !important;
+  background: var(--odd-btn, #edf4f0) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-price strong,
+html[data-theme='light']:not(#_) .winner-match--compact .winner-price strong {
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-price > span,
+html[data-theme='light']:not(#_) .winner-match--compact .winner-price > span {
+  color: var(--secondary) !important;
+}
+
+html[data-theme='light']:not(#_) .winner-price:hover,
+html[data-theme='light']:not(#_) .winner-match--compact .winner-price:hover,
+html[data-theme='light']:not(#_) .live-page .mobile-live-price:hover,
+html[data-theme='light']:not(#_) .sports-page .odds > div:hover,
+html[data-theme='light']:not(#_) .sports-page .odds > button:hover {
+  background: #dfece5 !important;
+}
+
+html[data-theme='light']:not(#_) .winner-price[aria-pressed='true'],
+html[data-theme='light']:not(#_) .winner-match--compact .winner-price[aria-pressed='true'],
+html[data-theme='light']:not(#_) .live-page .mobile-live-price[aria-pressed='true'] {
+  border-color: var(--main-color) !important;
+  background: var(--main-color) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='light']:not(#_) .winner-price[aria-pressed='true'] strong,
+html[data-theme='light']:not(#_) .winner-price[aria-pressed='true'] span,
+html[data-theme='light']:not(#_) .winner-match--compact .winner-price[aria-pressed='true'] strong,
+html[data-theme='light']:not(#_) .winner-match--compact .winner-price[aria-pressed='true'] span {
+  color: #ffffff !important;
+}
+
+/* Live Mobile Match Summary on Live Page */
+html[data-theme='light']:not(#_) .live-page .mobile-live-summary {
+  color: var(--text) !important;
+}
+
+html[data-theme='light']:not(#_) .live-page .mobile-live-status {
+  color: var(--secondary) !important;
+}
+
+html[data-theme='light']:not(#_) .live-page .mobile-live-teams {
+  border-left-color: var(--border) !important;
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .live-page .mobile-live-scores {
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .live-page .mobile-live-media {
+  border-left-color: var(--border) !important;
+  color: var(--secondary) !important;
+}
+
+/* Event Card (Detailed Pre-match / Event Grid) */
+html[data-theme='light']:not(#_) .sports-page .event-card h3 {
+  color: var(--heading) !important;
+}
+
+html[data-theme='light']:not(#_) .sports-page .event-card .event-meta {
+  color: var(--secondary) !important;
+}
+
+html[data-theme='light']:not(#_) .sports-page .event-card .bookmaker {
+  color: var(--secondary) !important;
 }
 
 html[data-theme='light']:not(#_) .sports-page .sort-menu {
@@ -491,17 +1549,6 @@ html[data-theme='light']:not(#_) .sports-page .sort-menu-item:hover {
 html[data-theme='light']:not(#_) .sports-page .sort-menu-item--active {
   color: #ffffff;
   background: var(--main-color);
-}
-
-html[data-theme='light']:not(#_) .winner-match + .winner-match,
-html[data-theme='light']:not(#_) .sports-page .outright-panel {
-  border-top-color: var(--border);
-}
-
-html[data-theme='light']:not(#_) .winner-price[aria-pressed='true'],
-html[data-theme='light']:not(#_) .winner-price[aria-pressed='true'] span,
-html[data-theme='light']:not(#_) .winner-price[aria-pressed='true'] strong {
-  color: #ffffff;
 }
 
 /* --------------------------------------------------------------------------
@@ -1189,4 +2236,597 @@ html[data-theme='light']:not(#_) .bg-\[\#1e201f\] {
 html[data-theme='light']:not(#_) .me-page svg rect[fill='#ffff'] {
   fill: #e4eee8;
 }
+
+/* ==========================================================================
+   User Requested Light Background Classes
+   ========================================================================== */
+
+/* 1. Jackpot Counter Plate & Components */
+html[data-theme='light']:not(#_) .jackpot-counter-plate {
+  border: 1px solid rgba(1, 148, 64, 0.22);
+  background: #f0f7f3;
+  box-shadow: inset 0 1px 3px rgba(1, 148, 64, 0.08), 0 2px 8px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .jackpot-currency-badge {
+  border: 1px solid rgba(1, 148, 64, 0.35);
+  background: #d8eee3;
+  color: #026b34;
+  text-shadow: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 1px 3px rgba(1, 148, 64, 0.1);
+}
+
+html[data-theme='light']:not(#_) .digit-box {
+  border: 1px solid rgba(1, 148, 64, 0.18);
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 4px rgba(16, 38, 28, 0.06);
+}
+
+/* 2. Winners Card */
+html[data-theme='light']:not(#_) .winners-card {
+  border: 1px solid rgba(0, 148, 64, 0.18);
+  border-top: 1px solid rgba(0, 148, 64, 0.3);
+  background: linear-gradient(145deg, #ffffff 0%, #f7fbf8 50%, #edf7f1 100%);
+  box-shadow: 0 10px 28px -6px rgba(16, 38, 28, 0.08), 0 0 16px -4px rgba(0, 148, 64, 0.1);
+}
+
+html[data-theme='light']:not(#_) .winners-heading {
+  color: #10261c;
+}
+
+html[data-theme='light']:not(#_) .winner-row {
+  border-bottom: 1px solid rgba(10, 62, 39, 0.08);
+  background: transparent;
+}
+
+html[data-theme='light']:not(#_) .winner-row:nth-child(even) {
+  background: rgba(0, 148, 64, 0.03);
+}
+
+html[data-theme='light']:not(#_) .winner-username {
+  color: #10261c;
+}
+
+html[data-theme='light']:not(#_) .winner-timestamp {
+  color: #5d7066;
+}
+
+html[data-theme='light']:not(#_) .winner-amount {
+  color: #019440;
+}
+
+html[data-theme='light']:not(#_) .winners-card-footer {
+  border-top-color: rgba(10, 62, 39, 0.1);
+  color: #5d7066;
+}
+
+html[data-theme='light']:not(#_) .winner-item:nth-child(even) {
+  background-color: rgba(0, 148, 64, 0.03);
+}
+
+/* 3. Allgames Promo :before and :after (Light Green Theme) */
+html[data-theme='light']:not(#_) .allgames-promo {
+  background: linear-gradient(135deg, #ffffff 0%, #f2faf5 45%, #e2f4ea 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 148, 64, 0.22), 0 6px 20px rgba(16, 38, 28, 0.06);
+}
+
+html[data-theme='light']:not(#_) .allgames-promo::before {
+  background:
+    linear-gradient(90deg, #e6f5ec 0%, rgba(230, 245, 236, 0.96) 28%, rgba(230, 245, 236, 0.86) 44%, rgba(230, 245, 236, 0.58) 64%, rgba(230, 245, 236, 0.16) 82%, transparent 96%),
+    linear-gradient(180deg, rgba(230, 245, 236, 0.35) 0%, transparent 35%, rgba(230, 245, 236, 0.55) 100%);
+}
+
+html[data-theme='light']:not(#_) .allgames-promo::after {
+  background: conic-gradient(from var(--promo-border-angle), transparent 15%, #009440 34%, #80e2b3 48%, #007a35 60%, transparent 80%);
+}
+
+html[data-theme='light']:not(#_) .allgames-promo .allgames-eyebrow {
+  color: #019440;
+}
+
+html[data-theme='light']:not(#_) .allgames-promo h3 {
+  color: #10261c;
+  text-shadow: none;
+}
+
+html[data-theme='light']:not(#_) .allgames-promo h3+p {
+  color: #1a382a;
+  text-shadow: none;
+}
+
+html[data-theme='light']:not(#_) .allgames-promo h3+p>span {
+  color: #4a6357;
+  text-shadow: none;
+}
+
+html[data-theme='light']:not(#_) .allgames-promo .allgames-text-link {
+  color: #019440;
+  text-shadow: none;
+}
+
+/* 4. Getting Started FAQ List */
+html[data-theme='light']:not(#_) .getting-started-faq-list details {
+  background: #ffffff;
+  border: 1px solid rgba(10, 62, 39, 0.12);
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.04);
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-list details[open] {
+  border-color: rgba(1, 148, 64, 0.28);
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-list summary {
+  color: #10261c;
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-list summary:hover {
+  background: rgba(1, 148, 64, 0.04);
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-toggle {
+  border-color: rgba(1, 148, 64, 0.2);
+  background: rgba(1, 148, 64, 0.08);
+  color: #019440;
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq-list p {
+  color: #5d7066;
+}
+
+html[data-theme='light']:not(#_) .getting-started-faq,
+html[data-theme='light']:not(#_) .homepage-start-panel {
+  background: #ffffff;
+  border-color: var(--border);
+  box-shadow: 0 2px 8px rgba(16, 38, 28, 0.04);
+}
+
+/* 5. Sports Chat */
+html[data-theme='light']:not(#_) .sports-chat {
+  border-color: #d8e2dc;
+  background: #ffffff;
+  color: #10261c;
+  box-shadow: 0 2px 8px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .sports-chat__body {
+  background: #ffffff;
+}
+
+html[data-theme='light']:not(#_) .sports-chat__empty p {
+  color: #5d7066;
+}
+
+html[data-theme='light']:not(#_) .sports-chat__footer {
+  background: #f8fbf9;
+  border-top: 1px solid #e2ece6;
+}
+
+html[data-theme='light']:not(#_) .chat-login {
+  border: 1px solid #d8e2dc;
+  background: #ffffff;
+  color: #10261c;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* 6. Sports Category Banner */
+html[data-theme='light']:not(#_) .sports-category-banner {
+  background-color: #eaf5ee;
+  color: #10261c;
+  border: 1px solid rgba(10, 62, 39, 0.1);
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.04);
+}
+
+html[data-theme='light']:not(#_) .sports-category-banner::before {
+  background: linear-gradient(90deg, rgba(234, 245, 238, .88) 0%, rgba(234, 245, 238, .55) 45%, rgba(234, 245, 238, .12) 85%);
+}
+
+html[data-theme='light']:not(#_) .sports-category-banner::after {
+  background: linear-gradient(to bottom, transparent 35%, rgba(234, 245, 238, 0.5) 75%, rgba(234, 245, 238, 0.9) 100%);
+}
+
+html[data-theme='light']:not(#_) .sports-category-banner__toggle {
+  border-color: #d8e2dc;
+  background: #ffffff;
+  color: #10261c;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* 7. Loading States & Spinners */
+html[data-theme='light']:not(#_) .loading,
+html[data-theme='light']:not(#_) [role="status"] {
+  color: var(--heading);
+}
+
+html[data-theme='light']:not(#_) .\32 bet-spinner-root--fullscreen,
+html[data-theme='light']:not(#_) [class~="2bet-spinner-root--fullscreen"] {
+  background-color: var(--page, #eef5f1);
+}
+
+html[data-theme='light']:not(#_) .\32 bet-spinner-root--overlay,
+html[data-theme='light']:not(#_) [class~="2bet-spinner-root--overlay"] {
+  background-color: rgba(238, 245, 241, 0.85);
+}
+
+html[data-theme='light']:not(#_) .\32 bet-spinner__label,
+html[data-theme='light']:not(#_) [class~="2bet-spinner__label"] {
+  color: var(--heading);
+}
+
+/* 8. Live Video Player */
+html[data-theme='light']:not(#_) .live-video-player {
+  background-color: #eaf5ee;
+  border-color: rgba(1, 148, 64, 0.16);
+  box-shadow: 0 2px 8px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .sports-preview-card,
+html[data-theme='light']:not(#_) #tv-title {
+  color: #10261c;
+}
+
+/* 9. Provider Filter Bar & Provider Pills across E-Games Pages */
+html[data-theme='light']:not(#_) .provider-filter-bar {
+  background-color: transparent;
+}
+
+html[data-theme='light']:not(#_) .provider-pill:not(.bg-\[var\(--main-color\)\]):not(.bg-main-color) {
+  background-color: #eaf5ee;
+  color: #10261c;
+  border-color: rgba(1, 148, 64, 0.18);
+}
+
+html[data-theme='light']:not(#_) .provider-filter-bar button.h-8.w-8 {
+  background-color: #eaf5ee;
+  color: #10261c;
+}
+
+html[data-theme='light']:not(#_) .provider-filter-bar button.h-8.w-8:hover {
+  color: #019440;
+}
+
+/* 10. Generic Page Section Cards & Nav Headers */
+html[data-theme='light']:not(#_) .section-card,
+html[data-theme='light']:not(#_) .account-card,
+html[data-theme='light']:not(#_) .welcome-card,
+html[data-theme='light']:not(#_) .services-card,
+html[data-theme='light']:not(#_) .streamer-card,
+html[data-theme='light']:not(#_) .streamers-content-card,
+html[data-theme='light']:not(#_) .search-card,
+html[data-theme='light']:not(#_) .top-nav-bar,
+html[data-theme='light']:not(#_) .seo-header {
+  background-color: #ffffff;
+  color: #10261c;
+  border-color: #d8e2dc;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05);
+}
+
+html[data-theme='light']:not(#_) .seo-header h1 {
+  color: #10261c;
+}
+
+html[data-theme='light']:not(#_) .seo-header button {
+  background-color: #eaf5ee;
+}
+
+/* 11. Subpage Header Universal */
+html[data-theme='light']:not(#_) .subpage-header {
+  background: #ffffff !important;
+  border-bottom: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+}
+
+html[data-theme='light']:not(#_) .subpage-header__title {
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .subpage-header__back-btn {
+  color: #019440 !important;
+  background-color: #eaf5ee !important;
+}
+
+html[data-theme='light']:not(#_) .subpage-header__back-btn:hover {
+  background-color: #d8ece0 !important;
+}
+
+/* 12. Bonuses & Promotions */
+html[data-theme='light']:not(#_) .bonus-category-sticky {
+  background: transparent !important;
+}
+
+html[data-theme='light']:not(#_) .bonus-category-header,
+html[data-theme='light']:not(#_) .bonus-category-header .category-nav {
+  background: #ffffff !important;
+  border-color: #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .category-card {
+  background: #07543e !important;
+}
+
+html[data-theme='light']:not(#_) .category-card__media {
+  background: #dce8e1 !important;
+}
+
+html[data-theme='light']:not(#_) .mobile-bonuses {
+  background: #eef5f1 !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .mobile-bonuses__sticky,
+html[data-theme='light']:not(#_) .mobile-bonuses__categories {
+  background: #ffffff !important;
+  border-color: #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .mobile-bonuses__group {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+}
+
+html[data-theme='light']:not(#_) .mobile-bonus-row {
+  border-bottom: 1px solid #eef2f0 !important;
+}
+
+html[data-theme='light']:not(#_) .mobile-bonus-row__details {
+  background: #eaf5ee !important;
+  color: #019440 !important;
+}
+
+html[data-theme='light']:not(#_) .vip-benefits {
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .vip-benefits th {
+  background: #eaf5ee !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .vip-benefits td {
+  border-color: #eef2f0 !important;
+  color: #24382e !important;
+}
+
+html[data-theme='light']:not(#_) .promotion-terms-card {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+  color: #24382e !important;
+}
+
+html[data-theme='light']:not(#_) .promotion-terms-card h2,
+html[data-theme='light']:not(#_) #promotion-terms-title {
+  background: #eaf5ee !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .promotion-banner {
+  background: #dce8e1 !important;
+}
+
+html[data-theme='light']:not(#_) .promotion-sheet {
+  background: #ffffff !important;
+  border-color: #d8e2dc !important;
+  color: #24382e !important;
+}
+
+html[data-theme='light']:not(#_) .promotion-sheet th {
+  background: #eaf5ee !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .promotion-sheet td {
+  border-color: #eef2f0 !important;
+  color: #24382e !important;
+}
+
+/* 13. Game Rules */
+html[data-theme='light']:not(#_) .game-rules-category-nav {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .game-rules-card {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+  color: #24382e !important;
+}
+
+html[data-theme='light']:not(#_) .game-rules-content table {
+  border-color: #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .game-rules-content th {
+  background: #eaf5ee !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .game-rules-content td {
+  border-color: #eef2f0 !important;
+  color: #24382e !important;
+}
+
+/* 14. Live Casino Lobby & Cards */
+html[data-theme='light']:not(#_) .casino-category-button,
+html[data-theme='light']:not(#_) .casino-multitable-button,
+html[data-theme='light']:not(#_) .casino-view-switch {
+  background: #ffffff !important;
+  color: #5d7066 !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 2px rgba(16, 38, 28, 0.05) !important;
+}
+
+html[data-theme='light']:not(#_) .casino-category-button--active {
+  background: #eaf5ee !important;
+  color: #019440 !important;
+  border-color: #019440 !important;
+}
+
+html[data-theme='light']:not(#_) .casino-table-card {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .casino-table-card:hover {
+  border-color: #019440 !important;
+}
+
+html[data-theme='light']:not(#_) .casino-table-placeholder {
+  background: #edf4f0 !important;
+}
+
+html[data-theme='light']:not(#_) .casino-sicbo-results {
+  background: #eef5f1 !important;
+}
+
+html[data-theme='light']:not(#_) .casino-dice-total {
+  background: #ffffff !important;
+  color: #b45309 !important;
+}
+
+html[data-theme='light']:not(#_) .live-casino-roadmap {
+  background: #ffffff !important;
+  border-color: #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .casino-road-filter-trigger {
+  background: #ffffff !important;
+  color: #10261c !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 2px rgba(16, 38, 28, 0.05) !important;
+}
+
+html[data-theme='light']:not(#_) .casino-road-pattern-menu {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 4px 12px rgba(16, 38, 28, 0.1) !important;
+}
+
+html[data-theme='light']:not(#_) .casino-road-pattern-option {
+  background: #f4f8f5 !important;
+  color: #10261c !important;
+  border: 1px solid #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .casino-road-pattern-option--active {
+  background: #eaf5ee !important;
+  color: #019440 !important;
+  border-color: #019440 !important;
+}
+
+html[data-theme='light']:not(#_) .casino-section-arrow {
+  background: #ffffff !important;
+  color: #10261c !important;
+  border: 2px solid #d8e2dc !important;
+  box-shadow: 0 2px 6px rgba(16, 38, 28, 0.1) !important;
+}
+
+/* 15. About Us & App Download */
+html[data-theme='light']:not(#_) .about-us-card {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+  color: #24382e !important;
+}
+
+html[data-theme='light']:not(#_) .about-us-card h2 {
+  background: #eaf5ee !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .app-card {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+}
+
+html[data-theme='light']:not(#_) .native-app-row {
+  background: #f4f8f5 !important;
+  color: #10261c !important;
+  border: 1px solid #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .native-app-copy strong {
+  color: #10261c !important;
+}
+
+/* 16. Customer Service & Legal Shell */
+html[data-theme='light']:not(#_) .customer-service-chat-stage {
+  background: #f4f8f5 !important;
+  border: 1px solid #d8e2dc !important;
+}
+
+html[data-theme='light']:not(#_) .customer-service-chat-frame {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 2px 10px rgba(16, 38, 28, 0.08) !important;
+}
+
+html[data-theme='light']:not(#_) .doc-card {
+  background: #ffffff !important;
+  border: 1px solid #d8e2dc !important;
+  box-shadow: 0 1px 3px rgba(16, 38, 28, 0.05) !important;
+  color: #24382e !important;
+}
+
+html[data-theme='light']:not(#_) .doc-card h2 {
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .doc-body {
+  color: #24382e !important;
+}
+
+/* 17. Live Page & Popular Game Predict */
+html[data-theme='light']:not(#_) .live-category-heading__count {
+  background: #eaf5ee !important;
+  color: #019440 !important;
+  border: 1px solid rgba(1, 148, 64, 0.2) !important;
+}
+
+html[data-theme='light']:not(#_) .popular-game {
+  border-right-color: #d8e2dc !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .popular-game__predict {
+  background: #eaf5ee !important;
+  color: #019440 !important;
+  border: 1px solid rgba(1, 148, 64, 0.2) !important;
+}
+
+html[data-theme='light']:not(#_) .popular-game__meta {
+  color: #5d7066 !important;
+}
+
+html[data-theme='light']:not(#_) .popular-game__team {
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .live-page .desktop-live-price {
+  background: #ffffff !important;
+  border-color: #d8e2dc !important;
+  color: #10261c !important;
+}
+
+html[data-theme='light']:not(#_) .live-page .desktop-live-price strong {
+  color: #019440 !important;
+}
+
+/* 18. Preserve white text on dark hero banners and in-play badges in light mode */
+html[data-theme='light']:not(#_) .me-mobile-header h1,
+html[data-theme='light']:not(#_) .me-mobile-header .me-header-btn,
+html[data-theme='light']:not(#_) .me-top-btn,
+html[data-theme='light']:not(#_) .me-mobile-header span {
+  color: #ffffff !important;
+}
+
+html[data-theme='light']:not(#_) .bg-\[\#093E2C\].text-white {
+  color: #ffffff !important;
+}
+
+
 

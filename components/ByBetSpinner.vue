@@ -154,8 +154,8 @@ const gradientId = useId ? useId() : `twobet-spin-${Math.random().toString(36).s
   background-color: var(--page, #000000);
 }
 
-:global(html[data-theme='light']) .\32 bet-spinner-root--fullscreen,
-:global(html[data-theme='light']) [class~="2bet-spinner-root--fullscreen"] {
+html[data-theme='light'] .\32 bet-spinner-root--fullscreen,
+html[data-theme='light'] [class~="2bet-spinner-root--fullscreen"] {
   background-color: var(--page, #eef5f1);
 }
 

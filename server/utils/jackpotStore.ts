@@ -23,48 +23,87 @@ export const DEFAULT_JACKPOTS: JackpotData = {
   updatedAt: new Date().toISOString(),
 }
 
-const getJackpotFilePath = (): string => path.resolve(process.cwd(), 'data/jackpots.json')
+const getJackpotFilePath = (): string => process.env.JACKPOT_FILE_PATH || path.resolve(process.cwd(), 'data/jackpots.json')
 
-export async function readJackpotFile(): Promise<JackpotData> {
+let writeQueue: Promise<void> = Promise.resolve()
+
+function normalizeJackpotData(parsed: Partial<JackpotData>): JackpotData {
+  return {
+    mega: typeof parsed.mega === 'number' && Number.isFinite(parsed.mega) ? parsed.mega : DEFAULT_JACKPOTS.mega,
+    jdb: typeof parsed.jdb === 'number' && Number.isFinite(parsed.jdb) ? parsed.jdb : DEFAULT_JACKPOTS.jdb,
+    jili: typeof parsed.jili === 'number' && Number.isFinite(parsed.jili) ? parsed.jili : DEFAULT_JACKPOTS.jili,
+    cq9: typeof parsed.cq9 === 'number' && Number.isFinite(parsed.cq9) ? parsed.cq9 : DEFAULT_JACKPOTS.cq9,
+    grand: typeof parsed.grand === 'number' && Number.isFinite(parsed.grand) ? parsed.grand : DEFAULT_JACKPOTS.grand,
+    major: typeof parsed.major === 'number' && Number.isFinite(parsed.major) ? parsed.major : DEFAULT_JACKPOTS.major,
+    minor: typeof parsed.minor === 'number' && Number.isFinite(parsed.minor) ? parsed.minor : DEFAULT_JACKPOTS.minor,
+    updatedAt: typeof parsed.updatedAt === 'string' && parsed.updatedAt ? parsed.updatedAt : new Date().toISOString(),
+  }
+}
+
+async function readJackpotFileRaw(): Promise<JackpotData | null> {
   const filePath = getJackpotFilePath()
   try {
     const raw = await fs.readFile(filePath, 'utf-8')
     const parsed = JSON.parse(raw) as Partial<JackpotData>
-    return {
-      mega: typeof parsed.mega === 'number' && !Number.isNaN(parsed.mega) ? parsed.mega : DEFAULT_JACKPOTS.mega,
-      jdb: typeof parsed.jdb === 'number' && !Number.isNaN(parsed.jdb) ? parsed.jdb : DEFAULT_JACKPOTS.jdb,
-      jili: typeof parsed.jili === 'number' && !Number.isNaN(parsed.jili) ? parsed.jili : DEFAULT_JACKPOTS.jili,
-      cq9: typeof parsed.cq9 === 'number' && !Number.isNaN(parsed.cq9) ? parsed.cq9 : DEFAULT_JACKPOTS.cq9,
-      grand: typeof parsed.grand === 'number' ? parsed.grand : DEFAULT_JACKPOTS.grand,
-      major: typeof parsed.major === 'number' ? parsed.major : DEFAULT_JACKPOTS.major,
-      minor: typeof parsed.minor === 'number' ? parsed.minor : DEFAULT_JACKPOTS.minor,
-      updatedAt: parsed.updatedAt || new Date().toISOString(),
-    }
+    if (!parsed || typeof parsed !== 'object') return null
+    return normalizeJackpotData(parsed)
   } catch {
-    await writeJackpotFile(DEFAULT_JACKPOTS).catch(() => {})
-    return { ...DEFAULT_JACKPOTS }
+    return null
   }
+}
+
+async function atomicWriteJackpots(payload: JackpotData): Promise<void> {
+  const filePath = getJackpotFilePath()
+  const fsWithRename = fs as typeof fs & {
+    rename?: (oldPath: string, newPath: string) => Promise<void>
+  }
+  await fs.mkdir(path.dirname(filePath), { recursive: true })
+  const serialized = `${JSON.stringify(payload, null, 2)}\n`
+
+  if (typeof fsWithRename.rename === 'function') {
+    const nonce = Math.random().toString(36).slice(2, 8)
+    const tmpPath = `${filePath}.${Date.now()}.${nonce}.tmp`
+    await fs.writeFile(tmpPath, serialized, 'utf-8')
+    await fsWithRename.rename(tmpPath, filePath)
+    return
+  }
+
+  await fs.writeFile(filePath, serialized, 'utf-8')
+}
+
+export async function readJackpotFile(): Promise<JackpotData> {
+  const existing = await readJackpotFileRaw()
+  if (existing) return existing
+
+  const fallback = { ...DEFAULT_JACKPOTS, updatedAt: new Date().toISOString() }
+  writeQueue = writeQueue.then(() => atomicWriteJackpots(fallback)).catch(() => {})
+  await writeQueue
+  return fallback
 }
 
 export async function writeJackpotFile(data: Partial<JackpotData>): Promise<JackpotData> {
-  const filePath = getJackpotFilePath()
-  const current = await readJackpotFile().catch(() => ({ ...DEFAULT_JACKPOTS }))
-  const round2 = (val: number) => Math.round(val * 100) / 100
+  let result: JackpotData = { ...DEFAULT_JACKPOTS, updatedAt: new Date().toISOString() }
 
-  const updated: JackpotData = {
-    ...current,
-    ...(typeof data.mega === 'number' && !Number.isNaN(data.mega) ? { mega: round2(data.mega) } : {}),
-    ...(typeof data.jdb === 'number' && !Number.isNaN(data.jdb) ? { jdb: round2(data.jdb) } : {}),
-    ...(typeof data.jili === 'number' && !Number.isNaN(data.jili) ? { jili: round2(data.jili) } : {}),
-    ...(typeof data.cq9 === 'number' && !Number.isNaN(data.cq9) ? { cq9: round2(data.cq9) } : {}),
-    ...(typeof data.grand === 'number' && !Number.isNaN(data.grand) ? { grand: round2(data.grand) } : {}),
-    ...(typeof data.major === 'number' && !Number.isNaN(data.major) ? { major: round2(data.major) } : {}),
-    ...(typeof data.minor === 'number' && !Number.isNaN(data.minor) ? { minor: round2(data.minor) } : {}),
-    updatedAt: new Date().toISOString(),
+  const task = async () => {
+    const current = (await readJackpotFileRaw()) ?? { ...DEFAULT_JACKPOTS }
+    const round2 = (val: number) => Math.round(val * 100) / 100
+
+    result = {
+      ...current,
+      ...(typeof data.mega === 'number' && Number.isFinite(data.mega) ? { mega: round2(data.mega) } : {}),
+      ...(typeof data.jdb === 'number' && Number.isFinite(data.jdb) ? { jdb: round2(data.jdb) } : {}),
+      ...(typeof data.jili === 'number' && Number.isFinite(data.jili) ? { jili: round2(data.jili) } : {}),
+      ...(typeof data.cq9 === 'number' && Number.isFinite(data.cq9) ? { cq9: round2(data.cq9) } : {}),
+      ...(typeof data.grand === 'number' && Number.isFinite(data.grand) ? { grand: round2(data.grand) } : {}),
+      ...(typeof data.major === 'number' && Number.isFinite(data.major) ? { major: round2(data.major) } : {}),
+      ...(typeof data.minor === 'number' && Number.isFinite(data.minor) ? { minor: round2(data.minor) } : {}),
+      updatedAt: new Date().toISOString(),
+    }
+
+    await atomicWriteJackpots(result)
   }
 
-  await fs.mkdir(path.dirname(filePath), { recursive: true })
-  await fs.writeFile(filePath, `${JSON.stringify(updated, null, 2)}\n`, 'utf-8')
-  return updated
+  writeQueue = writeQueue.then(task, task)
+  await writeQueue
+  return result
 }
-

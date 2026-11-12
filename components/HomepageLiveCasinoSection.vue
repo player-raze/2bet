@@ -37,20 +37,31 @@ function categoryIcon(key: string) {
     :items-per-slide="1"
   >
     <template #header="{ atStart, atEnd, move }">
-      <header class="live-section-header flex items-center justify-between">
-        <div class="live-heading flex items-center min-w-0"><h2 id="live-casino-title"><img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Live Casino')" width="28" height="28" loading="lazy" decoding="async">{{ translate('Live Casino') }}</h2><p>{{ translate('Real dealers. Real games. Real excitement.') }}</p></div>
+      <header class="live-section-header flex items-center justify-between border-b border-white/[0.09] light:border-b-[#d8e2dc]">
+        <div class="live-heading flex items-center min-w-0">
+          <h2 id="live-casino-title" class="text-white light:text-[#10261c]">
+            <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Live Casino')" width="28" height="28" loading="lazy" decoding="async">
+            {{ translate('Live Casino') }}
+          </h2>
+          <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/15 light:border-l-[#d8e2dc]">{{ translate('Real dealers. Real games. Real excitement.') }}</p>
+        </div>
         <div class="live-header-actions flex items-center">
-          <NuxtLink to="/entertainment/live-casino" class="live-view-all">{{ translate('View all live casino') }} <ArrowRight :size="16" aria-hidden="true" /></NuxtLink>
+          <NuxtLink to="/entertainment/live-casino" class="live-view-all text-[#F9C600] light:text-[#b88e00]">{{ translate('View all live casino') }} <ArrowRight :size="16" aria-hidden="true" /></NuxtLink>
           <div class="live-carousel-controls flex items-center" :aria-label="translate('Live Casino slider controls')">
-            <button type="button" :disabled="atStart" :aria-label="translate('Previous Live Casino items')" aria-controls="live-casino-track" @click="move(-1)"><ChevronLeft :size="17" aria-hidden="true" /></button>
-            <button type="button" :disabled="atEnd" :aria-label="translate('Next Live Casino items')" aria-controls="live-casino-track" @click="move(1)"><ChevronRight :size="17" aria-hidden="true" /></button>
+            <button type="button" :disabled="atStart" class="text-[#d6e1dc] border border-white/15 hover:border-white/30 hover:bg-[#14241c] light:border-[#d8e2dc] light:text-[#5d7066] light:hover:text-[#10261c] light:hover:bg-[#f4f8f5]" :aria-label="translate('Previous Live Casino items')" aria-controls="live-casino-track" @click="move(-1)"><ChevronLeft :size="17" aria-hidden="true" /></button>
+            <button type="button" :disabled="atEnd" class="text-[#d6e1dc] border border-white/15 hover:border-white/30 hover:bg-[#14241c] light:border-[#d8e2dc] light:text-[#5d7066] light:hover:text-[#10261c] light:hover:bg-[#f4f8f5]" :aria-label="translate('Next Live Casino items')" aria-controls="live-casino-track" @click="move(1)"><ChevronRight :size="17" aria-hidden="true" /></button>
           </div>
         </div>
       </header>
-      <nav class="live-table-directory" aria-labelledby="live-table-directory-title">
-        <h3 id="live-table-directory-title">{{ translate('Find your table') }}</h3>
+      <nav class="live-table-directory bg-gradient-to-br from-[#162b20] to-[#102119] border border-white/[0.06] light:bg-gradient-to-br light:from-white light:via-[#f2faf5] light:to-[#e4f4eb] light:border-[#009440]/20" aria-labelledby="live-table-directory-title">
+        <h3 id="live-table-directory-title" class="text-[#91aaa0] light:text-[#5d7066]">{{ translate('Find your table') }}</h3>
         <div class="live-table-links">
-          <NuxtLink v-for="game in quickCategories" :key="game.key" :to="`/entertainment/live-casino/${game.category}`">
+          <NuxtLink
+            v-for="game in quickCategories"
+            :key="game.key"
+            :to="`/entertainment/live-casino/${game.category}`"
+            class="text-[#e1e9e4] light:text-[#10261c] hover:text-[#009440] hover:bg-[#063523] light:hover:bg-[#e8f2ec] light:hover:text-[#009440]"
+          >
             <img :src="categoryIcon(game.key)" class="live-sidebar-icon" :alt="translate(game.key === 'sicbo' ? 'Sic Bo' : game.title)" width="28" height="28" decoding="async">
             <span>{{ translate(game.key === 'sicbo' ? 'Sic Bo' : game.title) }}</span>
           </NuxtLink>
@@ -61,7 +72,7 @@ function categoryIcon(key: string) {
       v-for="game in categories"
       :key="game.key"
       :to="`/entertainment/live-casino/${game.category}`"
-      class="live-dealer-card"
+      class="live-dealer-card bg-[#061b13] border border-[#235844]/35 light:bg-gradient-to-b light:from-white light:via-[#f6fbf8] light:to-[#e8f6ee] light:border-[#009440]/20 light:shadow-sm"
       :data-category="game.category"
       :aria-label="translate(game.title)"
       :title="translate(game.title)"
@@ -70,37 +81,40 @@ function categoryIcon(key: string) {
         <img :src="game.image" :alt="translate(game.title)" width="1086" height="1448" loading="lazy" decoding="async">
         <span class="allgames-card-live-badge"><i /> {{ translate('LIVE') }}</span>
       </div>
-      <div class="live-dealer-caption">
-        <div><h3>{{ translate(game.title) }}</h3><p>{{ translate(descriptions[game.key] || game.description) }}</p></div>
-        <span class="live-dealer-arrow" aria-hidden="true"><ArrowRight :size="16" /></span>
+      <div class="live-dealer-caption bg-[#061b13] border-t border-[#23613f]/50 light:bg-gradient-to-b light:from-white light:to-[#f0f8f3] light:border-t-[#009440]/15">
+        <div>
+          <h3 class="text-[#f3f9f5] light:text-[#10261c]">{{ translate(game.title) }}</h3>
+          <p class="text-[#a8c0b3] light:text-[#5d7066]">{{ translate(descriptions[game.key] || game.description) }}</p>
+        </div>
+        <span class="live-dealer-arrow text-[#68d5ae] border border-[#267d5f] bg-[#09271b] light:bg-[#e8f2ec] light:text-[#009440] light:border-[#009440]/40" aria-hidden="true"><ArrowRight :size="16" /></span>
       </div>
     </NuxtLink>
   </HomepageContentSlider>
 
   <section id="live-casino-mobile" class="live-casino-mobile allgames-section" aria-labelledby="live-casino-mobile-title">
-    <header class="live-mobile-header">
-      <h2 id="live-casino-mobile-title" class="flex items-center">
+    <header class="live-mobile-header border-b border-white/[0.09] light:border-b-[#d8e2dc]">
+      <h2 id="live-casino-mobile-title" class="flex items-center text-white light:text-[#10261c]">
         <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Live Casino')" width="28" height="28" loading="lazy" decoding="async">
         {{ translate('Live Casino') }}
       </h2>
-      <p>{{ translate('Real dealers. Real games. Real excitement.') }}</p>
+      <p class="text-[#a8b6bc] light:text-[#5d7066]">{{ translate('Real dealers. Real games. Real excitement.') }}</p>
     </header>
     <div class="live-mobile-grid grid grid-cols-3">
       <NuxtLink
         v-for="game in categories.slice(0, 24)"
         :key="game.key"
         :to="`/entertainment/live-casino/${game.category}`"
-        class="live-mobile-card"
+        class="live-mobile-card bg-[#061b13] light:bg-gradient-to-b light:from-white light:via-[#f5fbf7] light:to-[#eaf6ef] light:border light:border-[#009440]/20 light:shadow-sm"
         :aria-label="translate(game.title)"
         :title="translate(game.title)"
       >
         <div class="live-mobile-art">
           <img :src="game.image" :alt="translate(game.title)" width="300" height="300" loading="lazy" decoding="async">
         </div>
-        <h3>{{ translate(game.title) }}</h3>
+        <h3 class="text-white light:text-[#10261c]">{{ translate(game.title) }}</h3>
       </NuxtLink>
     </div>
-    <NuxtLink to="/entertainment/live-casino" class="live-all-games flex w-full items-center justify-center">
+    <NuxtLink to="/entertainment/live-casino" class="live-all-games flex w-full items-center justify-center text-white light:text-white bg-[#009440] hover:bg-[#007a35]">
       {{ translate('All Games') }}
     </NuxtLink>
   </section>
@@ -112,32 +126,31 @@ function categoryIcon(key: string) {
 .live-section-header { grid-column: 1 / -1; grid-row: 1; min-height: 48px; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid #ffffff18; }
 .live-heading { gap: 22px; }
 .live-heading h2 { display: flex; align-items: center; flex-shrink: 0; gap: 12px; font-size: var(--allgames-heading-size); font-weight: var(--homepage-display-weight); line-height: 1.2; letter-spacing: .01em; }
-.live-heading > p { padding-left: 22px; border-left: 1px solid #ffffff26; color: #a8b6bc; font-size: 14px; line-height: 22px; }
+.live-heading > p { padding-left: 22px; font-size: 14px; line-height: 22px; }
 .live-header-actions { flex-shrink: 0; gap: 32px; }
-.live-section-header .live-view-all { display: inline-flex; align-items: center; gap: 12px; min-height: 32px; color: #F9C600; font-size: 14px; font-weight: 600; }
+.live-section-header .live-view-all { display: inline-flex; align-items: center; gap: 12px; min-height: 32px; font-size: 14px; font-weight: 600; }
 .live-view-all:hover { text-decoration: underline; text-underline-offset: 4px; }
 .live-carousel-controls { gap: 12px; }
-.live-carousel-controls button { display: grid; place-items: center; width: 34px; height: 30px; border: 1px solid #ffffff26; border-radius: 6px; color: #d6e1dc; background: transparent; }
+.live-carousel-controls button { display: grid; place-items: center; width: 34px; height: 30px; border-radius: 6px; background: transparent; }
 .live-carousel-controls button:disabled { opacity: .35; cursor: default; }
-.live-carousel-controls button:hover:enabled { border-color: #ffffff4a; background: #14241c; }
 .homepage-live-casino-section :deep(.allgames-game-track) { --allgames-row-gap: 16px; grid-column: 2; grid-row: 2; grid-auto-columns: calc((100% - 3 * var(--allgames-row-gap)) / 4); padding: 0; }
-.live-dealer-card { position: relative; display: flex; flex-direction: column; width: 100%; min-width: 0; min-height: 400px; aspect-ratio: 5 / 4; overflow: hidden; border: 1px solid #23584457; border-radius: 8px; background: #061b13; transition: border-color .2s; }
+.live-dealer-card { position: relative; display: flex; flex-direction: column; width: 100%; min-width: 0; min-height: 400px; aspect-ratio: 5 / 4; overflow: hidden; border-radius: 8px; transition: border-color .2s; }
 .live-dealer-art { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 .live-dealer-art>img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; transition: filter .2s; }
 .live-dealer-card:is(:hover,:focus-visible) { border-color: #4d9b78; }
 .live-dealer-card:is(:hover,:focus-visible) .live-dealer-art>img { filter: blur(3px); }
-.live-dealer-caption { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; min-height: 62px; gap: 10px; padding: 9px 12px; border-top: 1px solid #23613f80; background: #061b13; }
+.live-dealer-caption { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; min-height: 62px; gap: 10px; padding: 9px 12px; }
 .live-dealer-caption>div { min-width: 0; }
-.live-dealer-caption h3 { color: #f3f9f5; font-size: clamp(14px,1.35cqw,19px); font-weight: 800; line-height: 1.2; letter-spacing: -.3px; }
-.live-dealer-caption p { overflow: hidden; margin-top: 4px; color: #a8c0b3; font-size: clamp(9px,.85cqw,12px); line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
-.live-dealer-arrow { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 1px solid #267d5f; border-radius: 50%; color: #68d5ae; background: #09271b; transition: background .2s; }
+.live-dealer-caption h3 { font-size: clamp(14px,1.35cqw,19px); font-weight: 800; line-height: 1.2; letter-spacing: -.3px; }
+.live-dealer-caption p { overflow: hidden; margin-top: 4px; font-size: clamp(9px,.85cqw,12px); line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
+.live-dealer-arrow { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; transition: background .2s; }
 .live-dealer-card:is(:hover,:focus-visible) .live-dealer-arrow { background: #15452d; }
 .live-dealer-card:focus-visible { outline-offset: -3px; }
 .live-dealer-card .allgames-card-live-badge { top: 12px; left: 12px; border: 0; padding: 5px 7px; }
-.live-table-directory { grid-column: 1; grid-row: 2; display: flex; flex-direction: column; min-width: 0; padding: 14px 7px; border: 1px solid #ffffff0e; border-radius: 7px; background: radial-gradient(ellipse at 12% 65%, #4fbd8b15, transparent 65%), linear-gradient(115deg, #162b20, #102119); }
-.live-table-directory h3 { margin: 0 7px 8px; color: #91aaa0; font-size: 10px; font-weight: 600; line-height: 1.3; text-transform: uppercase; }
+.live-table-directory { grid-column: 1; grid-row: 2; display: flex; flex-direction: column; min-width: 0; padding: 14px 7px; border-radius: 7px; }
+.live-table-directory h3 { margin: 0 7px 8px; font-size: 10px; font-weight: 600; line-height: 1.3; text-transform: uppercase; }
 .live-table-links { display: grid; flex: 1; grid-template-rows: repeat(6,minmax(38px,1fr)); gap: 4px; }
-.live-table-links>a { display: flex; align-items: center; min-width: 0; min-height: 38px; gap: 10px; padding: 4px 9px; border: 1px solid transparent; border-radius: 6px; color: #e1e9e4; font-size: 14px; font-weight: 700; line-height: 1.3; transition: background .2s,color .2s,border-color .2s; }
+.live-table-links>a { display: flex; align-items: center; min-width: 0; min-height: 38px; gap: 10px; padding: 4px 9px; border: 1px solid transparent; border-radius: 6px; font-size: 14px; font-weight: 700; line-height: 1.3; transition: background .2s,color .2s,border-color .2s; }
 .live-table-links>a>span { flex: 1; min-width: 0; }
 .live-sidebar-icon { flex-shrink: 0; width: 28px; height: 28px; object-fit: contain; }
 .live-table-links>a:is(:hover,:focus-visible) { border-color: #25d6a426; color: #009440; background: #063523; }

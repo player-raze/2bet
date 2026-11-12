@@ -119,14 +119,14 @@ watch(() => props.category, () => {
 <template>
   <div class="poker-page" :class="{ 'poker-page--popular': isPopular }">
     <h1 class="sr-only">{{ categoryLabel }}</h1>
-    <div class="poker-sticky-header sticky-header-seal">
-      <nav class="poker-category-nav" aria-label="Poker game categories">
+    <div class="poker-sticky-header sticky-header-seal light:bg-[#f4f8f5]">
+      <nav class="poker-category-nav light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm" aria-label="Poker game categories">
         <NuxtLink
           v-for="tab in tabs"
           :key="tab.key"
           :to="tab.to"
           class="poker-category-tab"
-          :class="{ 'poker-category-tab--active': category === tab.key }"
+          :class="{ 'poker-category-tab--active text-white': category === tab.key }"
           :aria-current="category === tab.key ? 'page' : undefined"
           :title="tab.label"
         >
@@ -135,15 +135,15 @@ watch(() => props.category, () => {
         </NuxtLink>
       </nav>
 
-      <div class="poker-toolbar bg-black">
+      <div class="poker-toolbar bg-black light:bg-transparent">
         <div class="poker-providers" role="group" :aria-label="translate('Filter by provider')">
           <RouletteEntryButton style="--roulette-entry-size: 38px; border: 0" class="block sm:hidden" />
           <button
             v-for="provider in availableProviders"
             :key="provider.key"
             type="button"
-            class="poker-provider-pill"
-            :class="{ 'poker-provider-pill--active': isProviderActive(provider.key) }"
+            class="poker-provider-pill light:border-[#d8e2dc] light:bg-white light:text-[#5d7066]"
+            :class="{ 'poker-provider-pill--active text-white': isProviderActive(provider.key) }"
             :aria-pressed="isProviderActive(provider.key)"
             :aria-label="provider.key === 'all' ? translate('All') : provider.label"
             :title="provider.key === 'all' ? translate('All') : provider.label"
@@ -159,19 +159,19 @@ watch(() => props.category, () => {
           </button>
         </div>
         <div class="poker-toolbar-actions">
-          <button type="button" class="poker-icon-button" :aria-expanded="searchOpen" aria-controls="poker-search" :aria-label="translate('Search poker games')" @click="searchOpen ? closeSearch() : openSearch()">
+          <button type="button" class="poker-icon-button light:border-[#d8e2dc] light:bg-white light:text-[#5d7066]" :aria-expanded="searchOpen" aria-controls="poker-search" :aria-label="translate('Search poker games')" @click="searchOpen ? closeSearch() : openSearch()">
             <Search :size="16" aria-hidden="true" />
           </button>
-          <button type="button" class="poker-icon-button" :class="{ 'poker-icon-button--active': hasFilters }" :aria-label="translate('Filter poker games')" @click="filterOpen = true">
+          <button type="button" class="poker-icon-button light:border-[#d8e2dc] light:bg-white light:text-[#5d7066]" :class="{ 'poker-icon-button--active': hasFilters }" :aria-label="translate('Filter poker games')" @click="filterOpen = true">
             <SlidersHorizontal :size="16" aria-hidden="true" />
           </button>
         </div>
       </div>
 
-      <div v-if="searchOpen" id="poker-search" class="poker-search">
+      <div v-if="searchOpen" id="poker-search" class="poker-search light:border-[#d8e2dc] light:bg-white light:text-[#10261c]">
         <Search :size="17" aria-hidden="true" />
         <input ref="searchInput" v-model="searchQuery" type="search" :placeholder="translate('Search game or provider')" :aria-label="translate('Search game or provider')" @keydown.esc="closeSearch" />
-        <button type="button" class="poker-icon-button" :aria-label="translate('Close search')" @click="closeSearch"><X :size="16" /></button>
+        <button type="button" class="poker-icon-button light:border-[#d8e2dc] light:bg-white light:text-[#5d7066]" :aria-label="translate('Close search')" @click="closeSearch"><X :size="16" /></button>
       </div>
     </div>
 
@@ -185,7 +185,7 @@ watch(() => props.category, () => {
       >
         <header v-if="isPopular" class="poker-section-header">
           <h2 :id="`poker-heading-${section.key}`">{{ section.label }}</h2>
-          <NuxtLink :to="`${basePath}/${section.key}`" class="poker-section-count" :aria-label="`View all ${section.games.length} ${section.label} games`">
+          <NuxtLink :to="`${basePath}/${section.key}`" class="poker-section-count light:border-[#d8e2dc] light:bg-white light:text-[#5d7066]" :aria-label="`View all ${section.games.length} ${section.label} games`">
             <span>{{ section.games.length }}</span><ChevronRight :size="14" aria-hidden="true" />
           </NuxtLink>
         </header>
@@ -265,7 +265,7 @@ watch(() => props.category, () => {
 
 .poker-category-tab:hover { color: var(--text); }
 .poker-category-tab--active,
-.poker-category-tab--active:hover { color: #fff; background: var(--main-color); }
+.poker-category-tab--active:hover { background: var(--main-color); }
 .poker-category-tab :deep(.fill-text-4),
 .poker-category-tab :deep(.fill-title-button-special) {
   fill: currentColor;
@@ -302,7 +302,7 @@ watch(() => props.category, () => {
   display: block;
 }
 
-.poker-provider-pill--active { color: #fff; background: var(--main-color); font-weight: 700; }
+.poker-provider-pill--active { background: var(--main-color); font-weight: 700; }
 
 .poker-icon-button {
   display: inline-flex;

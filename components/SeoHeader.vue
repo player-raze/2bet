@@ -141,7 +141,7 @@ const handleBack = (): void => {
     class="seo-header-sticky-wrapper sticky-header-seal sticky top-[var(--content-sticky-top)] z-20 -mx-1 p-0 pb-1 rounded-t-xl"
   >
     <header
-      class="seo-header flex items-center justify-between  rounded-lg bg-[#1f1f1f] px-2.5  shadow-sm select-none"
+      class="seo-header flex items-center justify-between rounded-lg bg-[#1f1f1f] light:bg-white light:border light:border-[#d8e2dc] px-2.5 shadow-sm select-none"
       :class="customClass"
     >
       <!-- Left: Back Button & Title -->
@@ -149,7 +149,7 @@ const handleBack = (): void => {
         <button
           v-if="showBack"
           type="button"
-          class="flex items-center justify-center h-6 w-6 bg-[#141414] rounded-full text-[#1FA779] transition-colors cursor-pointer shrink-0"
+          class="flex items-center justify-center h-6 w-6 bg-[#141414] light:bg-[#eaf5ee] rounded-full text-[#1FA779] transition-colors cursor-pointer shrink-0"
           :aria-label="translate('Go back')"
           @click="handleBack"
         >
@@ -157,7 +157,7 @@ const handleBack = (): void => {
         </button>
 
         <!-- Page Title (SEO H1) -->
-        <h1 class="text-[16px] font-bold text-white tracking-tight truncate leading-tight">
+        <h1 class="text-[16px] font-bold text-white light:text-[#10261c] tracking-tight truncate leading-tight">
           <slot name="title">
             {{ displayTitle }}
           </slot>
@@ -170,7 +170,7 @@ const handleBack = (): void => {
 
   <header
     v-else
-    class="seo-header flex items-center justify-between gap-2 rounded-lg  px-1 py-2 mb-2 shadow-sm select-none"
+    class="seo-header flex items-center justify-between gap-2 rounded-lg px-1 py-2 mb-2 shadow-sm select-none light:bg-white light:border light:border-[#d8e2dc]"
     :class="customClass"
   >
     <!-- Left: Back Button & Title -->
@@ -178,7 +178,7 @@ const handleBack = (): void => {
       <button
         v-if="showBack"
         type="button"
-        class="flex items-center justify-center h-6 w-6 bg-[#141414] rounded-full text-[#1FA779] transition-colors cursor-pointer shrink-0"
+        class="flex items-center justify-center h-6 w-6 bg-[#141414] light:bg-[#eaf5ee] rounded-full text-[#1FA779] transition-colors cursor-pointer shrink-0"
         :aria-label="translate('Go back')"
         @click="handleBack"
       >
@@ -186,7 +186,7 @@ const handleBack = (): void => {
       </button>
 
       <!-- Page Title (SEO H1) -->
-      <h1 class="text-[15px] font-bold text-white tracking-tight truncate leading-tight">
+      <h1 class="text-[15px] font-bold text-white light:text-[#10261c] tracking-tight truncate leading-tight">
         <slot name="title">
           {{ displayTitle }}
         </slot>

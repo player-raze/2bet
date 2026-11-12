@@ -93,30 +93,30 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <footer id="support" class="app-footer  w-full text-[#8e9491] select-none border-t border-white/[0.04] mt-1 sm:mt-4 px-3 sm:px-0">
-    <div class="footer-inner max-w-5xl mx-auto bg-[#141414] sm:bg-transparent rounded-xl px-4 sm:px-6  pb-20 sm:pb-12">
+  <footer id="support" class="app-footer w-full text-[#8e9491] light:text-[#5d7066] light:bg-[#edf4f0] select-none border-t border-white/[0.04] light:border-[#d8e2dc] mt-1 sm:mt-4 px-3 sm:px-0">
+    <div class="footer-inner max-w-5xl mx-auto bg-[#141414] light:bg-white rounded-xl px-4 sm:px-6 pb-20 sm:pb-12 border border-white/5 light:border-[#d8e2dc] light:shadow-sm">
       <!-- Section 1: Special Promotion -->
-      <div class="footer-accordion-item border-b border-white/[0.06] py-3.5">
+      <div class="footer-accordion-item border-b border-white/[0.06] light:border-[#eef2f0] py-3.5">
         <button
           type="button"
           class="flex w-full items-center justify-between text-left cursor-pointer group"
           :aria-expanded="openSections.specialPromotion"
           @click="toggleSection('specialPromotion')"
         >
-          <span class="text-[14px] sm:text-[15px] font-bold text-white tracking-tight group-hover:text-[#1fa779] transition-colors">{{ translate('Special Promotion') }}</span>
-          <ChevronUp v-if="openSections.specialPromotion" class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
-          <ChevronDown v-else class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
+          <span class="text-[14px] sm:text-[15px] font-bold text-white light:text-[#10261c] tracking-tight group-hover:text-[#1fa779] transition-colors">{{ translate('Special Promotion') }}</span>
+          <ChevronUp v-if="openSections.specialPromotion" class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
+          <ChevronDown v-else class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
         </button>
 
         <Transition name="accordion">
-          <div v-show="openSections.specialPromotion" class="pt-3 pb-1 text-[13px] sm:text-[14px] text-[#8e9491] space-y-2">
+          <div v-show="openSections.specialPromotion" class="pt-3 pb-1 text-[13px] sm:text-[14px] text-[#8e9491] light:text-[#5d7066] space-y-2">
             <div>
-              <NuxtLink to="/bonus/share-and-earn" class="hover:text-white transition-colors inline-block">
+              <NuxtLink to="/bonus/share-and-earn" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">
                 {{ translate('分享賺錢計劃') }}
               </NuxtLink>
             </div>
             <div>
-              <NuxtLink to="/bonuses" class="hover:text-white transition-colors inline-block">
+              <NuxtLink to="/bonuses" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">
                 {{ translate('Latest Deals') }}
               </NuxtLink>
             </div>
@@ -125,41 +125,41 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- Section 2: HELP -->
-      <div class="footer-accordion-item border-b border-white/[0.06] py-3.5">
+      <div class="footer-accordion-item border-b border-white/[0.06] light:border-[#eef2f0] py-3.5">
         <button
           type="button"
           class="flex w-full items-center justify-between text-left cursor-pointer group"
           :aria-expanded="openSections.help"
           @click="toggleSection('help')"
         >
-          <span class="text-[14px] sm:text-[15px] font-bold text-white uppercase tracking-wider group-hover:text-[#1fa779] transition-colors">{{ translate('HELP') }}</span>
-          <ChevronUp v-if="openSections.help" class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
-          <ChevronDown v-else class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
+          <span class="text-[14px] sm:text-[15px] font-bold text-white light:text-[#10261c] uppercase tracking-wider group-hover:text-[#1fa779] transition-colors">{{ translate('HELP') }}</span>
+          <ChevronUp v-if="openSections.help" class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
+          <ChevronDown v-else class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
         </button>
 
         <Transition name="accordion">
-          <div v-show="openSections.help" class="pt-3 pb-1 text-[13px] sm:text-[14px] text-[#8e9491] space-y-2">
-            <div><NuxtLink to="/egames/customer-service" class="hover:text-white transition-colors inline-block">{{ translate('24/7 Services') }}</NuxtLink></div>
-            <div><NuxtLink to="/game-rules/sports-betting-rules" class="hover:text-white transition-colors inline-block">{{ translate('Game Rules') }}</NuxtLink></div>
-            <div><NuxtLink to="/responsible-gaming" class="hover:text-white transition-colors inline-block">{{ translate('Responsible Gaming') }}</NuxtLink></div>
-            <div><NuxtLink to="/terms-of-use" class="hover:text-white transition-colors inline-block">{{ translate('Terms of Use') }}</NuxtLink></div>
-            <div><NuxtLink to="/privacy-policy" class="hover:text-white transition-colors inline-block">{{ translate('Privacy Policy') }}</NuxtLink></div>
-            <div><NuxtLink to="/about-us" class="hover:text-white transition-colors inline-block">{{ translate('About Us') }}</NuxtLink></div>
+          <div v-show="openSections.help" class="pt-3 pb-1 text-[13px] sm:text-[14px] text-[#8e9491] light:text-[#5d7066] space-y-2">
+            <div><NuxtLink to="/egames/customer-service" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('24/7 Services') }}</NuxtLink></div>
+            <div><NuxtLink to="/game-rules/sports-betting-rules" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('Game Rules') }}</NuxtLink></div>
+            <div><NuxtLink to="/responsible-gaming" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('Responsible Gaming') }}</NuxtLink></div>
+            <div><NuxtLink to="/terms-of-use" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('Terms of Use') }}</NuxtLink></div>
+            <div><NuxtLink to="/privacy-policy" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('Privacy Policy') }}</NuxtLink></div>
+            <div><NuxtLink to="/about-us" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('About Us') }}</NuxtLink></div>
           </div>
         </Transition>
       </div>
 
       <!-- Section 3: Responsibility & Reputation -->
-      <div class="footer-accordion-item border-b border-white/[0.06] py-3.5">
+      <div class="footer-accordion-item border-b border-white/[0.06] light:border-[#eef2f0] py-3.5">
         <button
           type="button"
           class="flex w-full items-center justify-between text-left cursor-pointer group"
           :aria-expanded="openSections.responsibility"
           @click="toggleSection('responsibility')"
         >
-          <span class="text-[14px] sm:text-[15px] font-bold text-white tracking-tight group-hover:text-[#1fa779] transition-colors">{{ translate('Responsibility & Reputation') }}</span>
-          <ChevronUp v-if="openSections.responsibility" class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
-          <ChevronDown v-else class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
+          <span class="text-[14px] sm:text-[15px] font-bold text-white light:text-[#10261c] tracking-tight group-hover:text-[#1fa779] transition-colors">{{ translate('Responsibility & Reputation') }}</span>
+          <ChevronUp v-if="openSections.responsibility" class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
+          <ChevronDown v-else class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
         </button>
 
         <Transition name="accordion">
@@ -177,20 +177,20 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- Section 4: About Us -->
-      <div class="footer-accordion-item border-b border-white/[0.06] py-3.5">
+      <div class="footer-accordion-item border-b border-white/[0.06] light:border-[#eef2f0] py-3.5">
         <button
           type="button"
           class="flex w-full items-center justify-between text-left cursor-pointer group"
           :aria-expanded="openSections.aboutUs"
           @click="toggleSection('aboutUs')"
         >
-          <span class="text-[14px] sm:text-[15px] font-bold text-white tracking-tight group-hover:text-[#1fa779] transition-colors">{{ translate('About Us') }}</span>
-          <ChevronUp v-if="openSections.aboutUs" class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
-          <ChevronDown v-else class="h-4 w-4 text-white/50 group-hover:text-white transition-colors" />
+          <span class="text-[14px] sm:text-[15px] font-bold text-white light:text-[#10261c] tracking-tight group-hover:text-[#1fa779] transition-colors">{{ translate('About Us') }}</span>
+          <ChevronUp v-if="openSections.aboutUs" class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
+          <ChevronDown v-else class="h-4 w-4 text-white/50 light:text-[#5d7066] group-hover:text-white light:group-hover:text-[#10261c] transition-colors" />
         </button>
 
         <Transition name="accordion">
-          <div v-show="openSections.aboutUs" class="pt-4 pb-2 text-[13px] sm:text-[13.5px] text-[#8e9491] leading-relaxed space-y-3">
+          <div v-show="openSections.aboutUs" class="pt-4 pb-2 text-[13px] sm:text-[13.5px] text-[#8e9491] light:text-[#5d7066] leading-relaxed space-y-3">
             <!-- Brand Logo -->
             <NuxtLink to="/" class="inline-block mb-1">
               <img
@@ -251,7 +251,7 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- Server Time & Copyright -->
-      <div class="text-[11px] sm:text-[12px] mt-5 text-[#717673] space-y-1 mb-8">
+      <div class="text-[11px] sm:text-[12px] mt-5 text-[#717673] light:text-[#768b80] space-y-1 mb-8">
         <ClientOnly>
           <p>{{ translate('Server Time') }}: {{ serverTime }} (GMT+08:00)</p>
           <template #fallback>
@@ -270,7 +270,6 @@ onBeforeUnmount(() => {
   position: relative;
   z-index: 20;
   width: 100%;
-  color: #8e9491;
 }
 
 .footer-inner {
@@ -315,48 +314,5 @@ onBeforeUnmount(() => {
 .accordion-leave-to {
   opacity: 0;
   transform: translateY(-4px);
-}
-
-/* Light Mode Overrides */
-:global(html[data-theme='light']) .app-footer {
-  background: #edf4f0 !important;
-  color: #5d7066 !important;
-  border-top-color: rgba(3, 98, 66, 0.12) !important;
-}
-
-:global(html[data-theme='light']) .app-footer .footer-accordion-item {
-  border-bottom-color: rgba(10, 62, 39, 0.08) !important;
-}
-
-:global(html[data-theme='light']) .app-footer button span {
-  color: #14251d !important;
-}
-
-:global(html[data-theme='light']) .app-footer button svg {
-  color: #5d7066 !important;
-}
-
-:global(html[data-theme='light']) .app-footer button:hover span {
-  color: var(--main-color) !important;
-}
-
-:global(html[data-theme='light']) .app-footer a {
-  color: #5d7066;
-}
-
-:global(html[data-theme='light']) .app-footer a:hover {
-  color: var(--main-color) !important;
-}
-
-:global(html[data-theme='light']) .app-footer h4 {
-  color: #14251d !important;
-}
-
-:global(html[data-theme='light']) .app-footer p {
-  color: #5d7066;
-}
-
-:global(html[data-theme='light']) .app-footer .border-white\/\[0\.08\] {
-  border-top-color: rgba(10, 62, 39, 0.08) !important;
 }
 </style>

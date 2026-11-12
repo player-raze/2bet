@@ -80,7 +80,7 @@ const destination = (sport: typeof sports[number]): string => {
 </script>
 
 <template>
-  <nav class="mobile-sports-nav" :aria-label="translate('Sports')">
+  <nav class="mobile-sports-nav bg-[#1f1f1f] light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm" :aria-label="translate('Sports')">
     <NuxtLink
       v-for="sport in sports"
       :key="sport.key"
@@ -115,7 +115,7 @@ const destination = (sport: typeof sports[number]): string => {
     <NuxtLink
       :to="bybetRedirectSearch"
       external
-      class="mobile-sports-nav__item mobile-sports-nav__search"
+      class="mobile-sports-nav__item mobile-sports-nav__search text-white light:text-[#10261c] bg-transparent"
       :aria-label="translate('Search sports')"
     >
       <Search :size="24" :stroke-width="1.5" aria-hidden="true" />
@@ -136,7 +136,6 @@ const destination = (sport: typeof sports[number]): string => {
     margin-bottom: 8px;
     padding: 8px;
     border-radius: 12px;
-    background: #1f1f1f;
     scrollbar-width: none;
     overscroll-behavior-inline: contain;
   }
@@ -153,7 +152,7 @@ const destination = (sport: typeof sports[number]): string => {
   }
 
   .mobile-sports-nav__item--active { background: var(--main-color); }
-  .mobile-sports-nav__search { border: 0; color: #fff; background: transparent; }
+  .mobile-sports-nav__search { border: 0; background: transparent; }
   .mobile-sports-nav__item img,
   .mobile-sports-nav__img {
     max-width: 30px;

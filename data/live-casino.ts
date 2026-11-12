@@ -31,7 +31,7 @@ export const LIVE_CASINO_CATEGORIES: LiveCasinoCategory[] = [
   { key: 'dragon-tiger', label: 'Dragon Tiger' },
   { key: 'roulette', label: 'Roulette' },
   { key: 'sicbo', label: 'Sicbo' },
-  { key: 'evolution', label: 'Evolution' },
+  { key: 'evolution', label: '' },
 ]
 
 export const GAME_SHOW: LiveCasinoTable[] = [

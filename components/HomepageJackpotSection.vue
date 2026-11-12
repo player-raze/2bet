@@ -72,7 +72,7 @@ let winnerTimer: ReturnType<typeof setTimeout> | null = null
 
 const scheduleNextWinner = (): void => {
   if (!import.meta.client) return
-  const delay = Math.floor(Math.random() * (11000 - 6500 + 1)) + 6500
+  const delay = 3000
   winnerTimer = setTimeout(() => {
     if (!isPaused.value && !isHovered.value) {
       const randomUser = usernamesList[Math.floor(Math.random() * usernamesList.length)] || 'player_88'
@@ -106,9 +106,9 @@ onBeforeUnmount(() => {
 <template>
   <section id="jackpot" class="homepage-jackpot-section" aria-labelledby="jackpot-title">
     <!-- Section Header -->
-    <header class="jackpot-header flex items-center justify-between">
+    <header class="jackpot-header flex items-center justify-between border-b border-white/[0.09] light:border-b-[#d8e2dc]">
       <div class="jackpot-heading flex items-center min-w-0">
-        <h2 id="jackpot-title">
+        <h2 id="jackpot-title" class="text-white light:text-[#10261c]">
           <img
             src="/icons/egames/jackpot.webp"
             class="allgames-heading-symbol allgames-heading-image"
@@ -118,10 +118,10 @@ onBeforeUnmount(() => {
           />
           {{ translate('Top Jackpots') }}
         </h2>
-        <p>{{ translate('Spin for life-changing progressive jackpots') }}</p>
+        <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/15 light:border-l-[#d8e2dc]">{{ translate('Spin for life-changing progressive jackpots') }}</p>
       </div>
 
-      <NuxtLink to="/egames/jackpot/all" class="jackpot-view-all">
+      <NuxtLink to="/egames/jackpot/all" class="jackpot-view-all text-[#32d49a] hover:text-[#019440] light:text-[#019440] light:hover:text-[#026b34]">
         {{ translate('View all jackpots') }}
         <ArrowRight :size="16" aria-hidden="true" />
       </NuxtLink>
@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
 
         <!-- Top Badges Row -->
         <div class="jdb-card-top flex items-center justify-between flex-wrap gap-2">
-          <div class="jdb-provider-pill flex items-center gap-2">
+          <div class="jdb-provider-pill flex items-center gap-2 border border-white/10 bg-white/[0.04] light:border-[#d8e2dc] light:bg-[#f4f8f5]">
             <img
               :src="themedLogo('/images/providers/jdb.webp')"
               alt="JDB Gaming"
@@ -145,11 +145,11 @@ onBeforeUnmount(() => {
               loading="lazy"
               decoding="async"
             />
-            <span class="jdb-provider-name">JDB Gaming</span>
-            <span class="jdb-progressive-tag">{{ translate('Progressive Jackpot') }}</span>
+            <span class="jdb-provider-name text-white light:text-[#10261c]">JDB Gaming</span>
+            <span class="jdb-progressive-tag text-[#32d49a] bg-[#019440]/20 border border-[#019440]/40 light:text-[#019440] light:bg-[#019440]/10 light:border-[#019440]/30">{{ translate('Progressive Jackpot') }}</span>
           </div>
 
-          <div class="jdb-live-indicator flex items-center gap-1.5">
+          <div class="jdb-live-indicator flex items-center gap-1.5 text-[#f87171] bg-red-500/10 border border-red-500/25">
             <span class="jdb-pulsing-dot" />
             <span>{{ translate('Live Drop') }}</span>
           </div>
@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
         <!-- Center Stage: Wordmark + Panda Mascot -->
         <div class="jdb-stage">
           <div class="jdb-wordmark-container">
-            <span class="jdb-eyebrow">{{ translate('GRAND PRIZE POOL') }}</span>
+            <span class="jdb-eyebrow text-[#32d49a] light:text-[#019440]">{{ translate('GRAND PRIZE POOL') }}</span>
             <img
               src="/images/jackpot/jackpot.webp"
               alt="JACKPOT"
@@ -186,19 +186,19 @@ onBeforeUnmount(() => {
 
         <!-- 3D Digit Counter Plate -->
         <div
-          class="jackpot-counter-plate"
+          class="jackpot-counter-plate light:bg-[#f0f7f3] light:border-emerald-500/25"
           role="status"
           aria-live="polite"
           :aria-label="`JDB Jackpot: R$ ${formatJackpotAmount(jdbDisplay)}`"
         >
-          <div class="jackpot-currency-badge" aria-hidden="true">
+          <div class="jackpot-currency-badge light:bg-[#d8eee3] light:text-[#026b34] light:border-emerald-500/35" aria-hidden="true">
             <span>R$</span>
           </div>
 
           <div class="jackpot-counter-tiles" aria-hidden="true">
             <template v-for="(character, index) in jackpotCharacters" :key="`${index}-${character}`">
               <!-- Digit plate -->
-              <div v-if="/\d/.test(character)" class="digit-box">
+              <div v-if="/\d/.test(character)" class="digit-box light:bg-white light:border-emerald-500/20">
                 <img
                   :src="`/images/jackpot/${character}.webp`"
                   :alt="character"
@@ -224,11 +224,11 @@ onBeforeUnmount(() => {
         <!-- Bottom Action Row -->
         <div class="jdb-card-footer flex items-center justify-between flex-wrap gap-3">
           <div class="jdb-perks flex items-center gap-3">
-            <span class="jdb-perk-pill">
+            <span class="jdb-perk-pill text-[#9ca3af] light:text-[#5d7066]">
               <Sparkles :size="13" class="text-[#32d49a]" />
               {{ translate('Drop on any spin') }}
             </span>
-            <span class="jdb-perk-pill hidden sm:inline-flex">
+            <span class="jdb-perk-pill hidden sm:inline-flex text-[#9ca3af] light:text-[#5d7066]">
               <Flame :size="13" class="text-[#32d49a]" />
               {{ translate('36 Jackpot Games') }}
             </span>
@@ -239,7 +239,7 @@ onBeforeUnmount(() => {
             external
             target="_blank"
             rel="noopener noreferrer"
-            class="jdb-cta-btn"
+            class="jdb-cta-btn text-white light:text-white bg-gradient-to-br from-[#01b04c] via-[#019440] to-[#017a35]"
           >
             <span>{{ translate('Spin to Win') }}</span>
             <Play :size="15" fill="currentColor" />
@@ -249,7 +249,7 @@ onBeforeUnmount(() => {
 
       <!-- Live Winners Card -->
       <div
-        class="winners-card"
+        class="winners-card light:bg-white light:border-emerald-500/20 light:shadow-md"
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
       >
@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
         <div class="winners-card-header flex items-center justify-between">
           <div class="winners-title-group flex items-center gap-2">
             <Trophy :size="18" class="text-[#32d49a]" />
-            <h3 class="winners-heading">{{ translate('Recent Winners') }}</h3>
+            <h3 class="winners-heading text-white light:text-[#10261c]">{{ translate('Recent Winners') }}</h3>
           </div>
 
         </div>
@@ -268,7 +268,7 @@ onBeforeUnmount(() => {
             <li
               v-for="winner in winners"
               :key="winner.id"
-              class="winner-row"
+              class="winner-row border border-[#019440]/15 bg-black/60 light:bg-white light:border-b-emerald-500/10"
             >
               <div class="winner-player-info flex items-center gap-3 min-w-0">
                 <div class="winner-provider-logo-box">
@@ -281,26 +281,26 @@ onBeforeUnmount(() => {
                   />
                 </div>
                 <div class="winner-meta flex flex-col min-w-0">
-                  <span class="winner-username truncate">{{ winner.username }}</span>
-                  <span class="winner-timestamp">{{ winner.date }}</span>
+                  <span class="winner-username text-[#f3f4f6] truncate light:text-[#10261c]">{{ winner.username }}</span>
+                  <span class="winner-timestamp text-[#6b7280] light:text-[#5d7066]">{{ winner.date }}</span>
                 </div>
               </div>
 
               <div class="winner-prize-box flex items-center gap-1.5">
-                <span class="winner-amount">{{ winner.amount }}</span>
+                <span class="winner-amount text-[#32d49a] light:text-[#019440] font-bold">{{ winner.amount }}</span>
               </div>
             </li>
           </TransitionGroup>
         </div>
 
         <!-- Winners Footer -->
-        <div class="winners-card-footer flex items-center justify-between">
-          <div class="winners-stat flex items-center gap-1.5">
+        <div class="winners-card-footer flex items-center justify-between text-[#9ca3af] light:border-t-emerald-500/10 light:text-[#5d7066]">
+          <div class="winners-stat flex items-center gap-1.5 text-[#9ca3af] light:text-[#5d7066]">
             <Flame :size="14" class="text-[#32d49a] flex-shrink-0" />
             <span class="truncate">{{ translate('Over 2,450 payouts awarded today') }}</span>
           </div>
 
-          <NuxtLink to="/egames/jackpot/all" class="winners-view-all-link flex items-center gap-1">
+          <NuxtLink to="/egames/jackpot/all" class="winners-view-all-link flex items-center gap-1 text-[#32d49a] hover:text-[#019440] light:text-[#019440] light:hover:text-[#026b34]">
             <span>{{ translate('View all winners') }}</span>
             <ArrowRight :size="13" />
           </NuxtLink>
@@ -335,7 +335,6 @@ onBeforeUnmount(() => {
   align-items: center;
   flex-shrink: 0;
   gap: 12px;
-  color: #fff;
   font-size: var(--allgames-heading-size);
   font-weight: var(--homepage-display-weight);
   line-height: 1.2;
@@ -344,8 +343,6 @@ onBeforeUnmount(() => {
 
 .jackpot-heading > p {
   padding-left: 22px;
-  border-left: 1px solid #ffffff26;
-  color: #a8b6bc;
   font-size: 14px;
   line-height: 22px;
 }
@@ -355,7 +352,6 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 10px;
   min-height: 32px;
-  color: #32d49a;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
@@ -363,7 +359,6 @@ onBeforeUnmount(() => {
 }
 
 .jackpot-view-all:hover {
-  color: #019440;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -427,7 +422,6 @@ onBeforeUnmount(() => {
 }
 
 .jdb-provider-name {
-  color: #fff;
   font-size: 12px;
   font-weight: 700;
 }
@@ -435,9 +429,6 @@ onBeforeUnmount(() => {
 .jdb-progressive-tag {
   padding: 2px 8px;
   border-radius: 9999px;
-  color: #32d49a;
-  background: rgba(1, 148, 64, 0.2);
-  border: 1px solid rgba(1, 148, 64, 0.4);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -445,10 +436,7 @@ onBeforeUnmount(() => {
 
 .jdb-live-indicator {
   padding: 4px 10px;
-  border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 9999px;
-  color: #f87171;
-  background: rgba(239, 68, 68, 0.1);
   font-size: 11px;
   font-weight: 600;
 }
@@ -483,7 +471,6 @@ onBeforeUnmount(() => {
 }
 
 .jdb-eyebrow {
-  color: #32d49a;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -618,7 +605,6 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #9ca3af;
   font-size: 12px;
   font-weight: 500;
 }
@@ -663,7 +649,6 @@ onBeforeUnmount(() => {
 }
 
 .winners-heading {
-  color: #fff;
   font-size: 15px;
   font-weight: 750;
 }
@@ -745,7 +730,6 @@ onBeforeUnmount(() => {
 }
 
 .winner-username {
-  color: #f3f4f6;
   font-family: monospace;
   font-size: 13px;
   font-weight: 600;
@@ -753,14 +737,12 @@ onBeforeUnmount(() => {
 }
 
 .winner-timestamp {
-  color: #6b7280;
   font-family: monospace;
   font-size: 11px;
   line-height: 1.2;
 }
 
 .winner-amount {
-  color: #32d49a;
   font-family: monospace;
   font-size: 13px;
   font-weight: 750;
@@ -787,24 +769,20 @@ onBeforeUnmount(() => {
 .winners-card-footer {
   padding-top: 10px;
   border-top: 1px solid rgba(1, 148, 64, 0.18);
-  color: #9ca3af;
   font-size: 12px;
 }
 
 .winners-stat {
   font-size: 12px;
-  color: #9ca3af;
 }
 
 .winners-view-all-link {
-  color: #32d49a;
   font-weight: 600;
   white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .winners-view-all-link:hover {
-  color: #019440;
   text-decoration: underline;
   text-underline-offset: 3px;
 }

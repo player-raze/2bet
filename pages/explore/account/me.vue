@@ -52,7 +52,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
     <div class="me-hero-wrapper relative w-full overflow-hidden">
       <!-- Frosted Profile Card -->
       <div class="px-3.5 pt-2 pb-4 lg:px-6 lg:py-6">
-        <div class="me-frosted-card mx-auto max-w-xl rounded-[20px] p-4 lg:p-6 bg-white/[0.14] backdrop-blur-xl border border-white/25 shadow-0 ">
+        <div class="me-frosted-card mx-auto max-w-xl rounded-[20px] p-4 lg:p-6 bg-white/[0.15] backdrop-blur-xl border border-white/25 shadow-0 ">
           <!-- User Avatar Silhouette -->
           <div class="me-top-btn w-14 h-14 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-3">
             <UserRound class="w-7 h-7 text-white/70" :stroke-width="2" />
@@ -64,7 +64,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               :href="loginUrl"
               target="_blank"
               rel="noopener noreferrer"
-              class="me-top-btn h-9 rounded-full bg-white/20 hover:bg-white/30 text-white font-medium text-[14px] flex items-center justify-center transition-all max-w-[135px]"
+              class="me-top-btn h-9 rounded-full bg-white/40  text-white font-bold text-[14px] flex items-center justify-center transition-all max-w-[135px]"
             >
               {{ translate('Login') }}
             </a>
@@ -72,7 +72,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               :href="bybetRedirectRegister"
               target="_blank"
               rel="noopener noreferrer"
-              class="me-top-btn h-9 rounded-full bg-white/20 hover:bg-white/30 text-white font-medium text-[14px] flex items-center justify-center transition-all max-w-[135px]"
+              class="me-top-btn h-9 rounded-full bg-white/40 text-white font-bold text-[14px] flex items-center justify-center transition-all max-w-[135px]"
             >
               {{ translate('Sign Up') }}
             </a>
@@ -87,7 +87,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               :href="bybetRedirectUrl"
               target="_blank"
               rel="noopener noreferrer"
-              class="me-top-btn h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-[13px] font-normal flex items-center justify-center transition-all"
+              class="me-top-btn h-8 rounded-full bg-white/40  text-white text-[13px] font-bold flex items-center justify-center transition-all"
             >
               {{ translate('Deposit') }}
             </a>
@@ -95,7 +95,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               :href="bybetRedirectUrl"
               target="_blank"
               rel="noopener noreferrer"
-              class="me-top-btn h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-[13px] font-normal flex items-center justify-center transition-all"
+              class="me-top-btn h-8 rounded-full bg-white/40 text-white text-[13px] font-bold flex items-center justify-center transition-all"
             >
               {{ translate('Withdraw') }}
             </a>
@@ -103,7 +103,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               :href="bybetRedirectUrl"
               target="_blank"
               rel="noopener noreferrer"
-              class="me-top-btn h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-[13px] font-normal flex items-center justify-center transition-all"
+              class="me-top-btn h-8 rounded-full bg-white/40 text-white text-[13px] font-bold flex items-center justify-center transition-all"
             >
               {{ translate('VIP') }}
             </a>
@@ -111,7 +111,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               :href="bybetRedirectUrl"
               target="_blank"
               rel="noopener noreferrer"
-              class="me-top-btn h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-[13px] font-normal flex items-center justify-center transition-all"
+              class="me-top-btn h-8 rounded-full bg-white/40 text-white text-[13px] font-bold flex items-center justify-center transition-all"
             >
               {{ translate('Bonus') }}
             </a>
@@ -301,11 +301,11 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               <span class="text-[14px] text-white">{{ translate('Theme') }}</span>
             </div>
             <!-- Segmented Pill Toggle -->
-            <div class="flex items-center rounded-full bg-black p-0.5 text-[13px]">
+            <div class="flex items-center rounded-full bg-black p-0.5 text-[13px] light:bg-[#eaf5ee] light:border light:border-[#d8e2dc]">
               <button
                 type="button"
                 class="rounded-full px-3 py-1 text-[12px] font-medium transition-all cursor-pointer"
-                :class="selectedTheme === 'International' ? 'bg-[var(--main-color)] text-white font-semibold shadow' : 'text-white/70 hover:text-white'"
+                :class="selectedTheme === 'International' ? 'bg-[var(--main-color)] text-white font-semibold shadow' : 'text-white/70 hover:text-white light:text-[#5d7066]'"
                 @click="selectedTheme = 'International'"
               >
                 {{ translate('International') }}
@@ -313,7 +313,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               <button
                 type="button"
                 class="rounded-full px-3 py-1 text-[12px] font-medium transition-all cursor-pointer"
-                :class="selectedTheme === 'Asia' ? 'bg-[var(--main-color)] text-white font-semibold shadow' : 'text-white/70 hover:text-white'"
+                :class="selectedTheme === 'Asia' ? 'bg-[var(--main-color)] text-white font-semibold shadow' : 'text-white/70 hover:text-white light:text-[#5d7066]'"
                 @click="selectedTheme = 'Asia'"
               >
                 {{ translate('Asia') }}
@@ -374,11 +374,11 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               <span class="text-[14px] text-white">{{ translate('Mode') }}</span>
             </div>
             <!-- Segmented Pill Toggle -->
-            <div class="flex items-center rounded-full bg-black p-0.5 text-[13px]">
+            <div class="flex items-center rounded-full bg-black p-0.5 text-[13px] light:bg-[#eaf5ee] light:border light:border-[#d8e2dc]">
               <button
                 type="button"
                 class="rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-all cursor-pointer"
-                :class="themePreference === 'light' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white/70 hover:text-white'"
+                :class="themePreference === 'light' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white/70 hover:text-white light:text-[#5d7066]'"
                 :aria-pressed="themePreference === 'light'"
                 @click="setThemePreference('light')"
               >
@@ -387,7 +387,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               <button
                 type="button"
                 class="rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-all cursor-pointer"
-                :class="themePreference === 'dark' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white/70 hover:text-white'"
+                :class="themePreference === 'dark' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white/70 hover:text-white light:text-[#5d7066]'"
                 :aria-pressed="themePreference === 'dark'"
                 @click="setThemePreference('dark')"
               >
@@ -396,7 +396,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
               <button
                 type="button"
                 class="rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-all cursor-pointer"
-                :class="themePreference === 'auto' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white/70 hover:text-white'"
+                :class="themePreference === 'auto' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white/70 hover:text-white light:text-[#5d7066]'"
                 :aria-pressed="themePreference === 'auto'"
                 @click="setThemePreference('auto')"
               >
@@ -745,11 +745,11 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
             <span class="text-[14px] text-white">{{ translate('Theme') }}</span>
           </div>
           <!-- Toggle Pill -->
-          <div class="flex items-center rounded-full bg-black p-0.5 text-[14px]">
+          <div class="flex items-center rounded-full bg-black p-0.5 text-[14px] light:bg-[#eaf5ee] light:border light:border-[#d8e2dc]">
             <button
               type="button"
               class="rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-all cursor-pointer"
-              :class="selectedTheme === 'International' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white '"
+              :class="selectedTheme === 'International' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white light:text-[#5d7066]'"
               @click="selectedTheme = 'International'"
             >
               {{ translate('International') }}
@@ -757,7 +757,7 @@ const selectedTheme = ref<'International' | 'Asia'>('International')
             <button
               type="button"
               class="rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-all cursor-pointer"
-              :class="selectedTheme === 'Asia' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white '"
+              :class="selectedTheme === 'Asia' ? 'bg-[var(--main-color)] text-white font-bold shadow' : 'text-white light:text-[#5d7066]'"
               @click="selectedTheme = 'Asia'"
             >
               {{ translate('Asia') }}

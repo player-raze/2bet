@@ -31,11 +31,11 @@ const appDownloadUrl = `${bybetRedirectUrl}/downloadApp?p=${bybetRedirectCode}`
 </script>
 
 <template>
-  <div class="download-app-page max-w-4xl mx-auto pb-16 text-white">
+  <div class="download-app-page max-w-4xl mx-auto pb-16 text-white light:text-[#10261c]">
     <SubpageHeader title="Download APP" back-to="/account/me" class="download-app-header mb-2.5 sm:mb-3" />
 
     <div class="download-content">
-      <section class="app-card" aria-label="2bet app download">
+      <section class="app-card bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" aria-label="2bet app download">
         <img
           src="/images/app/league-player.webp"
           alt="Football player in a green kit with LEAGUE lettering"
@@ -48,18 +48,18 @@ const appDownloadUrl = `${bybetRedirectUrl}/downloadApp?p=${bybetRedirectCode}`
 
         <button
           type="button"
-          class="native-app-row"
+          class="native-app-row bg-[#242424] text-white hover:bg-[#292929] light:bg-[#f4f8f5] light:text-[#10261c] light:border light:border-[#d8e2dc] light:shadow-xs"
           aria-haspopup="dialog"
           :aria-expanded="showInstallationGuide"
           @click="showInstallationGuide = true"
         >
           <span class="native-app-icon" aria-hidden="true">
             <img src="/icons/2bet-square.webp" alt="" width="36" height="36">
-            <span>Native</span>
+            <span class="text-[#08743b] bg-white">Native</span>
           </span>
           <span class="native-app-copy">
-            <strong>Native APP</strong>
-            <span>Standard App</span>
+            <strong class="text-white light:text-[#10261c]">Native APP</strong>
+            <span class="text-[#999] light:text-[#5d7066]">Standard App</span>
           </span>
           <span class="native-app-arrow" aria-hidden="true"><ChevronRight :size="18" /></span>
         </button>
@@ -85,7 +85,6 @@ const appDownloadUrl = `${bybetRedirectUrl}/downloadApp?p=${bybetRedirectCode}`
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 5%);
   border-radius: 22px;
-  background: #141414;
 }
 .download-player {
   display: block;
@@ -104,12 +103,9 @@ const appDownloadUrl = `${bybetRedirectUrl}/downloadApp?p=${bybetRedirectCode}`
   padding: 12px 16px;
   border: 0;
   border-radius: 16px;
-  color: #fff;
-  background: #242424;
   text-align: left;
   cursor: pointer;
 }
-.native-app-row:hover { background: #292929; }
 .native-app-row:focus-visible { outline: 2px solid #48daa6; outline-offset: 3px; }
 .native-app-icon { position: relative; width: 36px; height: 36px; flex: 0 0 36px; }
 .native-app-icon img { display: block; width: 36px; height: 36px; border-radius: 8px; }
@@ -119,15 +115,13 @@ const appDownloadUrl = `${bybetRedirectUrl}/downloadApp?p=${bybetRedirectCode}`
   left: 2px;
   padding: 0 2px;
   border-radius: 3px;
-  color: #08743b;
-  background: #fff;
   font-size: 4px;
   font-weight: 700;
   line-height: 6px;
 }
 .native-app-copy { display: flex; min-width: 0; flex: 1 1 auto; flex-direction: column; }
 .native-app-copy strong { font-size: 16px; font-weight: 700; line-height: 20px; }
-.native-app-copy > span { color: #999; font-size: 12px; line-height: 16px; }
+.native-app-copy > span { font-size: 12px; line-height: 16px; }
 .native-app-arrow {
   display: grid;
   width: 32px;

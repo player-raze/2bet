@@ -85,11 +85,11 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
           @select="emit('select', $event)"
         />
       </div>
-      <p v-if="!tables.length" class="casino-section-empty">This is no game currently.</p>
-      <button v-if="canScrollLeft" class="casino-section-arrow casino-section-arrow--previous" type="button" :aria-label="`Previous ${title} tables`" @click="scrollTables(-1)">
+      <p v-if="!tables.length" class="casino-section-empty text-[#929292] light:text-[#5d7066]">This is no game currently.</p>
+      <button v-if="canScrollLeft" class="casino-section-arrow casino-section-arrow--previous bg-[#141414] text-white border-2 border-[#333] light:bg-white light:text-[#10261c] light:border-[#d8e2dc] light:shadow-md" type="button" :aria-label="`Previous ${title} tables`" @click="scrollTables(-1)">
         <ChevronLeft :size="19" aria-hidden="true" />
       </button>
-      <button v-if="canScrollRight" class="casino-section-arrow casino-section-arrow--next" type="button" :aria-label="`Next ${title} tables`" @click="scrollTables(1)">
+      <button v-if="canScrollRight" class="casino-section-arrow casino-section-arrow--next bg-[#141414] text-white border-2 border-[#333] light:bg-white light:text-[#10261c] light:border-[#d8e2dc] light:shadow-md" type="button" :aria-label="`Next ${title} tables`" @click="scrollTables(1)">
         <ChevronRight :size="19" aria-hidden="true" />
       </button>
     </div>
@@ -102,14 +102,14 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
 .casino-table-section .casino-section-header { margin: 0 0 14px; color: var(--main-color); font-size: 16px; font-weight: 400; line-height: 22px; }
 .casino-table-section--featured h2,
 .casino-table-section--featured .casino-section-header { color: var(--heading); }
-.casino-section-empty { margin: 0; color: #929292; font-size: 12px; line-height: 20px; }
+.casino-section-empty { margin: 0; font-size: 12px; line-height: 20px; }
 .casino-section-viewport { position: relative; min-width: 0; }
 .casino-section-list { display: grid; min-width: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 8px; }
 .casino-table-section--row .casino-section-list { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
 .casino-table-section--row .casino-section-list::-webkit-scrollbar { display: none; }
 .casino-table-section--row .casino-section-list > :deep(.casino-table-card) { width: 190px; height: auto; flex: 0 0 190px; }
 .casino-table-section--featured .casino-section-list > :deep(.casino-table-card) { width: 200px; flex-basis: 200px; }
-.casino-section-arrow { position: absolute; top: 50%; z-index: 2; display: grid; width: 32px; height: 32px; place-items: center; transform: translateY(-50%); border: 3px solid #333; border-radius: 50%; color: #fff; background: #141414; cursor: pointer; }
+.casino-section-arrow { position: absolute; top: 50%; z-index: 2; display: grid; width: 32px; height: 32px; place-items: center; transform: translateY(-50%); border-radius: 50%; cursor: pointer; }
 .casino-section-arrow--previous { left: 0; }
 .casino-section-arrow--next { right: 0; }
 .casino-section-arrow:focus-visible { outline: 2px solid var(--main-color); outline-offset: 2px; }

@@ -17,7 +17,7 @@ const providerLogo = (provider: string): string => {
 
 <template>
   <section class="provider-section" aria-labelledby="providers-title">
-    <p id="providers-title">Game providers</p>
+    <p id="providers-title" class="text-[#73827b] light:text-[#5d7066]">Game providers</p>
     <div class="provider-list">
       <a
         v-for="provider in providers"
@@ -25,6 +25,7 @@ const providerLogo = (provider: string): string => {
         :href="externalSiteUrl"
         target="_blank"
         rel="nofollow noopener noreferrer"
+        class="text-[#83938b] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
         :aria-label="`Browse ${provider} games on 2bets in a new tab`"
       >
         <img
@@ -52,7 +53,6 @@ const providerLogo = (provider: string): string => {
 
 .provider-section p {
   margin: 0 0 0.8rem;
-  color: #73827b;
   font-size: 0.59rem;
   font-weight: 750;
   letter-spacing: 0.1em;
@@ -79,7 +79,6 @@ const providerLogo = (provider: string): string => {
   padding: 0 0.9rem;
   border: 1px solid var(--border);
   border-radius: 0.5rem;
-  color: #83938b;
   font-size: 0.68rem;
   font-weight: 700;
   background: rgba(255, 255, 255, 0.018);
@@ -88,7 +87,6 @@ const providerLogo = (provider: string): string => {
 }
 
 .provider-list a:hover {
-  color: var(--text);
   background: var(--surface);
 }
 

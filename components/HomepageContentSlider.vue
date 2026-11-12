@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<{
   featuredFirst?: boolean
   resetKey?: string
   mobileDots?: boolean
+  mobileAutoplayMs?: number
 }>(), { visibleCards: 5 })
 
 const track = ref<HTMLElement | null>(null)
@@ -30,6 +31,9 @@ let resizeObserver: ResizeObserver | undefined
 let cachedStep = 0
 let cachedGap = 0
 let scrollRafId: number | null = null
+let autoplayTimer: ReturnType<typeof setInterval> | null = null
+let mobileMediaQuery: MediaQueryList | null = null
+let isAutoplayPaused = false
 
 function updateMetrics() {
   const element = track.value
@@ -45,7 +49,8 @@ function updatePosition() {
   if (!element) return
   atStart.value = element.scrollLeft <= 2
   atEnd.value = element.scrollWidth - element.clientWidth - element.scrollLeft <= 2
-  const step = cachedStep || ((element.firstElementChild as HTMLElement | null)?.offsetWidth || 0)
+  const fallbackGap = cachedGap || parseFloat(getComputedStyle(element).columnGap || '0')
+  const step = cachedStep || (((element.firstElementChild as HTMLElement | null)?.offsetWidth || 0) + fallbackGap)
   if (props.featuredFirst) {
     const left = element.scrollLeft
     const cardWidth = step || 1
@@ -63,6 +68,39 @@ function onScroll() {
   })
 }
 
+function stopMobileAutoplay() {
+  if (autoplayTimer !== null) {
+    clearInterval(autoplayTimer)
+    autoplayTimer = null
+  }
+}
+
+function advanceMobileSlide() {
+  if (isAutoplayPaused || props.itemCount <= 1 || typeof window === 'undefined' || document.hidden) return
+  if (!mobileMediaQuery?.matches) return
+  updateMetrics()
+  const nextIndex = atEnd.value || firstVisible.value >= props.itemCount ? 0 : firstVisible.value
+  goTo(nextIndex, false)
+}
+
+function syncMobileAutoplay() {
+  stopMobileAutoplay()
+  if (!props.mobileAutoplayMs || props.mobileAutoplayMs <= 0 || props.itemCount <= 1 || typeof window === 'undefined') return
+  if (!mobileMediaQuery) {
+    mobileMediaQuery = window.matchMedia('(max-width: 767px)')
+  }
+  if (!mobileMediaQuery.matches) return
+  autoplayTimer = setInterval(advanceMobileSlide, props.mobileAutoplayMs)
+}
+
+function pauseMobileAutoplay() {
+  isAutoplayPaused = true
+}
+
+function resumeMobileAutoplay() {
+  isAutoplayPaused = false
+}
+
 function move(direction: number) {
   const element = track.value
   if (!element) return
@@ -74,6 +112,7 @@ function move(direction: number) {
       ? element.scrollLeft + step
       : Math.max(0, element.scrollLeft - step)
     element.scrollTo({ left: destination, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+    syncMobileAutoplay()
     return
   }
   const visible = step ? Math.max(1, Math.floor((element.clientWidth + gap + 1) / step)) : 1
@@ -81,16 +120,19 @@ function move(direction: number) {
     left: direction * step * (props.itemsPerSlide ?? visible),
     behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
   })
+  syncMobileAutoplay()
 }
 
-function goTo(index: number) {
+function goTo(index: number, resetAutoplay = true) {
   const element = track.value
   const card = element?.children[index] as HTMLElement | undefined
   if (!element || !card) return
+  const offset = card.offsetParent === element ? card.offsetLeft : card.offsetLeft - element.offsetLeft
   element.scrollTo({
-    left: (card as HTMLElement).offsetLeft,
+    left: Math.max(0, offset),
     behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
   })
+  if (resetAutoplay) syncMobileAutoplay()
 }
 
 function handleKey(event: KeyboardEvent) {
@@ -98,20 +140,31 @@ function handleKey(event: KeyboardEvent) {
   if (event.target !== track.value || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
   event.preventDefault()
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') move(event.key === 'ArrowLeft' ? -1 : 1)
-  else track.value?.scrollTo({ left: event.key === 'Home' ? 0 : track.value.scrollWidth, behavior: 'instant' })
+  else {
+    track.value?.scrollTo({ left: event.key === 'Home' ? 0 : track.value.scrollWidth, behavior: 'instant' })
+    syncMobileAutoplay()
+  }
 }
 
-watch([() => props.itemCount, () => props.resetKey], async () => {
+watch([() => props.itemCount, () => props.resetKey, () => props.mobileAutoplayMs], async () => {
   await nextTick()
   track.value?.scrollTo({ left: 0, behavior: 'instant' })
   updateMetrics()
+  syncMobileAutoplay()
 })
 onMounted(() => {
   updateMetrics()
   resizeObserver = new ResizeObserver(updateMetrics)
   if (track.value) resizeObserver.observe(track.value)
+  if (typeof window !== 'undefined' && props.mobileAutoplayMs) {
+    mobileMediaQuery = window.matchMedia('(max-width: 767px)')
+    mobileMediaQuery.addEventListener?.('change', syncMobileAutoplay)
+    syncMobileAutoplay()
+  }
 })
 onBeforeUnmount(() => {
+  stopMobileAutoplay()
+  mobileMediaQuery?.removeEventListener?.('change', syncMobileAutoplay)
   resizeObserver?.disconnect()
   if (scrollRafId !== null) {
     cancelAnimationFrame(scrollRafId)
@@ -147,6 +200,13 @@ onBeforeUnmount(() => {
       tabindex="0"
       @scroll.passive="onScroll"
       @keydown="handleKey"
+      @touchstart.passive="pauseMobileAutoplay"
+      @touchend.passive="resumeMobileAutoplay"
+      @touchcancel.passive="resumeMobileAutoplay"
+      @pointerenter="pauseMobileAutoplay"
+      @pointerleave="resumeMobileAutoplay"
+      @focusin="pauseMobileAutoplay"
+      @focusout="resumeMobileAutoplay"
     ><slot :first-visible="firstVisible" /></div>
     <slot name="footer" :first-visible="firstVisible" :at-start="atStart" :at-end="atEnd" :move="move">
       <div v-if="mobileDots && itemCount > 1" class="homepage-slider-dots" role="group" :aria-label="`${title} slide navigation`">

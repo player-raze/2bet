@@ -243,7 +243,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="affiliate-page" :class="{ 'affiliate-page--commission': activeTab === 'commission' }">
+  <div class="affiliate-page bg-black light:bg-[#f4f8f5] text-white light:text-[#10261c]" :class="{ 'affiliate-page--commission': activeTab === 'commission' }">
     <SubpageHeader
       title="Affiliate"
       back-to="/account/me"
@@ -263,7 +263,7 @@ onBeforeUnmount(() => {
     </SubpageHeader>
 
     <div class="affiliate-content-container px-2 sm:px-0">
-      <nav class="affiliate-tabs" aria-label="Affiliate sections" role="tablist">
+      <nav class="affiliate-tabs bg-[#1c1d1c] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" aria-label="Affiliate sections" role="tablist">
         <button
           v-for="tab in affiliateTabs"
           :key="tab.id"
@@ -271,6 +271,7 @@ onBeforeUnmount(() => {
           role="tab"
           :aria-selected="activeTab === tab.id"
           :class="{ 'affiliate-tab--active': activeTab === tab.id }"
+          class="text-[#8e9491] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
           @click="activeTab = tab.id"
         >
           {{ tab.label }}
@@ -292,7 +293,7 @@ onBeforeUnmount(() => {
             <div class="affiliate-hero-rate"><strong>55</strong><span>%</span></div>
           </div>
 
-          <div class="cooperation-card">
+          <div class="cooperation-card bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]">
             <h3>「Earn for life」 on your 「player bets」!</h3>
             <ol class="cooperation-steps">
               <li v-for="step in cooperationSteps" :key="step.step">
@@ -301,19 +302,19 @@ onBeforeUnmount(() => {
                 </span>
                 <span>
                   <strong>{{ step.step }}</strong>
-                  <small>{{ step.label }}</small>
+                  <small class="text-[#949494] light:text-[#5d7066]">{{ step.label }}</small>
                 </span>
               </li>
             </ol>
             <div class="cooperation-description">
               <h3 class="m-0 text-sm font-bold">Complete three easy steps to start earning high commission!</h3>
-              <p>2Bet has been well-known in the industry for more than 10 years with excellent reputation. Players able to use all types of smart devices to enjoy the excellent gaming experience, is a reliable guarantee for your profit. A well-designed commission system makes it easier for you to make money. Get up to 55% commission every month.</p>
+              <p class="text-[#929292] light:text-[#5d7066]">2Bet has been well-known in the industry for more than 10 years with excellent reputation. Players able to use all types of smart devices to enjoy the excellent gaming experience, is a reliable guarantee for your profit. A well-designed commission system makes it easier for you to make money. Get up to 55% commission every month.</p>
             </div>
           </div>
 
           <div class="affiliate-actions">
             <a :href="bybetRedirectUrl" target="_blank" rel="noopener noreferrer" class="affiliate-action affiliate-action--primary">Apply Now</a>
-            <a :href="affiliateSystemUrl" target="_blank" rel="noopener noreferrer" class="affiliate-action">Affiliate System</a>
+            <a :href="affiliateSystemUrl" target="_blank" rel="noopener noreferrer" class="affiliate-action bg-[#303030] text-white light:bg-[#edf4f0] light:text-[#2a3c33] light:border light:border-[#d8e2dc]">Affiliate System</a>
           </div>
         </section>
 
@@ -323,15 +324,15 @@ onBeforeUnmount(() => {
           aria-labelledby="products-title"
         >
           <h2 id="products-title" class="affiliate-section-title">Our Products</h2>
-          <div class="affiliate-surface">
+          <div class="affiliate-surface bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]">
             <h3 class="section-label">Games</h3>
             <div class="product-grid">
-              <article v-for="product in products" :key="product.label" class="product-card">
+              <article v-for="product in products" :key="product.label" class="product-card bg-[#1f201f] light:bg-[#f4f8f5] text-white light:text-[#10261c]">
                 <h4 class="m-0 font-bold">{{ product.label }}</h4>
                 <img :src="product.image" :alt="product.label" loading="lazy">
               </article>
             </div>
-            <p class="products-copy">
+            <p class="products-copy text-[#929292] light:text-[#5d7066]">
               2bet has brought together the elite of the global gaming industry. Since 2011, 2bet has established an excellent reputation based on its secure and professional services. Creating a top-notch gaming experience is our unwavering pursuit, whether players use a mobile phone, smart computer, laptop, or desktop.
             </p>
           </div>
@@ -343,13 +344,13 @@ onBeforeUnmount(() => {
           aria-labelledby="advantages-title"
         >
           <h2 id="advantages-title" class="affiliate-section-title">Service Advantages</h2>
-          <article v-for="advantage in advantages" :key="advantage.id" class="advantage-card">
-            <h3>{{ advantage.title }}</h3>
-            <ul>
+          <article v-for="advantage in advantages" :key="advantage.id" class="advantage-card bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]">
+            <h3 class="text-[#f4f4f4] light:text-[#10261c]">{{ advantage.title }}</h3>
+            <ul class="text-[#909090] light:text-[#5d7066]">
               <li v-for="point in advantage.points" :key="point">{{ point }}</li>
             </ul>
           </article>
-          <p class="advantages-note">2Bet provides multi-gradient rebates. The more profit your downline players generate on the platform, the more commissions you can receive. Please refer to the details shown on your management centre.</p>
+          <p class="advantages-note text-[#929292] light:text-[#5d7066]">2Bet provides multi-gradient rebates. The more profit your downline players generate on the platform, the more commissions you can receive. Please refer to the details shown on your management centre.</p>
         </section>
 
         <section
@@ -358,7 +359,7 @@ onBeforeUnmount(() => {
           aria-labelledby="commission-title"
         >
           <h2 id="commission-title" class="affiliate-section-title">Commission Program</h2>
-          <div class="affiliate-surface commission-panel">
+          <div class="affiliate-surface commission-panel bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]">
             <div class="commission-flag">
               <BonusCurrencySelector
                 :model-value="selectedCurrency"
@@ -371,33 +372,37 @@ onBeforeUnmount(() => {
             <h3 class="commission-intro-title">
               <span v-for="line in commissionProgram.title" :key="line" class="block">{{ line }}</span>
             </h3>
-            <p v-for="paragraph in commissionProgram.introduction" :key="paragraph" class="commission-introduction">{{ paragraph }}</p>
+            <p v-for="paragraph in commissionProgram.introduction" :key="paragraph" class="commission-introduction text-[#929292] light:text-[#5d7066]">{{ paragraph }}</p>
 
             <h3>Commission Program</h3>
-            <p>{{ AFFILIATE_COMMISSION_DESCRIPTION }}</p>
+            <p class="text-[#929292] light:text-[#5d7066]">{{ AFFILIATE_COMMISSION_DESCRIPTION }}</p>
             <p v-if="commissionProgram.adjustmentNotice" class="commission-tier-notice">{{ commissionProgram.adjustmentNotice }}</p>
 
-            <div class="commission-table-wrap">
+            <div class="commission-table-wrap bg-black light:bg-[#f4f8f5] border border-white/5 light:border-[#d8e2dc]">
               <table class="commission-table">
                 <caption class="sr-only">{{ selectedCurrency }} commission tiers</caption>
                 <thead>
-                  <tr><th scope="col">Valid Members of the Month</th><th scope="col">Monthly Profit</th><th scope="col">Commission %</th></tr>
+                  <tr>
+                    <th scope="col" class="text-white light:text-[#10261c]">Valid Members of the Month</th>
+                    <th scope="col" class="text-white light:text-[#10261c]">Monthly Profit</th>
+                    <th scope="col" class="text-white light:text-[#10261c]">Commission %</th>
+                  </tr>
                 </thead>
                 <tbody>
                   <tr v-for="tier in commissionProgram.tiers" :key="tier.validMembers">
-                    <td>≥{{ tier.validMembers }}</td>
-                    <td><template v-for="(bound, index) in formatAffiliateProfitRange(tier).split('~')" :key="index"><template v-if="index > 0">~<wbr></template>{{ bound }}</template></td>
-                    <td>{{ tier.commission }}%</td>
+                    <td class="bg-[#171717] light:bg-white text-[#909090] light:text-[#24382e] border-b border-transparent light:border-[#d8e2dc]">≥{{ tier.validMembers }}</td>
+                    <td class="bg-[#171717] light:bg-white text-[#909090] light:text-[#24382e] border-b border-transparent light:border-[#d8e2dc]"><template v-for="(bound, index) in formatAffiliateProfitRange(tier).split('~')" :key="index"><template v-if="index > 0">~<wbr></template>{{ bound }}</template></td>
+                    <td class="bg-[#171717] light:bg-white text-[#909090] light:text-[#24382e] border-b border-transparent light:border-[#d8e2dc]">{{ tier.commission }}%</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <h3>Definition of Valid Members</h3>
-            <p>{{ AFFILIATE_VALID_MEMBERS_DESCRIPTION }}</p>
+            <p class="text-[#929292] light:text-[#5d7066]">{{ AFFILIATE_VALID_MEMBERS_DESCRIPTION }}</p>
 
             <h3>Commission Pay</h3>
-            <p>{{ AFFILIATE_COMMISSION_PAY_DESCRIPTION }}</p>
+            <p class="text-[#929292] light:text-[#5d7066]">{{ AFFILIATE_COMMISSION_PAY_DESCRIPTION }}</p>
           </div>
         </section>
 
@@ -407,7 +412,7 @@ onBeforeUnmount(() => {
           aria-labelledby="questions-title"
         >
           <h2 id="questions-title" class="affiliate-section-title">Affiliate Questions</h2>
-          <nav class="question-tabs" aria-label="Affiliate question categories" role="tablist">
+          <nav class="question-tabs bg-[#1c1d1c] light:bg-white border border-white/5 light:border-[#d8e2dc]" aria-label="Affiliate question categories" role="tablist">
             <button
               v-for="category in questionCategories"
               :key="category.id"
@@ -415,6 +420,7 @@ onBeforeUnmount(() => {
               role="tab"
               :aria-selected="activeQuestionTab === category.id"
               :class="{ 'question-tab--active': activeQuestionTab === category.id }"
+              class="text-[#8e9491] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
               @click="activeQuestionTab = category.id"
             >
               {{ category.label }}
@@ -424,13 +430,13 @@ onBeforeUnmount(() => {
             v-for="category in questionCategories"
             v-show="activeQuestionTab === category.id"
             :key="category.id"
-            class="affiliate-surface questions-content"
+            class="affiliate-surface questions-content bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]"
             :aria-labelledby="`question-category-${category.id}`"
           >
             <h3 :id="`question-category-${category.id}`" class="question-category-title">{{ category.title }}</h3>
             <article v-for="item in category.items" :key="item.question">
-              <h4>{{ item.question }}</h4>
-              <p>{{ item.answer }}</p>
+              <h4 class="text-white light:text-[#10261c]">{{ item.question }}</h4>
+              <p class="text-[#929292] light:text-[#5d7066]">{{ item.answer }}</p>
             </article>
           </section>
         </section>
@@ -441,10 +447,10 @@ onBeforeUnmount(() => {
           aria-labelledby="contact-title"
         >
           <h2 id="contact-title" class="affiliate-section-title">Contact Us</h2>
-          <div class="affiliate-surface contact-panel">
+          <div class="affiliate-surface contact-panel bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]">
             <h3 class="text-[18px] font-semibold text-center">Contact Us</h3>
-            <p class="text-white font-semibold text-[14px]">Professional Service · Efficient Coordination · Trusted Assurance</p>
-            <p class="contact-intro">Thank you for your support and trust in 2bet. We are committed to providing a stable, secure, and high-quality service environment, delivering a professional and reliable experience for every user. Whether it is account assistance, deposit and withdrawal support, or partnership and business cooperation, our professional team is dedicated to offering timely, efficient, and comprehensive support with a rigorous approach.</p>
+            <p class="text-white light:text-[#10261c] font-semibold text-[14px]">Professional Service · Efficient Coordination · Trusted Assurance</p>
+            <p class="contact-intro text-[#929292] light:text-[#5d7066]">Thank you for your support and trust in 2bet. We are committed to providing a stable, secure, and high-quality service environment, delivering a professional and reliable experience for every user. Whether it is account assistance, deposit and withdrawal support, or partnership and business cooperation, our professional team is dedicated to offering timely, efficient, and comprehensive support with a rigorous approach.</p>
             
           </div>
         </section>
@@ -460,22 +466,12 @@ onBeforeUnmount(() => {
   min-height: calc(100vh - var(--header-height));
   flex-direction: column;
   padding: 0;
-  color: #f5f5f5;
-  background: #000;
 }
 
 @media (min-width: 64rem) {
   .affiliate-page {
     padding: 0 4px;
   }
-}
-
-.affiliate-tabs,
-.affiliate-surface,
-.cooperation-card,
-.advantage-card,
-.question-tabs {
-  background: #151515;
 }
 
 .affiliate-titlebar {
@@ -491,18 +487,6 @@ onBeforeUnmount(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-}
-
-.affiliate-back {
-  display: grid;
-  width: 31px;
-  height: 31px;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  color: #00a97a;
-  background: #10211c;
-  cursor: pointer;
 }
 
 .affiliate-tabs {
@@ -527,7 +511,6 @@ onBeforeUnmount(() => {
   border: 0;
   border-radius: 18px;
   padding: 6px 13px;
-  color: #f1f1f1;
   font-size: 14px;
   font-weight: 700;
   background: transparent;
@@ -656,7 +639,6 @@ onBeforeUnmount(() => {
   flex: 0 0 auto;
   place-items: center;
   border-radius: 50%;
-  color: #111;
 }
 
 .step-icon--red { background: #d92931; }
@@ -674,7 +656,6 @@ onBeforeUnmount(() => {
 }
 
 .cooperation-steps small {
-  color: #949494;
   font-size: 14px;
 }
 
@@ -689,7 +670,6 @@ onBeforeUnmount(() => {
 .commission-panel > p,
 .questions-content p,
 .advantages-note {
-  color: #929292;
   font-size: 12px;
   line-height: 1.38;
 }
@@ -711,10 +691,8 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  color: #fff;
   font-size: 16px;
   font-weight: 700;
-  background: #303030;
   transition: filter 150ms ease, transform 150ms ease;
 }
 
@@ -749,7 +727,6 @@ onBeforeUnmount(() => {
   aspect-ratio: 0.74;
   overflow: hidden;
   border-radius: 12px;
-  background: #252525;
 }
 
 .product-card::after {
@@ -793,7 +770,6 @@ onBeforeUnmount(() => {
   align-items: center;
   margin: 0;
   padding: 9px 12px;
-  color: #f4f4f4;
   font-size: 14px;
   font-weight: 700;
 }
@@ -802,7 +778,6 @@ onBeforeUnmount(() => {
   display: grid;
   margin: 0;
   padding: 0 12px 11px;
-  color: #909090;
   font-size: 12px;
   list-style: none;
   gap: 8px;
@@ -855,7 +830,6 @@ onBeforeUnmount(() => {
   overflow-x: auto;
   border-radius: 12px;
   padding: 8px;
-  background: #000;
 }
 
 .commission-table {
@@ -863,13 +837,11 @@ onBeforeUnmount(() => {
   min-width: 590px;
   border-collapse: separate;
   border-spacing: 0 8px;
-  color: #909090;
   font-size: 12px;
 }
 
 .commission-table th {
   padding: 3px 12px;
-  color: #fff;
   text-align: left;
   font-size: 12px;
 }
@@ -886,7 +858,6 @@ onBeforeUnmount(() => {
 
 .commission-table td {
   padding: 12px;
-  background: #171717;
 }
 
 .commission-table td:first-child {
@@ -910,7 +881,6 @@ onBeforeUnmount(() => {
   position: relative;
   border: 0;
   padding: 9px 6px;
-  color: #f0f0f0;
   font-size: 12px;
   background: transparent;
   cursor: pointer;
@@ -923,7 +893,7 @@ onBeforeUnmount(() => {
   width: 0;
   height: 2px;
   content: '';
-  background: #fff;
+  background: currentColor;
   transform: translateX(-50%);
   transition: width 150ms ease;
 }
@@ -960,118 +930,7 @@ onBeforeUnmount(() => {
 
 .contact-intro {
   margin: 20px 0 14px;
-  color: #929292;
   font-size: 14px;
-}
-
-.contact-row {
-  display: flex;
-  min-height: 73px;
-  align-items: center;
-  border-top: 1px solid #050505;
-  gap: 12px;
-}
-
-.contact-icon {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 7px;
-  color: #fff;
-}
-
-.contact-icon--phone { background: #3bbf2c; }
-.contact-icon--email { background: #3695f5; }
-
-.contact-copy {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
-}
-
-.contact-copy h3 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.contact-copy small {
-  color: #929292;
-  font-size: 12px;
-}
-
-.contact-row button {
-  display: flex;
-  min-width: 68px;
-  min-height: 34px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 18px;
-  padding: 7px 12px;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  background: #000;
-  cursor: pointer;
-  gap: 5px;
-}
-
-.affiliate-regulatory {
-  display: flex;
-  min-height: 260px;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: column;
-  margin-top: auto;
-  padding: 42px 12px 20px;
-  text-align: center;
-  gap: 14px;
-}
-
-.regulatory-logos {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.regulatory-logos img:first-child {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-}
-
-.regulatory-logos img:last-child {
-  width: 184px;
-  height: 66px;
-  border-radius: 9px;
-  image-rendering: auto;
-}
-
-.regulatory-links {
-  display: flex;
-  justify-content: center;
-  color: #f01818;
-  font-size: 10px;
-  font-weight: 700;
-  gap: 15px;
-}
-
-.affiliate-regulatory > strong {
-  color: #145bc1;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.45;
-}
-
-.regulatory-hotline {
-  width: 126px;
-  height: 69px;
-  object-fit: contain;
 }
 
 @media (min-width: 768px) {
@@ -1174,15 +1033,6 @@ onBeforeUnmount(() => {
     font-size: 15px;
   }
 
-  .regulatory-logos img:first-child {
-    width: 68px;
-    height: 68px;
-  }
-
-  .regulatory-logos img:last-child {
-    width: 154px;
-    height: 55px;
-  }
 }
 
 @media (max-width: 63.99rem) {
@@ -1229,7 +1079,7 @@ onBeforeUnmount(() => {
   }
 
   .affiliate-page--commission .commission-flag { display: none; }
-  .affiliate-page--commission .commission-panel { border-radius: 12px; background: #141414; }
+  .affiliate-page--commission .commission-panel { border-radius: 12px; }
   .affiliate-page--commission .commission-intro-title {
     font-size: 18px;
     line-height: 26px;
@@ -1319,14 +1169,6 @@ onBeforeUnmount(() => {
     min-height: 48px;
   }
 
-  .contact-row button svg {
-    display: none;
-  }
-
-  .regulatory-links {
-    flex-direction: column;
-    gap: 4px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

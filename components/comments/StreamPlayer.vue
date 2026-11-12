@@ -119,10 +119,10 @@ watch([video, () => JSON.stringify(props.sources)], async ([element], _, onClean
 </script>
 
 <template>
-  <div class="relative h-full w-full bg-black">
+  <div class="relative h-full w-full bg-black light:bg-[#eaf5ee]">
     <video ref="video" :controls="!preview" :autoplay="!preview" muted playsinline preload="auto" class="h-full w-full object-contain" aria-label="Live sports stream" />
-    <div v-if="state !== 'ready' && !compact" class="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#14261d] px-5 text-center text-sm text-white/70" role="status">
-      <ByBetSpinner v-if="state === 'loading'" size="md" theme="dark" />
+    <div v-if="state !== 'ready' && !compact" class="loading pointer-events-none absolute inset-0 flex items-center justify-center bg-[#14261d] px-5 text-center text-sm text-white/70 light:bg-[#eaf5ee] light:text-[#10261c]" role="status">
+      <ByBetSpinner v-if="state === 'loading'" size="md" theme="auto" />
       <span v-else>Stream unavailable</span>
     </div>
   </div>

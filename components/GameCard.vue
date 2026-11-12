@@ -33,7 +33,7 @@ const emit = defineEmits<{
     </button>
     <div class="game-meta">
       <strong :title="game.title">{{ game.title }}</strong>
-      <span>{{ game.provider }}</span>
+      <span class="text-[#75867d] light:text-[#5d7066]">{{ game.provider }}</span>
     </div>
   </article>
 </template>
@@ -185,7 +185,6 @@ const emit = defineEmits<{
 
 .game-meta span {
   margin-top: 0.16rem;
-  color: #75867d;
   font-size: 0.58rem;
 }
 

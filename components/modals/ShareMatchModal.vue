@@ -40,11 +40,11 @@ const handleImgError = (event: Event): void => {
 <template>
   <div class="share-modal-overlay" @click.self="emit('close')">
     <div class="share-modal-container mobile-modal-slide-up">
-      <div class="share-card">
+      <div class="share-card bg-white text-[#333]">
         <!-- Top Decorative Section -->
-        <div class="card-header-deco">
+        <div class="card-header-deco text-white">
           <div class="brand-header">
-            <div class="brand-logo">2Bet</div>
+            <div class="brand-logo bg-black text-white">2Bet</div>
             <span class="brand-name">2Bet</span>
           </div>
           <div class="deco-people">
@@ -57,7 +57,7 @@ const handleImgError = (event: Event): void => {
           <div class="match-info">
             <span class="sport-icon">{{ getSportIcon(match.sport_key) }}</span>
             <span class="tournament-name">{{ match.sport_title }}</span>
-            <span class="match-date">{{ formattedDate }}</span>
+            <span class="match-date text-[#666]">{{ formattedDate }}</span>
           </div>
 
           <div class="teams-section">
@@ -72,21 +72,21 @@ const handleImgError = (event: Event): void => {
           </div>
 
           <div class="qr-section">
-            <div class="qr-code">
+            <div class="qr-code bg-[#eee]">
               <!-- Placeholder for QR Code -->
               <img :src="'/images/qr-placeholder.webp'" alt="QR Code" @error="handleImgError" />
             </div>
-            <span class="qr-label">Enter APP</span>
+            <span class="qr-label text-[#666]">Enter APP</span>
           </div>
         </div>
       </div>
 
       <!-- Bottom Actions -->
       <div class="modal-footer">
-        <button class="footer-share-btn" @click="emit('close')">
+        <button class="footer-share-btn text-white" @click="emit('close')">
           <Share2 :size="20" />
         </button>
-        <button class="save-btn" @click="emit('save')">
+        <button class="save-btn bg-[#006d44] text-white hover:bg-[#005a38]" @click="emit('save')">
           Save QR Code
         </button>
       </div>
@@ -117,7 +117,6 @@ const handleImgError = (event: Event): void => {
 }
 
 .share-card {
-  background: #fff;
   border-radius: 24px;
   overflow: hidden;
   width: 100%;
@@ -132,7 +131,6 @@ const handleImgError = (event: Event): void => {
   min-height: 120px;
   display: flex;
   align-items: flex-start;
-  color: white;
 }
 
 .brand-header {
@@ -143,8 +141,6 @@ const handleImgError = (event: Event): void => {
 }
 
 .brand-logo {
-  background: #000;
-  color: #fff;
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: bold;
@@ -171,7 +167,6 @@ const handleImgError = (event: Event): void => {
 
 .card-content {
   padding: 24px;
-  color: #333;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -187,7 +182,6 @@ const handleImgError = (event: Event): void => {
 
 .match-info .match-date {
   margin-left: auto;
-  color: #666;
 }
 
 .teams-section {
@@ -221,7 +215,6 @@ const handleImgError = (event: Event): void => {
 .qr-code {
   width: 160px;
   height: 160px;
-  background: #eee;
   border-radius: 8px;
 }
 
@@ -232,7 +225,6 @@ const handleImgError = (event: Event): void => {
 
 .qr-label {
   font-size: 12px;
-  color: #666;
 }
 
 .modal-footer {
@@ -245,7 +237,6 @@ const handleImgError = (event: Event): void => {
 .footer-share-btn {
   background: transparent;
   border: none;
-  color: white;
   cursor: pointer;
   padding: 12px;
   display: flex;
@@ -255,8 +246,6 @@ const handleImgError = (event: Event): void => {
 
 .save-btn {
   flex: 1;
-  background: #006d44;
-  color: white;
   border: none;
   border-radius: 12px;
   padding: 14px;
@@ -264,9 +253,5 @@ const handleImgError = (event: Event): void => {
   font-size: 16px;
   cursor: pointer;
   transition: background 0.2s;
-}
-
-.save-btn:hover {
-  background: #005a38;
 }
 </style>

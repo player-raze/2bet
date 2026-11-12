@@ -139,11 +139,11 @@ const altText = computed(() => props.options
   display: block;
 }
 
-:global(html[data-theme='light']) .outcome-graphic--dark {
+html[data-theme='light'] .outcome-graphic--dark {
   display: none;
 }
 
-:global(html[data-theme='light']) .outcome-graphic--light {
+html[data-theme='light'] .outcome-graphic--light {
   display: block;
 }
 

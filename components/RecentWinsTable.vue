@@ -13,19 +13,19 @@ defineProps<{
       <div>
         <span class="heading-icon"><AppIcon name="trophy" :size="16" /></span>
         <h2 id="wins-title">Recent Wins</h2>
-        <span class="demo-label" title="Illustrative data only"><Info :size="12" /> Demo data</span>
+        <span class="demo-label text-[#77877f] light:text-[#5d7066]" title="Illustrative data only"><Info :size="12" /> Demo data</span>
       </div>
     </div>
 
-    <div class="table-shell" tabindex="0" aria-label="Recent wins demo table, horizontally scrollable">
+    <div class="table-shell bg-[#111d17]/45 light:bg-white light:border-[#d8e2dc] light:shadow-sm" tabindex="0" aria-label="Recent wins demo table, horizontally scrollable">
       <table>
         <thead>
           <tr>
-            <th scope="col">Game</th>
-            <th scope="col">Player</th>
-            <th scope="col">Time</th>
-            <th scope="col">Multiplier</th>
-            <th scope="col" class="amount-column">Win Amount</th>
+            <th scope="col" class="text-[#718079] light:text-[#5d7066]">Game</th>
+            <th scope="col" class="text-[#718079] light:text-[#5d7066]">Player</th>
+            <th scope="col" class="text-[#718079] light:text-[#5d7066]">Time</th>
+            <th scope="col" class="text-[#718079] light:text-[#5d7066]">Multiplier</th>
+            <th scope="col" class="amount-column text-[#718079] light:text-[#5d7066]">Win Amount</th>
           </tr>
         </thead>
         <tbody>
@@ -36,11 +36,11 @@ defineProps<{
             </td>
             <td class="muted">{{ row.player }}</td>
             <td class="muted">{{ row.time }}</td>
-            <td><span class="multiplier">{{ row.multiplier }}</span></td>
-            <td class="amount-column">
-              <span class="currency-icon">₮</span>
+            <td><span class="multiplier text-[#73e2b9] light:text-[#019440] light:bg-[#019440]/10">{{ row.multiplier }}</span></td>
+            <td class="amount-column text-[#b6f4dc] light:text-[#026b34]">
+              <span class="currency-icon text-[#08100c] bg-[#56d4a6]">₮</span>
               <strong>{{ row.amount }}</strong>
-              <small>{{ row.currency }}</small>
+              <small class="text-[#718079] light:text-[#5d7066]">{{ row.currency }}</small>
             </td>
           </tr>
         </tbody>
@@ -55,7 +55,6 @@ defineProps<{
   align-items: center;
   padding: 0.22rem 0.4rem;
   border-radius: 0.3rem;
-  color: #77877f;
   font-size: 0.53rem;
   font-weight: 650;
   background: rgba(255, 255, 255, 0.04);
@@ -66,7 +65,6 @@ defineProps<{
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: rgba(17, 29, 23, 0.46);
 }
 
 table {
@@ -77,7 +75,6 @@ table {
 
 th {
   height: 2.65rem;
-  color: #718079;
   font-size: 0.58rem;
   font-weight: 700;
   text-align: left;
@@ -125,17 +122,12 @@ td:first-child {
   min-width: 3rem;
   padding: 0.22rem 0.35rem;
   border-radius: 0.3rem;
-  color: #73e2b9;
   text-align: center;
   background: rgba(50, 212, 154, 0.08);
 }
 
 .amount-column {
   text-align: right;
-}
-
-td.amount-column {
-  color: #b6f4dc;
 }
 
 .currency-icon {
@@ -145,15 +137,12 @@ td.amount-column {
   margin-right: 0.35rem;
   place-items: center;
   border-radius: 50%;
-  color: #08100c;
   font-size: 0.55rem;
   font-weight: 850;
-  background: #56d4a6;
 }
 
 .amount-column small {
   margin-left: 0.25rem;
-  color: #718079;
   font-size: 0.5rem;
 }
 </style>

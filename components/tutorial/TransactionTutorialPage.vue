@@ -107,13 +107,13 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
 </script>
 
 <template>
-  <section class="transaction-tutorial" :class="`transaction-tutorial--${mode}`">
+  <section class="transaction-tutorial text-[#f4f4f4] light:text-[#10261c]" :class="`transaction-tutorial--${mode}`">
     <SubpageHeader mobile-tabs back-to="/account/me" class="mb-2 sm:mb-3">
       <template #center>
-        <div class="transaction-pill-group" role="tablist">
+        <div class="transaction-pill-group bg-[#0a402d] light:bg-[#eaf5ee]" role="tablist">
           <NuxtLink
             to="/tutorial/transactions/deposit"
-            class="transaction-pill"
+            class="transaction-pill text-white/80 light:text-[#5d7066] hover:text-white light:hover:text-[#10261c] lg:bg-[#6b6c6b] lg:text-[#f4f4f4] lg:hover:bg-[#7a7b7a] lg:hover:text-white light:lg:bg-[#edf4f0] light:lg:text-[#2a3c33] [&.transaction-pill--active]:!bg-white [&.transaction-pill--active]:!text-[var(--main-color)] lg:[&.transaction-pill--active]:!bg-[#007653] lg:[&.transaction-pill--active]:!text-white"
             :class="{ 'transaction-pill--active': mode === 'deposit' }"
             role="tab"
             :aria-selected="mode === 'deposit'"
@@ -122,7 +122,7 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
           </NuxtLink>
           <NuxtLink
             to="/tutorial/transactions/withdraw"
-            class="transaction-pill"
+            class="transaction-pill text-white/80 light:text-[#5d7066] hover:text-white light:hover:text-[#10261c] lg:bg-[#6b6c6b] lg:text-[#f4f4f4] lg:hover:bg-[#7a7b7a] lg:hover:text-white light:lg:bg-[#edf4f0] light:lg:text-[#2a3c33] [&.transaction-pill--active]:!bg-white [&.transaction-pill--active]:!text-[var(--main-color)] lg:[&.transaction-pill--active]:!bg-[#007653] lg:[&.transaction-pill--active]:!text-white"
             :class="{ 'transaction-pill--active': mode === 'withdraw' }"
             role="tab"
             :aria-selected="mode === 'withdraw'"
@@ -134,15 +134,15 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
     </SubpageHeader>
 
     <div class="transaction-board-wrapper px-2.5 sm:px-0">
-      <div class="transaction-board">
+      <div class="transaction-board bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm">
         <article
           v-for="(step, index) in steps"
           :key="step.title"
-          class="transaction-step"
+          class="transaction-step border-b border-[#494949] light:border-b-[#d8e2dc] last:border-b-0"
         >
           <div class="transaction-copy">
-            <component :is="index === 0 ? 'h2' : 'h2'">{{ step.title }}</component>
-            <p>{{ step.description }}</p>
+            <component :is="index === 0 ? 'h2' : 'h2'" class="text-[#f5f5f5] light:text-[#10261c]">{{ step.title }}</component>
+            <p class="text-[#969696] light:text-[#5d7066]">{{ step.description }}</p>
           </div>
           <TransactionTutorialVisual
             :variant="step.visual"
@@ -168,13 +168,11 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
 .transaction-tutorial {
   width: min(100%, 1170px);
   margin: 0 auto 28px;
-  color: #f4f4f4;
 }
 
 .transaction-pill-group {
   display: inline-flex;
   align-items: center;
-  background-color: #0a402d;
   border-radius: 9999px;
   padding: 2.5px;
   gap: 2px;
@@ -188,19 +186,12 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
   border-radius: 9999px;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.82);
   transition: all 150ms ease;
   text-decoration: none;
   line-height: 1.2;
 }
 
-.transaction-pill:hover {
-  color: #ffffff;
-}
-
 .transaction-pill--active {
-  background-color: #ffffff;
-  color: var(--main-color);
   font-weight: 700;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
@@ -218,23 +209,10 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
     height: 32px;
     padding: 0 22px;
     border-radius: 7px;
-    color: #f4f4f4;
     font-size: 14px;
     font-weight: 700;
     line-height: 1;
-    background: #6b6c6b;
     box-shadow: none;
-  }
-
-  .transaction-pill:hover {
-    color: #ffffff;
-    background: #7a7b7a;
-  }
-
-  .transaction-pill--active,
-  .transaction-pill--active:hover {
-    color: #ffffff;
-    background: #007653;
   }
 }
 
@@ -242,7 +220,6 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
   margin-top: 8px;
   overflow: hidden;
   border-radius: 11px;
-  background: #141414;
 }
 
 .transaction-step {
@@ -251,7 +228,6 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
   grid-template-columns: minmax(0, 1fr) minmax(390px, 1fr);
   align-items: center;
   padding: 24px 54px;
-  border-bottom: 1px solid #494949;
 }
 
 .transaction-step:last-child {
@@ -268,7 +244,6 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
 .transaction-copy h1,
 .transaction-copy h2 {
   margin: 0 0 3px;
-  color: #f5f5f5;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.015em;
@@ -278,7 +253,6 @@ const steps = computed(() => (props.mode === 'deposit' ? depositSteps : withdraw
 .transaction-copy p {
   max-width: 330px;
   margin: 0 auto;
-  color: #969696;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.4;

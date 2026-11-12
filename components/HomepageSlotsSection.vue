@@ -79,7 +79,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
 <template>
   <div class="homepage-slots-wrapper">
     <!-- Desktop Carousel Mode (shows only first 10 slots) -->
-    <div class="slots-desktop-carousel">
+    <div class="slots-desktop-carousel text-[#f4f7f5] light:text-[#10261c]">
       <HomepageContentSlider
         id="slots"
         class="homepage-slots-section"
@@ -95,21 +95,21 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
         <template #header="{ atStart, atEnd, move }">
           <header class="slots-header flex items-center justify-between">
             <div class="slots-heading flex items-center min-w-0">
-              <h2 id="slots-title" class="flex items-center">
+              <h2 id="slots-title" class="flex items-center text-white light:text-[#10261c]">
                 <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Top Slots')" width="28" height="28">
                 {{ translate('Top Slots') }}
               </h2>
-              <p>{{ translate('Handpicked games from leading providers') }}</p>
+              <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Handpicked games from leading providers') }}</p>
             </div>
             <div class="slots-actions flex items-center">
-              <NuxtLink to="/egames/slots/top" class="slots-view-all inline-flex items-center">
+              <NuxtLink to="/egames/slots/top" class="slots-view-all inline-flex items-center text-[#F9C600] light:text-[#b88e00]">
                 {{ translate('View all') }} <ArrowRight :size="16" aria-hidden="true" />
               </NuxtLink>
               <div class="slots-controls flex items-center" :aria-label="translate('Top Slots slider controls')">
-                <button type="button" :disabled="atStart" :aria-label="translate('Previous Top Slots items')" aria-controls="slots-track" @click="move(-1)">
+                <button type="button" class="text-white bg-[#00291d] hover:bg-[#004532] light:bg-[#edf4f0] light:text-[#10261c] light:border-[#d8e2dc]" :disabled="atStart" :aria-label="translate('Previous Top Slots items')" aria-controls="slots-track" @click="move(-1)">
                   <ChevronLeft :size="17" aria-hidden="true" />
                 </button>
-                <button type="button" :disabled="atEnd" :aria-label="translate('Next Top Slots items')" aria-controls="slots-track" @click="move(1)">
+                <button type="button" class="text-white bg-[#00291d] hover:bg-[#004532] light:bg-[#edf4f0] light:text-[#10261c] light:border-[#d8e2dc]" :disabled="atEnd" :aria-label="translate('Next Top Slots items')" aria-controls="slots-track" @click="move(1)">
                   <ChevronRight :size="17" aria-hidden="true" />
                 </button>
               </div>
@@ -123,6 +123,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 type="button"
                 :data-collection="tab.key"
                 :aria-pressed="activeTab === tab.key"
+                class="text-[#a8b6bc] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
                 aria-controls="slots-track"
                 @click="activeTab = tab.key"
               >
@@ -135,6 +136,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 :key="provider.key"
                 :to="provider.key === 'all' ? '/egames/slots' : { path: '/egames/slots', query: { provider: provider.value } }"
                 :data-provider="provider.key"
+                class="text-[#aab7c5] bg-[#1a1a1a] hover:bg-[#222] hover:text-[#e8efeb] light:bg-[#f4f8f5] light:text-[#5d7066] light:border-[#d8e2dc] [&.is-all]:!bg-[#006c4b] [&.is-all]:!text-[#e9fff6] light:[&.is-all]:!bg-[#019440] light:[&.is-all]:!text-white"
                 :class="{ 'is-all': provider.key === 'all' }"
               >
                 {{ provider.key === 'all' ? translate(provider.label) : provider.label }}
@@ -163,7 +165,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 loading="lazy"
                 decoding="async"
               >
-              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot">
+              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white bg-[#ff3f51]">
                 {{ game.badge || translate('HOT') }}
               </span>
               <span class="slots-game-play" aria-hidden="true">
@@ -171,13 +173,13 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
               </span>
             </div>
             <div class="slots-game-caption">
-              <h3>{{ game.title }}</h3>
-              <p>{{ providerName(game.provider) }}</p>
+              <h3 class="text-[#f1f5f3] light:text-[#10261c]">{{ game.title }}</h3>
+              <p class="text-[#00ea76] light:text-[#019440]">{{ providerName(game.provider) }}</p>
             </div>
           </NuxtLink>
           <button
             type="button"
-            class="slots-favorite"
+            class="slots-favorite text-white bg-[#06130ddd] light:bg-white/40"
             :class="{ 'is-saved': favorites.includes(game.title) }"
             :aria-pressed="favorites.includes(game.title)"
             :aria-label="`${game.title} - ${translate('Favorites')}`"
@@ -198,14 +200,14 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
     </div>
 
     <!-- Mobile: show up to 24 games, followed by the full catalogue link. -->
-    <section id="slots-mobile" class="slots-mobile-grid homepage-slots-section" aria-labelledby="slots-mobile-title">
+    <section id="slots-mobile" class="slots-mobile-grid homepage-slots-section text-[#f4f7f5] light:text-[#10261c]" aria-labelledby="slots-mobile-title">
       <header class="slots-header flex items-center justify-between">
         <div class="slots-heading flex items-center min-w-0">
-          <h2 id="slots-mobile-title" class="flex items-center">
+          <h2 id="slots-mobile-title" class="flex items-center text-white light:text-[#10261c]">
             <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Top Slots')" width="28" height="28">
             {{ translate('Top Slots') }}
           </h2>
-          <p>{{ translate('Handpicked games from leading providers') }}</p>
+          <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Handpicked games from leading providers') }}</p>
         </div>
       </header>
 
@@ -217,6 +219,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
             type="button"
             :data-collection="tab.key"
             :aria-pressed="activeTab === tab.key"
+            class="text-[#a8b6bc] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
             aria-controls="slots-mobile-games"
             @click="activeTab = tab.key"
           >
@@ -247,7 +250,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 loading="lazy"
                 decoding="async"
               >
-              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot">
+              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white bg-[#ff3f51]">
                 {{ game.badge || translate('HOT') }}
               </span>
               <span class="slots-game-play" aria-hidden="true">
@@ -255,12 +258,12 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
               </span>
             </div>
             <div class="slots-game-caption">
-              <h3>{{ game.title }}</h3>
+              <h3 class="text-[#f1f5f3] light:text-[#10261c]">{{ game.title }}</h3>
             </div>
           </NuxtLink>
           <button
             type="button"
-            class="slots-favorite"
+            class="slots-favorite text-white bg-[#06130ddd] light:bg-white/40"
             :class="{ 'is-saved': favorites.includes(game.title) }"
             :aria-pressed="favorites.includes(game.title)"
             :aria-label="`${game.title} - ${translate('Favorites')}`"
@@ -279,7 +282,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
         {{ emptyMessage }}
       </div>
 
-      <NuxtLink to="/egames/slots" class="slots-all-games flex w-full items-center justify-center">
+      <NuxtLink to="/egames/slots" class="slots-all-games flex w-full items-center justify-center text-white bg-[var(--brand)] light:text-white hover:bg-[var(--brand-hover)]">
         {{ translate('All Games') }}
       </NuxtLink>
     </section>
@@ -346,7 +349,6 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   display: flex;
   flex-direction: column;
   gap: 16px;
-  color: #f4f7f5;
   width: 100%;
 }
 .slots-header {
@@ -368,8 +370,6 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
 }
 .slots-heading > p {
   padding-left: 22px;
-  border-left: 1px solid #ffffff26;
-  color: var(--slots-muted);
   font-size: 14px;
   line-height: 22px;
 }
@@ -382,7 +382,6 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   min-height: 32px;
   font-size: 14px;
   font-weight: 600;
-  color: #F9C600;
 }
 .slots-view-all:hover {
   text-decoration: underline;
@@ -396,15 +395,8 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   place-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid var(--slots-edge, #ffffff18);
   border-radius: 5px;
-  color: #fff;
-  background: #00291d;
   transition: all 160ms ease;
-}
-.slots-controls button:hover:not(:disabled) {
-  border-color: #25d6a480;
-  background: #004532;
 }
 .slots-controls button:disabled {
   opacity: 0.35;
@@ -422,14 +414,12 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   position: relative;
   min-height: 34px;
   padding-bottom: 9px;
-  color: var(--slots-muted);
   background: transparent;
   font-size: 14px;
   line-height: 1.4;
   white-space: nowrap;
 }
 .slots-tabs button[aria-pressed='true'] {
-  color: #f4f7f5;
   font-weight: 800;
 }
 .slots-tabs button[aria-pressed='true']::after {
@@ -440,9 +430,6 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   left: 0;
   height: 2px;
   background: #25d6a4;
-}
-.slots-tabs button:hover {
-  color: #f4f7f5;
 }
 .slots-provider-pills {
   min-width: 0;
@@ -463,24 +450,11 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   min-width: 52px;
   min-height: 34px;
   padding: 7px 18px;
-  border: 1px solid #2b2b2b;
   border-radius: 999px;
-  color: #aab7c5;
-  background: #1a1a1a;
   font-size: 10px;
   font-weight: var(--homepage-body-weight);
   line-height: 1.4;
   white-space: nowrap;
-}
-.slots-provider-pills a:hover {
-  border-color: #444;
-  color: #e8efeb;
-  background: #222;
-}
-.slots-provider-pills a.is-all {
-  border-color: #087354;
-  color: #e9fff6;
-  background: #006c4b;
 }
 .slots-provider-pills a:focus-visible {
   outline-offset: -2px;
@@ -544,8 +518,6 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   left: 7px;
   padding: 3px 8px;
   border-radius: 4px;
-  color: #fff;
-  background: #ff3f51;
   font-size: 10px;
   font-weight: 800;
   line-height: 1.2;
@@ -558,14 +530,12 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   overflow: hidden;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  color: #f1f5f3;
   font-size: 13px;
   font-weight: 700;
   line-height: 1.35;
 }
 .slots-game-caption p {
   margin-top: 3px;
-  color: var(--brand, #00ea76);
   font-size: 11px;
   line-height: 1.3;
 }
@@ -598,8 +568,6 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   height: 28px;
   border: 1px solid #ffffff26;
   border-radius: 5px;
-  color: #fff;
-  background: #06130ddd;
   opacity: 0;
   transition: opacity 180ms ease;
 }
@@ -626,18 +594,10 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
 .slots-all-games {
   min-height: 44px;
   padding: 8px 16px;
-  border: 1px solid var(--brand);
   border-radius: 8px;
-  color: #fff;
-  background: var(--brand);
   font-size: var(--homepage-mobile-control-font-size,12px);
   font-weight: 400;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-.slots-all-games:is(:hover, :focus-visible) {
-  border-color: var(--brand-hover);
-  background: var(--brand-hover);
-  color: #fff;
 }
 
 @media (max-width: 1023px) {

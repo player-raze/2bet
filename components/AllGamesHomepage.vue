@@ -136,7 +136,7 @@ onBeforeUnmount(() => {
   <div class="allgames-shell" :class="{ 'allgames-shell--expanded': !railCollapsed }">
 
     <main ref="homepageMain" class="allgames-main bg-black rounded-md">
-      <div class="allgames-welcome flex items-center justify-between">
+      <div class="allgames-welcome flex items-center justify-between text-[#FECA00] light:text-[#bf9000] hover:text-[#ffe8b2] light:hover:text-[#FECA00]">
         <p>{{ translate('THE 2BET EXPERIENCE') }} <span>{{ translate('One destination. Every kind of play.') }}</span></p>
         <NuxtLink to="/bonuses">{{ translate('Explore your rewards') }} <Gift :size="14" aria-hidden="true" /></NuxtLink>
       </div>
@@ -153,15 +153,15 @@ onBeforeUnmount(() => {
 
         <HomepageLiveCasinoSection :categories="liveGames" />
 
-        <HomepageContentSlider id="promotions" class="homepage-promotions-section" :title="translate('Promotions')" :description="translate('More to look forward to.')" view-all-to="/bonuses" :view-all-label="translate('View all promotions')" :item-count="promotions.length" :visible-cards="2" :items-per-slide="1" mobile-dots>
+        <HomepageContentSlider id="promotions" class="homepage-promotions-section" :title="translate('Promotions')" :description="translate('More to look forward to.')" view-all-to="/bonuses" :view-all-label="translate('View all promotions')" :item-count="promotions.length" :visible-cards="2" :items-per-slide="1" :mobile-autoplay-ms="3000" mobile-dots>
           <template #header>
           <header class="allgames-section-heading flex items-center justify-between gap-3">
             <div class="allgames-heading-copy flex items-center"><div><h2 id="promotions-title"><img src="/category-icons/gift.webp" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Promotions')" width="28" height="28" loading="lazy" decoding="async">{{ translate('Promotions') }}</h2><p>{{ translate('More to look forward to.') }}</p></div></div>
             <NuxtLink to="/bonuses" class="allgames-view-all">{{ translate('View all promotions') }} <ArrowRight :size="17" aria-hidden="true" /></NuxtLink>
           </header>
           </template>
-            <NuxtLink v-for="promotion in promotions" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="allgames-promo relative overflow-hidden" :data-tone="promotion.tone">
-              <img :src="promotion.bannerImage" :alt="translate(promotion.title)"  width="410" height="205" loading="lazy" decoding="async"><div class="relative"><p class="allgames-eyebrow">{{ translate(`${(promotion.category || '').toUpperCase()} REWARDS`.trim()) }}</p><h3>{{ translate(promotion.title) }}</h3><p>{{ translate(promotion.rate || '') }} <span>{{ translate('rewards to explore.') }}</span></p><span class="allgames-text-link">{{ translate('View promotion') }} <ArrowRight :size="16" /></span></div>
+            <NuxtLink v-for="promotion in promotions" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="allgames-promo relative overflow-hidden light:bg-[#eaf5ee] light:bg-gradient-to-br light:from-white light:via-[#f2faf5] light:to-[#e2f4ea] light:border light:border-[#009440]/25 light:shadow-sm" :data-tone="promotion.tone">
+              <img :src="promotion.bannerImage" :alt="translate(promotion.title)"  width="410" height="205" loading="lazy" decoding="async"><div class="relative"><p class="allgames-eyebrow light:text-[#019440]">{{ translate(`${(promotion.category || '').toUpperCase()} REWARDS`.trim()) }}</p><h3 class="light:text-[#10261c]">{{ translate(promotion.title) }}</h3><p class="light:text-[#1a382a]">{{ translate(promotion.rate || '') }} <span class="light:text-[#4a6357]">{{ translate('rewards to explore.') }}</span></p><span class="allgames-text-link light:text-[#019440]">{{ translate('View promotion') }} <ArrowRight :size="16" /></span></div>
             </NuxtLink>
         </HomepageContentSlider>
 

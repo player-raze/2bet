@@ -1,6 +1,7 @@
 import type { Sport, SportsEvent } from '~/types/sports'
 
 // Share cached responses and in-flight requests across server handlers.
+const ODDS_CACHE_MAX_ENTRIES = 128
 const cache = new Map<string, { data: unknown; expiry: number }>()
 const pending = new Map<string, Promise<unknown>>()
 
@@ -25,6 +26,10 @@ export function createOddsApi(api: string, apiKey: string) {
         const data = await $fetch<T>(path, { baseURL, query: { apiKey, ...query }, timeout: 15000, retry: 0 }) as T
         for (const [key, entry] of cache) if (entry.expiry <= Date.now()) cache.delete(key)
         cache.set(cacheKey, { data, expiry: Date.now() + ttl })
+        while (cache.size > ODDS_CACHE_MAX_ENTRIES) {
+          const oldestKey = cache.keys().next().value
+          if (oldestKey !== undefined) cache.delete(oldestKey)
+        }
         return data
       } catch {
         throw createError({ statusCode: 502, statusMessage: 'Sports data is temporarily unavailable' })
