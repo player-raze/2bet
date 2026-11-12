@@ -160,6 +160,26 @@
 .allgames-game-card:hover .allgames-game-arrow { background: var(--brand); }
 .allgames-card-live-badge { position: absolute; top: 7px; left: 7px; display: flex; align-items: center; gap: 4px; padding: 4px 5px; border: 1px solid #ff9da480; border-radius: 4px; background: #c6253b; color: #fff; font-size: 8px; font-weight: 800; letter-spacing: .5px; }
 .allgames-card-live-badge i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+.allgames-main .homepage-image-glare { position: relative; isolation: isolate; overflow: hidden; }
+.allgames-main .homepage-image-glare__shine { position: absolute; z-index: 1; top: -50%; bottom: -50%; left: -70%; width: 50%; opacity: 0; background: linear-gradient(100deg,transparent 10%,#ffffff14 30%,#ffffffb8 50%,#ffffff26 70%,transparent 90%); transform: translateX(0) skewX(-18deg); pointer-events: none; }
+.allgames-main .homepage-image-glare > :is(.slots-game-hot,.slots-game-play,.allgames-card-live-badge) { z-index: 2; }
+@keyframes homepage-image-glare {
+  0% { opacity: 0; transform: translateX(0) skewX(-18deg); }
+  15%,75% { opacity: .85; }
+  100% { opacity: 0; transform: translateX(440%) skewX(-18deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .allgames-main :is(.slots-game-link,.live-dealer-card,.live-mobile-card):focus-visible .homepage-image-glare__shine { animation: homepage-image-glare 900ms cubic-bezier(.2,.65,.3,1) both; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .allgames-main :is(.slots-game-link,.live-dealer-card,.live-mobile-card):hover .homepage-image-glare__shine { animation: homepage-image-glare 900ms cubic-bezier(.2,.65,.3,1) both; }
+}
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .allgames-main :is(.slots-game-link,.live-dealer-card,.live-mobile-card):active .homepage-image-glare__shine { animation: homepage-image-glare 320ms ease-out both; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .allgames-main .homepage-image-glare__shine { display: none; }
+}
 @property --promo-border-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 @keyframes promo-border-turn { to { --promo-border-angle: 360deg; } }
 .homepage-promotions-section > header > .allgames-view-all { flex-shrink: 0; color: #cad8d0; font-size: 14px; }

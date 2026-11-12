@@ -156,7 +156,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
             class="slots-game-link"
             :aria-label="`${translate('Discover')} ${game.title} - ${providerName(game.provider)}`"
           >
-            <div class="slots-game-art">
+            <div class="slots-game-art homepage-image-glare">
               <img
                 :src="game.image"
                 :alt="game.title"
@@ -165,6 +165,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 loading="lazy"
                 decoding="async"
               >
+              <span class="homepage-image-glare__shine" aria-hidden="true" />
               <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white bg-[#ff3f51]">
                 {{ game.badge || translate('HOT') }}
               </span>
@@ -241,7 +242,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
             class="slots-game-link"
             :aria-label="`${translate('Discover')} ${game.title} - ${providerName(game.provider)}`"
           >
-            <div class="slots-game-art">
+            <div class="slots-game-art homepage-image-glare">
               <img
                 :src="game.image"
                 :alt="game.title"
@@ -250,6 +251,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 loading="lazy"
                 decoding="async"
               >
+              <span class="homepage-image-glare__shine" aria-hidden="true" />
               <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white bg-[#ff3f51]">
                 {{ game.badge || translate('HOT') }}
               </span>

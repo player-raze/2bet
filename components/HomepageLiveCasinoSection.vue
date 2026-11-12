@@ -77,8 +77,9 @@ function categoryIcon(key: string) {
       :aria-label="translate(game.title)"
       :title="translate(game.title)"
     >
-      <div class="live-dealer-art">
+      <div class="live-dealer-art homepage-image-glare">
         <img :src="game.image" :alt="translate(game.title)" width="1086" height="1448" loading="lazy" decoding="async">
+        <span class="homepage-image-glare__shine" aria-hidden="true" />
         <span class="allgames-card-live-badge"><i /> {{ translate('LIVE') }}</span>
       </div>
       <div class="live-dealer-caption bg-[#061b13] border-t border-[#23613f]/50 light:bg-gradient-to-b light:from-white light:to-[#f0f8f3] light:border-t-[#009440]/15">
@@ -108,8 +109,9 @@ function categoryIcon(key: string) {
         :aria-label="translate(game.title)"
         :title="translate(game.title)"
       >
-        <div class="live-mobile-art">
+        <div class="live-mobile-art homepage-image-glare">
           <img :src="game.image" :alt="translate(game.title)" width="300" height="300" loading="lazy" decoding="async">
+          <span class="homepage-image-glare__shine" aria-hidden="true" />
         </div>
         <h3 class="text-white light:text-[#10261c]">{{ translate(game.title) }}</h3>
       </NuxtLink>

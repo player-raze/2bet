@@ -15,6 +15,7 @@ import { TOP_BINGO_GAMES } from '~/data/top-bingo-games'
 import { SAMPLE_MATCH_EVENTS } from '~/data/sports'
 import { HOMEPAGE_PROMOTIONS } from '~/data/homepage-promotions'
 import type { SportsEvent } from '~/types/sports'
+import { useHomepageMagnet } from '~/composables/useHomepageMagnet'
 
 const props = withDefaults(defineProps<{
   faqs?: FaqItem[]
@@ -26,6 +27,7 @@ const mobileMenu = ref(false)
 const railCollapsed = ref(true)
 const selectedCategory = ref('sports')
 const homepageMain = ref<HTMLElement | null>(null)
+useHomepageMagnet(homepageMain)
 const { toastMessage, showDemoMessage, clearDemoMessage } = useDemoInteraction()
 const { translate } = useSiteLocale()
 const categories = [

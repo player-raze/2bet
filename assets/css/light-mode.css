@@ -2305,7 +2305,7 @@ html[data-theme='light']:not(#_) .winner-item:nth-child(even) {
 /* 3. Allgames Promo :before and :after (Light Green Theme) */
 html[data-theme='light']:not(#_) .allgames-promo {
   background: linear-gradient(135deg, #ffffff 0%, #f2faf5 45%, #e2f4ea 100%);
-  box-shadow: inset 0 0 0 1px rgba(0, 148, 64, 0.22), 0 6px 20px rgba(16, 38, 28, 0.06);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--promo-edge) 42%, transparent), 0 6px 20px rgba(16, 38, 28, 0.06);
 }
 
 html[data-theme='light']:not(#_) .allgames-promo::before {
@@ -2315,7 +2315,7 @@ html[data-theme='light']:not(#_) .allgames-promo::before {
 }
 
 html[data-theme='light']:not(#_) .allgames-promo::after {
-  background: conic-gradient(from var(--promo-border-angle), transparent 15%, #009440 34%, #80e2b3 48%, #007a35 60%, transparent 80%);
+  background: conic-gradient(from var(--promo-border-angle), transparent 15%, var(--promo-edge) 34%, var(--promo-highlight) 48%, var(--promo-secondary) 60%, transparent 80%);
 }
 
 html[data-theme='light']:not(#_) .allgames-promo .allgames-eyebrow {

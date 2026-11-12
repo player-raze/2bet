@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, ArrowUpRight, Minus, Plus } from 'lucide-vue-next'
 import { faqItems, type FaqItem } from '~/data/homepage'
+import MagicBento from '~/components/effects/MagicBento.vue'
 
 const props = withDefaults(defineProps<{
   faqs?: FaqItem[]
@@ -23,15 +24,15 @@ function showAllFaqs() {
 </script>
 
 <template>
-  <div class="homepage-getting-started grid">
-    <section class="homepage-start-panel bg-[#0e1b14] border border-white/[0.08] light:bg-white light:border-[#d8e2dc] light:shadow-sm" aria-labelledby="allgames-start-title">
+  <MagicBento class="homepage-getting-started grid" glow-color="#009440">
+    <section data-bento-card class="homepage-start-panel bg-[#0e1b14] border border-white/[0.08] light:bg-white light:border-[#d8e2dc] light:shadow-sm" aria-labelledby="allgames-start-title">
       <p class="help-eyebrow text-[#FFCB00] light:text-[#b88e00]">{{ translate('GET STARTED') }} <span aria-hidden="true" /></p>
       <h2 id="allgames-start-title" class="allgames-section-title text-white light:text-[#10261c]">{{ translate('Your next favorite starts here.') }}</h2>
       <p class="getting-started-intro text-[#a8bcb1] light:text-[#5d7066]">{{ translate('Explore 2Bet in three simple steps.') }}</p>
 
       <ol class="getting-started-steps grid" :aria-label="translate('Get started in three steps')">
         <li v-for="(step, index) in steps" :key="step.title" class="min-w-0">
-          <NuxtLink :to="step.to" class="getting-started-card bg-gradient-to-br from-[#162b20] to-[#102119] border border-white/[0.05] light:bg-gradient-to-br light:from-white light:via-[#f4fbf7] light:to-[#e6f4ec] light:border-[#009440]/20 light:shadow-sm">
+          <NuxtLink :to="step.to" data-bento-card class="getting-started-card bg-gradient-to-br from-[#162b20] to-[#102119] border border-white/[0.05] light:bg-gradient-to-br light:from-white light:via-[#f4fbf7] light:to-[#e6f4ec] light:border-[#009440]/20 light:shadow-sm">
             <span class="getting-started-icon"><img :src="step.image" :alt="translate(step.title)" width="128" height="128" loading="lazy" decoding="async"></span>
             <div class="getting-started-card-copy">
               <span class="getting-started-number text-[#62ddb0] light:text-[#019440]">{{ translate('STEP') }} 0{{ index + 1 }}</span>
@@ -49,7 +50,7 @@ function showAllFaqs() {
       </div>
     </section>
 
-    <section class="getting-started-faq bg-[#0e1b14] border border-white/[0.08] light:bg-white light:border-[#d8e2dc] light:shadow-sm" aria-labelledby="allgames-faq-title">
+    <section data-bento-card class="getting-started-faq bg-[#0e1b14] border border-white/[0.08] light:bg-white light:border-[#d8e2dc] light:shadow-sm" aria-labelledby="allgames-faq-title">
       <p class="help-eyebrow text-[#FFCB00] light:text-[#b88e00]">{{ translate('HERE TO HELP') }} <span aria-hidden="true" /></p>
       <div class="getting-started-faq-heading flex">
         <h2 id="allgames-faq-title" class="allgames-section-title text-white light:text-[#10261c]">{{ translate('A little help, before you play.') }}</h2>
@@ -63,7 +64,7 @@ function showAllFaqs() {
           :open="index === 0"
           class="bg-[#112219] border border-white/[0.08] text-[#e9f1ed] light:bg-white light:border light:border-emerald-500/15 light:shadow-sm light:rounded-[7px]"
         >
-          <summary class="text-[#e9f1ed] light:text-[#10261c] hover:bg-emerald-500/5 light:hover:bg-emerald-500/5">
+          <summary data-bento-card class="text-[#e9f1ed] light:text-[#10261c] hover:bg-emerald-500/5 light:hover:bg-emerald-500/5">
             {{ translate(faq.question) }}
             <span class="getting-started-faq-toggle text-[#62ddb0] light:bg-emerald-500/10 light:border-emerald-500/20 light:text-emerald-700" aria-hidden="true"><Plus class="faq-plus" :size="22" /><Minus class="faq-minus" :size="22" /></span>
           </summary>
@@ -71,7 +72,7 @@ function showAllFaqs() {
         </details>
       </div>
     </section>
-  </div>
+  </MagicBento>
 </template>
 
 <style scoped>

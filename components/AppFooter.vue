@@ -113,7 +113,7 @@ onBeforeUnmount(() => {
           <div v-show="openSections.specialPromotion" class="pt-3 pb-1 text-[13px] sm:text-[14px] text-[#8e9491] light:text-[#5d7066] space-y-2">
             <div>
               <NuxtLink to="/bonus/share-and-earn" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">
-                {{ translate('分享賺錢計劃') }}
+                {{ translate('分享賺錢計劃') }} 1
               </NuxtLink>
             </div>
             <div>

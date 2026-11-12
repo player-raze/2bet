@@ -41,68 +41,26 @@ const activeNavMode = ref<NavMode>(getNavModeForPath(route.path))
 const displayedNavMode = ref<NavMode>(activeNavMode.value)
 const navModes: NavMode[] = ['primary', 'casino', 'egames', 'live-plaza']
 const doorPosition = ref(activeNavMode.value === 'primary' ? 0 : 4)
-const isNavVisible = ref(true)
 const isDoorAnimating = ref(false)
 const isMobileViewport = ref(false)
 const isBonusDetailPage = computed(() => route.path.startsWith('/bonus/') || route.path.startsWith('/explore/bonus/'))
 const isCustomerServiceChatPage = computed(() => /^\/(?:explore\/)?egames\/customer-service\/[12]\/?$/.test(route.path))
-const showNavigation = computed(() => !isBonusDetailPage.value && (isDoorAnimating.value || isNavVisible.value))
+const showNavigation = computed(() => !isBonusDetailPage.value && !isCustomerServiceChatPage.value)
 const updateViewport = (): void => { isMobileViewport.value = window.innerWidth < 1024 }
-
-const SCROLL_DIRECTION_THRESHOLD = 8
-const TOP_VISIBILITY_THRESHOLD = 16
-
-let lastScrollY = 0
-let scrollFrameId: number | null = null
-
-const updateNavVisibility = () => {
-  const currentScrollY = Math.max(window.scrollY, 0)
-
-  if (currentScrollY <= TOP_VISIBILITY_THRESHOLD) {
-    isNavVisible.value = true
-    lastScrollY = currentScrollY
-    scrollFrameId = null
-    return
-  }
-
-  const scrollDelta = currentScrollY - lastScrollY
-
-  if (Math.abs(scrollDelta) >= SCROLL_DIRECTION_THRESHOLD) {
-    isNavVisible.value = scrollDelta < 0
-    lastScrollY = currentScrollY
-  }
-
-  scrollFrameId = null
-}
-
-const handleScroll = () => {
-  if (scrollFrameId === null) {
-    scrollFrameId = window.requestAnimationFrame(updateNavVisibility)
-  }
-}
 
 watch(() => route.path, (path) => {
   void changeNavMode(getNavModeForPath(path))
-  isNavVisible.value = true
-  lastScrollY = Math.max(window.scrollY, 0)
 })
 
 onMounted(() => {
   updateViewport()
   window.addEventListener('resize', updateViewport, { passive: true })
-  lastScrollY = Math.max(window.scrollY, 0)
-  window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 onBeforeUnmount(() => {
   doorRequest++
   cancelDoorAnimation()
   window.removeEventListener('resize', updateViewport)
-  window.removeEventListener('scroll', handleScroll)
-
-  if (scrollFrameId !== null) {
-    window.cancelAnimationFrame(scrollFrameId)
-  }
 })
 
 const isPathActive = (destination: string): boolean => {
@@ -351,7 +309,7 @@ const handleNavCell = (cell: NavCell): void => {
 
 <template>
   <nav
-    v-show="!isBonusDetailPage && !isCustomerServiceChatPage"
+    v-show="showNavigation"
     class="mobile-bottom-nav bg-[#111111] text-[#8c8c8c] light:bg-white light:text-[#5d7066] light:border-t light:border-[#d8e2dc] light:shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"
     :class="{
       'mobile-bottom-nav--hidden': !showNavigation,
