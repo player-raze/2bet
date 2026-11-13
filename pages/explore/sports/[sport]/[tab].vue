@@ -34,20 +34,20 @@ const activeTabInfo = computed(() => {
 
   if (t === 'league') {
     return {
-      title: formatSeoTitle(`Ligas e Torneios de ${s} — Linhas de Apostas | 2bet`),
-      description: formatSeoDescription(`Aposte nas principais ligas e torneios de ${s.toLowerCase()} na 2bet Brasil. Cotações competitivas, prévias e cobertura completa.`),
+      title: formatSeoTitle(`Ligas e Torneios de ${s} — Linhas de Apostas | login 2bet`),
+      description: formatSeoDescription(`Aposte nas principais ligas e torneios de ${s.toLowerCase()} na login 2bet Brasil. Cotações competitivas, prévias e cobertura completa.`),
     }
   }
   if (t === 'inplay') {
     return {
-      title: formatSeoTitle(`Apostas ao Vivo em ${s} — Cotações em Tempo Real | 2bet`),
-      description: formatSeoDescription(`Acompanhe partidas de ${s.toLowerCase()} ao vivo na 2bet Brasil. Linhas dinâmicas em tempo real, placar atualizado e cash out rápido.`),
+      title: formatSeoTitle(`Apostas ao Vivo em ${s} — Cotações em Tempo Real | 2Bet Login App`),
+      description: formatSeoDescription(`Acompanhe partidas de ${s.toLowerCase()} ao vivo na 2Bet login app. Linhas dinâmicas em tempo real, placar atualizado e cash out rápido.`),
     }
   }
   if (t === 'upcoming') {
     return {
-      title: formatSeoTitle(`Próximas Partidas de ${s} e Agenda de Jogos | 2bet`),
-      description: formatSeoDescription(`Confira a programação das próximas partidas de ${s.toLowerCase()} na 2bet Brasil. Compare linhas antecipadas e garanta as melhores odds.`),
+      title: formatSeoTitle(`2Bet Apostas | Próximas Partidas de ${s} e Agenda de Jogos`),
+      description: formatSeoDescription(`Confira a programação das próximas partidas de ${s.toLowerCase()} na 2Bet apostas. Compare linhas antecipadas e garanta as melhores odds.`),
     }
   }
   if (t === 'pre-match' || t === 'prematch') {

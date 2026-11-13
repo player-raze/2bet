@@ -55,8 +55,8 @@ const abuseClauses = [
 ]
 
 useAppSeo({
-  title: 'Termos e Condições Gerais das Promoções e Bônus | 2bet',
-  description: 'Consulte os requisitos de rollover e regras das promoções da 2bet Brasil. Informações claras para você aproveitar seus bônus com confiança.',
+  title: 'Termos e Condições Gerais das Promoções e Bônus | 2Bet Apk',
+  description: 'Consulte os requisitos de rollover e regras das promoções da 2bet apk. Informações claras para você aproveitar seus bônus com confiança.',
   breadcrumbs: [
     { name: 'Início', path: '/' },
     { name: 'Bônus', path: '/bonuses' },

@@ -17,7 +17,7 @@ const themedProviderLogo = (providerLogo: string): string => {
 <template>
   <section class="winners-card mb-8 rounded-md bg-[#171817] light:bg-white light:border light:border-emerald-500/15 shadow-sm">
     <div class="flex items-center justify-between px-4 pt-2">
-      <h3 class="text-[16px] font-bold text-white light:text-[#10261c]">{{ translate('Winners List') }}</h3>
+      <h2 class="text-[16px] font-bold text-white light:text-[#10261c]">{{ translate('Winners List') }}</h2>
     </div>
 
     <TransitionGroup name="winner-fade" tag="div" class="divide-y divide-white/5 light:divide-emerald-500/10">

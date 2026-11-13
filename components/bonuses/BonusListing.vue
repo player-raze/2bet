@@ -91,11 +91,11 @@ useAppSeo({
   <div class="bonuses-page text-[#f5f5f5] light:text-[#10261c]">
     <MobileBonusListing :category="category" />
     <div class="bonuses-desktop">
-    <div class="bonuses-sticky sticky-header-seal bg-black light:bg-[#f4f8f5]">
+    <div class="bonuses-sticky rounded-xl sticky-header-seal bg-black pb-2 light:bg-[#f4f8f5]">
       <SeoHeader
         title="Bonuses"
-        meta-title="2bet Bônus de Cassino e Promoções Exclusivas"
-        description="Explore as promoções e bônus exclusivos da 2bet Brasil, incluindo o Programa Compartilhe e Ganhe e Privilégios VIP com regras claras."
+        meta-title="2bet Bonus de Cassino e Promoções Exclusivas"
+        description="Explore e aproveite nossas promoções e ofertas exclusivas no 2bet bonus, incluindo o programa Compartilhe e Ganhe e privilégios VIP."
         keywords="2bet bônus, USDT, Compartilhe e Ganhe, Clube VIP, promoções"
         custom-class="bonus-page-header"
       >
@@ -150,8 +150,8 @@ useAppSeo({
             <span v-if="promotion.showSaveBadge" class="featured-card__save text-white bg-[#ef174c]">◎ {{ translate('Save') }}</span>
           </div>
 
-          <div class="featured-card__copy bg-[#015D25]">
-            <strong class="text-white">{{ translate(promotion.title) }}</strong>
+          <div class="featured-card__copy bg-[#015D25]  ">
+            <strong class="text-white light:text-white">{{ translate(promotion.title) }}</strong>
             <span class="text-white/70">{{ translate(getFeaturedMeta(promotion)) }}</span>
           </div>
         </NuxtLink>
@@ -230,8 +230,6 @@ useAppSeo({
   z-index: 24;
   top: var(--content-sticky-top);
   margin: 0 -0.05rem 0;
-  padding: 0 0.05rem 0.28rem;
-  border-radius: 50px 50px 0  0 ;
 }
 
 :deep(.bonus-page-header) {
@@ -239,7 +237,6 @@ useAppSeo({
   margin-bottom: 0.28rem;
   padding: 0.26rem 0.45rem;
   border: 1px solid rgba(255, 255, 255, 0.035);
-  border-radius: 0.48rem;
 }
 
 .philippines-badge {

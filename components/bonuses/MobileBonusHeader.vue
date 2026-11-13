@@ -19,7 +19,7 @@ const { translate } = useSiteLocale()
     <h1>{{ translate('Bonuses') }}</h1>
     <BonusCurrencySelector v-if="currencySelector" v-model="selectedCurrency" />
     <NuxtLink v-else to="/account/language" class="mobile-bonus-header__flag bg-white/15 text-white" :aria-label="translate('Select language')">
-      <img src="/icons/PHP.webp" alt="Brazil" width="24" height="24">
+      <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2212%22%20fill%3D%22%2300a651%22%2F%3E%3Cpath%20d%3D%22M12%203%2023%2012%2012%2021%201%2012Z%22%20fill%3D%22%23ffdf00%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%225.7%22%20fill%3D%22%230047ab%22%2F%3E%3Cpath%20d%3D%22M6.7%2010.6q6.1-.7%2010.5%204%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%221.2%22%2F%3E%3C%2Fsvg%3E" alt="Brazil" width="24" height="24">
     </NuxtLink>
   </header>
 </template>

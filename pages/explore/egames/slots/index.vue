@@ -42,8 +42,8 @@ import { getProviderLogoForTheme } from '~/utils/providerLogo'
 const { effectiveTheme } = useSiteTheme()
 
 useAppSeo({
-  title: 'Slots Online — Caça-Níqueis com Alto RTP e Jackpots | 2bet',
-  description: 'Gire os melhores caça-níqueis no cassino 2bet. Centenas de slots online com alto RTP, jackpots acumulados em R$ e recursos bônus incríveis.',
+  title: '2Bet Slot Login — Slots Com RTP Alto e Grandes Jackpots',
+  description: 'Escolha entre centenas de opções de slots online na 2Bet slot login, que contam com alto RTP, jackpots em reais (R$) e recursos de bônus..',
   breadcrumbs: [
     { name: 'Início', path: '/' },
     { name: 'eGames', path: '/egames/slots' },

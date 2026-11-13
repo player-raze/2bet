@@ -16,8 +16,8 @@ const { selectedTimeZone } = useTimeZonePreference()
 const { setThemePreference, themePreference } = useSiteTheme()
 
 useAppSeo({
-  title: computed(() => locale.value === 'pt' ? 'Minha Conta — Perfil do Jogador e Nível do Clube VIP | 2bet' : 'My Account Profile & VIP Overview | 2Bet Brasil'),
-  description: computed(() => locale.value === 'pt' ? 'Acesse sua conta na 2bet Brasil para gerenciar saldo em BRL, conferir seu nível no Clube VIP e acompanhar transações com total segurança.' : 'Manage your 2Bet account profile, security settings, VIP tier status, and transaction history. Fast, secure account management on 2Bet Brasil.'),
+  title: computed(() => locale.value === 'pt' ? '2bet casino login app | Perfil do Jogador e Nível do Clube VIP' : 'My Account Profile & VIP Overview | 2Bet Brasil'),
+  description: computed(() => locale.value === 'pt' ? 'Acesse sua conta na 2bet casino login app para gerenciar saldo em BRL, conferir seu nível no Clube VIP e acompanhar transações com total segurança.' : 'Manage your 2bet casino login app account profile, security settings, VIP tier status, and transaction history. Fast, secure account management on 2Bet Brasil.'),
   keywords: '2bet login, minha conta 2bet, clube vip 2bet, perfil 2bet',
   breadcrumbs: computed(() => [
     { name: translate('Home'), path: '/' },

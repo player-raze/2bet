@@ -1,6 +1,80 @@
 {
   "schemaVersion": 1,
   "records": {
+    "bonus-da-virada-8-x-9": {
+      "id": "bonus-da-virada-8-x-9",
+      "slug": "bonus-da-virada-8-x-9",
+      "innerIcon": "/icons/promotions/megaphone.svg",
+      "title": "BÔNUS DA VIRADA 8 x 9",
+      "subtitle": "O JOGADOR FEZ 8 E O BANCO FEZ 9? VOCÊ PODE GANHAR ATÉ R$ 5.888!",
+      "language": "pt-BR",
+      "seoTitle": "Bônus da Virada 8 x 9 — Até R$ 5.888 no Bacará | 2bet",
+      "seoDesc": "Conheça o Bônus da Virada 8 x 9 da 2bet: aposte no Jogador no Bacará ao Vivo e confira as condições para solicitar um bônus de até R$ 5.888.",
+      "period": "2026-11-10 12:00:00 - 2027-01-01 11:59:59 (GMT+08:00)",
+      "paymentMethods": [
+        "BRL"
+      ],
+      "iconType": "live-casino",
+      "accentColor": "#019440",
+      "showRequirements": false,
+      "qualifications": [
+        {
+          "label": "Registration Platform",
+          "value": "PC、Mobile、App Sport"
+        }
+      ],
+      "eventContent": {
+        "description": "🃏Aposte no Jogador na mesa de Bacará ao Vivo da 2bet. Se a mão do Jogador terminar com 8 pontos e a do Banco com 9 pontos, você poderá solicitar um bônus especial de até R$ 5.888!🍀",
+        "descriptionTone": "white",
+        "tables": [
+          {
+            "variant": "outline",
+            "accentColor": "#777777",
+            "compact": true,
+            "columns": [
+              {
+                "key": "betAmount",
+                "label": "Valor da aposta",
+                "width": "50%"
+              },
+              {
+                "key": "bonus",
+                "label": "Bônus",
+                "width": "50%"
+              }
+            ],
+            "rows": [
+              {
+                "betAmount": "R$ 1.000",
+                "bonus": "R$ 88"
+              },
+              {
+                "betAmount": "R$ 10.000",
+                "bonus": "R$ 288"
+              },
+              {
+                "betAmount": "R$ 50.000",
+                "bonus": "R$ 2.888"
+              },
+              {
+                "betAmount": "R$ 100.000",
+                "bonus": "R$ 5.888"
+              }
+            ]
+          }
+        ]
+      },
+      "promotionTerms": "1. Same IP is not applicable",
+      "rules": [
+        "O bônus estará sujeito a um rollover de 8x antes de poder ser sacado.",
+        "A promoção é válida somente quando o resultado de 8 pontos para o Jogador e 9 pontos para o Banco ocorrer nas cartas iniciais, sem necessidade de compra de cartas adicionais. Apostas simultâneas no Jogador e no Banco não são elegíveis.",
+        "Exemplo: O membro A aposta R$ 100.000 no Jogador em uma mesa de Bacará ao Vivo da 2bet. As cartas iniciais resultam em 8 pontos para o Jogador e 9 pontos para o Banco. Nesse caso, o membro poderá receber um bônus de R$ 5.888. A promoção é válida exclusivamente para apostas no Jogador.",
+        "Os membros que atenderem aos requisitos poderão solicitar o bônus por meio do atendimento online. Cada membro poderá solicitar o bônus uma vez por dia. A solicitação deverá ser feita em até 24 horas após o resultado da rodada. Após esse prazo, o direito ao bônus será perdido.",
+        "Ao participar desta promoção, o membro declara estar de acordo com os Termos e Condições Gerais das Promoções."
+      ],
+      "rulesStyle": "plain",
+      "hasJoinButton": false
+    },
     "programa-vip": {
       "id": "programa-vip",
       "slug": "programa-vip",

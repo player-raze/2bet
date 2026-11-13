@@ -279,7 +279,7 @@ onBeforeUnmount(() => {
               <span>{{ translate(childItem.label) }}</span>
             </component>
             <NuxtLink
-              v-for="sport in (isLiveSportsRoute || isAboutUsRoute) && item.label === 'Sports' ? desktopLiveSports : []"
+              v-for="sport in (isAboutUsRoute && !isLiveSportsRoute) && item.label === 'Sports' ? desktopLiveSports : []"
               :key="sport.label"
               :to="isAboutUsRoute && sport.label === 'Baseball' ? '/sports/baseball' : sport.to"
               :external="sport.to.startsWith('http')"

@@ -65,8 +65,8 @@ const copiedContact = ref<'phone' | 'email' | null>(null)
 let copyResetTimer: ReturnType<typeof setTimeout> | null = null
 
 useAppSeo({
-  title: 'Programa de Afiliados Oficial e Comissões Exclusivas | 2bet',
-  description: 'Torne-se parceiro da 2bet Brasil e receba até 55% de comissões contínuas. Acompanhe relatórios em tempo real e receba pagamentos pontuais.',
+  title: 'Link Alternatif 2Bet | Programa de Afiliados e Comissões',
+  description: 'Torne-se parceiro da link alternatif 2Bet e receba até 55% de comissões contínuas. Acompanhe relatórios em tempo real e receba pagamentos pontuais.',
   breadcrumbs: [
     { name: 'Início', path: '/' },
     { name: 'Programa de Afiliados', path: '/affiliate' },
@@ -271,7 +271,7 @@ onBeforeUnmount(() => {
           role="tab"
           :aria-selected="activeTab === tab.id"
           :class="{ 'affiliate-tab--active': activeTab === tab.id }"
-          class="text-[#8e9491] hover:text-white light:text-[#5d7066] light:hover:text-[#10261c]"
+          class="text-[#8e9491] hover:text-white light:text-[#5d7066] "
           @click="activeTab = tab.id"
         >
           {{ tab.label }}
@@ -521,7 +521,7 @@ onBeforeUnmount(() => {
 .affiliate-tabs button:hover,
 .affiliate-tabs .affiliate-tab--active {
   color: #fff;
-  background: var(--main-color, #007554);
+  /* background: var(--main-color, #007554); */
 }
 
 .affiliate-section-title {

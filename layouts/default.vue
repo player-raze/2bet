@@ -29,6 +29,9 @@ const usesDesktopContentReferenceShell = computed(() => {
     || path === '/bonuses'
     || path.startsWith('/bonuses/')
     || path.startsWith('/bonus/')
+    || path === '/blogs'
+    || path.startsWith('/blogs/')
+    || path.startsWith('/blog/')
     || path === '/live-plaza'
     || path.startsWith('/live-plaza/')
     || path === '/account'
@@ -82,6 +85,8 @@ const isDedicatedMobileHeaderPage = computed(() => {
     '/account/timezone',
     '/bonuses',
     '/bonus',
+    '/blogs',
+    '/blog',
   ].some(prefix => path === prefix || path.startsWith(prefix + '/'))
 })
 const isMobileDevice = (): boolean => {

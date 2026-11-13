@@ -6,10 +6,22 @@ const presentation: Array<{
   bannerImage: string
   title: string
   description: string
+  rate?: string
   slug: string
   accentColor: string
   imagePosition?: string
 }> = [
+  {
+    id: 'bonus-da-virada-8-x-9',
+    tone: 'live-casino',
+    bannerImage: '/images/promotions/bonus_da_virada_8_x_9.png',
+    title: 'BÔNUS DA VIRADA 8 x 9',
+    description: 'Até R$ 5.888 no Bacará ao Vivo',
+    rate: 'Até R$ 5.888',
+    slug: 'bonus-da-virada-8-x-9',
+    accentColor: '#009440',
+    imagePosition: 'center',
+  },
   {
     id: 'seu-primeiro-deposito',
     tone: 'slots',

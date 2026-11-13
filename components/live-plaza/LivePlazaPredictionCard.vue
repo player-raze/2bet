@@ -165,7 +165,6 @@ const isPredictedOption = (option: PredictionOption): boolean => {
           :key="`${option.label}-${option.odd}`"
           type="button"
           class="bg-[#252525] light:bg-white text-[#929592] light:text-[#5d7066] border border-transparent light:border-[#d8e2dc] hover:text-white light:hover:text-[#10261c] hover:bg-[#2d2d2d] light:hover:bg-[#eaf5ee]"
-          :class="{ '!border-[#00a676] !bg-[#073628] light:!bg-[#d9ede1] !text-white light:!text-[#017a35]': isPredictedOption(option) }"
           @click="emit('selectOdd', prediction, option)"
         >
           <span>{{ option.label }}</span>

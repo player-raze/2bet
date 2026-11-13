@@ -5,6 +5,7 @@
   "scripts": {
     "postinstall": "nuxt prepare",
     "dev": "node scripts/dev.mjs",
+    "bloggerist": "node scripts/bloggerist.mjs",
     "build": "nuxt build && node scripts/generate-sitemap.mjs && node scripts/generate-llms-txt.mjs",
     "typecheck": "nuxt typecheck",
     "predictions:refresh": "node scripts/refresh-daily-predictions.mjs",
@@ -17,6 +18,7 @@
     "lucide-vue-next": "^0.468.0",
     "mpegts.js": "^1.8.2",
     "nuxt": "^4.4.5",
+    "ultrahtml": "^1.7.0",
     "vue": "latest",
     "vue-router": "latest"
   },

@@ -13,8 +13,8 @@ const activeCategory = computed(() => {
 const categoryLabel = computed(() => LIVE_CASINO_CATEGORIES.find(category => category.key === activeCategory.value)?.label || 'Live Tables')
 
 useAppSeo({
-  title: computed(() => formatSeoTitle(`${translate(categoryLabel.value)} ao Vivo — Mesas com Crupiês Reais | 2bet`)),
-  description: computed(() => formatSeoDescription(`Jogue ${translate(categoryLabel.value).toLowerCase()} ao vivo na 2bet Brasil. Mesas exclusivas com crupiês profissionais, transmissão em HD e limites flexíveis.`)),
+  title: computed(() => formatSeoTitle(` ${translate(categoryLabel.value)} ao Vivo — Mesas com Crupiês Reais | 2Bet Game`)),
+  description: computed(() => formatSeoDescription(`Jogue ${translate(categoryLabel.value).toLowerCase()} ao vivo na 2Bet game. Mesas exclusivas com crupiês profissionais, transmissão em HD e limites flexíveis.`)),
   breadcrumbs: computed(() => [
     { name: 'Início', path: '/' },
     { name: 'Cassino ao Vivo', path: '/entertainment/live-casino/featured' },

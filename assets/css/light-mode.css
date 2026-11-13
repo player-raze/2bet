@@ -113,7 +113,6 @@ html[data-theme='light']:not(#_) .footer,
 html[data-theme='light']:not(#_) .app-footer {
   border-top-color: rgba(3, 98, 66, 0.14);
   color: #5d7066;
-  background: #edf4f0;
 }
 
 html[data-theme='light']:not(#_) .footer h2,
@@ -1637,7 +1636,7 @@ html[data-theme='light']:not(#_) .affiliate-tabs button:hover {
 }
 
 html[data-theme='light']:not(#_) .affiliate-tabs .affiliate-tab--active {
-  color: #ffffff;
+  color: #ffffff!important;
   background: var(--main-color);
 }
 
@@ -2071,7 +2070,7 @@ html[data-theme='light']:not(#_) .market-tab:hover {
 
 html[data-theme='light']:not(#_) .market-tab--active,
 html[data-theme='light']:not(#_) .market-tab--active:hover {
-  color: #ffffff;
+  color: #ffffff!important;
   background: var(--main-color);
 }
 

@@ -412,27 +412,10 @@ export const formatSeoTitle = (
     return raw
   }
 
-  const escapedSite = escapeRegExp(cleanSiteName)
-  const trailingBrandRegex = new RegExp(
-    `\\s*\\|\\s*(?:${escapedSite}(?:\\s+[^|]*)?|ByBet(?:\\s+[^|]*)?|2Bet(?:\\s+[^|]*)?)\\s*$`,
-    'i',
-  )
-  let baseTitle = raw.replace(trailingBrandRegex, '').trim()
-
-  if (!baseTitle || baseTitle.toLowerCase() === cleanSiteName.toLowerCase()) {
-    baseTitle = locale === 'pt'
-      ? 'Apostas Esportivas, Cassino ao Vivo e Slots Online'
-      : 'Online Casino, Live Dealer Tables & Sports Betting'
-  }
-
-  const suffix = ` | ${cleanSiteName}`
-  if (locale === 'pt') {
-    const minBase = Math.max(10, 50 - suffix.length)
-    const maxBase = Math.max(minBase, 60 - suffix.length)
-    baseTitle = enforcePtBaseTitleLength(baseTitle, minBase, maxBase)
-  }
-
-  return `${baseTitle}${suffix}`
+  // Preserve the title exactly as authored. In particular, an explicit
+  // "| 2bet" suffix is meaningful metadata and must not be stripped or
+  // appended automatically.
+  return raw
 }
 
 export const isHomepageRoute = (routePath?: string): boolean => {

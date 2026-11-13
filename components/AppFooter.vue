@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <footer id="support" class="app-footer w-full text-[#8e9491] light:text-[#5d7066] light:bg-[#edf4f0] select-none border-t border-white/[0.04] light:border-[#d8e2dc] mt-1 sm:mt-4 px-3 sm:px-0">
+  <footer id="support" class="app-footer w-full text-[#8e9491] light:text-[#5d7066] select-none border-t border-white/[0.04] light:border-transparent mt-1 sm:mt-4 px-3 sm:px-0">
     <div class="footer-inner max-w-5xl mx-auto bg-[#141414] light:bg-white rounded-xl px-4 sm:px-6 pb-20 sm:pb-12 border border-white/5 light:border-[#d8e2dc] light:shadow-sm">
       <!-- Section 1: Special Promotion -->
        <!-- sample test -->
@@ -146,6 +146,7 @@ onBeforeUnmount(() => {
             <div><NuxtLink to="/terms-of-use" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('Terms of Use') }}</NuxtLink></div>
             <div><NuxtLink to="/privacy-policy" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('Privacy Policy') }}</NuxtLink></div>
             <div><NuxtLink to="/about-us" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">{{ translate('About Us') }}</NuxtLink></div>
+            <div><NuxtLink to="/blogs" class="hover:text-white light:hover:text-[#10261c] transition-colors inline-block">Blog</NuxtLink></div>
           </div>
         </Transition>
       </div>

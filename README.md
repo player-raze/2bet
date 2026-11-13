@@ -21,6 +21,36 @@ npm run typecheck
 npm run build
 ```
 
+## Blogs and Bloggerist
+
+The public blog list is `/blogs`; categories use `/blogs/<category>` and articles
+use `/blog/<blog-slug>`. Pagination keeps the category path, for example
+`/blogs/guides?page=2`. Published posts, categories and article content come from
+the existing Bloggerist blog APIs. Drafts and future scheduled posts remain
+hidden. Empty storage displays an empty list.
+
+`npm run dev` also starts the bundled `public/bloggerist` application through PHP
+on `http://127.0.0.1:8082` (or an available port if 8082 is occupied), and prints the
+admin URL: `/admin/blogs.php` on that PHP origin. The process stops with Nuxt. To run
+PHP separately, use `npm run bloggerist` and set `NUXT_BLOGGERIST_URL` to its printed
+origin when starting Nuxt. PHP with PDO SQLite and DOM extensions is required;
+without it, Nuxt still starts and the blogs page reports that content is unavailable.
+
+Use the existing Bloggerist administrator credentials. Configure them through
+Bloggerist's `admin/.env` or environment (`ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`,
+and `ADMIN_JWT_SECRET`); this integration does not create accounts or passwords.
+Local SQLite/runtime storage is `data/bloggerist`, outside the public source
+folder; an explicit `APP_STORAGE_DIR` takes precedence. Existing Bloggerist source
+files are not modified. Local PHP uses its own origin for `SITE_BASE_URL` unless
+explicitly configured.
+
+For production, serve Bloggerist as a separate PHP site with its folder as the
+document root, enforce its `.htaccess` restrictions (or Nginx equivalents), and
+set Nuxt's `NUXT_BLOGGERIST_URL` to that PHP origin. Configure Bloggerist's
+`SITE_BASE_URL` to the same origin so uploads resolve correctly. Nuxt excludes
+the Bloggerist source folder from public assets: PHP source, storage, configuration
+and repository files must never be published as downloadable static assets.
+
 ## Artwork note
 
 No reference screenshot or source image files were present in the workspace. All banner and game artwork is local, replaceable CSS/SVG-style illustration rendered by the Vue components. It does not depend on third-party image URLs. Replace the visual layers in `PromoBanners.vue`, `GameCard.vue`, `OriginalGames.vue`, and `LiveCasinoGrid.vue` when final licensed artwork is available.

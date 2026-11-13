@@ -4,8 +4,8 @@ import SubpageHeader from '~/components/SubpageHeader.vue'
 import AppInstallationGuide from '~/components/download/AppInstallationGuide.vue'
 
 useAppSeo({
-  title: 'Aplicativo Oficial — Guia de Download e Instalação | 2bet',
-  description: 'Conheça o aplicativo 2bet e acompanhe as instruções de download e instalação no celular.',
+  title: '2Bet App Login Download — Guia de Download e Instalação | 2bet',
+  description: 'Confira o aplicativo 2Bet app login download — baixe-o e siga as instruções para realizar o baixar e a instalação no seu celular.',
   keywords: '2bet app, baixar 2bet, instalação 2bet, app de apostas, cassino mobile',
   breadcrumbs: [
     { name: 'Início', path: '/' },

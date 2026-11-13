@@ -23,8 +23,8 @@ const tabs = computed(() => [
 const categoryLabel = computed(() => tabs.value.find(tab => tab.key === props.category)?.label || translate('Poker'))
 
 useAppSeo({
-  title: computed(() => formatSeoTitle(`${categoryLabel.value} Online — Jogos de Cartas e Mesa | 2bet`)),
-  description: computed(() => formatSeoDescription(`Divirta-se com jogos de ${categoryLabel.value.toLowerCase()} na 2bet Brasil. Mesas dinâmicas, disputas emocionantes e regras transparentes de cartas.`)),
+  title: computed(() => formatSeoTitle(`2Bet Poker | ${categoryLabel.value} Online Jogos de Cartas e Mesa`)),
+  description: computed(() => formatSeoDescription(`Divirta-se com jogos de ${categoryLabel.value.toLowerCase()} na 2Bet poker. Mesas dinâmicas, disputas emocionantes e regras transparentes de cartas.`)),
   breadcrumbs: computed(() => [
     { name: translate('Home'), path: '/' },
     { name: translate('Poker'), path: basePath },

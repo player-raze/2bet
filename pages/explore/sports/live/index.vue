@@ -2,8 +2,8 @@
 import LiveView from '~/components/sports/LiveView.vue'
 
 useAppSeo({
-  title: 'Central de Apostas ao Vivo — Placares e Cotações | 2bet',
-  description: 'Acesse a central de apostas ao vivo da 2bet Brasil. Placares em tempo real, estatísticas atualizadas e liquidação rápida de bilhetes.',
+  title: 'Plataforma 2bet | Aplicativo Premium de Apostas ao Vivo',
+  description: 'Acesse a central de apostas ao vivo da Plataforma 2bet Brasil. Placares em tempo real, estatísticas atualizadas e liquidação rápida de bilhetes.',
   breadcrumbs: [
     { name: 'Início', path: '/' },
     { name: 'Esportes', path: '/sports/popular' },

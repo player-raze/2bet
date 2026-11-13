@@ -3,6 +3,13 @@ import { onBeforeUnmount, onMounted, type Ref } from 'vue'
 const controls = 'button, a[href], [role="button"], input[type="button"], input[type="submit"], summary'
 const returnDuration = 240
 
+function isMagnetExcluded(element: HTMLElement): boolean {
+  for (let current: HTMLElement | null = element; current; current = current.parentElement) {
+    if (current.classList?.contains('getting-started-faq') || current.classList?.contains('allgames-footer')) return true
+  }
+  return false
+}
+
 export function setupHomepageMagnet(root: HTMLElement): () => void {
   const view = root.ownerDocument.defaultView
   if (!view) return () => {}
@@ -48,7 +55,9 @@ export function setupHomepageMagnet(root: HTMLElement): () => void {
     if (!motion.matches || event.pointerType !== 'mouse') return
     const target = event.target instanceof view!.Element ? event.target.closest(controls) : null
     if (!(target instanceof view!.HTMLElement) || !root.contains(target)
-      || target.matches(':disabled, [aria-disabled="true"]') || target.closest('[inert]')) {
+      || target.matches(':disabled, [aria-disabled="true"]')
+      || target.closest('[inert]')
+      || isMagnetExcluded(target)) {
       release()
       return
     }

@@ -17,6 +17,7 @@ const processGlobal = (
         INDEX_FOLLOW?: string
         LIVESTREAM_API?: string
         INPLAY_API?: string
+        BLOGGERIST_URL?: string
       }
     }
   }
@@ -52,6 +53,7 @@ export default defineNuxtConfig({
     kadarioSite: 'YBa-BnymZ6iN8pkfAUFTWIKn',
     inplayApi: environment?.INPLAY_API || 'https://live88.eu.cc/api/v1/scores?site=YBa-BnymZ6iN8pkfAUFTWIKn',
     livestreamApi: environment?.LIVESTREAM_API || 'https://live88.eu.cc/api/v1/scores?site=YBa-BnymZ6iN8pkfAUFTWIKn',
+    bloggeristUrl: environment?.BLOGGERIST_URL || 'http://127.0.0.1:8082',
   },
   modules: ['@nuxtjs/tailwindcss'],
   hooks: {
@@ -71,6 +73,19 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
+    // Bloggerist is executable PHP, not static website content.
+    ignore: ['**/bloggerist/**'],
+    devHandlers: [{
+      route: '/',
+      handler: (event) => {
+        let path = event.path.split('?')[0]
+        try { path = decodeURIComponent(path) } catch { /* Reject below if applicable. */ }
+        if (/^\/bloggerist(?:\/|$)/i.test(path)) {
+          event.node.res.statusCode = 404
+          return 'Not found'
+        }
+      },
+    }],
     hooks: {
       compiled: async (nitro) => {
         try {

@@ -113,8 +113,8 @@ useAppSeo({
     <div class="bonus-category-sticky sticky-header-seal bg-black light:bg-[#f4f8f5]">
       <SeoHeader
         title="Bonuses"
-        :meta-title="`${translate(categoryLabel)} — Bônus e Promoções de Cassino Online | 2bet`"
-        :description="`Explore bônus e promoções de ${translate(categoryLabel).toLowerCase()} disponíveis na 2bet Brasil. Aproveite recompensas, rebates e ofertas exclusivas.`"
+        :meta-title="`${translate(categoryLabel)} — Bônus e Promoções de Cassino Online | 2bet Casino`"
+        :description="`Explore os bônus de ${translate(categoryLabel).toLowerCase()} recompensas e promoções disponíveis na 2bet Brasil. Aproveite recompensas, cashbacks e ofertas exclusivas.`"
         keywords="2bet bônus, promoções, recompensas de depósito, rebates"
         back-to="/bonuses"
         custom-class="bonus-category-header"
@@ -157,8 +157,8 @@ useAppSeo({
           >
           <span v-if="promotion.showSaveBadge" class="category-card__save text-white bg-[#ef174c]">◎ {{ translate('Save') }}</span>
         </div>
-        <div class="category-card__copy bg-gradient-to-b from-[#07543e] to-[#064433]">
-          <strong class="text-white">{{ translate(promotion.title) }}</strong>
+        <div class="category-card__copy bg-[#015D25]">
+          <strong class="text-white light:text-white">{{ translate(promotion.title) }}</strong>
           <span class="text-white/80">{{ translate(countdown(promotion)) }}</span>
         </div>
       </NuxtLink>
@@ -186,8 +186,8 @@ useAppSeo({
           >
           <span v-if="promotion.showSaveBadge" class="category-card__save text-white bg-[#ef174c]">◎ {{ translate('Save') }}</span>
         </div>
-        <div class="category-card__copy bg-gradient-to-b from-[#07543e] to-[#064433]">
-          <strong class="text-white">{{ translate(promotion.title) }}</strong>
+        <div class="category-card__copy bg-[#015D25]">
+          <strong class="text-white light:text-white">{{ translate(promotion.title) }}</strong>
           <span class="text-white/80">{{ translate(countdown(promotion)) }}</span>
         </div>
       </NuxtLink>

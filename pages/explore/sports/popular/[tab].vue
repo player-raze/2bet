@@ -25,13 +25,13 @@ const tabMetaMap: Record<string, TabMeta> = {
   },
   upcoming: {
     label: 'Em Breve',
-    title: 'Próximas Partidas Esportivas — Agenda e Cotações | 2bet',
-    description: 'Confira a agenda de próximos eventos esportivos na 2bet Brasil. Compare cotações antecipadas em futebol, basquete, tênis e mais.',
+    title: '2Bet Bet | Partidas esportivas populares, agenda e odds',
+    description: 'Confira a agenda de próximos eventos esportivos na 2Bet bet. Compare cotações antecipadas em futebol, basquete, tênis e mais.',
   },
   'pre-match': {
     label: 'Pré-Jogo',
-    title: 'Odds Pré-Jogo Populares e Estatísticas de Partidas | 2bet',
-    description: 'Navegue pelas cotações pré-jogo mais procuradas na 2bet Brasil. Estatísticas detalhadas das maiores ligas esportivas mundiais.',
+    title: '2bet Com | Odds Pré-Jogo Populares e Estatísticas de Partidas',
+    description: 'Navegue pelas cotações pré-jogo mais procuradas na 2bet com Brasil. Estatísticas detalhadas das maiores ligas esportivas mundiais.',
   },
   'smart-pick': {
     label: 'Smart Pick',

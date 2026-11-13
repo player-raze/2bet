@@ -5,8 +5,8 @@ const { closeComments } = useCommentPanel()
 const { translate } = useSiteLocale()
 
 useAppSeo({
-  title: 'Central de Ajuda e Suporte ao Cliente 24 Horas | 2bet',
-  description: 'Atendimento rápido 24 horas por dia na 2bet Brasil. Esclareça dúvidas sobre depósitos, saques, bônus e regras de jogos via chat ao vivo.',
+  title: '2bet Suporte ao Cliente 24/7 e Central de Ajuda Online',
+  description: 'Atendimento rápido 24 horas por dia na 2bet Suporte. Esclareça dúvidas sobre depósitos, saques, bônus e regras de jogos via chat ao vivo.',
   keywords: 'suporte 2bet, atendimento ao cliente 2bet, ajuda 2bet, chat ao vivo',
   breadcrumbs: [
     { name: 'Início', path: '/' },
@@ -32,8 +32,8 @@ onMounted(() => {
     <SeoHeader
       sticky
       title="24/7 Services"
-      meta-title="Suporte ao Cliente 24/7 e Central de Ajuda Online | 2bet"
-      description="Fale com o suporte ao cliente 24/7 da 2bet para ajuda rápida com depósitos, saques, bônus e verificação de conta. Atendimento ao vivo."
+      meta-title="2bet Suporte ao Cliente 24/7 e Central de Ajuda Online"
+      description="Atendimento rápido 24 horas por dia na 2bet Suporte. Esclareça dúvidas sobre depósitos, saques, bônus e regras de jogos via chat ao vivo."
       back-to="/account/me"
     />
 

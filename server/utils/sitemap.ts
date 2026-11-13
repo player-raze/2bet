@@ -35,6 +35,7 @@ export function getSitemapEntries(): SitemapEntry[] {
     { path: '/egames/slots', changefreq: 'daily', priority: 0.9 },
     { path: '/egames/jackpot/all', changefreq: 'daily', priority: 0.9 },
     { path: '/entertainment/live-casino/baccarat', changefreq: 'daily', priority: 0.9 },
+    { path: '/entertainment/poker', changefreq: 'daily', priority: 0.9 },
 
     // Sports Betting
     { path: '/sports/popular/inplay', changefreq: 'hourly', priority: 0.8 },

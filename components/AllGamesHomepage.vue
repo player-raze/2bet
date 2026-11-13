@@ -46,6 +46,20 @@ const categoryDetails = [
 ]
 let motionPreference: MediaQueryList | undefined
 let sectionRevealObserver: IntersectionObserver | undefined
+let glareTimer: ReturnType<typeof setInterval> | undefined
+
+const triggerRandomHomepageGlare = () => {
+  if (motionPreference?.matches || !homepageMain.value) return
+  const targets = Array.from(homepageMain.value.querySelectorAll<HTMLElement>('.homepage-image-glare'))
+  if (!targets.length) return
+  const target = targets[Math.floor(Math.random() * targets.length)]
+  const shine = target.querySelector<HTMLElement>('.homepage-image-glare__shine')
+  if (!shine) return
+  shine.classList.remove('homepage-image-glare__shine--auto')
+  void shine.offsetWidth
+  shine.classList.add('homepage-image-glare__shine--auto')
+  window.setTimeout(() => shine.classList.remove('homepage-image-glare__shine--auto'), 950)
+}
 
 function uniqueBy<T>(items: T[], key: (item: T) => string): T[] {
   const seen = new Set<string>()
@@ -121,12 +135,14 @@ onMounted(() => {
   motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
   motionPreference.addEventListener('change', handleMotionPreference)
   initializeSectionEffects()
+  glareTimer = setInterval(triggerRandomHomepageGlare, 2000)
   inplayInterval = setInterval(() => {
     refreshInplay()
   }, 30000)
 })
 onBeforeUnmount(() => {
   if (inplayInterval) clearInterval(inplayInterval)
+  if (glareTimer) clearInterval(glareTimer)
   sectionRevealObserver?.disconnect()
   motionPreference?.removeEventListener('change', handleMotionPreference)
   window.removeEventListener('keydown', handleEscape)

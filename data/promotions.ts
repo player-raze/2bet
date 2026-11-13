@@ -203,6 +203,11 @@ export const PROMOTION_PLACEHOLDER_IMAGES = {
 } as const
 
 export const PROMO_IMAGE_MAP: Record<string, PromoImages> = {
+  'bonus-da-virada-8-x-9': {
+    header: '/images/promotions/bonus_da_virada_8_x_9_header.png',
+    banner: '/images/promotions/bonus_da_virada_8_x_9.png',
+    thumbnail: '/images/promotions/bonus_da_virada_8_x_9_thumb.png',
+  },
   'share-and-earn': {
     header: '/images/promotions/share_and_earn_header.webp',
     banner: '/images/promotions/share_and_earn.webp',
@@ -310,8 +315,27 @@ const vipPrivileges = bonusDetailDatabase.records['vip-privileges']
 const vipProgram = bonusDetailDatabase.records['programa-vip']
 const firstDeposit = bonusDetailDatabase.records['seu-primeiro-deposito']
 const dailyRecovery = bonusDetailDatabase.records['bonus-diario-de-recuperacao']
+const turnaroundBonus = bonusDetailDatabase.records['bonus-da-virada-8-x-9']
 
 export const PROMOTIONS: PromotionItem[] = [
+  {
+    id: turnaroundBonus.id,
+    slug: turnaroundBonus.slug,
+    title: turnaroundBonus.title,
+    description: turnaroundBonus.subtitle,
+    seoTitle: turnaroundBonus.seoTitle,
+    seoDesc: turnaroundBonus.seoDesc,
+    category: ['live-casino'],
+    categories: ['live-casino'],
+    paymentMethods: [...turnaroundBonus.paymentMethods],
+    thumbnailType: 'live-casino',
+    accentColor: '#019440',
+    bannerImage: PROMO_IMAGE_MAP['bonus-da-virada-8-x-9'],
+    headerImage: PROMO_IMAGE_MAP['bonus-da-virada-8-x-9']!.header,
+    thumbnailImage: PROMO_IMAGE_MAP['bonus-da-virada-8-x-9']!.thumbnail,
+    innerIcon: getBonusIcon(turnaroundBonus),
+    showSaveBadge: false,
+  },
   {
     id: vipProgram.id,
     slug: vipProgram.slug,

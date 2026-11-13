@@ -20,8 +20,8 @@ const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig
 const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
 
 useAppSeo({
-  title: 'Previsões de Apostas Esportivas com Alta Precisão | 2bet',
-  description: 'Acesse análises e previsões esportivas fundamentadas na 2bet Brasil. Estatísticas de partidas de futebol para orientar suas decisões.',
+  title: '2Bet Prediction | Apostas Esportivas com Alta Precisão',
+  description: 'Acesse análises e previsões esportivas fundamentadas na 2Bet Prediction. Estatísticas de partidas de futebol para orientar suas decisões.',
   breadcrumbs: [
     { name: 'Início', path: '/' },
     { name: 'Praça ao Vivo', path: '/live-plaza/home' },

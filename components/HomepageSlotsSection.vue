@@ -166,7 +166,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 decoding="async"
               >
               <span class="homepage-image-glare__shine" aria-hidden="true" />
-              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white bg-[#ff3f51]">
+              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white light:text-white bg-[#ff3f51]">
                 {{ game.badge || translate('HOT') }}
               </span>
               <span class="slots-game-play" aria-hidden="true">
@@ -252,7 +252,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
                 decoding="async"
               >
               <span class="homepage-image-glare__shine" aria-hidden="true" />
-              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white bg-[#ff3f51]">
+              <span v-if="game.badge || game.title === 'Sweet Bonanza 1000' || game.hotPercent" class="slots-game-hot text-white light:text-white bg-[#ff3f51]">
                 {{ game.badge || translate('HOT') }}
               </span>
               <span class="slots-game-play" aria-hidden="true">
