@@ -5,7 +5,12 @@ import process from 'node:process'
 import { setTimeout as delay } from 'node:timers/promises'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-const bundledRoot = fileURLToPath(new URL('../public/bloggerist/', import.meta.url))
+const rootCandidates = [
+  new URL('../bloggerist/', import.meta.url),
+  new URL('../public/bloggerist/', import.meta.url),
+]
+const resolvedRootUrl = rootCandidates.find(u => existsSync(u)) || rootCandidates[0]
+const bundledRoot = fileURLToPath(resolvedRootUrl)
 const router = fileURLToPath(new URL('./bloggerist-router.php', import.meta.url))
 const localStorage = fileURLToPath(new URL('../data/bloggerist/', import.meta.url))
 

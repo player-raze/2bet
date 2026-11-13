@@ -35,6 +35,8 @@ export default defineNuxtConfig({
     '**/data/*.json',
     '**/data/*.sqlite*',
     '**/data/*.log',
+    'bloggerist/**',
+    '**/bloggerist/**',
   ],
   devtools: { enabled: false },
   runtimeConfig: {

@@ -299,6 +299,7 @@ export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string)
   { label: 'Withdraw', icon: CreditCard, sectionId: null, to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, external: true }, //explore/account/withdraw
   { label: 'VIP', icon: Crown, sectionId: null, to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, external: true }, //explore/account/vip
   { label: 'History', icon: NotebookTabs, sectionId: null, to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, external: true }, // explore/account/history
+  { label: 'Blogs', icon: NotebookTabs, sectionId: null, to: `/blogs`, external: true }, // explore/account/history
   { label: 'English', icon: Globe, sectionId: null, control: 'language', surface: true },
   { label: 'Auto', icon: Moon, sectionId: null, control: 'theme', surface: true },
 ]

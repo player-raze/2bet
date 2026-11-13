@@ -1,0 +1,4 @@
+[submodule "bloggerist"]
+	path = bloggerist
+	url = https://github.com/YumiAlmero03/blog-system-for-google-ai.git
+	branch = main
