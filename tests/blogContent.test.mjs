@@ -44,7 +44,36 @@ test('drafts, private and future scheduled posts cannot appear publicly', () => 
   const now = Date.parse('2026-11-13T00:00:00Z')
   assert.equal(isPublishedBlog({ status: 'published', isPublic: true }, now), true)
   assert.equal(isPublishedBlog({ status: 'draft' }, now), false)
+  assert.equal(isPublishedBlog({ status: 'Draft' }, now), false)
+  assert.equal(isPublishedBlog({ isDraft: true }, now), false)
+  assert.equal(isPublishedBlog({ is_draft: 1 }, now), false)
+  assert.equal(isPublishedBlog({ status: 'archived' }, now), false)
   assert.equal(isPublishedBlog({ status: 'published', isPublic: false }, now), false)
   assert.equal(isPublishedBlog({ status: 'scheduled', scheduledAt: '2026-11-14T00:00:00Z' }, now), false)
   assert.equal(isPublishedBlog({ status: 'scheduled', scheduledAt: '2026-11-12T00:00:00Z' }, now), true)
 })
+
+test('blog category list filters out categories with 0 published blogs (including categories with only drafts)', () => {
+  const categories = [
+    { id: 'community', name: 'Community', slug: 'community', postCount: 1 },
+    { id: 'general', name: 'General', slug: 'general', postCount: 1 }, // had draft only
+    { id: 'promotions', name: 'Promotions', slug: 'promotions', postCount: 0 },
+    { id: 'sports-news', name: 'Sports News', slug: 'sports-news', postCount: 3 },
+  ]
+  // Only published posts are in the list; General has no published posts
+  const posts = [
+    { slug: 'test-1', status: 'published', category: { slug: 'community' } },
+    { slug: 'test-2', status: 'published', category: { slug: 'sports-news' } },
+  ]
+  const filterCategories = (cats, currentCategory = '') => cats.filter((item) => {
+    const hasPublishedPosts = posts.some(p => (p.category?.slug === item.slug || p.category?.id === item.id) && p.status !== 'draft')
+    const isCurrent = Boolean(currentCategory && (currentCategory === item.slug || currentCategory === item.id))
+    return hasPublishedPosts || isCurrent
+  })
+
+  const visible = filterCategories(categories)
+  assert.deepEqual(visible.map(c => c.slug), ['community', 'sports-news'])
+  assert.equal(visible.some(c => c.slug === 'general'), false, 'Category with only drafts must be excluded')
+  assert.equal(visible.some(c => c.slug === 'promotions'), false, 'Category with 0 posts must be excluded')
+})
+

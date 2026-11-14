@@ -10,6 +10,7 @@ export interface BlogPost {
   id: string
   slug: string
   title: string
+  status?: string
   excerpt: string
   featuredImage: string
   author: string

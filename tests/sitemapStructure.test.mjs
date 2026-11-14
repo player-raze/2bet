@@ -76,4 +76,11 @@ describe('Sitemap Architecture & Structure Suite', () => {
     assert.ok(indexContent.includes('https://2bet.br/sitemap-pages.xml'), 'sitemap-index.xml must contain sitemap-pages.xml')
     assert.ok(indexContent.includes('https://2bet.br/sitemap-blog.php'), 'sitemap-index.xml must contain sitemap-blog.php')
   })
+
+  test('Case 7: robots.txt disallows preview URLs for all user agents and Googlebot', () => {
+    const robotsPath = path.join(rootDir, 'server/routes/robots.txt.ts')
+    const content = fs.readFileSync(robotsPath, 'utf8')
+    assert.ok(content.includes('Disallow: /*?*preview='), 'Must disallow /*?*preview=')
+    assert.ok(content.includes('User-agent: Googlebot'), 'Must explicitly mention Googlebot')
+  })
 })

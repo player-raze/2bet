@@ -44,6 +44,7 @@ export function normalizeBlogPost(value: unknown, origin: string): BlogPost {
     id: String(post.id ?? ''),
     slug: string(post.slug),
     title: string(post.title),
+    status: string(post.status || 'published'),
     excerpt: string(post.excerpt),
     featuredImage: blogUrl(post.featuredImage, origin),
     author: string(writer.name) || string(post.author) || 'Editorial Team',
@@ -64,8 +65,12 @@ export function normalizeBlogPost(value: unknown, origin: string): BlogPost {
 
 export function isPublishedBlog(value: unknown, now = Date.now()): boolean {
   const post = asRecord(value)
-  if (post.isPublic === false || (post.status && !['published', 'scheduled'].includes(post.status))) return false
-  const scheduled = blogDate(post.scheduledAt)
+  const status = String(post.status || post.state || '').toLowerCase().trim()
+  if (status === 'draft' || status === 'archived' || status === 'trash') return false
+  if (post.isDraft === true || post.is_draft === true || post.is_draft === 1 || post.is_draft === '1') return false
+  if (post.isPublic === false || post.is_public === false || post.is_public === 0 || post.is_public === '0') return false
+  if (status && !['published', 'scheduled'].includes(status)) return false
+  const scheduled = blogDate(post.scheduledAt ?? post.scheduled_at)
   return !scheduled || new Date(scheduled).getTime() <= now
 }
 

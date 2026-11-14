@@ -30,10 +30,23 @@ const copy = computed(() => locale.value === 'pt' ? {
 })
 const category = computed(() => typeof route.params.category === 'string' ? route.params.category : '')
 const page = computed(() => Math.max(1, Math.min(10000, Number.parseInt(String(route.query.page || '1'), 10) || 1)))
-const query = computed(() => ({ count: 12, page: page.value, ...(category.value ? { category: category.value } : {}) }))
+const isPreview = computed(() => route.query.preview === '1' || route.query.preview === 'true')
+const query = computed(() => ({
+  count: 12,
+  page: page.value,
+  ...(category.value ? { category: category.value } : {}),
+  ...(isPreview.value ? { preview: '1' } : {}),
+}))
 const { data, error, status, refresh } = await useFetch<BlogListResponse>('/api/blogs', { query })
-const posts = computed(() => data.value?.blogs || [])
-const categories = computed(() => data.value?.categories || [])
+const posts = computed(() => (data.value?.blogs || []).filter(post => isPreview.value || post.status !== 'draft'))
+const categories = computed(() => {
+  const all = data.value?.categories || []
+  return all.filter((item) => {
+    const hasMatchingPosts = posts.value.some(p => p.category?.slug === item.slug || p.category?.id === item.id)
+    const isCurrent = Boolean(category.value && (category.value === item.slug || category.value === item.id))
+    return hasMatchingPosts || isCurrent
+  })
+})
 const pagination = computed(() => data.value?.pagination)
 const featured = computed(() => posts.value.slice(0, 4))
 const groups = computed(() => {
@@ -61,8 +74,19 @@ const postDate = (post: BlogPost) => {
 }
 const siteUrl = computed(() => String(config.public.siteUrl || 'https://2bet.com').replace(/\/+$/, ''))
 const title = computed(() => locale.value === 'pt' ? 'Blog — Novidades e Guias | 2bet' : 'Blog — News and Guides | 2bet')
-useSeoMeta({ title, ogTitle: title, twitterTitle: title, description: () => copy.value.intro, ogDescription: () => copy.value.intro, twitterDescription: () => copy.value.intro, ogType: 'website', twitterCard: 'summary_large_image' })
-useHead(() => ({ link: [{ rel: 'canonical', href: `${siteUrl.value}${categoryLink(category.value).path}${page.value > 1 ? `?page=${page.value}` : ''}` }] }))
+useSeoMeta({
+  title, ogTitle: title, twitterTitle: title,
+  description: () => copy.value.intro, ogDescription: () => copy.value.intro, twitterDescription: () => copy.value.intro,
+  ogType: 'website', twitterCard: 'summary_large_image',
+  robots: () => (isPreview.value ? 'noindex, nofollow, noarchive' : undefined),
+})
+useHead(() => ({
+  meta: isPreview.value ? [
+    { name: 'robots', content: 'noindex, nofollow, noarchive' },
+    { name: 'googlebot', content: 'noindex, nofollow, noarchive' },
+  ] : [],
+  link: isPreview.value ? [] : [{ rel: 'canonical', href: `${siteUrl.value}${categoryLink(category.value).path}${page.value > 1 ? `?page=${page.value}` : ''}` }],
+}))
 watch([page, category], () => featuredTrack.value?.scrollTo({ left: 0 }))
 </script>
 

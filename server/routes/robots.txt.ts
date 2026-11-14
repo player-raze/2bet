@@ -8,8 +8,29 @@ export default defineEventHandler((event: H3Event) => {
   setResponseHeader(event, 'content-type', 'text/plain; charset=utf-8')
 
   if (isIndexFollow) {
-    return `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap-index.xml\n`
+    return [
+      'User-agent: *',
+      'Disallow: /*?*preview=',
+      'Disallow: /*?preview=',
+      'Disallow: /*&preview=',
+      'Allow: /',
+      '',
+      'User-agent: Googlebot',
+      'Disallow: /*?*preview=',
+      'Disallow: /*?preview=',
+      'Disallow: /*&preview=',
+      'Allow: /',
+      '',
+      `Sitemap: ${siteUrl}/sitemap-index.xml`,
+      '',
+    ].join('\n')
   }
 
-  return `User-agent: *\nDisallow: /\n\nSitemap: ${siteUrl}/sitemap-index.xml\n`
+  return [
+    'User-agent: *',
+    'Disallow: /',
+    '',
+    `Sitemap: ${siteUrl}/sitemap-index.xml`,
+    '',
+  ].join('\n')
 })

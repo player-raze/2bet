@@ -14,10 +14,14 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const { locale } = useSiteLocale()
 const slug = computed(() => String(route.params.slug || ''))
-const { data, error, status, refresh } = await useFetch<BlogDetailResponse>(() => `/api/blogs/${encodeURIComponent(slug.value)}`)
+const isPreview = computed(() => route.query.preview === '1' || route.query.preview === 'true')
+const { data, error, status, refresh } = await useFetch<BlogDetailResponse>(() => `/api/blogs/${encodeURIComponent(slug.value)}`, {
+  query: computed(() => (isPreview.value ? { preview: '1' } : {})),
+})
 const missing = error.value && (error.value.statusCode === 404 || error.value.status === 404)
 if (missing) throw createError({ statusCode: 404, statusMessage: locale.value === 'pt' ? 'Artigo não encontrado' : 'Article not found' })
 const post = computed(() => data.value?.blog)
+const isNoIndex = computed(() => isPreview.value || post.value?.status === 'draft')
 const related = computed(() => data.value?.related || [])
 const copy = computed(() => locale.value === 'pt' ? {
   blog: 'Blog', back: 'Todos os artigos', related: 'Leia também', by: 'Por', updated: 'Atualizado em',
@@ -43,9 +47,14 @@ useSeoMeta({
   ogType: 'article', twitterCard: 'summary_large_image',
   articlePublishedTime: () => post.value?.publishedAt || undefined,
   articleModifiedTime: () => post.value?.updatedAt || undefined,
+  robots: () => (isNoIndex.value ? 'noindex, nofollow, noarchive' : undefined),
 })
 useHead(() => ({
-  link: [{ rel: 'canonical', href: canonical.value }],
+  meta: isNoIndex.value ? [
+    { name: 'robots', content: 'noindex, nofollow, noarchive' },
+    { name: 'googlebot', content: 'noindex, nofollow, noarchive' },
+  ] : [],
+  link: isNoIndex.value ? [] : [{ rel: 'canonical', href: canonical.value }],
   script: post.value ? [{ key: 'blog-article-schema', type: 'application/ld+json', children: JSON.stringify({
     '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.value.title,
     description: description.value, url: canonical.value, mainEntityOfPage: canonical.value,
@@ -97,6 +106,8 @@ useHead(() => ({
 .blog-detail-page { width: 100%; min-width: 0; color: var(--text); }
 .blog-detail-content { min-width: 0; }
 .blog-banner { width: 100%; height: clamp(180px,22vw,310px); overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.blog-banner :deep(img) { object-position: center 10%; }
+.blog-banner :deep(.blog-image--fallback img) { object-position: center; }
 .blog-detail-columns { display: grid; grid-template-columns: minmax(0,1fr); gap: 14px; align-items: start; margin-top: 12px; }
 .blog-detail-columns--related { grid-template-columns: minmax(0,1fr) minmax(220px,28%); }
 .blog-article { min-width: 0; padding: clamp(20px,2.6vw,36px); border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
