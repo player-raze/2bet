@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
     :aria-label="translate('Main navigation')"
   >
     <div class="rail-viewport">
-      <nav id="rail-navigation" class="rail-pill light:bg-white/80 light:border-[#d8e2dc] light:shadow-sm">
+      <nav id="rail-navigation" class="rail-pill light:bg-white/80 light:border-[#d8e2dc] light:shadow-sm backdrop-blur-xl">
         <template v-for="(item, itemIndex) in railItems" :key="`${item.label}-${itemIndex}`">
           <component
             :is="item.to ? nuxtLinkComponent : item.sectionId && !isExpandable(item) ? 'a' : 'button'"
