@@ -114,3 +114,123 @@ export function sanitizeBlogHtml(html: string, origin: string): string {
   }
   return render(parse(html))
 }
+
+export interface BlogFaqItem {
+  '@type': 'Question'
+  name: string
+  acceptedAnswer: {
+    '@type': 'Answer'
+    text: string
+  }
+}
+
+export interface BlogFaqSchema {
+  '@type': 'FAQPage'
+  '@id'?: string
+  mainEntity: BlogFaqItem[]
+}
+
+export function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+export function extractFaqFromHtml(contentHtml: string, canonicalUrl?: string): BlogFaqSchema | null {
+  if (!contentHtml || (!contentHtml.includes('<details') && !contentHtml.includes('blog-faq-item'))) {
+    return null
+  }
+  const detailsRegex = /<details[^>]*>([\s\S]*?)<\/details>/gi
+  const items: BlogFaqItem[] = []
+
+  let match: RegExpExecArray | null
+  while ((match = detailsRegex.exec(contentHtml)) !== null) {
+    const inner = match[1]
+    const summaryMatch = /<summary[^>]*>([\s\S]*?)<\/summary>/i.exec(inner)
+    if (!summaryMatch) continue
+    const question = stripHtml(summaryMatch[1])
+    const answerHtml = inner.replace(/<summary[^>]*>[\s\S]*?<\/summary>/i, '')
+    const answer = stripHtml(answerHtml)
+    if (question && answer) {
+      items.push({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: answer,
+        },
+      })
+    }
+  }
+
+  if (items.length === 0) return null
+  return {
+    '@type': 'FAQPage',
+    ...(canonicalUrl ? { '@id': `${canonicalUrl}#faq` } : {}),
+    mainEntity: items,
+  }
+}
+
+export function extractBlogFaqSchema(post: unknown, canonicalUrl?: string, rawData?: unknown): BlogFaqSchema | null {
+  const p = asRecord(post)
+  const r = asRecord(rawData)
+
+  // 1. Direct faq_schema / faqSchema on post or response payload
+  const direct = p.faq_schema ?? p.faqSchema ?? p.faq ?? r.faq_schema ?? r.faqSchema ?? r.faq
+  if (direct && typeof direct === 'object') {
+    if (Array.isArray(direct.mainEntity) && direct.mainEntity.length > 0) {
+      const items: BlogFaqItem[] = direct.mainEntity.map((item: unknown) => {
+        const it = asRecord(item)
+        const ans = asRecord(it.acceptedAnswer)
+        return {
+          '@type': 'Question' as const,
+          name: stripHtml(String(it.name || it.question || '')),
+          acceptedAnswer: {
+            '@type': 'Answer' as const,
+            text: stripHtml(String(ans.text || it.acceptedAnswer || it.answer || '')),
+          },
+        }
+      }).filter((item: BlogFaqItem) => item.name && item.acceptedAnswer.text)
+
+      if (items.length > 0) {
+        return {
+          '@type': 'FAQPage',
+          ...(canonicalUrl ? { '@id': `${canonicalUrl}#faq` } : {}),
+          mainEntity: items,
+        }
+      }
+    } else if (Array.isArray(direct) && direct.length > 0) {
+      const items: BlogFaqItem[] = direct.map((item: unknown) => {
+        const it = asRecord(item)
+        const ans = asRecord(it.acceptedAnswer)
+        return {
+          '@type': 'Question' as const,
+          name: stripHtml(String(it.question || it.name || '')),
+          acceptedAnswer: {
+            '@type': 'Answer' as const,
+            text: stripHtml(String(ans.text || it.answer || it.acceptedAnswer || '')),
+          },
+        }
+      }).filter((item: BlogFaqItem) => item.name && item.acceptedAnswer.text)
+
+      if (items.length > 0) {
+        return {
+          '@type': 'FAQPage',
+          ...(canonicalUrl ? { '@id': `${canonicalUrl}#faq` } : {}),
+          mainEntity: items,
+        }
+      }
+    }
+  }
+
+  // 2. Extract from contentHtml
+  const contentHtml = String(p.contentHtml || p.content_html || '')
+  return extractFaqFromHtml(contentHtml, canonicalUrl)
+}

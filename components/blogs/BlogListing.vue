@@ -16,7 +16,7 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const { locale } = useSiteLocale()
 const copy = computed(() => locale.value === 'pt' ? {
-  title: 'Blog', intro: 'Novidades, guias e histórias da 2bet.', all: 'Todos', featured: 'Em destaque',
+  title: 'Blog', intro: 'Confira os artigos do blog da 2bet com dicas de apostas, tutoriais e notícias atualizadas para quem quer apostar com mais segurança.', all: 'Todos', featured: 'Em destaque',
   latest: 'Últimos artigos', read: 'Ler artigo', empty: 'Nenhum artigo publicado ainda.',
   emptyCategory: 'Nenhum artigo nesta categoria ainda.', emptyHint: 'Volte em breve para conferir novidades.',
   error: 'Não foi possível carregar os artigos.', retry: 'Tentar novamente', previous: 'Página anterior', next: 'Próxima página',
@@ -37,16 +37,13 @@ const query = computed(() => ({
   ...(category.value ? { category: category.value } : {}),
   ...(isPreview.value ? { preview: '1' } : {}),
 }))
-const { data, error, status, refresh } = await useFetch<BlogListResponse>('/api/blogs', { query })
-const posts = computed(() => (data.value?.blogs || []).filter(post => isPreview.value || post.status !== 'draft'))
-const categories = computed(() => {
-  const all = data.value?.categories || []
-  return all.filter((item) => {
-    const hasMatchingPosts = posts.value.some(p => p.category?.slug === item.slug || p.category?.id === item.id)
-    const isCurrent = Boolean(category.value && (category.value === item.slug || category.value === item.id))
-    return hasMatchingPosts || isCurrent
-  })
+const { data, error, status, refresh } = await useFetch<BlogListResponse>(() => '/api/blogs', {
+  query,
+  key: computed(() => `blog-list-${category.value}-${page.value}-${isPreview.value}`),
+  watch: [category, page, isPreview],
 })
+const posts = computed(() => (data.value?.blogs || []).filter(post => isPreview.value || post.status !== 'draft'))
+const categories = computed(() => (data.value?.categories || []).filter(item => Boolean(item && item.name && item.slug && (Number(item.postCount) || 0) > 0)))
 const pagination = computed(() => data.value?.pagination)
 const featured = computed(() => posts.value.slice(0, 4))
 const groups = computed(() => {
@@ -72,20 +69,135 @@ const postDate = (post: BlogPost) => {
   const date = new Date(post.publishedAt)
   return Number.isNaN(date.getTime()) ? post.date : new Intl.DateTimeFormat(locale.value === 'pt' ? 'pt-BR' : 'en', { dateStyle: 'medium', timeZone: 'UTC' }).format(date)
 }
+const currentCategory = computed(() => {
+  if (!category.value) return null
+  return categories.value.find(c => c.slug === category.value || c.id === category.value) || null
+})
+const currentCategoryName = computed(() => {
+  if (currentCategory.value?.name) return currentCategory.value.name
+  if (!category.value) return ''
+  return category.value
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+})
 const siteUrl = computed(() => String(config.public.siteUrl || 'https://2bet.com').replace(/\/+$/, ''))
-const title = computed(() => locale.value === 'pt' ? 'Blog — Novidades e Guias | 2bet' : 'Blog — News and Guides | 2bet')
+const title = computed(() => {
+  if (category.value) {
+    return locale.value === 'pt'
+      ? `${currentCategoryName.value} | Blog da 2bet | Tutoriais e Guias de Apostas`
+      : `${currentCategoryName.value} | 2bet Blog | Betting Guides & Tutorials`
+  }
+  return locale.value === 'pt' ? 'Blog da 2bet | Tutoriais e Guias de Apostas' : 'Blog — News and Guides | 2bet'
+})
+const description = computed(() => {
+  if (category.value) {
+    return locale.value === 'pt'
+      ? `Confira os blogs da ${currentCategoryName.value} na 2bet para encontrar dicas, tutoriais e as últimas novidades. Perfeito para quem deseja apostar com mais confiança.`
+      : `Check out ${currentCategoryName.value} articles on 2bet for betting tips, tutorials and updates.`
+  }
+  return copy.value.intro
+})
 useSeoMeta({
   title, ogTitle: title, twitterTitle: title,
-  description: () => copy.value.intro, ogDescription: () => copy.value.intro, twitterDescription: () => copy.value.intro,
+  description, ogDescription: description, twitterDescription: description,
+  ogImage: '/brand/2bet-og.webp',
+  twitterImage: '/brand/2bet-og.webp',
   ogType: 'website', twitterCard: 'summary_large_image',
   robots: () => (isPreview.value ? 'noindex, nofollow, noarchive' : undefined),
 })
+
+const listingSchema = computed(() => {
+  if (isPreview.value) return null
+  const currentUrl = `${siteUrl.value}${categoryLink(category.value).path}`
+
+  if (category.value) {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'CollectionPage',
+          '@id': `${currentUrl}#collection`,
+          name: title.value,
+          description: description.value,
+          url: currentUrl,
+          isPartOf: {
+            '@type': 'Blog',
+            name: copy.value.title,
+            url: `${siteUrl.value}/blogs`,
+          },
+          mainEntity: {
+            '@type': 'ItemList',
+            name: currentCategoryName.value,
+            itemListElement: posts.value.map((p, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              url: `${siteUrl.value}/blog/${encodeURIComponent(p.slug)}`,
+              name: p.title,
+            })),
+          },
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl.value },
+            { '@type': 'ListItem', position: 2, name: copy.value.title, item: `${siteUrl.value}/blogs` },
+            { '@type': 'ListItem', position: 3, name: currentCategoryName.value, item: currentUrl },
+          ],
+        },
+      ],
+    }
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Blog',
+        '@id': `${siteUrl.value}/blogs#blog`,
+        name: title.value,
+        description: description.value,
+        url: `${siteUrl.value}/blogs`,
+        publisher: {
+          '@type': 'Organization',
+          name: String(config.public.siteName || '2bet'),
+          url: siteUrl.value,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${siteUrl.value}/brand/2bet-logo.webp`,
+          },
+        },
+        blogPost: posts.value.slice(0, 10).map(p => ({
+          '@type': 'BlogPosting',
+          headline: p.title,
+          description: p.excerpt,
+          url: `${siteUrl.value}/blog/${encodeURIComponent(p.slug)}`,
+          datePublished: p.publishedAt || undefined,
+          image: p.featuredImage || undefined,
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl.value },
+          { '@type': 'ListItem', position: 2, name: copy.value.title, item: `${siteUrl.value}/blogs` },
+        ],
+      },
+    ],
+  }
+})
+
 useHead(() => ({
   meta: isPreview.value ? [
     { name: 'robots', content: 'noindex, nofollow, noarchive' },
     { name: 'googlebot', content: 'noindex, nofollow, noarchive' },
   ] : [],
   link: isPreview.value ? [] : [{ rel: 'canonical', href: `${siteUrl.value}${categoryLink(category.value).path}${page.value > 1 ? `?page=${page.value}` : ''}` }],
+  script: listingSchema.value ? [{
+    key: 'blog-listing-schema',
+    type: 'application/ld+json',
+    children: JSON.stringify(listingSchema.value).replace(/</g, '\\u003c'),
+  }] : [],
 }))
 watch([page, category], () => featuredTrack.value?.scrollTo({ left: 0 }))
 </script>

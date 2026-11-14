@@ -81,7 +81,7 @@ const seoKeywords = computed(() => {
 })
 
 const seoImage = computed(() => {
-  const raw = bonusHeaderImageSrc.value || (typeof bonus.value.bannerImage === 'string' ? bonus.value.bannerImage : bonus.value.bannerImage?.banner) || bonus.value.thumbnailImage || '/brand/2bet-logo.webp'
+  const raw = bonusHeaderImageSrc.value || (typeof bonus.value.bannerImage === 'string' ? bonus.value.bannerImage : bonus.value.bannerImage?.banner) || bonus.value.thumbnailImage || '/brand/2bet-og.webp'
   return raw.startsWith('http') ? raw : `https://2bet.com${raw}`
 })
 

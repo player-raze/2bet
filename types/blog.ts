@@ -23,10 +23,28 @@ export interface BlogPost {
   readTime: string
 }
 
+export interface BlogFaqItem {
+  '@type'?: 'Question'
+  name: string
+  acceptedAnswer: {
+    '@type'?: 'Answer'
+    text: string
+  }
+}
+
+export interface BlogFaqSchema {
+  '@context'?: string
+  '@type': 'FAQPage'
+  '@id'?: string
+  mainEntity: BlogFaqItem[]
+}
+
 export interface BlogArticle extends BlogPost {
   contentHtml: string
   seoTitle: string
   seoDescription: string
+  faq_schema?: BlogFaqSchema | null
+  faqSchema?: BlogFaqSchema | null
 }
 
 export interface BlogListResponse {

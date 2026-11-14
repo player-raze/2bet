@@ -530,7 +530,7 @@ export const useAppSeo = (options: AppSeoOptions) => {
   })
 
   const image = computed(() => {
-    return resolveVal(options.image) || '/brand/2bet-logo.webp'
+    return resolveVal(options.image) || '/brand/2bet-og.webp'
   })
 
   const canonicalUrl = computed(() => {

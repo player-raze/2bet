@@ -24,7 +24,7 @@ useAppSeo({
   title: '2bet Casino Online | Apostas Esportivas Premium no Brasil',
   description: 'Aposte em esportes e jogue no 2bet casino online. Aqui você encontra milhares de slots, mesas com crupiês ao vivo e saques rápidos.',
   keywords: '2bet, cassino online, slots, apostas esportivas, cassino ao vivo, 2bet brasil',
-  image: '/brand/2bet-logo.webp',
+  image: '/hero/editorial/sports.webp',
   includeSiteName: false,
   schema: computed(() => [
     {

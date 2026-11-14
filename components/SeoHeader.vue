@@ -22,7 +22,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   description: undefined,
   keywords: undefined,
-  ogImage: '/brand/2bet-logo.webp',
+  ogImage: '/brand/2bet-og.webp',
   showBack: true,
   showFlag: true,
   sticky: false,
