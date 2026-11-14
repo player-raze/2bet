@@ -71,7 +71,8 @@ export function buildLlmsTxtContent(base = siteUrl, name = siteName) {
 ## Machine-Readable Resources
 
 - [Full LLM Documentation](${base}/llms-full.txt): Expanded full-text reference designed for AI context windows.
-- [Sitemap XML](${base}/sitemap.xml): Full XML sitemap covering all canonical pages.
+- [Sitemap Index XML](${base}/sitemap-index.xml): XML sitemap index covering all canonical pages and blog articles.
+- [Sitemap Pages XML](${base}/sitemap-pages.xml): Full XML sitemap covering all canonical pages.
 - [Robots TXT](${base}/robots.txt): Search engine and crawler directives.
 `
 }

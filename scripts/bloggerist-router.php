@@ -40,8 +40,8 @@ if (!$file || !str_starts_with($file, $root . DIRECTORY_SEPARATOR) || !is_file($
 
 $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 if ($extension === 'php') {
-    // Uploaded content must never be executable; only actual admin/API entrypoints run.
-    if (!preg_match('~^/(?:admin/[^/]+|api/[^/]+)\.php$~', $path)) bloggerist_not_found();
+    // Uploaded content must never be executable; only actual admin/API/sitemap entrypoints run.
+    if (!preg_match('~^/(?:admin/[^/]+|api/[^/]+|sitemap-blog)\.php$~', $path)) bloggerist_not_found();
     $_SERVER['SCRIPT_FILENAME'] = $file;
     $_SERVER['SCRIPT_NAME'] = $path;
     require $file;

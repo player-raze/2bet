@@ -4,6 +4,7 @@ import { SLOT_CATEGORIES } from '~/data/slots'
 import { LIVE_CASINO_CATEGORIES } from '~/data/live-casino'
 import { BINGO_CATEGORIES } from '~/data/bingo'
 import { JACKPOT_SECTIONS } from '~/data/jackpot'
+import { POKER_CATEGORIES } from '~/data/poker'
 
 function getSitemapDates(): Record<string, { lastmod?: string; hash?: string }> {
   try {
@@ -141,6 +142,17 @@ export function getSitemapEntries(): SitemapEntry[] {
     }
   }
 
+  // Dynamic Poker Categories
+  for (const cat of POKER_CATEGORIES) {
+    if (cat.key && cat.key !== 'poker') {
+      entries.push({
+        path: `/entertainment/poker/${cat.key}`,
+        changefreq: 'daily',
+        priority: 0.8,
+      })
+    }
+  }
+
   // Dynamic Individual Bonus & Promotion Pages
   for (const promo of PROMOTIONS) {
     if (promo.id) {
@@ -189,6 +201,26 @@ export function generateSitemapXml(siteUrl: string, currentDate?: string): strin
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${xmlEntries}
 </urlset>
+`
+}
+
+export const generateSitemapPagesXml = generateSitemapXml
+
+export function generateSitemapIndexXml(siteUrl: string, currentDate?: string): string {
+  const normalizedSiteUrl = (siteUrl || 'https://2bet.com').replace(/\/+$/, '')
+  const today = currentDate || new Date().toISOString().split('T')[0]
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${normalizedSiteUrl}/sitemap-pages.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${normalizedSiteUrl}/sitemap-blog.php</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+</sitemapindex>
 `
 }
 

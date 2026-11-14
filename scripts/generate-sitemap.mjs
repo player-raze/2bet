@@ -31,6 +31,9 @@ function getSourceFilesForPath(baseDir, urlPath) {
   if (urlPath.startsWith('/entertainment/live-casino') || urlPath.startsWith('/explore/entertainment/live-casino')) {
     return [resolve('data/live-casino.ts'), resolve('pages/explore/entertainment/live-casino')]
   }
+  if (urlPath.startsWith('/entertainment/poker') || urlPath.startsWith('/explore/entertainment/poker')) {
+    return [resolve('data/poker.ts'), resolve('pages/explore/entertainment/poker')]
+  }
   if (urlPath.startsWith('/game-rules/')) {
     const slug = urlPath.replace('/game-rules/', '')
     return [
@@ -140,6 +143,14 @@ export async function generateSitemapFile(customSiteUrl) {
     console.warn('[sitemap] Failed to load data/jackpot.ts with jiti, using fallback', err.message)
   }
 
+  let pokerCategories = []
+  try {
+    const mod = jiti(path.join(rootDir, 'data/poker.ts'))
+    pokerCategories = mod.POKER_CATEGORIES || []
+  } catch (err) {
+    console.warn('[sitemap] Failed to load data/poker.ts with jiti, using fallback', err.message)
+  }
+
   const entries = [
     // Core Homepage
     { path: '/', changefreq: 'daily', priority: 1.0 },
@@ -148,6 +159,7 @@ export async function generateSitemapFile(customSiteUrl) {
     { path: '/egames/slots', changefreq: 'daily', priority: 0.9 },
     { path: '/egames/jackpot/all', changefreq: 'daily', priority: 0.9 },
     { path: '/entertainment/live-casino/baccarat', changefreq: 'daily', priority: 0.9 },
+    { path: '/entertainment/poker', changefreq: 'daily', priority: 0.9 },
 
     // Sports Betting
     { path: '/sports/popular/inplay', changefreq: 'hourly', priority: 0.8 },
@@ -261,6 +273,17 @@ export async function generateSitemapFile(customSiteUrl) {
     }
   }
 
+  // Dynamic Poker Categories
+  for (const cat of pokerCategories) {
+    if (cat.key && cat.key !== 'poker') {
+      entries.push({
+        path: `/entertainment/poker/${cat.key}`,
+        changefreq: 'daily',
+        priority: 0.8,
+      })
+    }
+  }
+
   // Dynamic Individual Bonus & Promotion Pages
   for (const promo of promotions) {
     if (promo.id) {
@@ -326,43 +349,74 @@ export async function generateSitemapFile(customSiteUrl) {
     })
     .join('\n')
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+  const pagesXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${xmlEntries}
 </urlset>
 `
 
-  // 1. Write to public/sitemap.xml atomically to prevent partial reads
-  const publicDir = path.join(rootDir, 'public')
-  if (!fs.existsSync(publicDir)) {
-    fs.mkdirSync(publicDir, { recursive: true })
-  }
-  const publicPath = path.join(publicDir, 'sitemap.xml')
-  const tempPublicPath = path.join(publicDir, `sitemap.${Date.now()}.${Math.random().toString(36).slice(2, 8)}.tmp`)
-  fs.writeFileSync(tempPublicPath, xml, 'utf8')
-  fs.renameSync(tempPublicPath, publicPath)
+  const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${siteUrl}/sitemap-pages.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${siteUrl}/sitemap-blog.php</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+</sitemapindex>
+`
 
-  // 2. Write to .output/public/sitemap.xml atomically if build output exists
+  const writeAtomic = (targetFile, content) => {
+    const dir = path.dirname(targetFile)
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+    const tempFile = path.join(dir, `.${path.basename(targetFile)}.${Date.now()}.${Math.random().toString(36).slice(2, 8)}.tmp`)
+    fs.writeFileSync(tempFile, content, 'utf8')
+    fs.renameSync(tempFile, targetFile)
+  }
+
+  // 1. Write to public/ directory
+  const publicDir = path.join(rootDir, 'public')
+  const pagesPath = path.join(publicDir, 'sitemap-pages.xml')
+  const indexPath = path.join(publicDir, 'sitemap-index.xml')
+  writeAtomic(pagesPath, pagesXml)
+  writeAtomic(indexPath, indexXml)
+
+  // Clean up legacy sitemap.xml in public/ if present
+  const legacyPublicPath = path.join(publicDir, 'sitemap.xml')
+  if (fs.existsSync(legacyPublicPath)) {
+    try { fs.unlinkSync(legacyPublicPath) } catch { /* ignore */ }
+  }
+
+  // 2. Write to .output/public/ if build output exists
   const outputPublicDir = path.join(rootDir, '.output', 'public')
   let writtenToOutput = false
   if (fs.existsSync(outputPublicDir)) {
-    const outputPath = path.join(outputPublicDir, 'sitemap.xml')
-    const tempOutputPath = path.join(outputPublicDir, `sitemap.${Date.now()}.${Math.random().toString(36).slice(2, 8)}.tmp`)
-    fs.writeFileSync(tempOutputPath, xml, 'utf8')
-    fs.renameSync(tempOutputPath, outputPath)
+    const outputPagesPath = path.join(outputPublicDir, 'sitemap-pages.xml')
+    const outputIndexPath = path.join(outputPublicDir, 'sitemap-index.xml')
+    writeAtomic(outputPagesPath, pagesXml)
+    writeAtomic(outputIndexPath, indexXml)
+
+    const legacyOutputPath = path.join(outputPublicDir, 'sitemap.xml')
+    if (fs.existsSync(legacyOutputPath)) {
+      try { fs.unlinkSync(legacyOutputPath) } catch { /* ignore */ }
+    }
     writtenToOutput = true
   }
 
-  console.log(`[sitemap] Generated sitemap.xml with ${uniqueEntries.length} URLs for ${siteUrl}`)
-  console.log(`[sitemap] Saved to: ${publicPath}`)
+  console.log(`[sitemap] Generated sitemap-pages.xml with ${uniqueEntries.length} URLs for ${siteUrl}`)
+  console.log(`[sitemap] Generated sitemap-index.xml linking sitemap-pages.xml and sitemap-blog.php`)
+  console.log(`[sitemap] Saved to: ${pagesPath} and ${indexPath}`)
   if (writtenToOutput) {
-    console.log(`[sitemap] Saved to: ${path.join(outputPublicDir, 'sitemap.xml')}`)
+    console.log(`[sitemap] Saved to: ${outputPublicDir}/sitemap-pages.xml and ${outputPublicDir}/sitemap-index.xml`)
   }
 
   return {
     count: uniqueEntries.length,
     siteUrl,
-    publicPath,
+    pagesPath,
+    indexPath,
   }
 }
 

@@ -39,6 +39,8 @@ data/jackpots.json
 
 # Build-generated sitemap & LLM manifests
 public/sitemap.xml
+public/sitemap-pages.xml
+public/sitemap-index.xml
 public/llms.txt
 public/llms-full.txt
 llms.txt
