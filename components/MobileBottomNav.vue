@@ -549,21 +549,28 @@ const handleNavCell = (cell: NavCell): void => {
   }
 
   .mobile-bottom-nav__item:hover,
+  .mobile-bottom-nav__item:active,
   .mobile-bottom-nav__item--active {
     color: var(--main-color);
   }
 
   .mobile-bottom-nav__item:hover svg,
+  .mobile-bottom-nav__item:active svg,
   .mobile-bottom-nav__item--active svg,
   .mobile-bottom-nav__item:hover :deep(svg),
+  .mobile-bottom-nav__item:active :deep(svg),
   .mobile-bottom-nav__item--active :deep(svg),
   .mobile-bottom-nav__item:hover .fill-nav-bar-icon-button,
+  .mobile-bottom-nav__item:active .fill-nav-bar-icon-button,
   .mobile-bottom-nav__item--active .fill-nav-bar-icon-button,
   .mobile-bottom-nav__item:hover :deep(.fill-nav-bar-icon-button),
+  .mobile-bottom-nav__item:active :deep(.fill-nav-bar-icon-button),
   .mobile-bottom-nav__item--active :deep(.fill-nav-bar-icon-button),
   .mobile-bottom-nav__item:hover .fill-icon-3,
+  .mobile-bottom-nav__item:active .fill-icon-3,
   .mobile-bottom-nav__item--active .fill-icon-3,
   .mobile-bottom-nav__item:hover :deep(.fill-icon-3),
+  .mobile-bottom-nav__item:active :deep(.fill-icon-3),
   .mobile-bottom-nav__item--active :deep(.fill-icon-3) {
     fill: var(--main-color);
   }
@@ -571,6 +578,12 @@ const handleNavCell = (cell: NavCell): void => {
   .mobile-bottom-nav__item--active img {
     filter: none;
     opacity: 1;
+  }
+
+  .mobile-bottom-nav__item:active,
+  .mobile-bottom-nav__switch:active {
+    transform: scale(0.96);
+    transition: transform 90ms ease, color 140ms ease;
   }
 
   .mobile-bottom-nav__switch {

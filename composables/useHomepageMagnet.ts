@@ -25,6 +25,21 @@ export function setupHomepageMagnet(root: HTMLElement): () => void {
   let frame: number | undefined
   let point = { x: 0, y: 0 }
 
+  // Touch devices do not have a hover state, but they still benefit from a
+  // short pressed-state response when interacting with homepage controls.
+  function press(event: PointerEvent) {
+    if (event.pointerType !== 'touch' || !root.contains(event.target as Node)) return
+    const target = event.target instanceof view!.Element ? event.target.closest(controls) : null
+    if (!(target instanceof view!.HTMLElement) || target.matches(':disabled, [aria-disabled="true"]')
+      || target.closest('[inert]') || isMagnetExcluded(target)) return
+    target.dataset.homepagePressed = 'true'
+  }
+
+  function releasePress(event: PointerEvent) {
+    const target = event.target instanceof view!.Element ? event.target.closest<HTMLElement>(controls) : null
+    target?.removeAttribute('data-homepage-pressed')
+  }
+
   function restore(element: HTMLElement) {
     const saved = elements.get(element)
     if (!saved) return
@@ -97,6 +112,10 @@ export function setupHomepageMagnet(root: HTMLElement): () => void {
   }
 
   root.addEventListener('pointermove', move, { passive: true })
+  root.addEventListener('pointerdown', press, { passive: true })
+  root.addEventListener('pointerup', releasePress, { passive: true })
+  root.addEventListener('pointercancel', releasePress, { passive: true })
+  root.addEventListener('pointerleave', releasePress, { passive: true })
   root.addEventListener('pointerout', leave, { passive: true })
   root.addEventListener('pointerleave', release, { passive: true })
   root.addEventListener('focusin', reset)
@@ -107,6 +126,10 @@ export function setupHomepageMagnet(root: HTMLElement): () => void {
 
   return () => {
     root.removeEventListener('pointermove', move)
+    root.removeEventListener('pointerdown', press)
+    root.removeEventListener('pointerup', releasePress)
+    root.removeEventListener('pointercancel', releasePress)
+    root.removeEventListener('pointerleave', releasePress)
     root.removeEventListener('pointerout', leave)
     root.removeEventListener('pointerleave', release)
     root.removeEventListener('focusin', reset)
