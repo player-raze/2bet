@@ -70,6 +70,8 @@ const scrollFeatured = (direction: -1 | 1): void => {
 const getFeaturedMeta = (promotion: PromotionItem): string => {
   return getPromotionCountdownText(promotion, nowMs.value)
 }
+const siteUrl = useSiteUrl()
+
 useAppSeo({
   title: 'Bônus de Boas-Vindas e Promoções no Cassino Online | 2bet',
   description: 'Aproveite as ofertas de bônus na 2bet Brasil. Bônus de primeiro depósito, programa de convites e recompensas exclusivas do Clube VIP.',
@@ -77,13 +79,13 @@ useAppSeo({
     { name: 'Início', path: '/' },
     { name: 'Promoções', path: '/bonuses' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '2bet Promoções e Bônus',
-    url: 'https://2bet.com/bonuses',
+    url: `${siteUrl.value}/bonuses`,
     description: 'Explore as promoções e bônus exclusivos da 2bet Brasil, incluindo o Programa Compartilhe e Ganhe e Privilégios VIP com regras claras.',
-  },
+  })),
 })
 </script>
 

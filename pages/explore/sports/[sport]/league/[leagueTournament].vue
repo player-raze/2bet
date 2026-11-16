@@ -6,6 +6,7 @@ defineProps<{
 
 const route = useRoute()
 const { translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 
 const sportName = computed(() => {
   const s = String(route.params.sport || 'sports')
@@ -30,7 +31,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `${leagueName.value} ${sportName.value} - 2bet`,
-    url: `https://2bet.com${route.path}`,
+    url: `${siteUrl.value}${route.path}`,
     description: formatSeoDescription(`Aposte na ${leagueName.value} (${sportName.value}) na 2bet Brasil com cotações dinâmicas e mercados ao vivo.`),
   })),
 })

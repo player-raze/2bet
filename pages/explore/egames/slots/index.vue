@@ -41,6 +41,7 @@ import { getProviderLogoForTheme } from '~/utils/providerLogo'
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { effectiveTheme } = useSiteTheme()
+const siteUrl = useSiteUrl()
 
 useAppSeo({
   title: '2Bet Slot Login — Slots Com RTP Alto e Grandes Jackpots',
@@ -50,13 +51,13 @@ useAppSeo({
     { name: 'eGames', path: '/egames/slots' },
     { name: 'Slots', path: '/egames/slots' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '2Bet Online Slots',
-    url: 'https://2bet.com/egames/slots',
+    url: `${siteUrl.value}/egames/slots`,
     description: 'Play top online slot games at 2Bet Brasil. Spin popular titles, megaways, and progressive jackpots.',
-  },
+  })),
 })
 
 const categoryIcons: Record<string, Component> = {

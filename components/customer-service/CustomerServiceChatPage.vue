@@ -5,6 +5,7 @@ const props = defineProps<{
 
 const { closeComments } = useCommentPanel()
 const { translate, locale } = useSiteLocale()
+const siteUrl = useSiteUrl()
 const langParam = computed(() => (locale.value === 'pt' ? 'pt' : (locale.value || 'en')))
 const chatUrl = computed(() => `https://cs11.levxfemf.app/#/index?source=2bet&needNav=1&lang=${langParam.value}&vipType=0&isPC=1&darkMode=1&deviceCode=4ff68888-f34d-49fb-ab39-e0ff581e41b8&deviceId=4ff68888-f34d-49fb-ab39-e0ff581e41b8`)
 
@@ -16,12 +17,12 @@ useAppSeo({
     { name: translate('Customer Service'), path: '/egames/customer-service' },
     { name: `${translate('24/7 Services')} ${props.serviceNumber}`, path: `/egames/customer-service/${props.serviceNumber}` },
   ]),
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
     name: `2bet Atendimento 24/7 Canal ${props.serviceNumber}`,
-    url: `https://2bet.com/egames/customer-service/${props.serviceNumber}`,
-  },
+    url: `${siteUrl.value}/egames/customer-service/${props.serviceNumber}`,
+  })),
 })
 
 onMounted(() => {

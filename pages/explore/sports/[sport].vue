@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
+const siteUrl = useSiteUrl()
 const sportNames: Record<string, string> = {
   basketball: 'Basketball', baseball: 'Baseball', soccer: 'Soccer', football: 'Soccer', tennis: 'Tennis',
 }
@@ -36,7 +37,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Apostas em ${sportDisplayName.value} - 2bet`,
-    url: `https://2bet.com/sports/${route.params.sport}`,
+    url: `${siteUrl.value}/sports/${route.params.sport}`,
     description: `Aposte em ${sportDisplayName.value} na 2bet Brasil com spreads competitivos, vencedor, totais e apostas futuras.`,
   })),
 })

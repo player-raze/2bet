@@ -82,12 +82,14 @@ const seoKeywords = computed(() => {
   ].join(', ')
 })
 
+const siteUrl = computed(() => normalizeSiteUrl(rawSiteUrl))
+
 const seoImage = computed(() => {
   const raw = bonusBannerImageSrc.value || (typeof bonus.value.bannerImage === 'string' ? bonus.value.bannerImage : bonus.value.bannerImage?.banner) || bonus.value.thumbnailImage || '/brand/2bet-og.webp'
-  return resolveSeoImageUrl(raw, String(rawSiteUrl || 'https://2bet.com'))
+  return resolveSeoImageUrl(raw, siteUrl.value)
 })
 
-const canonicalUrl = computed(() => `https://2bet.com/bonus/${bonus.value.slug}`)
+const canonicalUrl = computed(() => `${siteUrl.value}/bonus/${bonus.value.slug}`)
 
 useAppSeo({
   title: seoTitle,
@@ -110,8 +112,8 @@ useAppSeo({
     'organizer': {
       '@type': 'Organization',
       'name': '2bet Brasil',
-      'url': 'https://2bet.com',
-      'logo': 'https://2bet.com/brand/2bet-logo.webp',
+      'url': siteUrl.value,
+      'logo': `${siteUrl.value}/brand/2bet-logo.webp`,
     },
   })),
 })

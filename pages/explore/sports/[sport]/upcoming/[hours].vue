@@ -5,6 +5,7 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
+const siteUrl = useSiteUrl()
 
 const sportNames: Record<string, string> = {
   basketball: 'Basketball', baseball: 'Baseball', soccer: 'Soccer', tennis: 'Tennis',
@@ -40,7 +41,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Próximas Partidas de ${sportName.value} (${hoursLabel.value}) - 2bet`,
-    url: `https://2bet.com${route.path}`,
+    url: `${siteUrl.value}${route.path}`,
     description: formatSeoDescription(`Próximas partidas de ${sportName.value} agendadas nas próximas ${hoursLabel.value} na 2bet Brasil.`),
   })),
 })

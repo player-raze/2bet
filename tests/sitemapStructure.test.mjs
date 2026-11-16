@@ -200,4 +200,81 @@ describe('Sitemap Architecture & Structure Suite', () => {
     assert.match(siteUrlUtil, /resolveRuntimeSiteUrl/)
     assert.match(siteUrlUtil, /readDotEnvValue\(['"]SITE_URL['"]\)/)
   })
+
+  test('Case 12: schemas and links resolve dynamically from SITE_URL while keeping https://2bet.com fallback', async () => {
+    const collectVueFiles = (dir) => {
+      const entries = fs.readdirSync(dir, { withFileTypes: true })
+      const files = []
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name)
+        if (entry.isDirectory()) {
+          files.push(...collectVueFiles(fullPath))
+        } else if (entry.name.endsWith('.vue')) {
+          files.push(fullPath)
+        }
+      }
+      return files
+    }
+
+    const vueFiles = [
+      ...collectVueFiles(path.join(rootDir, 'components')),
+      ...collectVueFiles(path.join(rootDir, 'pages')),
+    ]
+
+    for (const filePath of vueFiles) {
+      const content = fs.readFileSync(filePath, 'utf8')
+      const rel = path.relative(rootDir, filePath)
+      assert.doesNotMatch(
+        content,
+        /https?:\/\/2bet\.com\//,
+        `${rel} must use runtime siteUrl instead of hardcoded https://2bet.com/...`,
+      )
+      assert.doesNotMatch(
+        content,
+        /chickenkiller/i,
+        `${rel} must never hardcode chickenkiller as a fallback`,
+      )
+    }
+
+    for (const codePath of [
+      'composables/useAppSeo.ts',
+      'server/utils/siteUrl.ts',
+      'server/utils/sitemap.ts',
+      'server/plugins/runtimeEnvSync.ts',
+      'scripts/generate-sitemap.mjs',
+      'scripts/generate-llms-txt.mjs',
+      'nuxt.config.ts',
+    ]) {
+      const content = fs.readFileSync(path.join(rootDir, codePath), 'utf8')
+      assert.doesNotMatch(content, /chickenkiller/i, `${codePath} must never hardcode chickenkiller`)
+    }
+
+    const useAppSeoSrc = fs.readFileSync(path.join(rootDir, 'composables/useAppSeo.ts'), 'utf8')
+    assert.match(useAppSeoSrc, /DEFAULT_SITE_URL\s*=\s*'https:\/\/2bet\.com'/)
+    assert.match(useAppSeoSrc, /export const useSiteUrl\s*=/)
+
+    const runtimeEnvSyncSrc = fs.readFileSync(path.join(rootDir, 'server/plugins/runtimeEnvSync.ts'), 'utf8')
+    assert.match(runtimeEnvSyncSrc, /config\.public\.siteUrl/)
+
+    const { generateSitemapFile } = await import('../scripts/generate-sitemap.mjs')
+    const os = await import('node:os')
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), '2bet-custom-origin-'))
+    const chickenEnv = path.join(tmpDir, 'chicken.env')
+    const emptyEnv = path.join(tmpDir, 'empty.env')
+    try {
+      fs.writeFileSync(chickenEnv, 'SITE_URL=http://thechikin.chickenkiller.com/\n', 'utf8')
+      const customRes = await generateSitemapFile(undefined, { envPath: chickenEnv })
+      assert.equal(customRes.siteUrl, 'http://thechikin.chickenkiller.com')
+      assert.ok(fs.readFileSync(customRes.indexPath, 'utf8').includes('<loc>http://thechikin.chickenkiller.com/sitemap-pages.xml</loc>'))
+      assert.ok(fs.readFileSync(customRes.pagesPath, 'utf8').includes('<loc>http://thechikin.chickenkiller.com/bonuses</loc>'))
+
+      fs.writeFileSync(emptyEnv, 'SITE_URL=\n', 'utf8')
+      const fallbackRes = await generateSitemapFile(undefined, { envPath: emptyEnv })
+      assert.equal(fallbackRes.siteUrl, 'https://2bet.com')
+      assert.ok(fs.readFileSync(fallbackRes.indexPath, 'utf8').includes('<loc>https://2bet.com/sitemap-pages.xml</loc>'))
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true })
+      await generateSitemapFile()
+    }
+  })
 })

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import SubpageHeader from '~/components/SubpageHeader.vue'
 
+const siteUrl = useSiteUrl()
+
 useAppSeo({
   title: 'Sobre a Plataforma Oficial de Apostas e Cassino | 2bet',
   description: 'Conheça a 2bet: nossa reputação, variedade de jogos, depósitos, saques e atendimento ao cliente disponível 24 horas.',
@@ -8,13 +10,13 @@ useAppSeo({
     { name: 'Início', path: '/' },
     { name: 'Sobre Nós', path: '/about-us' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
     name: 'Sobre a 2bet',
-    url: 'https://2bet.com/about-us',
+    url: `${siteUrl.value}/about-us`,
     description: 'Conheça a 2bet: confiança, variedade de jogos, depósitos, saques e suporte 24/7.',
-  },
+  })),
 })
 </script>
 

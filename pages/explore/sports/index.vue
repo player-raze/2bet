@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { locale } = useSiteLocale()
+const siteUrl = useSiteUrl()
 
 useAppSeo({
   title: 'Apostas Esportivas — Melhores Odds e Mercados ao Vivo | 2bet',
@@ -8,12 +9,12 @@ useAppSeo({
     { name: 'Início', path: '/' },
     { name: 'Esportes', path: '/sports/popular' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '2Bet Sports Betting',
-    url: 'https://2bet.com/sports/popular',
-  },
+    url: `${siteUrl.value}/sports/popular`,
+  })),
 })
 
 navigateTo('/sports/popular', { redirectCode: 301 })

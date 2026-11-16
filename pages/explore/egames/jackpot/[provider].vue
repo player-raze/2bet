@@ -41,6 +41,7 @@ const route = useRoute()
 const router = useRouter()
 const { effectiveTheme } = useSiteTheme()
 const { translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 
 const themedProviderLogo = (providerLogo: string): string => {
   return getProviderLogoForTheme(providerLogo, effectiveTheme.value)
@@ -81,7 +82,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `${providerName.value} Jackpots Progressivos - 2bet`,
-    url: `https://2bet.com/egames/jackpot/${activeProvider.value}`,
+    url: `${siteUrl.value}/egames/jackpot/${activeProvider.value}`,
   })),
 })
 

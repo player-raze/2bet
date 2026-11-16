@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ChevronRight } from 'lucide-vue-next'
 
+const siteUrl = useSiteUrl()
+
 useAppSeo({
   title: 'Transmissões ao Vivo de Partidas e Mesas de Jogos | 2bet',
   description: 'Assista a partidas e jogos em tempo real com streamers oficiais na 2bet Brasil. Interaja com a comunidade e confira dicas exclusivas.',
@@ -9,12 +11,12 @@ useAppSeo({
     { name: 'Praça ao Vivo', path: '/live-plaza/home' },
     { name: 'Streamers', path: '/live-plaza/streamer' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '2Bet Live Streamers',
-    url: 'https://2bet.com/live-plaza/streamer',
-  },
+    url: `${siteUrl.value}/live-plaza/streamer`,
+  })),
 })
 
 const router = useRouter()

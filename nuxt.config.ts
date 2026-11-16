@@ -14,6 +14,7 @@ const processGlobal = (
         BYBET_REDIRECT_CODE?: string
         SITE_NAME?: string
         SITE_URL?: string
+        NUXT_PUBLIC_SITE_URL?: string
         INDEX_FOLLOW?: string
         LIVESTREAM_API?: string
         INPLAY_API?: string
@@ -93,7 +94,8 @@ export default defineNuxtConfig({
       compiled: async (nitro) => {
         try {
           const { generateSitemapFile } = await import('./scripts/generate-sitemap.mjs')
-          await generateSitemapFile(nitro.options.runtimeConfig?.public?.siteUrl)
+          const configuredSiteUrl = (environment?.NUXT_PUBLIC_SITE_URL || environment?.SITE_URL || '').trim() || undefined
+          await generateSitemapFile(configuredSiteUrl)
         } catch (e) {
           console.warn('[sitemap] Build hook warning:', e)
         }

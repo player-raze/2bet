@@ -6,6 +6,7 @@ defineProps<{
 
 const route = useRoute()
 const { translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 
 const sportName = computed(() => {
   const s = String(route.params.sport || 'sports')
@@ -26,7 +27,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Odds Pré-Jogo de ${sportName.value} em ${route.params.date} - 2bet`,
-    url: `https://2bet.com${route.path}`,
+    url: `${siteUrl.value}${route.path}`,
     description: formatSeoDescription(`Cotações pré-jogo de ${sportName.value} e mercados esportivos para partidas em ${route.params.date} na 2bet Brasil.`),
   })),
 })

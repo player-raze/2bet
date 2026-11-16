@@ -3,6 +3,7 @@ import { ChevronRight } from 'lucide-vue-next'
 
 const { closeComments } = useCommentPanel()
 const { translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 
 useAppSeo({
   title: '2bet Suporte ao Cliente 24/7 e Central de Ajuda Online',
@@ -13,12 +14,12 @@ useAppSeo({
     { name: 'Ajuda', path: '/help/contact-us' },
     { name: 'Atendimento ao Cliente', path: '/egames/customer-service' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
     name: 'Suporte ao Cliente 2bet',
-    url: 'https://2bet.com/egames/customer-service',
-  },
+    url: `${siteUrl.value}/egames/customer-service`,
+  })),
 })
 
 onMounted(() => {

@@ -7,6 +7,7 @@ import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 const route = useRoute()
 const router = useRouter()
 const { translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 const activeCategory = computed(() => {
   const category = String(route.params.category || 'featured')
   return category === 'game-show' ? 'live-show' : category
@@ -25,7 +26,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `${translate(categoryLabel.value)} Cassino ao Vivo - 2bet`,
-    url: `https://2bet.com/entertainment/live-casino/${activeCategory.value}`,
+    url: `${siteUrl.value}/entertainment/live-casino/${activeCategory.value}`,
   })),
 })
 

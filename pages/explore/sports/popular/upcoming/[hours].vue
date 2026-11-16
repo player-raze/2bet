@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<{
 })
 
 const route = useRoute()
+const siteUrl = useSiteUrl()
 const hoursLabel = computed(() => String(route.params.hours).replace('hours', ' Horas'))
 
 useAppSeo({
@@ -28,7 +29,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Próximas Partidas Esportivas (${hoursLabel.value}) - 2bet`,
-    url: `https://2bet.com${route.path}`,
+    url: `${siteUrl.value}${route.path}`,
     description: `Próximos jogos esportivos começando nas próximas ${hoursLabel.value} na plataforma 2bet Brasil.`,
   })),
 })

@@ -2,10 +2,29 @@ import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import type { H3Event } from 'h3'
 
+let cachedDotEnv: { envPath: string | null; raw: string; values: Record<string, string> } | null = null
+
+export function parseDotEnvContent(content: string): Record<string, string> {
+  const parsed: Record<string, string> = {}
+  for (const line of content.split(/\r?\n/)) {
+    const match = line.match(/^[ \t]*([\w.-]+)[ \t]*=[ \t]*(.*)$/)
+    if (!match) continue
+    const key = match[1]
+    const rawVal = (match[2] ?? '').trim()
+    if (!rawVal) {
+      parsed[key] = ''
+      continue
+    }
+    const quoted = rawVal.match(/^(?:"([^"\r\n]*)"|'([^'\r\n]*)')/)
+    parsed[key] = quoted ? (quoted[1] ?? quoted[2] ?? '').trim() : (rawVal.split('#')[0]?.trim() ?? '')
+  }
+  return parsed
+}
+
 /**
- * Reads a key directly from .env (checking cwd and parent directory when running inside .output).
+ * Reads and parses key=value pairs from .env (checking cwd and parent directory when running inside .output).
  */
-export async function readDotEnvValue(key: string): Promise<string | undefined> {
+export async function readDotEnvMap(): Promise<Record<string, string>> {
   const candidates = [
     path.resolve(process.cwd(), '.env'),
     path.resolve(process.cwd(), '../.env'),
@@ -14,20 +33,27 @@ export async function readDotEnvValue(key: string): Promise<string | undefined> 
   for (const envPath of candidates) {
     try {
       const content = await fs.readFile(envPath, 'utf8')
-      const match = content.match(new RegExp(`^[ \\t]*${key}[ \\t]*=[ \\t]*(.*)$`, 'm'))
-      if (match) {
-        const rawVal = (match[1] ?? '').trim()
-        if (!rawVal) return ''
-        const quoted = rawVal.match(/^(?:"([^"\r\n]*)"|'([^'\r\n]*)')/)
-        if (quoted) return (quoted[1] ?? quoted[2] ?? '').trim()
-        return rawVal.split('#')[0]?.trim() ?? ''
+      if (cachedDotEnv && cachedDotEnv.envPath === envPath && cachedDotEnv.raw === content) {
+        return cachedDotEnv.values
       }
+      const values = parseDotEnvContent(content)
+      cachedDotEnv = { envPath, raw: content, values }
+      return values
     } catch {
       // Ignore missing or unreadable .env files
     }
   }
 
-  return undefined
+  cachedDotEnv = { envPath: null, raw: '', values: {} }
+  return {}
+}
+
+/**
+ * Reads a key directly from .env (checking cwd and parent directory when running inside .output).
+ */
+export async function readDotEnvValue(key: string): Promise<string | undefined> {
+  const envMap = await readDotEnvMap()
+  return Object.prototype.hasOwnProperty.call(envMap, key) ? envMap[key] : undefined
 }
 
 /**

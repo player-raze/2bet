@@ -19,6 +19,7 @@ const predictionSortOptions: Array<{ value: PredictionSort; label: string }> = [
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
 const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const siteUrl = useSiteUrl()
 
 useAppSeo({
   title: '2Bet Prediction | Apostas Esportivas com Alta Precisão',
@@ -28,12 +29,12 @@ useAppSeo({
     { name: 'Praça ao Vivo', path: '/live-plaza/home' },
     { name: 'Previsões de Especialistas', path: '/live-plaza/expert-predictions' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '2Bet Expert Predictions',
-    url: 'https://2bet.com/live-plaza/expert-predictions',
-  },
+    url: `${siteUrl.value}/live-plaza/expert-predictions`,
+  })),
 })
 
 const { showDemoMessage } = useDemoInteraction()

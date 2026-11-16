@@ -43,6 +43,7 @@ const categoryIcons: Record<string, Component> = {
 const route = useRoute()
 const router = useRouter()
 const { translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 
 const normalizeCategory = (param: string): string => {
   const p = (param || '').toLowerCase()
@@ -69,7 +70,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `${translate(categoryLabel.value)} Bingo - 2bet`,
-    url: `https://2bet.com/egames/bingo/${activeCategory.value}`,
+    url: `${siteUrl.value}/egames/bingo/${activeCategory.value}`,
   })),
 })
 

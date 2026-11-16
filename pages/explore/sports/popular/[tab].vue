@@ -5,6 +5,7 @@ defineProps<{
 }>()
 
 const route = useRoute()
+const siteUrl = useSiteUrl()
 
 interface TabMeta {
   label: string
@@ -66,7 +67,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: currentTab.value.title.replace(' | 2bet', ''),
-    url: `https://2bet.com/sports/popular/${route.params.tab}`,
+    url: `${siteUrl.value}/sports/popular/${route.params.tab}`,
     description: currentTab.value.description,
   })),
 })

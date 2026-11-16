@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const siteUrl = useSiteUrl()
+
 useAppSeo({
   title: 'Apostas Esportivas Populares — Melhores Jogos e Odds | 2bet',
   description: 'Aposte nos eventos mais concorridos do momento na 2bet Brasil. Principais ligas de futebol, basquete e tênis com cotações vantajosas.',
@@ -7,12 +9,12 @@ useAppSeo({
     { name: 'Esportes', path: '/sports/popular' },
     { name: 'Popular', path: '/sports/popular' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Popular Sports Betting - 2Bet',
-    url: 'https://2bet.com/sports/popular',
-  },
+    url: `${siteUrl.value}/sports/popular`,
+  })),
 })
 
 const selectedSports = ['Basketball', 'Soccer', 'Tennis', 'Baseball']

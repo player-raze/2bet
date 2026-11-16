@@ -33,6 +33,8 @@ import GameRail from '~/components/game-cards/GameRail.vue'
 import GameEmptyState from '~/components/game-cards/GameEmptyState.vue'
 import { sortRailGames } from '~/utils/gameSort'
 
+const siteUrl = useSiteUrl()
+
 useAppSeo({
   title: 'Bingo Online — Cartelas Premiadas e Sorteios ao Vivo | 2bet',
   description: 'Jogue bingo online na 2bet Brasil. Escolha suas cartelas favoritas, aproveite bolas extras com bônus e dispute prêmios em dinheiro real.',
@@ -41,13 +43,13 @@ useAppSeo({
     { name: 'eGames', path: '/egames/slots' },
     { name: 'Bingo', path: '/egames/bingo' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '2Bet Online Bingo',
-    url: 'https://2bet.com/egames/bingo',
+    url: `${siteUrl.value}/egames/bingo`,
     description: 'Play online bingo games at 2Bet Brasil. Experience fast-paced ball draws, multi-card action, and instant cash prizes.',
-  },
+  })),
 })
 
 const categoryIcons: Record<string, Component> = {

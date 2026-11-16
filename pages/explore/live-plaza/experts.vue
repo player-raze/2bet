@@ -20,6 +20,7 @@ const sortOptions: Array<{ value: ExpertSort; label: string }> = [
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
 const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 const { translate } = useSitePreferences()
+const siteUrl = useSiteUrl()
 
 useAppSeo({
   title: 'Top Tipsters e Especialistas em Apostas Esportivas | 2bet',
@@ -29,12 +30,12 @@ useAppSeo({
     { name: 'Praça ao Vivo', path: '/live-plaza/home' },
     { name: 'Especialistas', path: '/live-plaza/experts' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '2Bet Sports Experts',
-    url: 'https://2bet.com/live-plaza/experts',
-  },
+    url: `${siteUrl.value}/live-plaza/experts`,
+  })),
 })
 
 const selectedSport = ref<LivePlazaSportFilter>('all')

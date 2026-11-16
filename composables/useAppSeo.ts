@@ -424,15 +424,33 @@ export const isHomepageRoute = (routePath?: string): boolean => {
   return cleanPath === '/'
 }
 
+export const DEFAULT_SITE_URL = 'https://2bet.com'
+
 export const DEFAULT_OG_IMAGE_PATH = '/brand/2bet-og.webp'
+
+export const normalizeSiteUrl = (
+  rawSiteUrl: unknown,
+  fallback: string = DEFAULT_SITE_URL,
+): string => {
+  const cleanFallback = fallback.trim().replace(/\/+$/, '') || DEFAULT_SITE_URL
+  const cleanRaw = typeof rawSiteUrl === 'string'
+    ? rawSiteUrl.trim().replace(/^['"]+|['"]+$/g, '').replace(/\/+$/, '')
+    : ''
+  return cleanRaw || cleanFallback
+}
+
+export const useSiteUrl = () => {
+  const config = useRuntimeConfig()
+  return computed(() => normalizeSiteUrl(config.public.siteUrl, DEFAULT_SITE_URL))
+}
 
 /** Resolve a relative SEO image path against siteUrl while preserving full external URLs. */
 export const resolveSeoImageUrl = (
   rawImage: string | undefined | null,
-  siteUrl: string = 'https://2bet.com',
+  siteUrl: string = DEFAULT_SITE_URL,
   fallbackPath: string = DEFAULT_OG_IMAGE_PATH,
 ): string => {
-  const baseOrigin = String(siteUrl || 'https://2bet.com').trim().replace(/\/+$/, '') || 'https://2bet.com'
+  const baseOrigin = normalizeSiteUrl(siteUrl, DEFAULT_SITE_URL)
   const candidate = (typeof rawImage === 'string' ? rawImage.trim() : '') || fallbackPath
   if (/^https?:\/\//i.test(candidate)) {
     return candidate
@@ -506,7 +524,7 @@ export const useAppSeo = (options: AppSeoOptions) => {
       .trim()
       .replace(/^['"]+|['"]+$/g, '')
   })
-  const siteUrl = computed(() => String(config.public.siteUrl || 'https://2bet.com').replace(/\/+$/, ''))
+  const siteUrl = computed(() => normalizeSiteUrl(config.public.siteUrl, DEFAULT_SITE_URL))
 
   const shouldIncludeSiteName = computed(() => {
     const optSiteName = resolveVal(options.siteName)

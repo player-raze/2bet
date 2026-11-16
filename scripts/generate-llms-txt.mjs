@@ -12,21 +12,24 @@ try {
   } else {
     const envPath = path.resolve(rootDir, '.env')
     const content = fs.readFileSync(envPath, 'utf-8')
-    for (const line of content.split('\n')) {
-      const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/)
+    for (const line of content.split(/\r?\n/)) {
+      const match = line.match(/^[ \t]*([\w.-]+)[ \t]*=[ \t]*(.*)$/)
       if (match) {
         const key = match[1]
-        let val = (match[2] || '').trim()
-        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-          val = val.slice(1, -1)
-        }
+        const rawVal = (match[2] || '').trim()
+        const quoted = rawVal.match(/^(?:"([^"\r\n]*)"|'([^'\r\n]*)')/)
+        const val = !rawVal
+          ? ''
+          : quoted
+            ? (quoted[1] ?? quoted[2] ?? '').trim()
+            : (rawVal.split('#')[0]?.trim() ?? '')
         if (process.env[key] === undefined) process.env[key] = val
       }
     }
   }
 } catch {}
 
-const siteUrl = String(process.env.SITE_URL || 'https://2bet.com').replace(/\/+$/, '')
+const siteUrl = String(process.env.NUXT_PUBLIC_SITE_URL || process.env.SITE_URL || 'https://2bet.com').replace(/\/+$/, '')
 const siteName = String(process.env.SITE_NAME || '2bet')
 
 export function buildLlmsTxtContent(base = siteUrl, name = siteName) {

@@ -4,6 +4,7 @@ import LiveView from '~/components/sports/LiveView.vue'
 
 const route = useRoute()
 const { translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 const sport = computed(() => String(route.params.sport || '').toLowerCase())
 const sportName = computed(() => translate(sport.value.charAt(0).toUpperCase() + sport.value.slice(1)))
 
@@ -20,7 +21,7 @@ useAppSeo({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Apostas ao Vivo em ${sportName.value} - 2bet`,
-    url: `https://2bet.com/sports/live/${sport.value}`,
+    url: `${siteUrl.value}/sports/live/${sport.value}`,
     description: `Acompanhe e aposte ao vivo em jogos de ${sportName.value} com odds em tempo real na 2bet Brasil.`,
   })),
 })

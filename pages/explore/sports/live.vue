@@ -6,6 +6,7 @@ import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const route = useRoute()
 const { locale, translate } = useSiteLocale()
+const siteUrl = useSiteUrl()
 
 useAppSeo({
   title: 'Apostas ao Vivo — Cotações em Tempo Real e Jogos | 2bet',
@@ -15,12 +16,12 @@ useAppSeo({
     { name: 'Esportes', path: '/sports/popular' },
     { name: 'Ao Vivo', path: '/sports/live' },
   ],
-  schema: {
+  schema: computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Live Sports Betting - 2Bet',
-    url: 'https://2bet.com/sports/live',
-  },
+    url: `${siteUrl.value}/sports/live`,
+  })),
 })
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
