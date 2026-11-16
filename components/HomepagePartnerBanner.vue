@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
     :href="bybetRedirectUrl"
     target="_blank"
     rel="nofollow noopener noreferrer"
-    class="homepage-partner-banner"
+    class="homepage-partner-banner "
     aria-label="Seja um Parceiro Promocional da 2BET"
   >
     <picture class="homepage-partner-banner__image">
@@ -61,11 +61,12 @@ onBeforeUnmount(() => {
         height="80"
         loading="lazy"
         decoding="async"
+        class=""
       >
     </picture>
     <video
       ref="video"
-      class="homepage-partner-banner__video"
+      class="homepage-partner-banner__video rounded-lg"
       src="/images/affiliate/partner-promotional-mobile.mp4"
       poster="/images/affiliate/partner-promotional-desktop.webp"
       autoplay
@@ -81,7 +82,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .homepage-partner-banner { display: block; flex: 1 1 0; min-width: 0; max-width: 1020px; border-radius: 6px; }
 .homepage-partner-banner__image { display: block; }
-.homepage-partner-banner img { display: block; width: 100%; height: auto; aspect-ratio: 1020 / 80; object-fit: contain; }
+.homepage-partner-banner img { display: block; width: 100%; height: auto; aspect-ratio: 1020 / 70; object-fit: cover; border-radius: 20px; }
 .homepage-partner-banner__video { display: none; width: 100%; height: auto; }
 .homepage-partner-banner:focus-visible { outline: 2px solid #f9c600; outline-offset: 3px; }
 @media (max-width: 1199px) {

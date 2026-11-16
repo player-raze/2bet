@@ -279,12 +279,12 @@ const viewAllTarget = computed(() => {
   .sports-filter-value { gap: 10px; padding-inline: 14px; }
 }
 @media (max-width: 767px) {
-  .sports-header { display: grid; grid-template-columns: minmax(0,1fr) minmax(96px,120px); align-items: center; gap: 8px 12px; margin-bottom: 4px; padding-bottom: 16px; }
+  .sports-header { display: grid; grid-template-columns: minmax(0,1fr) minmax(120px,140px); align-items: center; gap: 8px 12px; margin-bottom: 4px; padding-bottom: 16px; }
   .sports-heading { display: contents; }
   .sports-heading h2 { grid-column: 1; grid-row: 1; min-width: 0; gap: 8px; font-size: 26px; }
   .sports-heading h2 img { width: 24px; height: 24px; }
   .sports-heading p { grid-column: 1; grid-row: 2; min-width: 0; padding: 0; border: 0; font-size: 13px; line-height: 1.6; text-wrap: pretty; }
-  .sports-partner-banner { grid-column: 2; grid-row: 1 / 3; }
+  .sports-partner-banner { grid-column: 2; grid-row: 1 / 3; width: 140px; max-width: 140px; }
   .homepage-sports-section .sports-explore { display: none; }
   .homepage-sports-section :deep(.allgames-game-track) { grid-auto-columns: 100%; }
   .sports-slider-footer { display: flex; flex-direction: column; gap: 12px; }

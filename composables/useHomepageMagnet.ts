@@ -12,6 +12,7 @@ function isMagnetExcluded(element: HTMLElement): boolean {
       || current.classList?.contains('homepage-sports-section')
       || current.classList?.contains('homepage-slider-dots')
       || current.classList?.contains('sports-preview')
+      || current.classList?.contains('homepage-hero__preview-row')
     ) return true
   }
   return false
