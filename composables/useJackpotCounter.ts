@@ -232,9 +232,27 @@ export const MINOR_JACKPOT_COUNTER: JackpotCounterOptions = {
 export const useJackpotCounter = (options: JackpotCounterOptions) => {
   const amount = useState<number>(`jackpot-counter:${options.key}`, () => toCents(options.initial()))
   const displayAmount = ref(amount.value)
+  const storageKey = `2bet-jackpot:${options.key}`
+  const lastTickKey = `${storageKey}:last-tick`
   const [minDelay, maxDelay] = options.delayMs ?? DEFAULT_DELAY_MS
   const initialDelayRange = options.initialDelayMs ?? DEFAULT_INITIAL_DELAY_MS
   let frameId: number | null = null
+  let mounted = false
+
+  const readCachedAmount = (): number | null => {
+    try {
+      const cached = localStorage.getItem(storageKey) ?? localStorage.getItem(`bybet-jackpot:${options.key}`)
+      return cached === null ? null : normalizeHydratedJackpotAmount(Number(cached), options)
+    } catch {
+      return null
+    }
+  }
+
+  const syncStoredAmount = (event: StorageEvent): void => {
+    if (event.key !== storageKey || event.newValue === null) return
+    const normalized = normalizeHydratedJackpotAmount(Number(event.newValue), options)
+    if (normalized !== null) amount.value = normalized
+  }
 
   const stopTween = (): void => {
     if (frameId !== null) {
@@ -255,7 +273,7 @@ export const useJackpotCounter = (options: JackpotCounterOptions) => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const maxDecreaseStep = Math.max(...(options.decreaseStep ?? options.step))
     const isResetJump = Boolean(options.resetOnMax && target === toCents(options.min ?? 0) && from - target > maxDecreaseStep)
-    if (prefersReducedMotion || from === target || isResetJump) {
+    if (prefersReducedMotion || document.hidden || from === target || isResetJump) {
       displayAmount.value = target
       return
     }
@@ -282,36 +300,48 @@ export const useJackpotCounter = (options: JackpotCounterOptions) => {
 
   const scheduleTick = (ticker: ActiveTicker, delay?: number): void => {
     const waitTime = delay ?? randomBetween(minDelay, maxDelay)
-    ticker.timer = setTimeout(() => {
-      if (!document.hidden) {
-        amount.value = computeNextJackpotAmount(amount.value, options)
-        queueJackpotSave(options.key, amount.value)
+    ticker.timer = setTimeout(async () => {
+      try {
+        if (!document.hidden) {
+          const advance = (): void => {
+            if (ticker.subscribers <= 0) return
+            // Tabs share the same amount and take turns advancing it only once per interval.
+            const cached = readCachedAmount()
+            if (cached !== null) amount.value = cached
+            try {
+              const lastTick = Number(localStorage.getItem(lastTickKey))
+              if (Date.now() - lastTick < minDelay) return
+              localStorage.setItem(lastTickKey, String(Date.now()))
+            } catch {}
+            amount.value = computeNextJackpotAmount(amount.value, options)
+            queueJackpotSave(options.key, amount.value)
+          }
+
+          if (navigator.locks) {
+            await navigator.locks.request(storageKey, advance)
+          } else {
+            advance()
+          }
+        }
+      } finally {
+        if (ticker.subscribers > 0) scheduleTick(ticker)
       }
-      scheduleTick(ticker)
     }, waitTime)
   }
 
   watch(amount, animateTo)
 
   onMounted(() => {
-    // 1. Immediately hydrate from localStorage if available to preserve value across refreshes
-    if (typeof localStorage !== 'undefined') {
-      const cached = localStorage.getItem(`2bet-jackpot:${options.key}`) || localStorage.getItem(`bybet-jackpot:${options.key}`)
-      if (cached) {
-        const parsed = Number(cached)
-        const normalized = normalizeHydratedJackpotAmount(parsed, options)
-        if (normalized !== null) {
-          amount.value = normalized
-          if (Math.abs(normalized - parsed) > 0.01) {
-            queueJackpotSave(options.key, normalized)
-          }
-        }
-      }
-    }
+    mounted = true
+    window.addEventListener('storage', syncStoredAmount)
+    // Preserve the shared value when navigating between the homepage and jackpot page.
+    const cached = readCachedAmount()
+    if (cached !== null) amount.value = cached
     displayAmount.value = amount.value
 
-    // 2. Sync with server data/jackpots.json in background
+    // Seed from the server only when this browser has no newer shared value.
     fetchLatestJackpots().then((serverData) => {
+      if (!mounted || readCachedAmount() !== null) return
       if (serverData && typeof serverData[options.key] === 'number') {
         const serverVal = serverData[options.key]
         const normalized = normalizeHydratedJackpotAmount(serverVal, options)
@@ -342,6 +372,8 @@ export const useJackpotCounter = (options: JackpotCounterOptions) => {
   })
 
   onBeforeUnmount(() => {
+    mounted = false
+    window.removeEventListener('storage', syncStoredAmount)
     stopTween()
 
     const ticker = activeTickers.get(options.key)

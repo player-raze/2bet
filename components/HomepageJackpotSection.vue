@@ -2,9 +2,9 @@
 import { ArrowRight, Flame, Pause, Play, Sparkles, Trophy } from 'lucide-vue-next'
 import {
   JDB_JACKPOT_COUNTER,
-  formatJackpotAmount,
   useJackpotCounter,
 } from '~/composables/useJackpotCounter'
+import JackpotCounter from '~/components/jackpot/JackpotCounter.vue'
 import { HOMEPAGE_WINNERS, type HomepageWinner } from '~/data/homepage-winners'
 import usernamesList from '~/data/usernames.json'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
@@ -17,10 +17,6 @@ const { translate } = useSiteLocale()
 const { effectiveTheme } = useSiteTheme()
 
 const { displayAmount: jdbDisplay } = useJackpotCounter(JDB_JACKPOT_COUNTER)
-
-const jackpotCharacters = computed(() => {
-  return [...formatJackpotAmount(jdbDisplay.value)]
-})
 
 const themedLogo = (logo: string): string => {
   return getProviderLogoForTheme(logo, effectiveTheme.value)
@@ -185,41 +181,7 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- 3D Digit Counter Plate -->
-        <div
-          class="jackpot-counter-plate light:bg-[#f0f7f3] light:border-emerald-500/25"
-          role="status"
-          aria-live="polite"
-          :aria-label="`JDB Jackpot: R$ ${formatJackpotAmount(jdbDisplay)}`"
-        >
-          <div class="jackpot-currency-badge light:bg-[#d8eee3] light:text-[#026b34] light:border-emerald-500/35" aria-hidden="true">
-            <span>R$</span>
-          </div>
-
-          <div class="jackpot-counter-tiles" aria-hidden="true">
-            <template v-for="(character, index) in jackpotCharacters" :key="`${index}-${character}`">
-              <!-- Digit plate -->
-              <div v-if="/\d/.test(character)" class="digit-box light:bg-white light:border-emerald-500/20">
-                <img
-                  :src="`/images/jackpot/${character}.webp`"
-                  :alt="character"
-                  class="digit-img"
-                  width="34"
-                  height="45"
-                />
-              </div>
-              <!-- Comma / Dot Separator -->
-              <div v-else class="separator-box">
-                <img
-                  :src="character === ',' ? '/images/jackpot/comma.webp' : '/images/jackpot/dot.webp'"
-                  :alt="character"
-                  class="separator-img"
-                  width="4"
-                  height="15"
-                />
-              </div>
-            </template>
-          </div>
-        </div>
+        <JackpotCounter :amount="jdbDisplay" provider="JDB" class="light:bg-[#f0f7f3]" />
 
         <!-- Bottom Action Row -->
         <div class="jdb-card-footer flex items-center justify-between flex-wrap gap-3">
@@ -520,86 +482,6 @@ onBeforeUnmount(() => {
   50% { transform: translateY(-7px); }
 }
 
-/* Counter Plate */
-.jackpot-counter-plate {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 14px;
-  border: 1px solid rgba(1, 148, 64, 0.28);
-  border-radius: 12px;
-  background: linear-gradient(180deg, #08160e 0%, #000000 100%);
-  box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.9),
-    0 1px 0 rgba(1, 148, 64, 0.2);
-}
-
-.jackpot-currency-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 48px;
-  padding: 0 12px;
-  border: 1px solid rgba(1, 148, 64, 0.6);
-  border-radius: 6px;
-  background: linear-gradient(180deg, #023819 0%, #011d0d 100%);
-  color: #32d49a;
-  font-family: monospace;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 12px rgba(1, 148, 64, 0.3);
-}
-
-.jackpot-counter-tiles {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5px;
-}
-
-.digit-box {
-  display: inline-flex;
-  width: 36px;
-  height: 48px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(1, 148, 64, 0.25);
-  border-radius: 6px;
-  background: linear-gradient(180deg, #132218 0%, #040d07 50%, #09150e 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(1, 148, 64, 0.2),
-    0 3px 6px rgba(0, 0, 0, 0.6);
-}
-
-.digit-img {
-  display: block;
-  width: 28px;
-  height: auto;
-  max-height: 38px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.85));
-}
-
-.separator-box {
-  display: inline-flex;
-  width: 9px;
-  height: 48px;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 6px;
-}
-
-.separator-img {
-  display: block;
-  width: 3px;
-  height: auto;
-  max-height: 14px;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
-}
-
 /* Footer & CTA */
 .jdb-perk-pill {
   display: inline-flex;
@@ -803,27 +685,6 @@ onBeforeUnmount(() => {
     padding: 18px 16px;
   }
 
-  .digit-box {
-    width: 30px;
-    height: 42px;
-  }
-
-  .digit-img {
-    width: 23px;
-    max-height: 32px;
-  }
-
-  .separator-box {
-    width: 7px;
-    height: 42px;
-  }
-
-  .jackpot-currency-badge {
-    height: 42px;
-    padding: 0 9px;
-    font-size: 12px;
-  }
-
   .winners-card {
     padding: 16px;
   }
@@ -857,27 +718,6 @@ onBeforeUnmount(() => {
 
   .jdb-wordmark-container {
     align-items: center;
-  }
-
-  .digit-box {
-    width: 27px;
-    height: 38px;
-  }
-
-  .digit-img {
-    width: 20px;
-    max-height: 28px;
-  }
-
-  .separator-box {
-    width: 6px;
-    height: 38px;
-  }
-
-  .jackpot-currency-badge {
-    height: 38px;
-    padding: 0 8px;
-    font-size: 12px;
   }
 
   .jdb-cta-btn {

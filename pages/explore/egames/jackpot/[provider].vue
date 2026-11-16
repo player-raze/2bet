@@ -16,6 +16,7 @@ import {
 import GameCard from '~/components/game-cards/GameCard.vue'
 import GameRail from '~/components/game-cards/GameRail.vue'
 import JackpotWinnersCard from '~/components/jackpot/JackpotWinnersCard.vue'
+import JackpotCounter from '~/components/jackpot/JackpotCounter.vue'
 import { SLOTS, getStandaloneJackpotGames, normalizeSlotProvider } from '~/data/slots'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
 
@@ -25,18 +26,6 @@ const JACKPOT_CHARACTER_IMAGES: Record<JackpotSection['jackpotCharacter'], strin
   dragon: '/images/jackpot/jili-jackpot.webp',
   genie: '/images/jackpot/cq9-jackpot.webp',
   panda: '/images/jackpot/jdb-jackpot.webp',
-}
-
-const JACKPOT_DIGIT_IMAGES: Record<string, string> = Object.fromEntries(
-  ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].map(digit => [
-    digit,
-    `/images/jackpot/${digit}.webp`,
-  ]),
-)
-
-const JACKPOT_SEPARATOR_IMAGES: Record<string, string> = {
-  ',': '/images/jackpot/comma.webp',
-  '.': '/images/jackpot/dot.webp',
 }
 
 const JACKPOT_INCREMENT_RANGES: Record<string, readonly [number, number]> = {
@@ -118,22 +107,6 @@ const getJackpotAmount = (section: JackpotSection): number => {
     return storeAmounts[section.id].value
   }
   return jackpotAmounts.value[section.id] ?? section.jackpotAmount
-}
-
-const getJackpotCharacters = (section: JackpotSection): string[] => {
-  return [...formatJackpotAmount(getJackpotAmount(section))]
-}
-
-const getJackpotDigitImage = (character: string): string | undefined => {
-  return JACKPOT_DIGIT_IMAGES[character]
-}
-
-const getJackpotSeparatorImage = (character: string): string | undefined => {
-  return JACKPOT_SEPARATOR_IMAGES[character]
-}
-
-const getJackpotLabel = (section: JackpotSection): string => {
-  return `${section.provider} live jackpot: R$${formatJackpotAmount(getJackpotAmount(section))}`
 }
 
 const refreshJackpotAmounts = (): void => {
@@ -333,40 +306,11 @@ watch(
           />
         </div>
 
-        <div
+        <JackpotCounter
           v-if="section.showCounter"
-          class="jackpot-counter-track bg-[#5d5d5d] light:bg-[#edf4f0] border border-transparent light:border-[#d8e2dc] light:shadow-sm"
-          role="status"
-          aria-live="polite"
-          :aria-label="getJackpotLabel(section)"
-        >
-          <div class="jackpot-counter" aria-hidden="true">
-            <template
-              v-for="(character, index) in getJackpotCharacters(section)"
-              :key="`${section.id}-${index}`"
-            >
-              <span v-if="/\d/.test(character)" class="jackpot-counter-character border border-[#848484]/80 light:border-[#d8e2dc] bg-gradient-to-b from-[#4b4b4b] via-[#333] to-[#3e3e3e] light:from-[#ffffff] light:via-[#f4f8f5] light:to-[#eaf5ee]">
-                <img
-                  v-if="getJackpotDigitImage(character)"
-                  :src="getJackpotDigitImage(character)"
-                  :alt="character"
-                  class="jackpot-digit-image"
-                  width="34"
-                  height="45"
-                />
-                <span v-else class="jackpot-digit-fallback">{{ character }}</span>
-              </span>
-              <span v-else class="jackpot-separator">
-                <img
-                  v-if="getJackpotSeparatorImage(character)"
-                  :src="getJackpotSeparatorImage(character)"
-                  :alt="character"
-                  class="jackpot-separator-image"
-                />
-              </span>
-            </template>
-          </div>
-        </div>
+          :amount="getJackpotAmount(section)"
+          :provider="section.provider"
+        />
 
         <div class="jackpot-provider-count">
           <NuxtLink
@@ -538,88 +482,6 @@ watch(
   max-height: 86px;
 }
 
-.jackpot-counter-track {
-  display: flex;
-  width: 100%;
-  height: 64px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.28);
-}
-
-.jackpot-counter {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5px;
-}
-
-.jackpot-counter-character {
-  display: inline-flex;
-  width: 41px;
-  height: 56px;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 5px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 2px 3px rgba(0, 0, 0, 0.4);
-}
-
-.jackpot-digit-image {
-  display: block;
-  width: 34px;
-  height: auto;
-  max-height: 45px;
-  object-fit: contain;
-  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.78));
-}
-
-.jackpot-digit-fallback {
-  display: inline-flex;
-  width: 34px;
-  height: 45px;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, #fff3a2 2%, #ffd264 42%, #e8921c 88%);
-  background-clip: text;
-  color: transparent;
-  font-size: 43px;
-  font-weight: 1000;
-  line-height: 1;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 2.5px #050505;
-  paint-order: stroke fill;
-  filter: drop-shadow(0 3px 0 #1f1508);
-  transform: rotate(-2deg);
-}
-
-.jackpot-separator {
-  display: inline-flex;
-  width: 9px;
-  height: 56px;
-  flex: 0 0 auto;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 3px;
-}
-
-.jackpot-separator-image {
-  display: block;
-  width: 3px;
-  height: auto;
-  max-height: 15px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.48));
-}
-
 @media (max-width: 767px) {
   .jackpot-brand-stage {
     height: 98px;
@@ -653,35 +515,6 @@ watch(
   .jackpot-provider-identity,
   .jackpot-provider-count {
     top: 6px;
-  }
-
-  .jackpot-counter-track {
-    height: 58px;
-  }
-
-  .jackpot-counter-character {
-    width: 34px;
-    height: 50px;
-  }
-
-  .jackpot-digit-image,
-  .jackpot-digit-fallback {
-    width: 29px;
-    max-height: 41px;
-  }
-
-  .jackpot-digit-fallback {
-    height: 41px;
-    font-size: 37px;
-  }
-
-  .jackpot-separator {
-    width: 8px;
-    height: 50px;
-  }
-
-  .jackpot-separator-image {
-    width: 8px;
   }
 
 }
