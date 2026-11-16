@@ -128,8 +128,12 @@ describe('Sports In-Play Matching & Football Route Suite', () => {
       'sportEvents/gameResult/football/regular/today',
     )
     assert.equal(
-      resolveSportsTabRedirectUrl('football', 'replay'),
-      `${getEnvRedirectUrl()}/sportEvents/gameResult/football/regular/today?p=xjSD`,
+      resolveSportsTabRedirectUrl('football', 'replay', undefined, 'xjSD'),
+      `${getEnvRedirectUrl().replace(/\/+$/, '')}/sportEvents/gameResult/football/regular/today?p=xjSD`,
+    )
+    assert.equal(
+      resolveSportsTabRedirectUrl('football', 'replay', undefined, ''),
+      `${getEnvRedirectUrl().replace(/\/+$/, '')}/sportEvents/gameResult/football/regular/today`,
     )
   })
 

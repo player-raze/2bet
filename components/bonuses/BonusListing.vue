@@ -89,11 +89,13 @@ useAppSeo({
 
 <template>
   <div class="bonuses-page text-[#f5f5f5] light:text-[#10261c]">
+    <h1 class="sr-only">{{ translate('Bonuses') }}</h1>
     <MobileBonusListing :category="category" />
     <div class="bonuses-desktop">
     <div class="bonuses-sticky rounded-xl sticky-header-seal bg-black pb-2 light:bg-[#f4f8f5]">
       <SeoHeader
         title="Bonuses"
+        heading-tag="span"
         meta-title="2bet Bonus de Cassino e Promoções Exclusivas"
         description="Explore e aproveite nossas promoções e ofertas exclusivas no 2bet bonus, incluindo o programa Compartilhe e Ganhe e privilégios VIP."
         keywords="2bet bônus, USDT, Compartilhe e Ganhe, Clube VIP, promoções"

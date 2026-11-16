@@ -3,6 +3,7 @@ import { Trophy, ChevronUp, ChevronDown, Search } from 'lucide-vue-next'
 import Ai from '~/components/buttons/Ai.vue'
 import Collapse from '~/components/buttons/Collapse.vue'
 import type { Sport, SportsEvent } from '~/types/sports'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const props = defineProps<{
   filteredSports: Sport[]
@@ -12,7 +13,7 @@ const props = defineProps<{
 }>()
 
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 const { translate } = useSitePreferences()
 const route = useRoute()
 const search = ref('')

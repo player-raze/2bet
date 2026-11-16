@@ -2,6 +2,7 @@
 import { ChevronRight } from 'lucide-vue-next'
 import SubpageHeader from '~/components/SubpageHeader.vue'
 import AppInstallationGuide from '~/components/download/AppInstallationGuide.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 useAppSeo({
   title: '2Bet App Login Download — Guia de Download e Instalação | 2bet',
@@ -26,13 +27,15 @@ useAppSeo({
 })
 
 const showInstallationGuide = ref(false)
+const { translate } = useSiteLocale()
 const { bybetRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const appDownloadUrl = `${bybetRedirectUrl}/downloadApp?p=${bybetRedirectCode}`
+const appDownloadUrl = buildBybetRedirectUrl('downloadApp', bybetRedirectUrl, bybetRedirectCode)
 </script>
 
 <template>
   <div class="download-app-page max-w-4xl mx-auto pb-16 text-white light:text-[#10261c]">
-    <SubpageHeader title="Download APP" back-to="/account/me" class="download-app-header mb-2.5 sm:mb-3" />
+    <h1 class="sr-only">{{ translate('Download APP') }}</h1>
+    <SubpageHeader title="Download APP" back-to="/account/me" heading-tag="span" class="download-app-header mb-2.5 sm:mb-3" />
 
     <div class="download-content">
       <section class="app-card bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm" aria-label="2bet app download">

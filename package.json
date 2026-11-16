@@ -6,7 +6,7 @@
     "postinstall": "nuxt prepare",
     "dev": "node scripts/dev.mjs",
     "bloggerist": "node scripts/bloggerist.mjs",
-    "build": "nuxt build && node scripts/generate-sitemap.mjs && node scripts/generate-llms-txt.mjs",
+    "build": "nuxt build && node scripts/generate-sitemap.mjs && node scripts/generate-llms-txt.mjs && node scripts/copy-robots-txt.mjs",
     "typecheck": "nuxt typecheck",
     "predictions:refresh": "node scripts/refresh-daily-predictions.mjs",
     "test": "node --test tests/**/*.test.mjs"

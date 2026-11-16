@@ -13,6 +13,8 @@ await navigateTo('/live-plaza/streamer/all', { replace: true })
 </script>
 
 <template>
-  <div />
+  <div>
+    <h1 class="sr-only">Todos os Streamers</h1>
+  </div>
 </template>
 

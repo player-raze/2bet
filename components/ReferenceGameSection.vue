@@ -2,6 +2,7 @@
 import { ArrowRight, Flame, Spade, Star, ThumbsUp, UsersRound } from 'lucide-vue-next'
 import type { Component } from 'vue'
 import type { ReferenceGame } from '~/data/homepage'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 interface Props {
   id: string
@@ -31,7 +32,7 @@ const { getDisplayCount } = useRumblingPlayerCount(
 )
 
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const externalSiteUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 const gameRowElement = ref<HTMLElement | null>(null)
 let autoplayTimer: ReturnType<typeof setInterval> | undefined
 let reducedMotionQuery: MediaQueryList | undefined

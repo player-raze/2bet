@@ -9,6 +9,7 @@ const props = withDefaults(
     sticky?: boolean
     customClass?: string
     mobileTabs?: boolean
+    headingTag?: 'h1' | 'h2' | 'p' | 'span'
   }>(),
   {
     title: '',
@@ -17,6 +18,7 @@ const props = withDefaults(
     sticky: true,
     customClass: '',
     mobileTabs: false,
+    headingTag: 'h1',
   }
 )
 
@@ -67,9 +69,9 @@ const handleBack = (): void => {
     <!-- Center: Title or custom content (e.g. segmented tabs) -->
     <div class="subpage-header__center">
       <slot name="center">
-        <h1 v-if="title" class="subpage-header__title text-white light:text-[#10261c]">
+        <component :is="headingTag" v-if="title" class="subpage-header__title text-white light:text-[#10261c]">
           {{ translate(title) }}
-        </h1>
+        </component>
       </slot>
     </div>
 

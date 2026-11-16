@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { X } from 'lucide-vue-next'
 import MobileBottomNav from '~/components/MobileBottomNav.vue'
+import FloatingPartnerBanner from '~/components/FloatingPartnerBanner.vue'
 import CommentPanel from '~/components/comments/CommentPanel.vue'
 import MobileLivePlazaHeader from '~/components/live-plaza/MobileLivePlazaHeader.vue'
 import MobileAccountHeader from '~/components/account/MobileAccountHeader.vue'
@@ -274,6 +275,7 @@ onBeforeUnmount(() => {
     </div>
 
     <MobileBottomNav />
+    <FloatingPartnerBanner />
 
     <Transition name="toast">
       <div v-if="toastMessage" class="demo-toast" role="status">

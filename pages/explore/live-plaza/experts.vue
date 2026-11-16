@@ -6,6 +6,7 @@ import {
   type ExpertPredictor,
 } from '~/data/predictions'
 import type { LivePlazaSportFilter } from '~/components/live-plaza/LivePlazaSportFilters.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 type ExpertSort = 'hit' | 'win-streak'
 
@@ -17,7 +18,7 @@ const sortOptions: Array<{ value: ExpertSort; label: string }> = [
 ]
 
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 const { translate } = useSitePreferences()
 
 useAppSeo({
@@ -153,9 +154,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="experts-page text-white light:text-[#10261c]">
+    <h1 class="sr-only">{{ translate('All Experts') }}</h1>
     <SubpageHeader
       title="All Experts"
       back-to="/live-plaza/expert-predictions"
+      heading-tag="span"
       class="mb-2 sm:mb-3"
     >
       <template #right>

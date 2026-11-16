@@ -2,6 +2,7 @@
 import { ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import HomepageContentSlider from '~/components/HomepageContentSlider.vue'
 import HomepageSportsCard from '~/components/HomepageSportsCard.vue'
+import HomepagePartnerBanner from '~/components/HomepagePartnerBanner.vue'
 import { getTournamentLogo } from '~/data/sports'
 import type { SportsEvent } from '~/types/sports'
 import { getFixtureSportKey, getFixtureSportLabel, prioritizeFootballFixtures } from '~/utils/sportsSelection'
@@ -124,6 +125,7 @@ const viewAllTarget = computed(() => {
           <h2 id="sports-title" class="flex items-center text-white light:text-[#10261c]"><img src="/icons/sports/popular.webp" class="allgames-heading-symbol allgames-heading-image" alt="" width="28" height="28">{{ translate('Sports') }}</h2>
           <p class="text-[#a9bdb4] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Big games. Your front-row seat.') }}</p>
         </div>
+        <HomepagePartnerBanner class="sports-partner-banner" />
         <NuxtLink :to="viewAllTarget" class="sports-explore inline-flex items-center text-[#F9C600] bg-white/[0.02] border border-white/10 hover:border-white/20 hover:bg-[#0c2a1d] light:bg-gradient-to-r light:from-white light:to-[#f0f9f4] light:border-[#009440]/25 light:text-[#009440] light:hover:bg-[#e4f5eb]">{{ translate('Explore sports') }} <ArrowUpRight :size="18" aria-hidden="true" class="text-[#F9C600] light:text-[#009440]" /></NuxtLink>
       </header>
 
@@ -260,6 +262,10 @@ const viewAllTarget = computed(() => {
 .sports-progress { display: block; width: 122px; height: 3px; overflow: hidden; border-radius: 2px; background: #1e3c30; }
 .sports-progress > span { display: block; height: 100%; border-radius: inherit; background: #009440; transition: width 180ms ease; }
 .sports-position { font-size: 10px; font-variant-numeric: tabular-nums; white-space: pre; }
+@media (min-width: 768px) and (max-width: 1439px) {
+  .sports-heading { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .sports-heading p { max-width: 240px; padding: 0; border: 0; font-size: 13px; line-height: 1.4; }
+}
 @media (max-width: 1199px) {
   .homepage-sports-section :deep(.allgames-game-track) { grid-auto-columns: calc((100% - var(--allgames-row-gap)) / 2); }
   .sports-fixtures-title { gap: 8px; font-size: 12px; }
@@ -273,11 +279,12 @@ const viewAllTarget = computed(() => {
   .sports-filter-value { gap: 10px; padding-inline: 14px; }
 }
 @media (max-width: 767px) {
-  .sports-header { display: grid; grid-template-columns: minmax(0,1fr); align-items: center; gap: 8px; margin-bottom: 4px; padding-bottom: 16px; }
+  .sports-header { display: grid; grid-template-columns: minmax(0,1fr) minmax(96px,120px); align-items: center; gap: 8px 12px; margin-bottom: 4px; padding-bottom: 16px; }
   .sports-heading { display: contents; }
   .sports-heading h2 { grid-column: 1; grid-row: 1; min-width: 0; gap: 8px; font-size: 26px; }
   .sports-heading h2 img { width: 24px; height: 24px; }
-  .sports-heading p { grid-column: 1 / -1; grid-row: 2; min-width: 0; padding: 0; border: 0; font-size: 13px; line-height: 1.6; text-wrap: pretty; }
+  .sports-heading p { grid-column: 1; grid-row: 2; min-width: 0; padding: 0; border: 0; font-size: 13px; line-height: 1.6; text-wrap: pretty; }
+  .sports-partner-banner { grid-column: 2; grid-row: 1 / 3; }
   .homepage-sports-section .sports-explore { display: none; }
   .homepage-sports-section :deep(.allgames-game-track) { grid-auto-columns: 100%; }
   .sports-slider-footer { display: flex; flex-direction: column; gap: 12px; }

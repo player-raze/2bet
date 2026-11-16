@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import LiveCasinoLobby from '~/components/live-casino/LiveCasinoLobby.vue'
 import { LIVE_CASINO_CATEGORIES, LIVE_CASINO_TABLES, type LiveCasinoTable } from '~/data/live-casino'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const route = useRoute()
 const router = useRouter()
@@ -31,7 +32,7 @@ useAppSeo({
 const { context: commentContext, openGameComments, closeComments } = useCommentPanel()
 const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 
 const isReminderOpen = ref(false)
 const isMaintenanceOpen = ref(false)

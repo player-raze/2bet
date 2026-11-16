@@ -3,11 +3,12 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { Bell, Headphones } from 'lucide-vue-next'
 import { useSiteLocale } from '~/composables/useSitePreferences'
 import { useDemoInteraction } from '~/composables/useDemoInteraction'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { translate } = useSiteLocale()
 const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const loginUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const loginUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const hasScrolled = ref(false)
 let scrollFrame: number | null = null
 

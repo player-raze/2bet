@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ChevronRight, Unlock } from 'lucide-vue-next'
 import type { Prediction, PredictionOption } from '~/data/predictions'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const props = defineProps<{
   prediction: Prediction
@@ -13,7 +14,7 @@ const emit = defineEmits<{
 }>()
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const { translate } = useSiteLocale()
 
 const formattedHitRate = computed(() => {

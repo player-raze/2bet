@@ -67,7 +67,8 @@ useAppSeo({
 
 <template>
   <div class="promotion-terms-page text-white light:text-[#24382e]">
-    <SubpageHeader :title="pageTitle" :back-to="backPath" />
+    <h1 class="sr-only">{{ pageTitle }}</h1>
+    <SubpageHeader :title="pageTitle" :back-to="backPath" heading-tag="span" />
     <article class="promotion-terms-card bg-[#121212] light:bg-white border border-transparent light:border-[#d8e2dc] shadow-sm light:shadow-sm" lang="en" aria-labelledby="promotion-terms-title">
       <img
         class="promotion-terms-banner"

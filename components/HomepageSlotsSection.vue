@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, ChevronLeft, ChevronRight, Heart, Play } from 'lucide-vue-next'
 import HomepageContentSlider from '~/components/HomepageContentSlider.vue'
+import HomepagePartnerBanner from '~/components/HomepagePartnerBanner.vue'
 import { SLOTS, newGames as newSlotGames, type SlotGame } from '~/data/slots'
 import type { ReferenceGame } from '~/data/homepage'
 
@@ -101,6 +102,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
               </h2>
               <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Handpicked games from leading providers') }}</p>
             </div>
+            <HomepagePartnerBanner />
             <div class="slots-actions flex items-center">
               <NuxtLink to="/egames/slots/top" class="slots-view-all inline-flex items-center text-[#F9C600] light:text-[#b88e00]">
                 {{ translate('View all') }} <ArrowRight :size="16" aria-hidden="true" />
@@ -210,6 +212,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
           </h2>
           <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Handpicked games from leading providers') }}</p>
         </div>
+        <HomepagePartnerBanner />
       </header>
 
       <div class="slots-toolbar flex items-center justify-between">
@@ -600,6 +603,17 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
   font-size: var(--homepage-mobile-control-font-size,12px);
   font-weight: 400;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .slots-heading { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .slots-heading > p { max-width: 240px; padding: 0; border: 0; font-size: 13px; line-height: 1.4; }
+}
+
+@media (max-width: 767px) {
+  .slots-mobile-grid .slots-header { display: grid; grid-template-columns: minmax(0,1fr) minmax(96px,120px); align-items: center; gap: 12px; }
+  .slots-mobile-grid .slots-heading { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .slots-mobile-grid .slots-heading > p { padding: 0; border: 0; font-size: 13px; line-height: 1.4; }
 }
 
 @media (max-width: 1023px) {

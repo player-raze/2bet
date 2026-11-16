@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { translate } = useSiteLocale()
 const nuxtLinkComponent = resolveComponent('NuxtLink')
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const externalSiteUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 
 interface HeroSlide {
   eyebrow: string

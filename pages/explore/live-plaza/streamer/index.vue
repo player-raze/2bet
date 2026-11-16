@@ -27,10 +27,12 @@ const handleAllStreamersClick = (): void => {
 
 <template>
   <div class="live-plaza-streamer-page w-full min-w-0 pb-16 text-white">
+    <h1 class="sr-only">{{ translate('Streamer') }}</h1>
     <!-- Reusable Top SEO Header Bar -->
     <SeoHeader
       sticky
       :title="translate('Streamer')"
+      heading-tag="span"
       :show-back="false"
     />
 

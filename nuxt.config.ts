@@ -46,7 +46,7 @@ export default defineNuxtConfig({
     public: {
       useOddsApi: environment?.USE_ODDS_API === 'true',
       bybetRedirectUrl: (environment?.BYBET_REDIRECT_URL || 'https://bybet.com').replace(/\/+$/, ''),
-      bybetRedirectCode: environment?.BYBET_REDIRECT_CODE || 'xjSD',
+      bybetRedirectCode: (environment?.BYBET_REDIRECT_CODE ?? 'xjSD').trim(),
       siteName: environment?.SITE_NAME || '2bet',
       siteUrl: (environment?.SITE_URL || 'https://2bet.com').replace(/\/+$/, ''),
       indexFollow: isIndexFollow,
@@ -95,6 +95,12 @@ export default defineNuxtConfig({
           await generateSitemapFile(nitro.options.runtimeConfig?.public?.siteUrl)
         } catch (e) {
           console.warn('[sitemap] Build hook warning:', e)
+        }
+        try {
+          const { copyRobotsTxtFile } = await import('./scripts/copy-robots-txt.mjs')
+          copyRobotsTxtFile()
+        } catch (e) {
+          console.warn('[robots.txt] Build hook warning:', e)
         }
       },
     },

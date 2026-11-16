@@ -18,9 +18,13 @@ function tryReadEnvFile(key: string): string | undefined {
       const envPath = path.resolve(proc.cwd(), '.env')
       if (fs.existsSync(envPath)) {
         const content = fs.readFileSync(envPath, 'utf-8')
-        const match = content.match(new RegExp(`^\\s*${key}\\s*=\\s*["']?([^"'\\r\\n]+)["']?`, 'm'))
-        if (match?.[1]) {
-          return match[1].trim()
+        const match = content.match(new RegExp(`^[ \\t]*${key}[ \\t]*=[ \\t]*(.*)$`, 'm'))
+        if (match) {
+          const rawVal = match[1].trim()
+          if (!rawVal) return ''
+          const quoted = rawVal.match(/^(?:"([^"\r\n]*)"|'([^'\r\n]*)')/)
+          if (quoted) return (quoted[1] ?? quoted[2] ?? '').trim()
+          return rawVal.split('#')[0].trim()
         }
       }
     }
@@ -56,12 +60,13 @@ export const getEnvRedirectUrl = (): string => {
 
 /**
  * Resolves the redirect referral / promo code from runtimeConfig, process.env, or .env file.
+ * Preserves an explicitly empty string so callers omit the ?p= query parameter.
  */
 export const getEnvRedirectCode = (): string => {
   try {
     if (typeof useRuntimeConfig === 'function') {
       const config = useRuntimeConfig()
-      if (config?.public?.bybetRedirectCode) {
+      if (config?.public?.bybetRedirectCode !== undefined && config?.public?.bybetRedirectCode !== null) {
         return String(config.public.bybetRedirectCode).trim()
       }
     }
@@ -69,13 +74,16 @@ export const getEnvRedirectCode = (): string => {
     // Outside Nuxt context
   }
 
-  const envCode = (
-    (typeof process !== 'undefined' && process.env?.BYBET_REDIRECT_CODE) ||
-    tryReadEnvFile('BYBET_REDIRECT_CODE') ||
-    ''
-  ).trim()
+  if (typeof process !== 'undefined' && process.env && process.env.BYBET_REDIRECT_CODE !== undefined) {
+    return String(process.env.BYBET_REDIRECT_CODE).trim()
+  }
 
-  return envCode || DEFAULT_BYBET_REDIRECT_CODE
+  const fileCode = tryReadEnvFile('BYBET_REDIRECT_CODE')
+  if (fileCode !== undefined) {
+    return fileCode
+  }
+
+  return DEFAULT_BYBET_REDIRECT_CODE
 }
 
 /**
@@ -87,16 +95,15 @@ export const buildBybetRedirectUrl = (
   redirectCode?: string,
 ): string => {
   const envUrl = getEnvRedirectUrl()
-  const envCode = getEnvRedirectCode()
-
   const raw = (bybetRedirectUrl || envUrl).trim().replace(/\/+$/, '')
-  const code = (redirectCode || envCode).trim()
+  const rawCode = redirectCode !== undefined && redirectCode !== null ? redirectCode : getEnvRedirectCode()
+  const code = String(rawCode ?? '').trim()
   const cleanPath = path.trim().replace(/^\/+/, '')
 
   const separator = cleanPath.includes('?') ? '&' : '?'
   const query = code && !cleanPath.includes('p=') ? `${separator}p=${encodeURIComponent(code)}` : ''
 
-  return `${raw}/${cleanPath}${query}`
+  return cleanPath ? `${raw}/${cleanPath}${query}` : `${raw}${query}`
 }
 
 export const resolveTennisRedirectUrl = (

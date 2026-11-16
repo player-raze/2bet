@@ -5,12 +5,13 @@ import {
   ChevronUp,
   UserRound,
 } from 'lucide-vue-next'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const loginUrl = bybetRedirectUrl
-const bybetRedirectRegister = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/registered?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectRegister = buildBybetRedirectUrl('registered', rawRedirectUrl, bybetRedirectCode)
 const { selectedLanguageLabel, translate, locale } = useSiteLocale()
 const { selectedTimeZone } = useTimeZonePreference()
 const { setThemePreference, themePreference } = useSiteTheme()

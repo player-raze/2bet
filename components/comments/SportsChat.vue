@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 const { translate } = useSiteLocale()
 </script>
 

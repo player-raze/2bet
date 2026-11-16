@@ -9,9 +9,11 @@ import { HOMEPAGE_WINNERS, type HomepageWinner } from '~/data/homepage-winners'
 import usernamesList from '~/data/usernames.json'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
 import { generateWinnerWinning } from '~/utils/winnerCurrency'
+import HomepagePartnerBanner from '~/components/HomepagePartnerBanner.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 
 const { translate } = useSiteLocale()
 const { effectiveTheme } = useSiteTheme()
@@ -117,7 +119,9 @@ onBeforeUnmount(() => {
         <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/15 light:border-l-[#d8e2dc]">{{ translate('Spin for life-changing progressive jackpots') }}</p>
       </div>
 
-      <NuxtLink to="/egames/jackpot/all" class="jackpot-view-all text-[#32d49a] hover:text-[#019440] light:text-[#019440] light:hover:text-[#026b34]">
+      <HomepagePartnerBanner />
+
+      <NuxtLink to="/egames/jackpot/all" class="jackpot-view-all text-[#32d49a] hover:text-[#019440] light:text-[#019440] light:hover:text-[#026b34] hidden sm:block">
         {{ translate('View all jackpots') }}
         <ArrowRight :size="16" aria-hidden="true" />
       </NuxtLink>
@@ -692,15 +696,32 @@ onBeforeUnmount(() => {
 
 @media (max-width: 540px) {
   .jackpot-header {
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(96px, 120px);
+    align-items: start;
     gap: 12px;
   }
 
   .jackpot-heading {
+    grid-column: 1;
+    grid-row: 1;
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
+  }
+
+  .jackpot-header > :deep(.homepage-partner-banner) {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    max-width: 120px;
+    justify-self: end;
+  }
+
+  .jackpot-view-all {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 
   .jackpot-heading > p {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { History, Trash2, Gamepad2, ArrowRight } from 'lucide-vue-next'
 import GameCard from '~/components/game-cards/GameCard.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 useAppSeo({
   title: 'Histórico de Jogos Recentes e Caça-Níqueis Favoritos | 2bet',
@@ -16,7 +17,7 @@ const { recentGames, clearRecentGames } = useRecentGames()
 const { translate } = useSitePreferences()
 const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 
 const activeGameId = ref<string | null>(null)
 

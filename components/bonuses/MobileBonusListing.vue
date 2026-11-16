@@ -86,7 +86,7 @@ watch(selectedCurrency, async () => {
 <template>
   <div class="mobile-bonuses bg-black text-[#f5f5f5] light:bg-[#eef5f1] light:text-[#10261c]">
     <div class="mobile-bonuses__sticky bg-black light:bg-[#eef5f1]">
-      <MobileBonusHeader :back-to="category === 'all' ? '/' : '/bonuses'" currency-selector />
+      <MobileBonusHeader :back-to="category === 'all' ? '/' : '/bonuses'" currency-selector heading-tag="span" />
       <nav ref="categoryNav" class="mobile-bonuses__categories mx-1 bg-[#111] light:bg-white light:shadow-sm light:border light:border-[#d8e2dc]" :aria-label="translate('Bonus categories')">
         <NuxtLink
           v-for="item in visibleCategories" :key="item.key"

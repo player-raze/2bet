@@ -13,15 +13,17 @@ import {
 } from '../utils/sportsRedirect.ts'
 
 describe('Sports Navigation External Redirects Suite', () => {
-  const envBase = getEnvRedirectUrl()
+  const rawEnvBase = getEnvRedirectUrl()
+  const envBase = rawEnvBase.replace(/\/+$/, '')
   const envCode = getEnvRedirectCode()
+  const pQuery = envCode ? `?p=${encodeURIComponent(envCode)}` : ''
 
   test('Case 1: popular > smart pick redirects to sportEvents/hotGame/smartPick with p parameter', () => {
     const pathResult = getSportsTabRedirectPath('popular', 'smart-pick')
     assert.equal(pathResult, 'sportEvents/hotGame/smartPick')
 
     const urlDefault = resolveSportsTabRedirectUrl('popular', 'smart-pick')
-    assert.equal(urlDefault, `${envBase}/sportEvents/hotGame/smartPick?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/hotGame/smartPick${pQuery}`)
 
     const urlCustom = resolveSportsTabRedirectUrl('popular', 'smart-pick', 'https://bybet.ph/', 'PROMO99')
     assert.equal(urlCustom, 'https://bybet.ph/sportEvents/hotGame/smartPick?p=PROMO99')
@@ -32,7 +34,7 @@ describe('Sports Navigation External Redirects Suite', () => {
     assert.equal(pathResult, 'sportEvents/hotGame/outright')
 
     const urlDefault = resolveSportsTabRedirectUrl('popular', 'outright')
-    assert.equal(urlDefault, `${envBase}/sportEvents/hotGame/outright?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/hotGame/outright${pQuery}`)
   })
 
   test('Case 3: basketball > parlay redirects to sportEvents/parlay/basketball/interval/inplay with p parameter', () => {
@@ -42,7 +44,7 @@ describe('Sports Navigation External Redirects Suite', () => {
     assert.equal(pathSmartPick, 'sportEvents/parlay/basketball/interval/inplay')
 
     const urlDefault = resolveSportsTabRedirectUrl('basketball', 'smart-pick')
-    assert.equal(urlDefault, `${envBase}/sportEvents/parlay/basketball/interval/inplay?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/parlay/basketball/interval/inplay${pQuery}`)
   })
 
   test('Case 4: basketball > outright redirects to sportEvents/outright/basketball with p parameter', () => {
@@ -50,7 +52,7 @@ describe('Sports Navigation External Redirects Suite', () => {
     assert.equal(pathResult, 'sportEvents/outright/basketball')
 
     const urlDefault = resolveSportsTabRedirectUrl('basketball', 'outright')
-    assert.equal(urlDefault, `${envBase}/sportEvents/outright/basketball?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/outright/basketball${pQuery}`)
   })
 
   test('Case 5: soccer > parlay redirects to sportEvents/parlay/football/interval/parlayPromotion with p parameter', () => {
@@ -60,7 +62,7 @@ describe('Sports Navigation External Redirects Suite', () => {
     assert.equal(pathSmartPick, 'sportEvents/parlay/football/interval/parlayPromotion')
 
     const urlDefault = resolveSportsTabRedirectUrl('soccer', 'smart-pick')
-    assert.equal(urlDefault, `${envBase}/sportEvents/parlay/football/interval/parlayPromotion?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/parlay/football/interval/parlayPromotion${pQuery}`)
   })
 
   test('Case 6: soccer > outright redirects to sportEvents/outright/football with p parameter', () => {
@@ -68,7 +70,7 @@ describe('Sports Navigation External Redirects Suite', () => {
     assert.equal(pathResult, 'sportEvents/outright/football')
 
     const urlDefault = resolveSportsTabRedirectUrl('soccer', 'outright')
-    assert.equal(urlDefault, `${envBase}/sportEvents/outright/football?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/outright/football${pQuery}`)
   })
 
   test('Case 7: soccer > replay redirects to sportEvents/gameResult/football/regular/today with p parameter', () => {
@@ -76,7 +78,7 @@ describe('Sports Navigation External Redirects Suite', () => {
     assert.equal(pathResult, 'sportEvents/gameResult/football/regular/today')
 
     const urlDefault = resolveSportsTabRedirectUrl('soccer', 'replay')
-    assert.equal(urlDefault, `${envBase}/sportEvents/gameResult/football/regular/today?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/gameResult/football/regular/today${pQuery}`)
   })
 
   test('Case 8: live > all esports redirects to sportEvents/liveGame/eSportBallGroup with p parameter', () => {
@@ -86,7 +88,7 @@ describe('Sports Navigation External Redirects Suite', () => {
     assert.equal(pathAllEsports, 'sportEvents/liveGame/eSportBallGroup')
 
     const urlDefault = resolveSportsTabRedirectUrl('live', 'esports')
-    assert.equal(urlDefault, `${envBase}/sportEvents/liveGame/eSportBallGroup?p=${envCode}`)
+    assert.equal(urlDefault, `${envBase}/sportEvents/liveGame/eSportBallGroup${pQuery}`)
   })
 
   test('Case 9: buildBybetRedirectUrl handles formatting, slashes, and custom query params cleanly', () => {
@@ -125,21 +127,21 @@ describe('Sports Navigation External Redirects Suite', () => {
 
   test('Case 13: utils/sportsRedirect.ts uses .env values when arguments are omitted', () => {
     // Both resolve to the configured .env values
-    assert.equal(getEnvRedirectUrl(), envBase)
+    assert.equal(getEnvRedirectUrl(), rawEnvBase)
     assert.equal(getEnvRedirectCode(), envCode)
 
     // Calling without explicit bybetRedirectUrl or redirectCode parameters
     assert.equal(
       buildBybetRedirectUrl('sportEvents/hotGame/smartPick'),
-      `${envBase}/sportEvents/hotGame/smartPick?p=${envCode}`,
+      `${envBase}/sportEvents/hotGame/smartPick${pQuery}`,
     )
     assert.equal(
       resolveTennisRedirectUrl(),
-      `${envBase}/sportEvents/inplay/tennis?p=${envCode}`,
+      `${envBase}/sportEvents/inplay/tennis${pQuery}`,
     )
     assert.equal(
       resolveSportsTabRedirectUrl('basketball', 'parlay'),
-      `${envBase}/sportEvents/parlay/basketball/interval/inplay?p=${envCode}`,
+      `${envBase}/sportEvents/parlay/basketball/interval/inplay${pQuery}`,
     )
   })
 
@@ -163,8 +165,48 @@ describe('Sports Navigation External Redirects Suite', () => {
         'https://custom-env-test.bybet.com/sportEvents/gameResult/football/regular/today?p=PROMO_FROM_ENV',
       )
     } finally {
-      process.env.BYBET_REDIRECT_URL = origUrl
-      process.env.BYBET_REDIRECT_CODE = origCode
+      if (origUrl === undefined) delete process.env.BYBET_REDIRECT_URL
+      else process.env.BYBET_REDIRECT_URL = origUrl
+      if (origCode === undefined) delete process.env.BYBET_REDIRECT_CODE
+      else process.env.BYBET_REDIRECT_CODE = origCode
+    }
+  })
+
+  test('Case 15: Empty BYBET_REDIRECT_CODE omits ?p= query parameter across all helpers and config', () => {
+    assert.equal(buildBybetRedirectUrl('login', 'https://2bet.com', ''), 'https://2bet.com/login')
+    assert.equal(buildBybetRedirectUrl('login', 'https://2bet.com', '   '), 'https://2bet.com/login')
+    assert.equal(
+      buildBybetRedirectUrl('sportEvents/hotGame/smartPick?tab=1', 'https://2bet.com', ''),
+      'https://2bet.com/sportEvents/hotGame/smartPick?tab=1',
+    )
+
+    const origCode = process.env.BYBET_REDIRECT_CODE
+    try {
+      process.env.BYBET_REDIRECT_CODE = ''
+      assert.equal(getEnvRedirectCode(), '')
+      assert.equal(buildBybetRedirectUrl('login', 'https://2bet.com'), 'https://2bet.com/login')
+      assert.equal(resolveTennisRedirectUrl('https://2bet.com'), 'https://2bet.com/sportEvents/inplay/tennis')
+      assert.equal(
+        resolveSportsTabRedirectUrl('soccer', 'outright', 'https://2bet.com'),
+        'https://2bet.com/sportEvents/outright/football',
+      )
+    } finally {
+      if (origCode === undefined) delete process.env.BYBET_REDIRECT_CODE
+      else process.env.BYBET_REDIRECT_CODE = origCode
+    }
+
+    const nuxtConfig = fs.readFileSync(path.resolve('nuxt.config.ts'), 'utf-8')
+    assert.match(nuxtConfig, /bybetRedirectCode:\s*\(environment\?\.BYBET_REDIRECT_CODE\s*\?\?/)
+  })
+
+  test('Case 16: HomepagePartnerBanner and FloatingPartnerBanner link to env redirect /login', () => {
+    for (const file of [
+      'components/HomepagePartnerBanner.vue',
+      'components/FloatingPartnerBanner.vue',
+    ]) {
+      const source = fs.readFileSync(path.resolve(file), 'utf-8')
+      assert.match(source, /buildBybetRedirectUrl\('login',\s*rawRedirectUrl,\s*bybetRedirectCode\)/, `${file} must build external login redirect URL`)
+      assert.doesNotMatch(source, /to="\/affiliate"/, `${file} must no longer link to /affiliate`)
     }
   })
 })

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import HomepageContentSlider from '~/components/HomepageContentSlider.vue'
+import HomepagePartnerBanner from '~/components/HomepagePartnerBanner.vue'
 import type { HomepageCasinoCategory } from '~/data/homepage-casino'
 
 const props = defineProps<{ categories: HomepageCasinoCategory[] }>()
@@ -45,6 +46,7 @@ function categoryIcon(key: string) {
           </h2>
           <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/15 light:border-l-[#d8e2dc]">{{ translate('Real dealers. Real games. Real excitement.') }}</p>
         </div>
+        <HomepagePartnerBanner />
         <div class="live-header-actions flex items-center">
           <NuxtLink to="/entertainment/live-casino" class="live-view-all text-[#F9C600] light:text-[#b88e00]">{{ translate('View all live casino') }} <ArrowRight :size="16" aria-hidden="true" /></NuxtLink>
           <div class="live-carousel-controls flex items-center" :aria-label="translate('Live Casino slider controls')">
@@ -99,6 +101,7 @@ function categoryIcon(key: string) {
         {{ translate('Live Casino') }}
       </h2>
       <p class="text-[#a8b6bc] light:text-[#5d7066]">{{ translate('Real dealers. Real games. Real excitement.') }}</p>
+      <HomepagePartnerBanner />
     </header>
     <div class="live-mobile-grid grid grid-cols-3">
       <NuxtLink
@@ -156,6 +159,10 @@ function categoryIcon(key: string) {
 .live-table-links>a>span { flex: 1; min-width: 0; }
 .live-sidebar-icon { flex-shrink: 0; width: 28px; height: 28px; object-fit: contain; }
 .live-table-links>a:is(:hover,:focus-visible) { border-color: #25d6a426; color: #009440; background: #063523; }
+@media (min-width: 768px) and (max-width: 1439px) {
+  .live-heading { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .live-heading > p { max-width: 240px; padding: 0; border: 0; font-size: 13px; line-height: 1.4; }
+}
 @media (max-width:1199px) {
   .homepage-live-casino-section { grid-template-columns: 172px minmax(0,1fr); column-gap: 16px; }
   .homepage-live-casino-section :deep(.allgames-game-track) { grid-auto-columns: calc((100% - var(--allgames-row-gap)) / 2); }
@@ -188,7 +195,10 @@ function categoryIcon(key: string) {
 @media (max-width:767px) {
   .live-casino-desktop { display: none; }
   .live-casino-mobile { display: flex; flex-direction: column; gap: 16px; color: var(--text); }
-  .live-mobile-header { padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .live-mobile-header { display: grid; grid-template-columns: minmax(0,1fr) minmax(96px,120px); align-items: center; gap: 6px 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .live-mobile-header h2 { grid-column: 1; grid-row: 1; }
+  .live-mobile-header p { grid-column: 1; grid-row: 2; }
+  .live-mobile-header :deep(.homepage-partner-banner) { grid-column: 2; grid-row: 1 / 3; }
   .live-mobile-header h2 { gap: 12px; font-size: var(--allgames-heading-size); font-weight: var(--homepage-display-weight); line-height: 1.2; }
   .live-mobile-header p { max-width: 210px; margin-top: 6px; color: var(--secondary); font-size: 13px; line-height: 1.4; }
   .live-mobile-grid { gap: 12px; }

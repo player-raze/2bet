@@ -13,6 +13,7 @@ import {
   formatJackpotAmount,
   useJackpotCounter,
 } from '~/composables/useJackpotCounter'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 import GameCard from '~/components/game-cards/GameCard.vue'
 import GameRail from '~/components/game-cards/GameRail.vue'
 import JackpotWinnersCard from '~/components/jackpot/JackpotWinnersCard.vue'
@@ -147,7 +148,7 @@ onBeforeUnmount(() => {
 
 const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const { context: commentContext, openGameComments, closeComments } = useCommentPanel()
 
 const toggleChat = (): void => {

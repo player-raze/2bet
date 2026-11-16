@@ -69,8 +69,8 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
     >
       <span>{{ title }}</span>
       <span class="relative block h-[36px] w-[72px] shrink-0" aria-hidden="true">
-        <img :src="artworkSvg" width="72" height="36" alt="" class="h-full w-full" />
-        <img :src="artworkWebp" width="132" height="108" alt="" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-contain" />
+        <img :src="artworkSvg" width="72" height="36" :alt="`${title} emblem`" class="h-full w-full" />
+        <img :src="artworkWebp" width="132" height="108" :alt="`${title} preview`" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-contain" />
       </span>
     </component>
     <div class="casino-section-viewport">

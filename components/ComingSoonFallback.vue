@@ -39,9 +39,11 @@ const pageTitle = computed(() => formatSegment(pathSegments.value.at(-1) ?? 'Com
 const props = withDefaults(
   defineProps<{
     disableSeo?: boolean
+    headingTag?: 'h1' | 'h2' | 'p' | 'span'
   }>(),
   {
     disableSeo: false,
+    headingTag: 'h1',
   }
 )
 
@@ -88,7 +90,7 @@ if (!props.disableSeo) {
         <span>{{ translate(sectionTitle) }}</span>
       </nav>
       <p class="eyebrow">{{ translate(sectionTitle) }}</p>
-      <h1>{{ translate(pageTitle) }}</h1>
+      <component :is="headingTag" class="coming-soon-title">{{ translate(pageTitle) }}</component>
       <p class="description">
         {{ translate('This experience is being prepared. Check back soon for something new.') }}
       </p>
@@ -170,9 +172,11 @@ if (!props.disableSeo) {
   text-transform: uppercase;
 }
 
-.coming-soon-card h1 {
+.coming-soon-card h1,
+.coming-soon-card .coming-soon-title {
   margin: 0.55rem 0 0;
   font-size: clamp(2rem, 7vw, 3.5rem);
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.045em;
 }

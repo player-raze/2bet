@@ -8,28 +8,151 @@ import PokerFilterModal from '~/components/poker/PokerFilterModal.vue'
 import PokerGameCard from '~/components/poker/PokerGameCard.vue'
 import { POKER_CATEGORIES, POKER_PROVIDERS, getPokerGames, getPokerProvidersByCategory, isGameInPokerCategory, type PokerGame } from '~/data/poker'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const props = withDefaults(defineProps<{ category?: string }>(), { category: 'popular' })
 const isPopular = computed(() => props.category === 'popular')
 const basePath = '/entertainment/poker'
-const { translate } = useSiteLocale()
+const { locale, translate } = useSiteLocale()
 const { effectiveTheme } = useSiteTheme()
+const config = useRuntimeConfig()
+const siteUrl = computed(() => String(config.public.siteUrl || 'https://2bet.com').replace(/\/+$/, ''))
 
 const tabs = computed(() => [
   { key: 'popular', label: translate('Popular'), to: basePath },
   { key: 'all', label: translate('All'), to: `${basePath}/all` },
   ...POKER_CATEGORIES.map(category => ({ ...category, label: translate(category.label), to: `${basePath}/${category.key}` })),
 ])
-const categoryLabel = computed(() => tabs.value.find(tab => tab.key === props.category)?.label || translate('Poker'))
+const EXTRA_POKER_LABELS: Record<string, string> = {
+  blackjack: 'Blackjack',
+}
+const categoryLabel = computed(() => {
+  const tabMatch = tabs.value.find(tab => tab.key === props.category)?.label
+  if (tabMatch) return tabMatch
+  const extra = EXTRA_POKER_LABELS[props.category]
+  return extra ? translate(extra) : translate('Poker')
+})
+
+interface PokerCategorySeoCopy {
+  titlePt: string
+  descriptionPt: string
+  headingPt: string
+  titleEn: string
+  descriptionEn: string
+  headingEn: string
+}
+
+const POKER_SEO_COPY: Record<string, PokerCategorySeoCopy> = {
+  popular: {
+    titlePt: '2Bet Poker Brasil | Jogos de Cartas, Pesca e Mesa Online',
+    descriptionPt: 'Explore os melhores jogos de pôquer, pesca, mahjong, bull bull e bacará na 2Bet Brasil. Mesas rápidas com provedores oficiais.',
+    headingPt: '2Bet Pôquer — Jogos Populares de Cartas e Mesa Online',
+    titleEn: '2Bet Poker | Popular Card, Fishing & Table Games Online',
+    descriptionEn: 'Explore top online poker, fishing, mahjong, bull bull, and baccarat tables at 2Bet with fast rounds and official game providers.',
+    headingEn: '2Bet Poker — Popular Card & Table Games',
+  },
+  all: {
+    titlePt: 'Todos os Jogos de Poker e Mesa Online | 2Bet Casino',
+    descriptionPt: 'Confira o catálogo completo de jogos de cartas, pesca, mahjong e mesa online na 2Bet Brasil com provedores oficiais e saques ágeis.',
+    headingPt: 'Todos os Jogos de Pôquer e Mesa Online',
+    titleEn: 'All Poker & Table Games Online | 2Bet Casino',
+    descriptionEn: 'Browse the complete 2Bet catalog of online poker, fishing, mahjong, and table games from official providers with fast payouts.',
+    headingEn: 'All Online Poker & Table Games',
+  },
+  fishing: {
+    titlePt: 'Jogos de Pesca Online — Arcade e Cassino | 2Bet Poker',
+    descriptionPt: 'Jogue os melhores títulos de pesca online na 2Bet Brasil. Ação arcade, multiplicadores altos e diversão instantânea no cassino.',
+    headingPt: 'Jogos de Pesca Online — 2Bet',
+    titleEn: 'Online Fishing Games — Arcade Casino | 2Bet Poker',
+    descriptionEn: 'Play top arcade fishing games online at 2Bet with high multipliers, crisp visuals, and fast payouts from official providers.',
+    headingEn: 'Online Fishing Casino Games',
+  },
+  mahjong: {
+    titlePt: 'Mahjong Online — Mesas Clássicas e Cartas | 2Bet Poker',
+    descriptionPt: 'Divirta-se com jogos clássicos de mahjong online na 2Bet Brasil. Partidas estratégicas com provedores oficiais e regras claras.',
+    headingPt: 'Jogos de Mahjong Online — 2Bet',
+    titleEn: 'Online Mahjong Games — Classic Tables | 2Bet Poker',
+    descriptionEn: 'Play classic mahjong tables online at 2Bet featuring smooth gameplay, clear rules, and official casino game providers.',
+    headingEn: 'Online Mahjong Table Games',
+  },
+  poker: {
+    titlePt: 'Pôquer Online — Texas Hold’em e Cartas | 2Bet Brasil',
+    descriptionPt: 'Jogue Texas Hold’em, Omaha, Pineapple Poker e mesas clássicas de pôquer online na 2Bet Brasil com partidas dinâmicas 24 horas.',
+    headingPt: 'Pôquer Online — Texas Hold’em, Omaha e Cartas',
+    titleEn: 'Online Poker — Texas Hold’em & Omaha Tables | 2Bet',
+    descriptionEn: 'Play Texas Hold’em, Omaha, and classic card poker games online at 2Bet with fast-paced tables available 24/7.',
+    headingEn: 'Online Poker Games & Card Tables',
+  },
+  bullbull: {
+    titlePt: 'Bull Bull Online — Jogos Rápidos de Cartas | 2Bet Poker',
+    descriptionPt: 'Experimente mesas rápidas de Bull Bull e Niu Niu online na 2Bet Brasil. Jogabilidade ágil, regras simples e provedores oficiais.',
+    headingPt: 'Bull Bull e Niu Niu Online — 2Bet',
+    titleEn: 'Online Bull Bull & Niu Niu Card Games | 2Bet Poker',
+    descriptionEn: 'Play fast-paced Bull Bull and Niu Niu card tables online at 2Bet with clear rules and certified game providers.',
+    headingEn: 'Online Bull Bull & Niu Niu Card Games',
+  },
+  baccarat: {
+    titlePt: 'Bacará Online — Jogos de Cartas e Mesa | 2Bet Poker',
+    descriptionPt: 'Aposte em jogos eletrônicos de bacará online na 2Bet Brasil. Rodadas rápidas, apostas laterais e provedores certificados no site.',
+    headingPt: 'Bacará Online de Cartas e Mesa — 2Bet',
+    titleEn: 'Online Baccarat Table Games | 2Bet Poker',
+    descriptionEn: 'Play electronic baccarat card games online at 2Bet with rapid rounds, side bets, and certified providers.',
+    headingEn: 'Online Baccarat Card & Table Games',
+  },
+  other: {
+    titlePt: 'Outros Jogos de Mesa — Fan Tan e Paigow | 2Bet Poker',
+    descriptionPt: 'Descubra jogos de Fan Tan, Xoc Dia, Paigow, Rummy e Hi-Lo online na 2Bet Brasil. Mesas rápidas com provedores oficiais no cassino.',
+    headingPt: 'Outros Jogos de Mesa — Fan Tan, Rummy e Paigow',
+    titleEn: 'Other Table Games — Fan Tan, Rummy & Paigow | 2Bet',
+    descriptionEn: 'Discover Fan Tan, Xoc Dia, Paigow, Rummy, and Hi-Lo table games online at 2Bet from official providers.',
+    headingEn: 'Other Card & Table Games',
+  },
+  blackjack: {
+    titlePt: 'Blackjack Online — Jogos de Cartas e Mesa | 2Bet Poker',
+    descriptionPt: 'Confira mesas de blackjack e jogos tradicionais de cartas online na 2Bet Brasil. Acesse o catálogo completo de jogos de mesa.',
+    headingPt: 'Blackjack Online — 2Bet Pôquer',
+    titleEn: 'Online Blackjack Card & Table Games | 2Bet Poker',
+    descriptionEn: 'Browse online blackjack and classic table games at 2Bet Casino with clear rules and official providers.',
+    headingEn: 'Online Blackjack & Table Games',
+  },
+}
+
+const activeSeoCopy = computed(() => POKER_SEO_COPY[props.category] || POKER_SEO_COPY.popular)
+const activeRoutePath = computed(() => isPopular.value ? basePath : `${basePath}/${props.category}`)
+const isEmptyFallbackCategory = computed(() => props.category === 'blackjack' && games.value.length === 0)
+const pageHeading = computed(() => locale.value === 'pt' ? activeSeoCopy.value.headingPt : activeSeoCopy.value.headingEn)
 
 useAppSeo({
-  title: computed(() => formatSeoTitle(`2Bet Poker | ${categoryLabel.value} Online Jogos de Cartas e Mesa`)),
-  description: computed(() => formatSeoDescription(`Divirta-se com jogos de ${categoryLabel.value.toLowerCase()} na 2Bet poker. Mesas dinâmicas, disputas emocionantes e regras transparentes de cartas.`)),
+  title: computed(() => locale.value === 'pt' ? activeSeoCopy.value.titlePt : activeSeoCopy.value.titleEn),
+  description: computed(() => locale.value === 'pt' ? activeSeoCopy.value.descriptionPt : activeSeoCopy.value.descriptionEn),
+  keywords: '2bet poker, pôquer online, texas holdem, pesca cassino, bull bull, mahjong, jogos de cartas',
+  image: '/brand/2bet-og.webp',
+  type: 'website',
+  canonicalPath: computed(() => isEmptyFallbackCategory.value ? basePath : activeRoutePath.value),
+  robots: computed(() => isEmptyFallbackCategory.value ? 'noindex, follow' : undefined),
   breadcrumbs: computed(() => [
     { name: translate('Home'), path: '/' },
     { name: translate('Poker'), path: basePath },
-    ...(props.category === 'popular' ? [] : [{ name: categoryLabel.value, path: `${basePath}/${props.category}` }]),
+    ...(isPopular.value ? [] : [{ name: categoryLabel.value, path: `${basePath}/${props.category}` }]),
   ]),
+  schema: computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: pageHeading.value,
+    description: locale.value === 'pt' ? activeSeoCopy.value.descriptionPt : activeSeoCopy.value.descriptionEn,
+    url: `${siteUrl.value}${activeRoutePath.value}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      name: pageHeading.value,
+      numberOfItems: games.value.length,
+      itemListElement: games.value.slice(0, 20).map((game, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: `${game.title} (${game.provider})`,
+        url: `${siteUrl.value}${activeRoutePath.value}#${encodeURIComponent(game.id)}`,
+      })),
+    },
+  })),
 })
 
 const filterState = ref<{ provider: string; sort: 'default' | 'title-asc' | 'title-desc' }>({ provider: 'all', sort: 'default' })
@@ -40,7 +163,7 @@ const filterOpen = ref(false)
 const selectedGame = ref<PokerGame | null>(null)
 const { addRecentGame } = useRecentGames()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 
 const availableProviders = computed(() => getPokerProvidersByCategory(props.category))
 
@@ -118,7 +241,7 @@ watch(() => props.category, () => {
 
 <template>
   <div class="poker-page" :class="{ 'poker-page--popular': isPopular }">
-    <h1 class="sr-only">{{ categoryLabel }}</h1>
+    <h1 class="sr-only">{{ pageHeading }}</h1>
     <div class="poker-sticky-header sticky-header-seal light:bg-[#f4f8f5]">
       <nav class="poker-category-nav light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm" aria-label="Poker game categories">
         <NuxtLink
@@ -189,6 +312,7 @@ watch(() => props.category, () => {
             <span>{{ section.games.length }}</span><ChevronRight :size="14" aria-hidden="true" />
           </NuxtLink>
         </header>
+        <h2 v-else class="sr-only">{{ section.label }}</h2>
 
         <div
           class="poker-games"

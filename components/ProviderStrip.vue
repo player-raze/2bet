@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { providerLogoByName } from '~/data/homepage'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 defineProps<{
   providers: string[]
 }>()
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const externalSiteUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const { effectiveTheme } = useSiteTheme()
 
 const providerLogo = (provider: string): string => {

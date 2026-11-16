@@ -4,6 +4,7 @@ import Ai from '~/components/buttons/Ai.vue'
 import Collapse from '~/components/buttons/Collapse.vue'
 import type { Sport } from '~/types/sports'
 import { SAMPLE_SPORTS, getTournamentLogo, getSportBall } from '~/data/sports'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 import League from './tabs/League.vue'
 
 interface DirectoryLeague extends Sport {
@@ -24,7 +25,7 @@ const props = withDefaults(defineProps<{
 const route = useRoute()
 const { translate } = useSiteLocale()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const defaultRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const defaultRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const bybetRedirectUrl = props.aiTo ?? defaultRedirectUrl
 const base = useSportsRouteBase()
 const search = ref('')

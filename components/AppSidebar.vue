@@ -5,6 +5,7 @@ import DepositReminderModal from '~/components/modals/DepositReminderModal.vue'
 import { createRailItems } from '~/data/homepage'
 import type { RailItem, RailSubItem } from '~/data/homepage'
 import type { LanguageOption, ThemePreference } from '~/composables/useSitePreferences'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { bybetRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
 const railItems = createRailItems(bybetRedirectUrl, bybetRedirectCode)
@@ -24,7 +25,7 @@ const route = useRoute()
 const isLiveSportsRoute = computed(() => /^\/(?:explore\/)?sports\/live(?:\/|$)/.test(route.path))
 const isAboutUsRoute = computed(() => route.path.replace(/\/+$/, '') === '/about-us')
 const desktopLiveSports = [
-  { label: 'Badminton', image: '/icons/sports/badminton.webp', to: `${bybetRedirectUrl}/login?p=${bybetRedirectCode}` },
+  { label: 'Badminton', image: '/icons/sports/badminton.webp', to: buildBybetRedirectUrl('login', bybetRedirectUrl, bybetRedirectCode) },
   { label: 'Baseball', image: '/icons/sports/baseball.webp', to: '/sports/live/baseball' },
 ]
 const nuxtLinkComponent = resolveComponent('NuxtLink')

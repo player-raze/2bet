@@ -15,11 +15,12 @@ import {
   type BonusDetail,
 } from '~/data/promotions'
 import { resolveSeoImageUrl } from '~/composables/useAppSeo'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const route = useRoute()
 const { translate } = useSiteLocale()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode, siteUrl: rawSiteUrl } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const { markAsViewed } = useViewedPromotions()
 const { selectedCurrency } = useBonusPayments()
 
@@ -82,7 +83,7 @@ const seoKeywords = computed(() => {
 })
 
 const seoImage = computed(() => {
-  const raw = bonusHeaderImageSrc.value || (typeof bonus.value.bannerImage === 'string' ? bonus.value.bannerImage : bonus.value.bannerImage?.banner) || bonus.value.thumbnailImage || '/brand/2bet-og.webp'
+  const raw = bonusBannerImageSrc.value || (typeof bonus.value.bannerImage === 'string' ? bonus.value.bannerImage : bonus.value.bannerImage?.banner) || bonus.value.thumbnailImage || '/brand/2bet-og.webp'
   return resolveSeoImageUrl(raw, String(rawSiteUrl || 'https://2bet.com'))
 })
 
@@ -158,11 +159,12 @@ const handleContentClick = (event: MouseEvent): void => {
 
 <template>
   <div class="bonus-detail-page text-[#e8e9e8] light:text-[#10261c]" :class="{ 'bonus-detail-page--with-action': bonus.hasJoinButton }" :style="{ '--bonus-accent': bonus.accentColor || '#087653' }">
-    <MobileBonusHeader back-to="/bonuses" currency-selector />
+    <MobileBonusHeader back-to="/bonuses" currency-selector heading-tag="span" />
     <SeoHeader
       class="bonus-detail-desktop-header"
       sticky
       title="Bonuses"
+      heading-tag="span"
       :meta-title="seoTitle"
       :description="seoDescription"
       :keywords="seoKeywords"
@@ -194,6 +196,7 @@ const handleContentClick = (event: MouseEvent): void => {
       </section>
 
       <article class="promotion-sheet bg-[#151515] light:bg-white border border-white/5 light:border-[#d8e2dc] text-[#e8e9e8] light:text-[#10261c] light:shadow-sm" :lang="bonus.language || 'zh-Hant'">
+        <h1 v-if="bonus.contentHtml && !/<h1\b/i.test(bonus.contentHtml)" class="sr-only">{{ bonus.title }}</h1>
         <div
           v-if="bonus.contentHtml"
           class="promotion-custom-content"

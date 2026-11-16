@@ -6,6 +6,7 @@ import GameEmptyState from '~/components/game-cards/GameEmptyState.vue'
 import JackpotWinnersCard from '~/components/jackpot/JackpotWinnersCard.vue'
 import SlotFilterModal from '~/components/slots/SlotFilterModal.vue'
 import { getStandaloneJackpotGames, normalizeSlotProvider, type SlotGame } from '~/data/slots'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 useAppSeo({
   title: 'Jackpots Exclusivos Betsoft com Prêmios em Dinheiro | 2bet',
@@ -35,7 +36,7 @@ const currentWinners = useJackpotWinners()
 const { showDemoMessage } = useDemoInteraction()
 const { addRecentGame } = useRecentGames()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 
 const matchesWinningLine = (game: SlotGame): boolean => {
   const selection = filterState.value.winningLine

@@ -274,8 +274,13 @@ export async function generateSitemapFile(customSiteUrl) {
   }
 
   // Dynamic Poker Categories
+  entries.push({
+    path: '/entertainment/poker/all',
+    changefreq: 'daily',
+    priority: 0.8,
+  })
   for (const cat of pokerCategories) {
-    if (cat.key && cat.key !== 'poker') {
+    if (cat.key) {
       entries.push({
         path: `/entertainment/poker/${cat.key}`,
         changefreq: 'daily',

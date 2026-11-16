@@ -13,6 +13,7 @@ useAppSeo({
 
 const showModal = ref(true)
 const router = useRouter()
+const { translate } = useSiteLocale()
 
 const handleClose = () => {
   showModal.value = false
@@ -26,7 +27,8 @@ const handleClose = () => {
 
 <template>
   <div>
-    <ComingSoonFallback :disable-seo="true" />
+    <h1 class="sr-only">{{ translate('Funds') }}</h1>
+    <ComingSoonFallback :disable-seo="true" heading-tag="p" />
     <DepositReminderModal v-if="showModal" @close="handleClose" />
   </div>
 </template>

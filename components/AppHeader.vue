@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Bell, Headphones, Menu, X } from 'lucide-vue-next'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 defineProps<{
   drawerOpen: boolean
@@ -11,9 +12,9 @@ const emit = defineEmits<{
 
 const { translate } = useSiteLocale()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
-const loginUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
-const registerUrl = `${bybetBaseUrl}/registered?p=${bybetRedirectCode}`
+const externalSiteUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
+const loginUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
+const registerUrl = buildBybetRedirectUrl('registered', bybetBaseUrl, bybetRedirectCode)
 </script>
 
 <template>

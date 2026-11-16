@@ -110,9 +110,11 @@ useAppSeo({
 
 <template>
   <div class="bonus-category-page text-[#f5f5f5] light:text-[#10261c]">
+    <h1 class="sr-only">{{ translate(categoryLabel) }} — {{ translate('Bonuses') }}</h1>
     <div class="bonus-category-sticky sticky-header-seal bg-black light:bg-[#f4f8f5]">
       <SeoHeader
         title="Bonuses"
+        heading-tag="span"
         :meta-title="`${translate(categoryLabel)} — Bônus e Promoções de Cassino Online | 2bet Casino`"
         :description="`Explore os bônus de ${translate(categoryLabel).toLowerCase()} recompensas e promoções disponíveis na 2bet Brasil. Aproveite recompensas, cashbacks e ofertas exclusivas.`"
         keywords="2bet bônus, promoções, recompensas de depósito, rebates"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { ArrowRight, Trophy, LockKeyhole, LogIn, UserPlus } from 'lucide-vue-next'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 import ReferencePlayerWinners from '~/components/ReferencePlayerWinners.vue'
 import {
   JILI_JACKPOT_COUNTER,
@@ -59,9 +60,9 @@ const jackpotDisplays: Record<JackpotKey, Ref<number>> = {
 }
 
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
-const loginUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
-const registerUrl = `${bybetBaseUrl}/register?p=${bybetRedirectCode}`
+const externalSiteUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
+const loginUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
+const registerUrl = buildBybetRedirectUrl('register', bybetBaseUrl, bybetRedirectCode)
 const { translate } = useSiteLocale()
 </script>
 

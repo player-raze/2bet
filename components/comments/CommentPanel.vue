@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+
 const { bybetRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const loginRedirectUrl = `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const loginRedirectUrl = buildBybetRedirectUrl('login', bybetRedirectUrl, bybetRedirectCode)
 import { ChevronDown, X } from 'lucide-vue-next'
 import SportsPreview from './SportsPreview.vue'
 import SportsChat from './SportsChat.vue'

@@ -3,11 +3,12 @@ import type { SportsEvent } from '~/types/sports'
 import { sportsTimeRange } from '~/utils/sportsTimeRange'
 import { matchesSportsSelection } from '~/utils/sportsSelection'
 import {
+  buildBybetRedirectUrl,
   getSportsTabRedirectPath,
   resolveSportsTabRedirectUrl,
 } from '~/utils/sportsRedirect'
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 import {
   Trophy,
   Radio,

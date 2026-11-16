@@ -1,4 +1,5 @@
 import { h, type Component } from 'vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 import {
   BadgeDollarSign,
   BadgeCent,
@@ -241,7 +242,13 @@ export const homepageChannels: HomepageChannel[] = [
   { label: 'Lottery', iconImage: '/icons/sports/soccer.webp', to: '/sports/soccer' },
 ]
 
-export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string): RailItem[] => [
+export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string): RailItem[] => {
+  const cleanRedirectBase = (bybetRedirectUrl || 'https://bybet.com')
+    .replace(/\/login(?:\?.*)?$/, '')
+    .replace(/\/+$/, '')
+  const externalUrl = (path: string): string => buildBybetRedirectUrl(path, cleanRedirectBase, redirectCode)
+
+  return [
   { label: 'Home', icon: Home, sectionId: null, to: '/' },
   {
     label: 'Sports',
@@ -251,10 +258,10 @@ export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string)
       { label: 'Popular', iconImage: '/icons/sports/popular.webp', to: '/sports/popular', accentColor: '#ff6948' },
       { label: 'Basketball', iconImage: '/icons/sports/basketball.webp', to: '/sports/basketball', accentColor: '#ff8a3d' },
       { label: 'Soccer', iconImage: '/icons/sports/soccer.webp', to: '/sports/soccer', accentColor: '#f4f7f5' },
-      { label: 'Tennis', iconImage: '/icons/sports/tennis.webp', to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/sportEvents/inplay/tennis?p=${redirectCode || 'xjSD'}`, accentColor: '#9cda35', external: true },
-      { label: 'Table Tennis', iconImage: '/icons/sports/table-tennis.webp', to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/sportEvents/incoming/tableTennis?p=${redirectCode || 'xjSD'}`, accentColor: '#9cda35', external: true },
-      { label: 'eSports', iconImage: '/icons/sports/egame.webp', to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/sportEvents/eSportGame?p=${redirectCode || 'xjSD'}`, accentColor: '#9cda35', external: true },
-      { label: 'eSports', iconImage: '/icons/sports/esports.webp', to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/sportEvents/eSportBall?p=${redirectCode || 'xjSD'}`, accentColor: '#9cda35', external: true },
+      { label: 'Tennis', iconImage: '/icons/sports/tennis.webp', to: externalUrl('sportEvents/inplay/tennis'), accentColor: '#9cda35', external: true },
+      { label: 'Table Tennis', iconImage: '/icons/sports/table-tennis.webp', to: externalUrl('sportEvents/incoming/tableTennis'), accentColor: '#9cda35', external: true },
+      { label: 'eSports', iconImage: '/icons/sports/egame.webp', to: externalUrl('sportEvents/eSportGame'), accentColor: '#9cda35', external: true },
+      { label: 'eSports', iconImage: '/icons/sports/esports.webp', to: externalUrl('sportEvents/eSportBall'), accentColor: '#9cda35', external: true },
       // { label: 'Baseball', iconImage: '/icons/sports/baseball.webp', to: '/sports/baseball', accentColor: '#ff6262' },
       { label: 'Live', iconImage: '/icons/sports/live.webp', to: '/sports/live', accentColor: '#48d5a5' },
     ],
@@ -265,7 +272,7 @@ export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string)
     sectionId: null,
     children: [
       { label: 'Live Casino', iconImage: '/icons/entertainment/live-casino.webp', to: '/entertainment/live-casino', accentColor: '#e2c37b' },
-      { label: 'Gaming', iconImage: '/icons/entertainment/gaming.webp', to: `${bybetRedirectUrl}/sportEvents/eSport?p=${redirectCode}`, accentColor: '#777cff' },
+      { label: 'Gaming', iconImage: '/icons/entertainment/gaming.webp', to: externalUrl('sportEvents/eSport'), accentColor: '#777cff' },
       { label: 'Poker', iconImage: '/icons/entertainment/poker.webp', to: '/entertainment/poker', accentColor: '#e2c37b' },
     ],
   },
@@ -278,7 +285,7 @@ export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string)
       { label: 'Slots', iconImage: '/icons/egames/slots.webp', to: '/egames/slots', accentColor: '#f1b33c' },
       // { label: 'Bingo', iconImage: '/icons/egames/bingo.webp', to: '/egames/bingo', accentColor: '#4d9cff' },
       { label: 'Jackpot', iconImage: '/icons/egames/jackpot.webp', to: '/egames/jackpot/all', accentColor: '#f4bd3e' },
-      { label: 'History', iconImage: '/icons/egames/history.webp', to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, accentColor: '#45cdb0', external: true },
+      { label: 'History', iconImage: '/icons/egames/history.webp', to: externalUrl('login'), accentColor: '#45cdb0', external: true },
       { label: 'Customer Service', iconImage: '/icons/egames/customer-service.webp', to: '/egames/customer-service', accentColor: '#8bd537' },
     ],
   },
@@ -295,14 +302,15 @@ export const createRailItems = (bybetRedirectUrl: string, redirectCode?: string)
     ],
   },
   { label: 'Me', icon: UserRound, sectionId: null, to: '/account/me' },
-  { label: 'Deposit', icon: BadgeDollarSign, sectionId: null, to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, external: true }, ///explore/account/deposit
-  { label: 'Withdraw', icon: CreditCard, sectionId: null, to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, external: true }, //explore/account/withdraw
-  { label: 'VIP', icon: Crown, sectionId: null, to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, external: true }, //explore/account/vip
-  { label: 'History', icon: NotebookTabs, sectionId: null, to: `${(bybetRedirectUrl || 'https://bybet.com').replace(/\/login(?:\?.*)?$/, '').replace(/\/+$/, '')}/login?p=${redirectCode || 'xjSD'}`, external: true }, // explore/account/history
+  { label: 'Deposit', icon: BadgeDollarSign, sectionId: null, to: externalUrl('login'), external: true }, ///explore/account/deposit
+  { label: 'Withdraw', icon: CreditCard, sectionId: null, to: externalUrl('login'), external: true }, //explore/account/withdraw
+  { label: 'VIP', icon: Crown, sectionId: null, to: externalUrl('login'), external: true }, //explore/account/vip
+  { label: 'History', icon: NotebookTabs, sectionId: null, to: externalUrl('login'), external: true }, // explore/account/history
   { label: 'Blogs', icon: Newspaper, sectionId: null, to: `/blogs`, external: true }, // explore/account/history
   { label: 'English', icon: Globe, sectionId: null, control: 'language', surface: true },
   { label: 'Auto', icon: Moon, sectionId: null, control: 'theme', surface: true },
 ]
+}
 
 const gamePlaceholderImage = '/brand/2bet-logo.webp'
 

@@ -43,7 +43,7 @@ export function getSitemapEntries(): SitemapEntry[] {
     { path: '/sports/popular/league', changefreq: 'hourly', priority: 0.8 },
     { path: '/sports/popular/upcoming', changefreq: 'hourly', priority: 0.8 },
     { path: '/sports/popular/pre-match', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/popular/outright', changefreq: 'hourly', priority: 0.8 },
+    // { path: '/sports/popular/outright', changefreq: 'hourly', priority: 0.8 },
     { path: '/sports/live', changefreq: 'hourly', priority: 0.9 },
     // { path: '/sports/basketball', changefreq: 'hourly', priority: 0.8 },
     // { path: '/sports/soccer', changefreq: 'hourly', priority: 0.8 },
@@ -143,8 +143,13 @@ export function getSitemapEntries(): SitemapEntry[] {
   }
 
   // Dynamic Poker Categories
+  entries.push({
+    path: '/entertainment/poker/all',
+    changefreq: 'daily',
+    priority: 0.8,
+  })
   for (const cat of POKER_CATEGORIES) {
-    if (cat.key && cat.key !== 'poker') {
+    if (cat.key) {
       entries.push({
         path: `/entertainment/poker/${cat.key}`,
         changefreq: 'daily',

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+
 const route = useRoute()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const redirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const redirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 const { isLoading } = useByBetLoader()
 </script>
 

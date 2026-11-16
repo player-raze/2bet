@@ -28,10 +28,12 @@ const handleBack = (): void => {
 
 <template>
   <div class="live-plaza-all-streamers-page w-full min-w-0 pb-16  text-white">
+    <h1 class="sr-only">{{ translate('All Streamers') }}</h1>
     <!-- Reusable Top SEO Header Bar -->
     <SeoHeader
       sticky
       :title="translate('All Streamers')"
+      heading-tag="span"
       back-to="/live-plaza/streamer"
     />
 

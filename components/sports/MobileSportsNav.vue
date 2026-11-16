@@ -5,8 +5,8 @@ import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const route = useRoute()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
-const bybetRedirectSearch = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/sportEvents/search?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectSearch = buildBybetRedirectUrl('sportEvents/search', rawRedirectUrl, bybetRedirectCode)
 const { translate } = useSiteLocale()
 
 interface MobileSportNavItem {

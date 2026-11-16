@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ChevronDown, ChevronRight, Download } from 'lucide-vue-next'
 import { faqItems } from '~/data/homepage'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { translate } = useSiteLocale()
 
 const openFaqIndex = ref<number | null>(null)
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const externalSiteUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 
 const toggleFaq = (index: number): void => {
   openFaqIndex.value = openFaqIndex.value === index ? null : index

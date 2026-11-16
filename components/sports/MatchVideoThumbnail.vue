@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Play } from 'lucide-vue-next'
 import type { LiveStream } from '~/types/livestream'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const props = defineProps<{
   thumbnail?: string
@@ -8,7 +9,7 @@ const props = defineProps<{
   label: string
 }>()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 
 function cloudflareThumbnail(source?: string): string | undefined {
   const match = source?.match(/(https:\/\/[^/]+\.cloudflarestream\.com\/[a-zA-Z0-9]+)/)
@@ -40,7 +41,7 @@ watch(thumbnailUrl, () => { imageFailed.value = false })
     <img
       v-if="thumbnailUrl && !imageFailed"
       :src="thumbnailUrl"
-      alt=""
+      :alt="`${label} live stream preview`"
       loading="lazy"
       class="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
       @error="imageFailed = true"

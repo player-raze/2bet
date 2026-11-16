@@ -2,6 +2,7 @@
 import { ArrowRight, Sparkles } from 'lucide-vue-next'
 import { providerLogoByName } from '~/data/homepage'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 defineProps<{
   providers: string[]
@@ -10,7 +11,7 @@ defineProps<{
 const { translate } = useSiteLocale()
 const { effectiveTheme } = useSiteTheme()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const externalSiteUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const externalSiteUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 
 const providerLogo = (provider: string): string => {
   return getProviderLogoForTheme(providerLogoByName[provider], effectiveTheme.value)

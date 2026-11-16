@@ -4,9 +4,10 @@ import { MessageCircle, ShoppingBag, GraduationCap, ChartPie, Video, PanelsTopLe
 import type { LiveStreamCatalog } from '~/types/livestream'
 import StreamPlayer from './StreamPlayer.vue'
 import ByBetSpinner from '~/components/ByBetSpinner.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 
 const { data: catalog, status, refresh } = useFetch<LiveStreamCatalog>('/api/livestream', { server: false })
 const selectedStreamId = ref('')

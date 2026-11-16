@@ -9,6 +9,7 @@ import {
   type PopularGame,
 } from '~/data/live-plaza'
 import type { LivePlazaSportFilter } from '~/components/live-plaza/LivePlazaSportFilters.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 type PopularGameSort = 'time' | 'predict'
 
@@ -35,7 +36,7 @@ useAppSeo({
 const { showDemoMessage } = useDemoInteraction()
 const { translate } = useSitePreferences()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${bybetBaseUrl}/login?p=${bybetRedirectCode}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 
 const redirectTo2Bet = (): void => {
   void navigateTo(bybetRedirectUrl, { external: true })
@@ -228,9 +229,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="live-plaza-page text-white light:text-[#10261c]">
+    <h1 class="sr-only">{{ translate('Live Plaza') }}</h1>
     <SeoHeader
       sticky
       title="Live Plaza"
+      heading-tag="span"
       :show-back="false"
       :show-flag="false"
     />

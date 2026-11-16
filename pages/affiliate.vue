@@ -21,6 +21,7 @@ import {
   Phone,
   Share2,
 } from 'lucide-vue-next'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 type AffiliateTabId = 'cooperation' | 'products' | 'advantages' | 'commission' | 'questions' | 'contact'
 type QuestionTabId = 'information' | 'share' | 'payment' | 'other'
@@ -39,7 +40,7 @@ interface QuestionCategory {
 
 const runtimeConfig = useRuntimeConfig()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = runtimeConfig.public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/franchiseRegister?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('franchiseRegister', rawRedirectUrl, bybetRedirectCode)
 const affiliateSystemUrl = 'https://2bet1.vip/'
 
 const activeTab = ref<AffiliateTabId>('cooperation')

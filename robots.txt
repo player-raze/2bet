@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /*?*preview=
+Disallow: /*?preview=
+Disallow: /*&preview=
+Allow: /
+
+User-agent: Googlebot
+Disallow: /*?*preview=
+Disallow: /*?preview=
+Disallow: /*&preview=
+Allow: /
+
+Sitemap: https://2bet.com/sitemap-index.xml

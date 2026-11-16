@@ -28,6 +28,7 @@ import {
   type BingoGame,
 } from '~/data/bingo'
 import GameCard from '~/components/game-cards/GameCard.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 import GameEmptyState from '~/components/game-cards/GameEmptyState.vue'
 import { sortRailGames } from '~/utils/gameSort'
 
@@ -93,7 +94,7 @@ const filterState = ref({
 
 const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 const { context: commentContext, openGameComments, closeComments } = useCommentPanel()
 
 const toggleChat = (): void => {

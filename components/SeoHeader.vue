@@ -17,6 +17,7 @@ interface Props {
   includeSiteName?: boolean
   includeCheckMore?: boolean
   robots?: string
+  headingTag?: 'h1' | 'h2' | 'p' | 'span'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -30,6 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
   includeSiteName: undefined,
   includeCheckMore: undefined,
   robots: undefined,
+  headingTag: 'h1',
 })
 
 const emit = defineEmits<{
@@ -159,12 +161,12 @@ const handleBack = (): void => {
           <ChevronLeft class="h-3 w-3" />
         </button>
 
-        <!-- Page Title (SEO H1) -->
-        <h1 class="text-[16px] font-bold text-white light:text-[#10261c] tracking-tight truncate leading-tight">
+        <!-- Page Title -->
+        <component :is="headingTag" class="seo-header__title text-[16px] font-bold text-white light:text-[#10261c] tracking-tight truncate leading-tight">
           <slot name="title">
             {{ displayTitle }}
           </slot>
-        </h1>
+        </component>
       </div>
 
       <slot name="actions" />
@@ -188,12 +190,12 @@ const handleBack = (): void => {
         <ChevronLeft class="h-3 w-3" />
       </button>
 
-      <!-- Page Title (SEO H1) -->
-      <h1 class="text-[15px] font-bold text-white light:text-[#10261c] tracking-tight truncate leading-tight">
+      <!-- Page Title -->
+      <component :is="headingTag" class="seo-header__title text-[15px] font-bold text-white light:text-[#10261c] tracking-tight truncate leading-tight">
         <slot name="title">
           {{ displayTitle }}
         </slot>
-      </h1>
+      </component>
     </div>
 
     <slot name="actions" />

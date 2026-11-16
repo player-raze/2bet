@@ -17,7 +17,8 @@ export interface AppSeoOptions {
   siteName?: string | boolean | ComputedRef<string | boolean> | (() => string | boolean)
   breadcrumbs?: BreadcrumbItem[] | ComputedRef<BreadcrumbItem[]> | (() => BreadcrumbItem[])
   schema?: Record<string, any> | Record<string, any>[] | ComputedRef<any> | (() => any)
-  robots?: string | ComputedRef<string> | (() => string)
+  robots?: string | ComputedRef<string | undefined> | (() => string | undefined)
+  canonicalPath?: string | ComputedRef<string | undefined> | (() => string | undefined)
 }
 
 const resolveVal = <T>(val: T | ComputedRef<T> | (() => T) | undefined): T | undefined => {
@@ -555,8 +556,9 @@ export const useAppSeo = (options: AppSeoOptions) => {
   })
 
   const canonicalUrl = computed(() => {
-    const p = route.path || '/'
-    return `${siteUrl.value}${p}`
+    const rawPath = resolveVal(options.canonicalPath) || route.path || '/'
+    const cleanPath = rawPath.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/'
+    return `${siteUrl.value}${cleanPath}`
   })
 
   const defaultRobots = computed(() => {
@@ -582,6 +584,7 @@ export const useAppSeo = (options: AppSeoOptions) => {
     twitterDescription: description,
     keywords,
     ogImage: image,
+    ogImageAlt: title,
     twitterImage: image,
     twitterCard: 'summary_large_image',
     ogType: options.type || 'website',

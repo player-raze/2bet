@@ -7,6 +7,7 @@ import {
   type PredictionsResponse,
 } from '~/data/predictions'
 import type { LivePlazaSportFilter } from '~/components/live-plaza/LivePlazaSportFilters.vue'
+import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 type PredictionSort = 'featured' | 'hit' | 'win-streak'
 
@@ -17,7 +18,7 @@ const predictionSortOptions: Array<{ value: PredictionSort; label: string }> = [
 ]
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
+const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
 
 useAppSeo({
   title: '2Bet Prediction | Apostas Esportivas com Alta Precisão',
@@ -205,9 +206,11 @@ const handleOddClick = (_prediction?: Prediction, _option?: PredictionOption): v
 
 <template>
   <div class="expert-predictions-page text-white light:text-[#10261c]">
+    <h1 class="sr-only">{{ translate('Predict') }}</h1>
     <SeoHeader
       sticky
       title="Predict"
+      heading-tag="span"
       :show-back="false"
       :show-flag="false"
     />
