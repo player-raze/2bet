@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
 import { Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import UnderMaintenance from '~/components/modals/UnderMaintenance.vue'
-import DepositReminderModal from '~/components/modals/DepositReminderModal.vue'
+const UnderMaintenance = defineAsyncComponent(() => import('~/components/modals/UnderMaintenance.vue'))
+const DepositReminderModal = defineAsyncComponent(() => import('~/components/modals/DepositReminderModal.vue'))
 import { createRailItems } from '~/data/homepage'
 import type { RailItem, RailSubItem } from '~/data/homepage'
 import type { LanguageOption, ThemePreference } from '~/composables/useSitePreferences'

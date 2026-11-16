@@ -2,7 +2,8 @@
 import { ArrowRight, ChevronLeft, ChevronRight, Heart, Play } from 'lucide-vue-next'
 import HomepageContentSlider from '~/components/HomepageContentSlider.vue'
 import HomepagePartnerBanner from '~/components/HomepagePartnerBanner.vue'
-import { SLOTS, newGames as newSlotGames, type SlotGame } from '~/data/slots'
+import { HOMEPAGE_NEW_SLOTS, HOMEPAGE_POPULAR_SLOTS } from '~/data/homepage-slots'
+import type { SlotGame } from '~/data/slots'
 import type { ReferenceGame } from '~/data/homepage'
 
 const props = defineProps<{ games?: SlotGame[] | ReferenceGame[] }>()
@@ -17,23 +18,45 @@ const tabs = [
 
 const activeTab = ref<(typeof tabs)[number]['key']>('popular')
 const favorites = useCookie<string[]>('2bet-slot-favorites', { default: () => [], sameSite: 'lax' })
+const loadedAllSlots = ref<SlotGame[] | null>(null)
+let loadingSlotsPromise: Promise<void> | null = null
+
+const ensureFullCatalogLoaded = async (): Promise<void> => {
+  if (loadedAllSlots.value || !import.meta.client) return
+  if (!loadingSlotsPromise) {
+    loadingSlotsPromise = import('~/data/slots')
+      .then((mod) => {
+        loadedAllSlots.value = mod.SLOTS
+      })
+      .finally(() => {
+        loadingSlotsPromise = null
+      })
+  }
+  await loadingSlotsPromise
+}
+
+watch(activeTab, (tab) => {
+  if (tab === 'favorites' && favorites.value.length > 0) {
+    void ensureFullCatalogLoaded()
+  }
+})
+
 const providerName = (provider?: string) => (!provider ? '2bet' : provider === 'PG' ? 'PG Soft' : provider)
 
-// All games sourced from slots.ts (2,300+ games)
 const allGames = computed<SlotGame[]>(() => {
   if (props.games && props.games.length > 50) {
     return props.games as SlotGame[]
   }
-  return SLOTS
+  return loadedAllSlots.value ?? HOMEPAGE_POPULAR_SLOTS
 })
 
 const newGamesList = computed<SlotGame[]>(() => {
-  const markedNew = allGames.value.filter(g => g.new || g.badge?.toLowerCase().includes('new'))
-  return markedNew.length ? markedNew : (newSlotGames as unknown as SlotGame[])
+  return HOMEPAGE_NEW_SLOTS
 })
 
 const favoriteGames = computed<SlotGame[]>(() => {
-  return allGames.value.filter(game => favorites.value.includes(game.title) || favorites.value.includes(game.id))
+  const source = loadedAllSlots.value ?? HOMEPAGE_POPULAR_SLOTS
+  return source.filter(game => favorites.value.includes(game.title) || favorites.value.includes(game.id))
 })
 
 const providers = [
@@ -97,7 +120,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
           <header class="slots-header flex items-center justify-between">
             <div class="slots-heading flex items-center min-w-0">
               <h2 id="slots-title" class="flex items-center text-white light:text-[#10261c]">
-                <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Top Slots')" width="28" height="28">
+                <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Top Slots')" width="28" height="28" loading="lazy" decoding="async">
                 {{ translate('Top Slots') }}
               </h2>
               <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Handpicked games from leading providers') }}</p>
@@ -207,7 +230,7 @@ const displayedGames = computed(() => currentCollection.value.slice(0, MOBILE_GA
       <header class="slots-header flex items-center justify-between">
         <div class="slots-heading flex items-center min-w-0">
           <h2 id="slots-mobile-title" class="flex items-center text-white light:text-[#10261c]">
-            <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Top Slots')" width="28" height="28">
+            <img :src="titleIcon" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Top Slots')" width="28" height="28" loading="lazy" decoding="async">
             {{ translate('Top Slots') }}
           </h2>
           <p class="text-[#a8b6bc] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Handpicked games from leading providers') }}</p>

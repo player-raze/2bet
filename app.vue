@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
+
+const LightModeTheme = defineAsyncComponent(() => import('~/components/LightModeTheme.vue'))
 const { locale, restoreLocale } = useSiteLocale()
 const { restoreTimeZone } = useTimeZonePreference()
 const {
@@ -53,6 +56,7 @@ nuxtApp.hook('page:finish', () => {
 </script>
 
 <template>
+  <LightModeTheme v-if="effectiveTheme === 'light'" />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>

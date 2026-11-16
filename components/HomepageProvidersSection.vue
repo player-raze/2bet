@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight, Layers, Pause, Play, Sparkles } from 'lucide-vue-next'
-import { getProviderLogoForTheme } from '~/utils/providerLogo'
+import { Layers, Sparkles } from 'lucide-vue-next'
+import { getProviderLogoDimensions, getProviderLogoForTheme } from '~/utils/providerLogo'
 
 export interface ProviderItem {
   id: string
@@ -176,8 +176,8 @@ const PROVIDERS: ProviderItem[] = [
   },
 ]
 
-// Duplicate 3 times for a completely seamless, infinite carousel loop
-const duplicatedProviders = [...PROVIDERS, ...PROVIDERS, ...PROVIDERS]
+// Duplicate 2 times for a seamless GPU-composited marquee loop
+const duplicatedProviders = [...PROVIDERS, ...PROVIDERS]
 
 const { translate } = useSiteLocale()
 const { effectiveTheme } = useSiteTheme()
@@ -186,140 +186,72 @@ const themedLogo = (logo: string): string => {
   return getProviderLogoForTheme(logo, effectiveTheme.value)
 }
 
+const logoDimensions = (logo: string) => {
+  return getProviderLogoDimensions(logo, effectiveTheme.value)
+}
+
 const trackRef = ref<HTMLElement | null>(null)
 const isPaused = ref(false)
 const isHovered = ref(false)
 const isVisible = ref(false)
-let animationFrameId: number | null = null
-let cachedSingleSetWidth = 0
 let observer: IntersectionObserver | null = null
-const SCROLL_SPEED = 0.85 // pixels per animation frame (~50px/sec)
+let touchResumeTimer: ReturnType<typeof setTimeout> | null = null
 
-const updateSingleSetWidth = (): void => {
-  if (trackRef.value) {
-    cachedSingleSetWidth = trackRef.value.scrollWidth / 3
-  }
-}
-
-const startAnimation = (): void => {
-  if (animationFrameId === null && isVisible.value && !isPaused.value && !isHovered.value && typeof document !== 'undefined' && !document.hidden) {
-    animationFrameId = requestAnimationFrame(updateCarouselLoop)
-  }
-}
-
-const stopAnimation = (): void => {
-  if (animationFrameId !== null) {
-    cancelAnimationFrame(animationFrameId)
-    animationFrameId = null
-  }
-}
-
-const updateCarouselLoop = (): void => {
-  if (trackRef.value && !isPaused.value && !isHovered.value && isVisible.value && !document.hidden) {
-    trackRef.value.scrollLeft += SCROLL_SPEED
-    const singleSet = cachedSingleSetWidth || (trackRef.value.scrollWidth / 3)
-
-    // Seamless loop: when passing set 2, reset by 1 set without visual jump
-    if (trackRef.value.scrollLeft >= singleSet * 2) {
-      trackRef.value.scrollLeft -= singleSet
-    }
-    animationFrameId = requestAnimationFrame(updateCarouselLoop)
-  } else {
-    animationFrameId = null
-  }
-}
-
-const scrollManual = (direction: 'left' | 'right'): void => {
-  if (!trackRef.value) return
-  const cardStep = 240
-  const singleSet = cachedSingleSetWidth || (trackRef.value.scrollWidth / 3)
-
-  if (direction === 'left') {
-    if (trackRef.value.scrollLeft <= singleSet * 0.2) {
-      trackRef.value.scrollLeft += singleSet
-    }
-    trackRef.value.scrollBy({ left: -cardStep, behavior: 'smooth' })
-  } else {
-    if (trackRef.value.scrollLeft >= singleSet * 2.2) {
-      trackRef.value.scrollLeft -= singleSet
-    }
-    trackRef.value.scrollBy({ left: cardStep, behavior: 'smooth' })
-  }
-}
-
-const togglePause = (): void => {
-  isPaused.value = !isPaused.value
-  if (isPaused.value) {
-    stopAnimation()
-  } else {
-    startAnimation()
-  }
-}
+const isMarqueePaused = computed(() => !isVisible.value || isPaused.value || isHovered.value)
 
 const handleMouseEnter = (): void => {
+  if (touchResumeTimer) {
+    clearTimeout(touchResumeTimer)
+    touchResumeTimer = null
+  }
   isHovered.value = true
-  stopAnimation()
 }
 
 const handleMouseLeave = (): void => {
   isHovered.value = false
-  startAnimation()
 }
 
 const handleTouchEnd = (): void => {
-  setTimeout(() => {
+  if (touchResumeTimer) clearTimeout(touchResumeTimer)
+  touchResumeTimer = setTimeout(() => {
     isHovered.value = false
-    startAnimation()
+    touchResumeTimer = null
   }, 1200)
 }
 
 const handleVisibilityChange = (): void => {
-  if (typeof document !== 'undefined' && document.hidden) {
-    stopAnimation()
-  } else {
-    startAnimation()
-  }
+  isPaused.value = typeof document !== 'undefined' && document.hidden
 }
 
 onMounted(() => {
   if (import.meta.client && trackRef.value) {
-    updateSingleSetWidth()
-    trackRef.value.scrollLeft = cachedSingleSetWidth
-
-    // Check motion preference
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       isPaused.value = true
     }
 
-    window.addEventListener('resize', updateSingleSetWidth, { passive: true })
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     if ('IntersectionObserver' in window) {
       observer = new IntersectionObserver(([entry]) => {
         isVisible.value = Boolean(entry?.isIntersecting)
-        if (isVisible.value) {
-          updateSingleSetWidth()
-          startAnimation()
-        } else {
-          stopAnimation()
-        }
       }, { rootMargin: '100px' })
       observer.observe(trackRef.value)
     } else {
       isVisible.value = true
-      startAnimation()
     }
   }
 })
 
 onBeforeUnmount(() => {
-  stopAnimation()
+  if (touchResumeTimer) {
+    clearTimeout(touchResumeTimer)
+    touchResumeTimer = null
+  }
   if (observer) {
     observer.disconnect()
     observer = null
   }
   if (import.meta.client) {
-    window.removeEventListener('resize', updateSingleSetWidth)
     document.removeEventListener('visibilitychange', handleVisibilityChange)
   }
 })
@@ -368,44 +300,51 @@ onBeforeUnmount(() => {
         role="region"
         :aria-label="translate('Game providers carousel')"
       >
-        <NuxtLink
-          v-for="(provider, index) in duplicatedProviders"
-          :key="`${provider.id}-${index}`"
-          :to="provider.to"
-          class="provider-glass-card group light:bg-white/75 light:hover:bg-white/95 light:border-black/[0.08] light:shadow-sm"
-          :aria-label="`${provider.name} - ${provider.category} (${provider.gamesCount})`"
+        <div
+          class="providers-carousel-rail"
+          :class="{ 'providers-carousel-rail--paused': isMarqueePaused }"
         >
-          <!-- Card Header Pill -->
-          <div class="card-glass-top flex items-center justify-between">
-            <span class="category-pill flex items-center gap-1.5 text-[#d1d5db] light:text-[#4b5563] bg-black/65 light:bg-black/[0.03] border border-[#019440]/25 light:border-black/[0.06]" :data-tone="provider.categoryTone">
-              <span class="status-dot" aria-hidden="true" />
-              {{ translate(provider.category) }}
-            </span>
-            <span v-if="provider.tag" class="tag-pill hidden sm:block">
-              {{ translate(provider.tag) }}
-            </span>
-          </div>
+          <NuxtLink
+            v-for="(provider, index) in duplicatedProviders"
+            :key="`${provider.id}-${index}`"
+            :to="provider.to"
+            class="provider-glass-card group light:bg-white/75 light:hover:bg-white/95 light:border-black/[0.08] light:shadow-sm"
+            :aria-label="`${provider.name} - ${provider.category} (${provider.gamesCount})`"
+          >
+            <!-- Card Header Pill -->
+            <div class="card-glass-top flex items-center justify-between">
+              <span class="category-pill flex items-center gap-1.5 text-[#d1d5db] light:text-[#4b5563] bg-black/65 light:bg-black/[0.03] border border-[#019440]/25 light:border-black/[0.06]" :data-tone="provider.categoryTone">
+                <span class="status-dot" aria-hidden="true" />
+                {{ translate(provider.category) }}
+              </span>
+              <span v-if="provider.tag" class="tag-pill hidden sm:block">
+                {{ translate(provider.tag) }}
+              </span>
+            </div>
 
-          <!-- Glass Logo Showcase -->
-          <div class="card-glass-body flex items-center justify-center">
-            <img
-              :src="themedLogo(provider.logo)"
-              :alt="provider.name"
-              class="provider-logo-img"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
+            <!-- Glass Logo Showcase -->
+            <div class="card-glass-body flex items-center justify-center">
+              <img
+                :src="themedLogo(provider.logo)"
+                :alt="provider.name"
+                :width="logoDimensions(provider.logo).width"
+                :height="logoDimensions(provider.logo).height"
+                class="provider-logo-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
 
-          <!-- Card Glass Footer -->
-          <div class="card-glass-footer flex items-center justify-between">
-            <span class="provider-title truncate text-[#f3f4f6] light:text-[#111827]">{{ provider.name }}</span>
-            <span class="games-count-pill hidden sm:block text-[#9ca3af] light:text-[#4b5563] bg-black/50 light:bg-black/[0.04] border border-[#019440]/15 light:border-black/[0.06]">{{ provider.gamesCount }}</span>
-          </div>
+            <!-- Card Glass Footer -->
+            <div class="card-glass-footer flex items-center justify-between">
+              <span class="provider-title truncate text-[#f3f4f6] light:text-[#111827]">{{ provider.name }}</span>
+              <span class="games-count-pill hidden sm:block text-[#9ca3af] light:text-[#4b5563] bg-black/50 light:bg-black/[0.04] border border-[#019440]/15 light:border-black/[0.06]">{{ provider.gamesCount }}</span>
+            </div>
 
-          <!-- Subtle Diagonal Light Reflection -->
-          <div class="glass-reflection" aria-hidden="true" />
-        </NuxtLink>
+            <!-- Subtle Diagonal Light Reflection -->
+            <div class="glass-reflection" aria-hidden="true" />
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </section>
@@ -501,9 +440,6 @@ onBeforeUnmount(() => {
 }
 
 .providers-carousel-track {
-  display: flex;
-  align-items: center;
-  gap: 14px;
   overflow-x: auto;
   scroll-behavior: auto;
   scrollbar-width: none;
@@ -511,6 +447,34 @@ onBeforeUnmount(() => {
   padding: 6px 12px 10px;
   cursor: grab;
   user-select: none;
+}
+
+.providers-carousel-rail {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  will-change: transform;
+  animation: providers-marquee 68s linear infinite;
+}
+
+.providers-carousel-rail--paused {
+  animation-play-state: paused;
+}
+
+@keyframes providers-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .providers-carousel-rail {
+    animation: none;
+  }
 }
 
 .providers-carousel-track::-webkit-scrollbar {
@@ -743,8 +707,10 @@ html[data-theme='light']:not(#_) .provider-logo-img {
   }
 
   .provider-logo-img {
+    width: auto;
+    height: auto;
     max-width: 108px;
-    height: 32px;
+    max-height: 32px;
   }
 
   .section-subtitle { font-size: 14px; }

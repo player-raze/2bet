@@ -1,12 +1,9 @@
-import { LIVE_CASINO_TABLES } from './live-casino'
-
 export interface HomepageCasinoCategory {
   key: string
   category: string
   title: string
   description: string
   image: string
-  tableCount: number
 }
 
 const category = (key: string, title: string, description: string, filename: string): HomepageCasinoCategory => ({
@@ -15,7 +12,6 @@ const category = (key: string, title: string, description: string, filename: str
   title,
   description,
   image: `/images/homepage-casino/${filename}.webp`,
-  tableCount: LIVE_CASINO_TABLES.filter(table => table.category === key).length,
 })
 
 export const HOMEPAGE_CASINO_CATEGORIES: HomepageCasinoCategory[] = [

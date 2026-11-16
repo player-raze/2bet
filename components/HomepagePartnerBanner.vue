@@ -53,7 +53,7 @@ onBeforeUnmount(() => {
     aria-label="Seja um Parceiro Promocional da 2BET"
   >
     <picture class="homepage-partner-banner__image">
-      <source media="(min-width: 1200px)" srcset="/images/affiliate/partner-promotional-desktop.webp" width="1020" height="80">
+      <source media="(min-width: 1200px)" srcset="/images/affiliate/partner-promotional-desktop.webp" width="1360" height="94">
       <img
         src="/images/affiliate/partner-promotional-desktop.webp"
         alt="Seja um Parceiro Promocional da 2BET"
@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
       muted
       loop
       playsinline
-      preload="metadata"
+      preload="none"
       aria-hidden="true"
     />
   </a>

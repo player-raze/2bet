@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import UnderMaintenance from '~/components/modals/UnderMaintenance.vue'
+import { defineAsyncComponent } from 'vue'
+const UnderMaintenance = defineAsyncComponent(() => import('~/components/modals/UnderMaintenance.vue'))
 import MobileBottomNavIcon from '~/components/MobileBottomNavIcon.vue'
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 

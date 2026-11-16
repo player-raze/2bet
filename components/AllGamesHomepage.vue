@@ -9,7 +9,7 @@ import HomepageProvidersSection from '~/components/HomepageProvidersSection.vue'
 import HomepageLiveCasinoSection from '~/components/HomepageLiveCasinoSection.vue'
 import HomepageGettingStarted from '~/components/HomepageGettingStarted.vue'
 import { popularGames, recommendedGames, faqItems, type FaqItem } from '~/data/homepage'
-import { LIVE_CASINO_CATEGORIES } from '~/data/live-casino'
+import { LIVE_CASINO_CATEGORIES } from '~/data/live-casino-categories'
 import { HOMEPAGE_CASINO_CATEGORIES } from '~/data/homepage-casino'
 import { TOP_BINGO_GAMES } from '~/data/top-bingo-games'
 import { SAMPLE_MATCH_EVENTS } from '~/data/sports'
@@ -47,18 +47,22 @@ const categoryDetails = [
 let motionPreference: MediaQueryList | undefined
 let sectionRevealObserver: IntersectionObserver | undefined
 let glareTimer: ReturnType<typeof setInterval> | undefined
+let glareEndTimer: ReturnType<typeof setTimeout> | undefined
+let glareTargets: HTMLElement[] = []
 
 const triggerRandomHomepageGlare = () => {
-  if (motionPreference?.matches || !homepageMain.value) return
-  const targets = Array.from(homepageMain.value.querySelectorAll<HTMLElement>('.homepage-image-glare'))
-  if (!targets.length) return
-  const target = targets[Math.floor(Math.random() * targets.length)]
-  const shine = target.querySelector<HTMLElement>('.homepage-image-glare__shine')
+  if (motionPreference?.matches || !glareTargets.length) return
+  const target = glareTargets[Math.floor(Math.random() * glareTargets.length)]
+  const shine = target?.querySelector<HTMLElement>('.homepage-image-glare__shine')
   if (!shine) return
   shine.classList.remove('homepage-image-glare__shine--auto')
-  void shine.offsetWidth
-  shine.classList.add('homepage-image-glare__shine--auto')
-  window.setTimeout(() => shine.classList.remove('homepage-image-glare__shine--auto'), 950)
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      shine.classList.add('homepage-image-glare__shine--auto')
+    })
+  })
+  if (glareEndTimer) clearTimeout(glareEndTimer)
+  glareEndTimer = setTimeout(() => shine.classList.remove('homepage-image-glare__shine--auto'), 950)
 }
 
 function uniqueBy<T>(items: T[], key: (item: T) => string): T[] {
@@ -116,9 +120,14 @@ function initializeSectionEffects() {
       sectionRevealObserver?.unobserve(entry.target)
     })
   }, { threshold: .05, rootMargin: '0px 0px -24px 0px' })
-  homepageMain.value?.querySelectorAll('.allgames-section,.homepage-getting-started,.allgames-footer').forEach(section => {
+  const sections = Array.from(
+    homepageMain.value?.querySelectorAll<HTMLElement>('.allgames-section,.homepage-getting-started,.allgames-footer') ?? [],
+  )
+  const threshold = window.innerHeight - 24
+  const belowFold = sections.map(section => section.getBoundingClientRect().top >= threshold)
+  sections.forEach((section, idx) => {
     section.classList.add('allgames-reveal')
-    if (section.getBoundingClientRect().top >= window.innerHeight - 24) {
+    if (belowFold[idx]) {
       section.classList.add('allgames-reveal-pending')
       sectionRevealObserver?.observe(section)
     }
@@ -134,6 +143,7 @@ onMounted(() => {
   window.addEventListener('keydown', handleEscape)
   motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
   motionPreference.addEventListener('change', handleMotionPreference)
+  glareTargets = Array.from(homepageMain.value?.querySelectorAll<HTMLElement>('.homepage-image-glare') ?? [])
   initializeSectionEffects()
   glareTimer = setInterval(triggerRandomHomepageGlare, 2000)
   inplayInterval = setInterval(() => {
@@ -143,6 +153,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (inplayInterval) clearInterval(inplayInterval)
   if (glareTimer) clearInterval(glareTimer)
+  if (glareEndTimer) clearTimeout(glareEndTimer)
+  glareTargets = []
   sectionRevealObserver?.disconnect()
   motionPreference?.removeEventListener('change', handleMotionPreference)
   window.removeEventListener('keydown', handleEscape)

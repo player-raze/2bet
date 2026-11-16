@@ -13,6 +13,7 @@ const slides = [
     action: 'Explore sports',
     to: '/sports/popular/league',
     image: '/hero/editorial/sports.webp',
+    mobileImage: '/hero/editorial/sports-mobile.webp',
     thumbnail: '/hero/thumbnails/sports.webp',
   },
   {
@@ -24,6 +25,7 @@ const slides = [
     action: 'Explore slots',
     to: '/egames/slots',
     image: '/hero/editorial/slots.webp',
+    mobileImage: '/hero/editorial/slots-mobile.webp',
     thumbnail: '/hero/thumbnails/slots.webp',
   },
   {
@@ -35,6 +37,7 @@ const slides = [
     action: 'Explore live casino',
     to: '/entertainment/live-casino/baccarat',
     image: '/hero/editorial/live-casino.webp',
+    mobileImage: '/hero/editorial/live-casino-mobile.webp',
     thumbnail: '/hero/thumbnails/live-casino.webp',
   },
   {
@@ -46,11 +49,13 @@ const slides = [
     action: 'Discover promotions',
     to: '/bonuses',
     image: '/hero/editorial/promotions.webp',
+    mobileImage: '/hero/editorial/promotions-mobile.webp',
     thumbnail: '/hero/thumbnails/bingo.webp',
   },
 ]
 
 const activeIndex = ref(0)
+const hasChangedSlide = ref(false)
 const autoplayPaused = ref(false)
 const slide = computed(() => slides[activeIndex.value]!)
 const nextSlide = computed(() => slides[(activeIndex.value + 1) % slides.length]!)
@@ -74,7 +79,11 @@ function startAutoplay() {
 }
 
 function selectSlide(index: number) {
-  activeIndex.value = (index + slides.length) % slides.length
+  const nextIndex = (index + slides.length) % slides.length
+  if (nextIndex !== activeIndex.value) {
+    hasChangedSlide.value = true
+    activeIndex.value = nextIndex
+  }
   startAutoplay()
 }
 
@@ -162,7 +171,7 @@ onBeforeUnmount(() => {
   <section
     id="allgames-featured"
     class="homepage-hero relative overflow-hidden"
-    :class="{ 'homepage-hero--paused': autoplayPaused }"
+    :class="{ 'homepage-hero--paused': autoplayPaused, 'homepage-hero--animated': hasChangedSlide }"
     :style="{ '--hero-slide-duration': `${slideDuration}ms` }"
     aria-roledescription="carousel"
     :aria-label="translate('Featured categories')"
@@ -190,13 +199,20 @@ onBeforeUnmount(() => {
         :class="{ 'is-active': activeIndex === index }"
         :data-category="item.id"
       >
+        <source
+          media="(max-width: 767px)"
+          :srcset="item.mobileImage"
+          width="768"
+          height="432"
+        >
         <img
           :src="item.image"
           :alt="translate(item.headline) || translate(item.category)"
           width="1672"
           height="941"
+          :loading="index === 0 ? 'eager' : 'lazy'"
           :fetchpriority="index === 0 ? 'high' : 'low'"
-          decoding="async"
+          :decoding="index === 0 ? 'sync' : 'async'"
         >
       </picture>
     </Transition>
@@ -281,11 +297,13 @@ onBeforeUnmount(() => {
 .homepage-hero--paused .homepage-hero__photo { animation-play-state: paused; }
 .homepage-hero__shade { z-index: -1; background: linear-gradient(90deg,#020c0a38,transparent 75%),linear-gradient(0deg,#020c0a66,transparent 25%); }
 .homepage-hero__copy { position: relative; min-width: 0; }
-.homepage-hero__copy-content { min-width: 0; animation: hero-copy-in 380ms ease both; }
+.homepage-hero__copy-content { min-width: 0; }
+.homepage-hero--animated .homepage-hero__copy-content { animation: hero-copy-in 380ms ease both; }
 .homepage-hero .homepage-hero__eyebrow { margin-bottom: 19px; font-size: clamp(14px,1.1cqw,17px); font-weight: 600; letter-spacing: .28em; text-transform: uppercase; }
 .homepage-hero h1 { font-family: var(--homepage-display-font,Impact,'Arial Narrow','Manrope',sans-serif); font-size: clamp(56px,6.5cqw,90px); font-weight: var(--homepage-display-weight,400); line-height: 1.04; letter-spacing: -.02em; }
-.homepage-hero h1 span { display: block; white-space: normal; overflow-wrap: anywhere; text-wrap: balance; animation: hero-title-reveal 780ms cubic-bezier(.16,1,.3,1) both; }
-.homepage-hero h1 span+span { animation-delay: 150ms; }
+.homepage-hero h1 span { display: block; white-space: normal; overflow-wrap: anywhere; text-wrap: balance; }
+.homepage-hero--animated h1 span { animation: hero-title-reveal 780ms cubic-bezier(.16,1,.3,1) both; }
+.homepage-hero--animated h1 span+span { animation-delay: 150ms; }
 .homepage-hero h1 span:first-child {
   color: var(--hero-accent);
   background: linear-gradient(105deg,var(--hero-accent) 42%,#5bd79c 50%,var(--hero-accent) 58%);
@@ -294,6 +312,8 @@ onBeforeUnmount(() => {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.homepage-hero--animated h1 span:first-child {
   animation: hero-title-reveal 780ms cubic-bezier(.16,1,.3,1) both,hero-title-sheen 1500ms ease 450ms both;
 }
 .homepage-hero .homepage-hero__description { max-width: 44cqw; margin-top: 28px; color: #edf1ee; font-size: clamp(14px,1.4cqw,20px); line-height: 1.6; text-wrap: pretty; }

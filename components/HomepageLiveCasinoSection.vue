@@ -64,7 +64,7 @@ function categoryIcon(key: string) {
             :to="`/entertainment/live-casino/${game.category}`"
             class="text-[#e1e9e4] light:text-[#10261c] hover:text-[#009440] hover:bg-[#063523] light:hover:bg-[#e8f2ec] light:hover:text-[#009440]"
           >
-            <img :src="categoryIcon(game.key)" class="live-sidebar-icon" :alt="translate(game.key === 'sicbo' ? 'Sic Bo' : game.title)" width="28" height="28" decoding="async">
+            <img :src="categoryIcon(game.key)" class="live-sidebar-icon" :alt="translate(game.key === 'sicbo' ? 'Sic Bo' : game.title)" width="28" height="28" loading="lazy" decoding="async">
             <span>{{ translate(game.key === 'sicbo' ? 'Sic Bo' : game.title) }}</span>
           </NuxtLink>
         </div>

@@ -228,6 +228,8 @@ const isBasketball = computed(() => sportKey.value === 'basketball')
             :src="competitionLogo"
             :alt="fixture.sport_title || ''"
             class="sports-center-watermark"
+            width="64"
+            height="64"
             aria-hidden="true"
             loading="lazy"
             decoding="async"

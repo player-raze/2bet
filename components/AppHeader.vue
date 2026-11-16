@@ -35,9 +35,8 @@ const registerUrl = buildBybetRedirectUrl('registered', bybetBaseUrl, bybetRedir
       <img
         src="/brand/2bet-logo.webp"
         alt="2Bet"
-        width="210"
-        height="64"
-        fetchpriority="high"
+        width="148"
+        height="54"
         decoding="async"
       >
     </NuxtLink>

@@ -60,7 +60,7 @@ function getSourceFilesForPath(baseDir, urlPath) {
     return [resolve('data/bingo.ts'), resolve('pages/explore/egames/bingo')]
   }
   if (urlPath.startsWith('/entertainment/live-casino') || urlPath.startsWith('/explore/entertainment/live-casino')) {
-    return [resolve('data/live-casino.ts'), resolve('pages/explore/entertainment/live-casino')]
+    return [resolve('data/live-casino.ts'), resolve('data/live-casino-categories.ts'), resolve('pages/explore/entertainment/live-casino')]
   }
   if (urlPath.startsWith('/entertainment/poker') || urlPath.startsWith('/explore/entertainment/poker')) {
     return [resolve('data/poker.ts'), resolve('pages/explore/entertainment/poker')]
@@ -139,210 +139,13 @@ export async function generateSitemapFile(customSiteUrl, options = {}) {
     },
   })
 
-  let promotions = []
-  try {
-    const mod = jiti(path.join(rootDir, 'data/promotions.ts'))
-    promotions = mod.PROMOTIONS || []
-  } catch (err) {
-    console.warn('[sitemap] Failed to load data/promotions.ts with jiti, using fallback', err.message)
+  // Keep server/utils/sitemap.ts as the single source of truth so commented-out or edited routes stay excluded.
+  const sitemapMod = jiti(path.join(rootDir, 'server/utils/sitemap.ts'))
+  if (typeof sitemapMod?.getSitemapEntries !== 'function' || typeof sitemapMod?.formatSitemapPagesXml !== 'function' || typeof sitemapMod?.generateSitemapIndexXml !== 'function') {
+    throw new Error('[sitemap] Failed to load sitemap helpers from server/utils/sitemap.ts')
   }
 
-  let slotCategories = []
-  try {
-    const mod = jiti(path.join(rootDir, 'data/slots.ts'))
-    slotCategories = mod.SLOT_CATEGORIES || []
-  } catch (err) {
-    console.warn('[sitemap] Failed to load data/slots.ts with jiti, using fallback', err.message)
-  }
-
-  let liveCasinoCategories = []
-  try {
-    const mod = jiti(path.join(rootDir, 'data/live-casino.ts'))
-    liveCasinoCategories = mod.LIVE_CASINO_CATEGORIES || []
-  } catch (err) {
-    console.warn('[sitemap] Failed to load data/live-casino.ts with jiti, using fallback', err.message)
-  }
-
-  let bingoCategories = []
-  try {
-    const mod = jiti(path.join(rootDir, 'data/bingo.ts'))
-    bingoCategories = mod.BINGO_CATEGORIES || []
-  } catch (err) {
-    console.warn('[sitemap] Failed to load data/bingo.ts with jiti, using fallback', err.message)
-  }
-
-  let jackpotSections = []
-  try {
-    const mod = jiti(path.join(rootDir, 'data/jackpot.ts'))
-    jackpotSections = mod.JACKPOT_SECTIONS || []
-  } catch (err) {
-    console.warn('[sitemap] Failed to load data/jackpot.ts with jiti, using fallback', err.message)
-  }
-
-  let pokerCategories = []
-  try {
-    const mod = jiti(path.join(rootDir, 'data/poker.ts'))
-    pokerCategories = mod.POKER_CATEGORIES || []
-  } catch (err) {
-    console.warn('[sitemap] Failed to load data/poker.ts with jiti, using fallback', err.message)
-  }
-
-  const entries = [
-    // Core Homepage
-    { path: '/', changefreq: 'daily', priority: 1.0 },
-
-    // Primary E-Games & Casino Lobbies
-    { path: '/egames/slots', changefreq: 'daily', priority: 0.9 },
-    { path: '/egames/jackpot/all', changefreq: 'daily', priority: 0.9 },
-    { path: '/entertainment/live-casino/baccarat', changefreq: 'daily', priority: 0.9 },
-    { path: '/entertainment/poker', changefreq: 'daily', priority: 0.9 },
-
-    // Sports Betting
-    { path: '/sports/popular/inplay', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/popular/league', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/popular/upcoming', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/popular/pre-match', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/popular/outright', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/live', changefreq: 'hourly', priority: 0.9 },
-    { path: '/sports/live/basketball', changefreq: 'hourly', priority: 0.9 },
-    { path: '/sports/live/soccer', changefreq: 'hourly', priority: 0.9 },
-    { path: '/sports/live/tennis', changefreq: 'hourly', priority: 0.9 },
-    { path: '/sports/live/baseball', changefreq: 'hourly', priority: 0.9 },
-    { path: '/sports/basketball/league', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/basketball/upcoming', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/basketball/inplay', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/basketball/pre-match', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/soccer/league', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/soccer/upcoming', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/soccer/pre-match', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/baseball/league', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/baseball/upcoming', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/baseball/inplay', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/tennis/league', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/tennis/upcoming', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/tennis/inplay', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/tennis/pre-match', changefreq: 'hourly', priority: 0.8 },
-
-
-    // Promotions & Bonuses
-    { path: '/bonuses', changefreq: 'daily', priority: 0.8 },
-    { path: '/bonuses/most-popular', changefreq: 'daily', priority: 0.8 },
-    { path: '/bonuses/slots', changefreq: 'daily', priority: 0.8 },
-    { path: '/bonuses/live-casino', changefreq: 'daily', priority: 0.8 },
-    { path: '/bonuses/sports', changefreq: 'daily', priority: 0.8 },
-    { path: '/bonuses/others', changefreq: 'daily', priority: 0.8 },
-    { path: '/bonuses/deposit', changefreq: 'weekly', priority: 0.7 },
-    { path: '/bonuses/terms-and-condition', changefreq: 'monthly', priority: 0.5 },
-
-    // Game Rules
-    { path: '/game-rules/sports-betting-rules', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/football', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/basketball', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/tennis', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/baseball', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/badminton', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/table-tennis', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/parlays-multiples', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/cash-out', changefreq: 'monthly', priority: 0.7 },
-    { path: '/game-rules/outright', changefreq: 'monthly', priority: 0.7 },
-
-    // Tutorials
-    { path: '/tutorial', changefreq: 'monthly', priority: 0.7 },
-    { path: '/tutorial/mock-betting', changefreq: 'monthly', priority: 0.7 },
-    { path: '/tutorial/transactions/deposit', changefreq: 'monthly', priority: 0.7 },
-    { path: '/tutorial/transactions/withdraw', changefreq: 'monthly', priority: 0.7 },
-
-    // Trust, Compliance & Legal
-    { path: '/download-app', changefreq: 'weekly', priority: 0.8 },
-    { path: '/affiliate', changefreq: 'monthly', priority: 0.7 },
-    { path: '/egames/customer-service', changefreq: 'monthly', priority: 0.6 },
-
-    // Live Plaza
-    { path: '/live-plaza/home', changefreq: 'daily', priority: 0.7 },
-    { path: '/live-plaza/streamer', changefreq: 'daily', priority: 0.7 },
-    { path: '/live-plaza/expert-predictions', changefreq: 'daily', priority: 0.7 },
-    { path: '/live-plaza/experts', changefreq: 'daily', priority: 0.7 },
-    { path: '/account/me', changefreq: 'yearly', priority: 0.1 },
-  ]
-
-  // Dynamic Slot Categories
-  for (const cat of slotCategories) {
-    if (cat.key && cat.key !== 'home') {
-      entries.push({
-        path: `/egames/slots/${cat.key}`,
-        changefreq: 'daily',
-        priority: 0.8,
-      })
-    }
-  }
-
-  // Dynamic Jackpot Providers
-  for (const section of jackpotSections) {
-    if (section.id && section.id !== 'all') {
-      entries.push({
-        path: `/egames/jackpot/${section.id}`,
-        changefreq: 'daily',
-        priority: 0.8,
-      })
-    }
-  }
-
-  // Dynamic Bingo Categories
-  // for (const cat of bingoCategories) {
-  //   if (cat.key && cat.key !== 'home') {
-  //     entries.push({
-  //       path: `/egames/bingo/${cat.key}`,
-  //       changefreq: 'daily',
-  //       priority: 0.8,
-  //     })
-  //   }
-  // }
-
-  // Dynamic Live Casino Categories
-  for (const cat of liveCasinoCategories) {
-    if (cat.key && cat.key !== 'baccarat') {
-      entries.push({
-        path: `/entertainment/live-casino/${cat.key}`,
-        changefreq: 'daily',
-        priority: 0.8,
-      })
-    }
-  }
-
-  // Dynamic Poker Categories
-  entries.push({
-    path: '/entertainment/poker/all',
-    changefreq: 'daily',
-    priority: 0.8,
-  })
-  for (const cat of pokerCategories) {
-    if (cat.key) {
-      entries.push({
-        path: `/entertainment/poker/${cat.key}`,
-        changefreq: 'daily',
-        priority: 0.8,
-      })
-    }
-  }
-
-  // Dynamic Individual Bonus & Promotion Pages
-  for (const promo of promotions) {
-    if (promo.id) {
-      entries.push({
-        path: `/bonus/${promo.id}`,
-        changefreq: 'weekly',
-        priority: 0.8,
-      })
-    }
-  }
-
-  // Deduplicate entries by path
-  const seen = new Set()
-  const uniqueEntries = entries.filter((entry) => {
-    if (seen.has(entry.path)) return false
-    seen.add(entry.path)
-    return true
-  })
+  const uniqueEntries = sitemapMod.getSitemapEntries().map((entry) => ({ ...entry }))
 
   // Load existing sitemap dates and content hashes
   const datesFilePath = path.join(rootDir, 'data/sitemap-dates.json')
@@ -377,37 +180,8 @@ export async function generateSitemapFile(customSiteUrl, options = {}) {
     console.log('[sitemap] Updated data/sitemap-dates.json with latest modified dates')
   }
 
-  const xmlEntries = uniqueEntries
-    .map((entry) => {
-      const loc = `${siteUrl}${entry.path}`
-      const lastmod = entry.lastmod || today
-      return `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>${entry.changefreq}</changefreq>
-    <priority>${entry.priority.toFixed(1)}</priority>
-  </url>`
-    })
-    .join('\n')
-
-  const pagesXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${xmlEntries}
-</urlset>
-`
-
-  const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>${siteUrl}/sitemap-pages.xml</loc>
-    <lastmod>${today}</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>${siteUrl}/sitemap-blog.php</loc>
-    <lastmod>${today}</lastmod>
-  </sitemap>
-</sitemapindex>
-`
+  const pagesXml = sitemapMod.formatSitemapPagesXml(siteUrl, uniqueEntries, today)
+  const indexXml = sitemapMod.generateSitemapIndexXml(siteUrl, today)
 
   const writeAtomic = (targetFile, content) => {
     const dir = path.dirname(targetFile)

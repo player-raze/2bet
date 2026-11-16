@@ -14,8 +14,18 @@ useHead({
     {
       rel: 'preload',
       as: 'image',
-      href: '/hero/editorial/sports.webp',
+      href: '/hero/editorial/sports-mobile.webp',
+      media: '(max-width: 767px)',
       fetchpriority: 'high',
+      tagPriority: -2,
+    },
+    {
+      rel: 'preload',
+      as: 'image',
+      href: '/hero/editorial/sports.webp',
+      media: '(min-width: 768px)',
+      fetchpriority: 'high',
+      tagPriority: -2,
     },
   ],
 })

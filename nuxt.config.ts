@@ -59,7 +59,21 @@ export default defineNuxtConfig({
     bloggeristUrl: environment?.BLOGGERIST_URL || 'http://127.0.0.1:8082',
   },
   modules: ['@nuxtjs/tailwindcss'],
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css',
+    exposeConfig: false,
+    viewer: false,
+  },
   hooks: {
+    'build:manifest'(manifest) {
+      // Shared component CSS already inlined during SSR should not also emit render-blocking stylesheet links.
+      const inlineCoveredCss = /(?:RouletteEntryButton|JackpotCounter|UnderMaintenance|DepositReminderModal|LightModeTheme)\..*\.css$/
+      for (const entry of Object.values(manifest)) {
+        if (entry?.css?.length) {
+          entry.css = entry.css.filter((file: string) => !inlineCoveredCss.test(file))
+        }
+      }
+    },
     'pages:extend'(pages) {
       const extraPages: any[] = []
       for (const page of pages) {
@@ -114,7 +128,6 @@ export default defineNuxtConfig({
     '@fontsource/manrope/latin-600.css',
     '@fontsource/manrope/latin-700.css',
     '@fontsource/manrope/latin-800.css',
-    '~/assets/css/main.css',
   ],
   app: {
     head: {

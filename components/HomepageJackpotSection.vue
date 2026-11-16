@@ -7,7 +7,7 @@ import {
 import JackpotCounter from '~/components/jackpot/JackpotCounter.vue'
 import { HOMEPAGE_WINNERS, type HomepageWinner } from '~/data/homepage-winners'
 import usernamesList from '~/data/usernames.json'
-import { getProviderLogoForTheme } from '~/utils/providerLogo'
+import { getProviderLogoDimensions, getProviderLogoForTheme } from '~/utils/providerLogo'
 import { generateWinnerWinning } from '~/utils/winnerCurrency'
 import HomepagePartnerBanner from '~/components/HomepagePartnerBanner.vue'
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
@@ -22,6 +22,10 @@ const { displayAmount: jdbDisplay } = useJackpotCounter(JDB_JACKPOT_COUNTER)
 
 const themedLogo = (logo: string): string => {
   return getProviderLogoForTheme(logo, effectiveTheme.value)
+}
+
+const winnerLogoDimensions = (logo: string) => {
+  return getProviderLogoDimensions(logo, effectiveTheme.value)
 }
 
 const PROVIDERS_POOL = [
@@ -113,6 +117,8 @@ onBeforeUnmount(() => {
             :alt="translate('Jackpot')"
             width="28"
             height="28"
+            loading="lazy"
+            decoding="async"
           />
           {{ translate('Top Jackpots') }}
         </h2>
@@ -241,6 +247,8 @@ onBeforeUnmount(() => {
                   <img
                     :src="themedLogo(winner.providerLogo)"
                     :alt="winner.provider"
+                    :width="winnerLogoDimensions(winner.providerLogo).width"
+                    :height="winnerLogoDimensions(winner.providerLogo).height"
                     class="winner-provider-img"
                     loading="lazy"
                     decoding="async"

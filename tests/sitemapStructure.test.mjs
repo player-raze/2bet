@@ -277,4 +277,39 @@ describe('Sitemap Architecture & Structure Suite', () => {
       await generateSitemapFile()
     }
   })
+
+  test('Case 13: commented-out pending paths in server/utils/sitemap.ts stay excluded from generated sitemap', async () => {
+    const sitemapMod = jiti(path.join(rootDir, 'server/utils/sitemap.ts'))
+    const { generateSitemapFile } = await import('../scripts/generate-sitemap.mjs')
+
+    const res = await generateSitemapFile('https://2bet.com')
+    const pagesXml = fs.readFileSync(res.pagesPath, 'utf8')
+    const generatedLocs = [...pagesXml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1])
+    const expectedLocs = sitemapMod.getSitemapEntries().map(e => `https://2bet.com${e.path}`)
+
+    assert.deepEqual(generatedLocs, expectedLocs, 'Generated sitemap URLs must match server/utils/sitemap.ts 1:1')
+
+    const commentedOutPaths = [
+      '/sports/popular/outright',
+      '/sports/basketball',
+      '/sports/soccer',
+      '/sports/baseball',
+      '/sports/tennis',
+      '/tutorial/transactions/deposit',
+      '/tutorial/transactions/withdraw',
+      '/responsible-gaming',
+      '/privacy-policy',
+      '/terms-of-use',
+      '/help/contact-us',
+      '/legal/general-terms',
+      '/legal/cookie-policy',
+    ]
+
+    for (const p of commentedOutPaths) {
+      assert.ok(!generatedLocs.includes(`https://2bet.com${p}`), `${p} must stay excluded while commented out`)
+    }
+    assert.ok(!generatedLocs.some(loc => loc.includes('/egames/bingo/')), 'Commented-out bingo routes must stay excluded')
+    assert.ok(generatedLocs.includes('https://2bet.com/about-us'), 'Active /about-us route from server/utils/sitemap.ts must be included')
+    assert.ok(generatedLocs.includes('https://2bet.com/bonuses/new-member'), 'Active /bonuses/new-member route from server/utils/sitemap.ts must be included')
+  })
 })

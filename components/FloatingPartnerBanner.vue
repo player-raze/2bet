@@ -19,8 +19,9 @@ const visible = useState('floating-partner-banner-visible', () => true)
       <img
         src="/images/affiliate/partner-floating.webp"
         alt="Seja Parceiro Agora — 2bet"
-        width="418"
-        height="627"
+        width="220"
+        height="220"
+        fetchpriority="low"
         decoding="async"
       >
     </a>

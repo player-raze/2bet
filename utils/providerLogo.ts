@@ -40,6 +40,50 @@ const lightProviderLogoByDefault: Readonly<Record<string, string>> = {
   '/images/providers/ks.png': '/images/providers/light/ks.png',
 }
 
+export interface ProviderLogoDimensions {
+  width: number
+  height: number
+}
+
+const providerLogoDimensionsByPath: Readonly<Record<string, ProviderLogoDimensions>> = {
+  '/images/providers/2bet.webp': { width: 120, height: 120 },
+  '/images/providers/ai-casino.webp': { width: 120, height: 120 },
+  '/images/providers/bs.webp': { width: 112, height: 112 },
+  '/images/providers/choice.webp': { width: 84, height: 84 },
+  '/images/providers/cq9.webp': { width: 120, height: 120 },
+  '/images/providers/db.webp': { width: 107, height: 40 },
+  '/images/providers/jdb.webp': { width: 112, height: 112 },
+  '/images/providers/jili.webp': { width: 84, height: 84 },
+  '/images/providers/ks.webp': { width: 107, height: 40 },
+  '/images/providers/ky.webp': { width: 107, height: 40 },
+  '/images/providers/lgd.webp': { width: 84, height: 82 },
+  '/images/providers/mg-plus.webp': { width: 84, height: 84 },
+  '/images/providers/mg.webp': { width: 84, height: 84 },
+  '/images/providers/netent.webp': { width: 120, height: 120 },
+  '/images/providers/pg.webp': { width: 112, height: 112 },
+  '/images/providers/pp.webp': { width: 84, height: 84 },
+  '/images/providers/red-tiger.webp': { width: 84, height: 84 },
+  '/images/providers/v8.webp': { width: 107, height: 40 },
+  '/images/providers/light/2bet.webp': { width: 120, height: 120 },
+  '/images/providers/light/ai-casino.webp': { width: 120, height: 120 },
+  '/images/providers/light/bs.webp': { width: 112, height: 112 },
+  '/images/providers/light/choice.webp': { width: 84, height: 84 },
+  '/images/providers/light/cq9.webp': { width: 120, height: 120 },
+  '/images/providers/light/db.webp': { width: 107, height: 40 },
+  '/images/providers/light/jdb.webp': { width: 112, height: 112 },
+  '/images/providers/light/jili.webp': { width: 84, height: 84 },
+  '/images/providers/light/ks.webp': { width: 107, height: 40 },
+  '/images/providers/light/ky.webp': { width: 107, height: 40 },
+  '/images/providers/light/lgd.webp': { width: 120, height: 119 },
+  '/images/providers/light/mg-plus.webp': { width: 112, height: 112 },
+  '/images/providers/light/mg.webp': { width: 112, height: 112 },
+  '/images/providers/light/netent.webp': { width: 120, height: 120 },
+  '/images/providers/light/pg.webp': { width: 84, height: 84 },
+  '/images/providers/light/pp.webp': { width: 84, height: 84 },
+  '/images/providers/light/red-tiger.webp': { width: 120, height: 120 },
+  '/images/providers/light/v8.webp': { width: 107, height: 40 },
+}
+
 export const getProviderLogoForTheme = (
   providerLogo: string | undefined,
   theme: EffectiveTheme,
@@ -49,4 +93,12 @@ export const getProviderLogoForTheme = (
   }
 
   return lightProviderLogoByDefault[providerLogo] ?? providerLogo
+}
+
+export const getProviderLogoDimensions = (
+  providerLogo: string | undefined,
+  theme: EffectiveTheme,
+): ProviderLogoDimensions => {
+  const resolved = getProviderLogoForTheme(providerLogo, theme)
+  return providerLogoDimensionsByPath[resolved] ?? { width: 100, height: 38 }
 }

@@ -78,7 +78,9 @@ function stopMobileAutoplay() {
 function advanceMobileSlide() {
   if (isAutoplayPaused || props.itemCount <= 1 || typeof window === 'undefined' || document.hidden) return
   if (!mobileMediaQuery?.matches) return
-  updateMetrics()
+  if (!cachedStep) {
+    updateMetrics()
+  }
   const nextIndex = atEnd.value || firstVisible.value >= props.itemCount ? 0 : firstVisible.value
   goTo(nextIndex, false)
 }

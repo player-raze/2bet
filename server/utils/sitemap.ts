@@ -184,10 +184,13 @@ export function getSitemapEntries(): SitemapEntry[] {
     }))
 }
 
-export function generateSitemapXml(siteUrl: string, currentDate?: string): string {
+export function formatSitemapPagesXml(
+  siteUrl: string,
+  entries: SitemapEntry[],
+  currentDate?: string,
+): string {
   const normalizedSiteUrl = (siteUrl || 'https://2bet.com').replace(/\/+$/, '')
   const today = currentDate || new Date().toISOString().split('T')[0]
-  const entries = getSitemapEntries()
 
   const xmlEntries = entries
     .map((entry) => {
@@ -207,6 +210,10 @@ export function generateSitemapXml(siteUrl: string, currentDate?: string): strin
 ${xmlEntries}
 </urlset>
 `
+}
+
+export function generateSitemapXml(siteUrl: string, currentDate?: string): string {
+  return formatSitemapPagesXml(siteUrl, getSitemapEntries(), currentDate)
 }
 
 export const generateSitemapPagesXml = generateSitemapXml

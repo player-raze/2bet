@@ -114,12 +114,13 @@ const gradientId = useId ? useId() : `twobet-spin-${Math.random().toString(36).s
         <img
           :src="isDarkTheme ? '/brand/2bet-logo.webp' : '/brand/2bet-light.webp'"
           alt="2bet"
+          width="148"
+          height="54"
           class="2bet-spinner__logo select-none pointer-events-none object-contain"
           :style="{
             width: `${logoWidth}px`,
           }"
-          loading="eager"
-          fetchpriority="high"
+          decoding="async"
           draggable="false"
         />
       </div>

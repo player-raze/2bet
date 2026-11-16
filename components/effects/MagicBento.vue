@@ -46,8 +46,10 @@ function drawLights() {
   frame = undefined
   if (!point || reducedMotion?.matches || !finePointer?.matches) return
   const radius = Math.max(40, props.spotlightRadius)
-  for (const card of cards) {
-    const rect = card.getBoundingClientRect()
+  const rects = cards.map(card => card.getBoundingClientRect())
+  for (let i = 0; i < cards.length; i++) {
+    const card = cards[i]!
+    const rect = rects[i]!
     const x = point.x - rect.left
     const y = point.y - rect.top
     const inside = x >= 0 && y >= 0 && x <= rect.width && y <= rect.height

@@ -14,6 +14,8 @@ const partnerLogos = computed(() => {
         ? '/responsible-gaming/technical-systems-testing-light.webp'
         : '/responsible-gaming/technical-systems-testing-dark.webp',
       heightClass: 'h-7',
+      width: 150,
+      height: 90,
     },
     {
       name: 'GamCare',
@@ -21,6 +23,8 @@ const partnerLogos = computed(() => {
         ? '/responsible-gaming/gamcare-light.webp'
         : '/responsible-gaming/gamcare-dark.webp',
       heightClass: 'h-6',
+      width: 150,
+      height: 90,
     },
     {
       name: 'Be Gamble Aware',
@@ -28,6 +32,8 @@ const partnerLogos = computed(() => {
         ? '/responsible-gaming/be-gamble-aware-light.webp'
         : '/responsible-gaming/be-gamble-aware-dark.webp',
       heightClass: 'h-6',
+      width: 150,
+      height: 90,
     },
     {
       name: '18 Plus',
@@ -35,6 +41,8 @@ const partnerLogos = computed(() => {
         ? '/responsible-gaming/18_plus_light.png'
         : '/responsible-gaming/18_plus_dark.png',
       heightClass: 'h-6',
+      width: 150,
+      height: 90,
     },
   ]
 })
@@ -173,8 +181,11 @@ onBeforeUnmount(() => {
               :key="logo.name"
               :src="logo.src"
               :alt="logo.name"
+              :width="logo.width"
+              :height="logo.height"
               :class="[logo.heightClass, 'w-auto object-contain opacity-85 hover:opacity-100 transition-opacity']"
               loading="lazy"
+              decoding="async"
             />
           </div>
         </Transition>
@@ -200,8 +211,11 @@ onBeforeUnmount(() => {
               <img
                 :src="footerBrandLogo"
                 alt="2Bet Logo"
+                width="108"
+                height="41"
                 class="h-6 sm:h-7 w-auto object-contain"
                 loading="lazy"
+                decoding="async"
               />
             </NuxtLink>
 
