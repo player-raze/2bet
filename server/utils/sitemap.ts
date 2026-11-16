@@ -76,8 +76,8 @@ export function getSitemapEntries(): SitemapEntry[] {
     // Tutorials
     { path: '/tutorial', changefreq: 'monthly', priority: 0.7 },
     { path: '/tutorial/mock-betting', changefreq: 'monthly', priority: 0.7 },
-    { path: '/tutorial/transactions/deposit', changefreq: 'monthly', priority: 0.7 },
-    { path: '/tutorial/transactions/withdraw', changefreq: 'monthly', priority: 0.7 },
+    // { path: '/tutorial/transactions/deposit', changefreq: 'monthly', priority: 0.7 },
+    // { path: '/tutorial/transactions/withdraw', changefreq: 'monthly', priority: 0.7 },
 
     // Trust, Compliance & Legal
     { path: '/about-us', changefreq: 'monthly', priority: 0.7 },
