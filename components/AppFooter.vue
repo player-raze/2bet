@@ -9,8 +9,10 @@ const partnerLogos = computed(() => {
   const isLight = effectiveTheme.value === 'light'
   return [
     {
-      name: 'DPO DPS',
-      src: '/responsible-gaming/dpo-dps.webp',
+      name: 'Technical Systems Testing',
+      src: isLight
+        ? '/responsible-gaming/technical-systems-testing-light.webp'
+        : '/responsible-gaming/technical-systems-testing-dark.webp',
       heightClass: 'h-7',
     },
     {
@@ -28,11 +30,11 @@ const partnerLogos = computed(() => {
       heightClass: 'h-6',
     },
     {
-      name: 'Technical Systems Testing',
+      name: '18 Plus',
       src: isLight
-        ? '/responsible-gaming/technical-systems-testing-light.webp'
-        : '/responsible-gaming/technical-systems-testing-dark.webp',
-      heightClass: 'h-7',
+        ? '/responsible-gaming/18_plus_light.png'
+        : '/responsible-gaming/18_plus_dark.png',
+      heightClass: 'h-6',
     },
   ]
 })
