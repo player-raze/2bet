@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { defineEventHandler, setResponseHeader, type H3Event } from 'h3'
+import { resolveRuntimeSiteUrl } from '~/server/utils/siteUrl'
 
 async function readCustomRobotsTxt(): Promise<string | null> {
   const candidates = [
@@ -21,7 +22,7 @@ async function readCustomRobotsTxt(): Promise<string | null> {
 export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig(event)
   const isIndexFollow = Boolean(config.public.indexFollow)
-  const siteUrl = String(config.public.siteUrl || 'https://2bet.com').replace(/\/+$/, '')
+  const siteUrl = await resolveRuntimeSiteUrl(event)
 
   setResponseHeader(event, 'content-type', 'text/plain; charset=utf-8')
 

@@ -169,4 +169,35 @@ describe('Sitemap Architecture & Structure Suite', () => {
       fs.rmSync(tmpDir, { recursive: true, force: true })
     }
   })
+
+  test('Case 11: sitemap generator and runtime routes read .env SITE_URL without stale static cache', async () => {
+    const { generateSitemapFile, readDotEnvMap } = await import('../scripts/generate-sitemap.mjs')
+    const os = await import('node:os')
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), '2bet-env-sitemap-'))
+    const envFile = path.join(tmpDir, '.env')
+    try {
+      fs.writeFileSync(envFile, 'SITE_NAME=\'2bet\'\nSITE_URL=https://2bet52.com/\nBYBET_REDIRECT_CODE=\n', 'utf8')
+      const parsed = readDotEnvMap(envFile)
+      assert.equal(parsed.SITE_URL, 'https://2bet52.com/')
+      assert.equal(parsed.BYBET_REDIRECT_CODE, '')
+
+      const res = await generateSitemapFile(undefined, { envPath: envFile })
+      assert.equal(res.siteUrl, 'https://2bet52.com')
+      const pagesContent = fs.readFileSync(res.pagesPath, 'utf8')
+      const indexContent = fs.readFileSync(res.indexPath, 'utf8')
+      assert.ok(pagesContent.includes('<loc>https://2bet52.com/</loc>'))
+      assert.ok(indexContent.includes('<loc>https://2bet52.com/sitemap-pages.xml</loc>'))
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true })
+      await generateSitemapFile(process.env.SITE_URL || 'https://2bet.com')
+    }
+
+    const nuxtConfig = fs.readFileSync(path.join(rootDir, 'nuxt.config.ts'), 'utf8')
+    assert.match(nuxtConfig, /\*\*\/sitemap-pages\.xml/)
+    assert.match(nuxtConfig, /\*\*\/sitemap-index\.xml/)
+
+    const siteUrlUtil = fs.readFileSync(path.join(rootDir, 'server/utils/siteUrl.ts'), 'utf8')
+    assert.match(siteUrlUtil, /resolveRuntimeSiteUrl/)
+    assert.match(siteUrlUtil, /readDotEnvValue\(['"]SITE_URL['"]\)/)
+  })
 })

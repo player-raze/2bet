@@ -7,6 +7,37 @@ import { createJiti } from 'jiti'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '..')
 
+export function readDotEnvMap(envPath = path.resolve(rootDir, '.env')) {
+  const parsed = {}
+  try {
+    if (!fs.existsSync(envPath)) return parsed
+    const content = fs.readFileSync(envPath, 'utf-8')
+    for (const line of content.split(/\r?\n/)) {
+      const match = line.match(/^[ \t]*([\w.-]+)[ \t]*=[ \t]*(.*)$/)
+      if (!match) continue
+      const key = match[1]
+      const rawVal = (match[2] ?? '').trim()
+      if (!rawVal) {
+        parsed[key] = ''
+        continue
+      }
+      const quoted = rawVal.match(/^(?:"([^"\r\n]*)"|'([^'\r\n]*)')/)
+      parsed[key] = quoted ? (quoted[1] ?? quoted[2] ?? '').trim() : rawVal.split('#')[0].trim()
+    }
+  } catch {
+    // Ignore unreadable .env
+  }
+  return parsed
+}
+
+const explicitEnvSiteUrl = (process.env.NUXT_PUBLIC_SITE_URL || process.env.SITE_URL || '').trim()
+
+for (const [key, val] of Object.entries(readDotEnvMap())) {
+  if (process.env[key] === undefined) {
+    process.env[key] = val
+  }
+}
+
 function getSourceFilesForPath(baseDir, urlPath) {
   const resolve = (...p) => path.join(baseDir, ...p)
   if (urlPath === '/') return [resolve('pages/index.vue'), resolve('data/homepage.ts')]
@@ -92,8 +123,13 @@ function computePathHash(baseDir, urlPath) {
   return hash.digest('hex')
 }
 
-export async function generateSitemapFile(customSiteUrl) {
-  const siteUrl = (customSiteUrl || process.env.SITE_URL || 'https://2bet.com').replace(/\/+$/, '')
+export async function generateSitemapFile(customSiteUrl, options = {}) {
+  const envFromFile = readDotEnvMap(options.envPath)
+  const fileSiteUrl = (envFromFile.NUXT_PUBLIC_SITE_URL || envFromFile.SITE_URL || '').trim()
+  const resolvedEnvSiteUrl = options.envPath
+    ? (fileSiteUrl || explicitEnvSiteUrl)
+    : (explicitEnvSiteUrl || fileSiteUrl || (process.env.NUXT_PUBLIC_SITE_URL || process.env.SITE_URL || '').trim())
+  const siteUrl = (customSiteUrl || resolvedEnvSiteUrl || 'https://2bet.com').replace(/\/+$/, '')
   const today = new Date().toISOString().split('T')[0]
 
   const jiti = createJiti(import.meta.url, {
