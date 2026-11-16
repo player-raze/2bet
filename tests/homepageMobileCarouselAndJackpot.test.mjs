@@ -64,6 +64,22 @@ describe('Jackpot 3-second interval and homepage mobile full-width 3s auto-slide
     assert.match(homepage, /id="promotions"[^>]*:mobile-autoplay-ms="3000"/)
   })
 
+  it('shows only 4 promotions in home > promotions', () => {
+    const homepagePromotions = read('data/homepage-promotions.ts')
+    const slugs = Array.from(homepagePromotions.matchAll(/slug:\s*'([^']+)'/g), match => match[1])
+    assert.equal(slugs.length, 4)
+    assert.deepEqual(slugs, [
+      'bonus-da-virada-8-x-9',
+      'seu-primeiro-deposito',
+      'bonus-diario-de-recuperacao',
+      'vip-privileges',
+    ])
+    assert.match(homepagePromotions, /presentation\.slice\(0,\s*4\)/)
+
+    const homepage = read('components/AllGamesHomepage.vue')
+    assert.match(homepage, /const promotions = HOMEPAGE_PROMOTIONS\.slice\(0,\s*4\)/)
+  })
+
   it('displays MobileBottomNav on /egames/customer-service in mobile mode', () => {
     const defaultLayout = read('layouts/default.vue')
     assert.doesNotMatch(
@@ -74,5 +90,34 @@ describe('Jackpot 3-second interval and homepage mobile full-width 3s auto-slide
     const mobileBottomNav = read('components/MobileBottomNav.vue')
     assert.match(mobileBottomNav, /to:\s*'\/egames\/customer-service'/)
     assert.match(mobileBottomNav, /isPathActive\(item\.to\)\s*\|\|\s*isPathActive\(`\/explore\$\{item\.to\}`\)/)
+  })
+
+  it('starts JDB jackpot at 1500 and resets to 1500 when hitting the 8000 ceiling', async () => {
+    const {
+      JDB_JACKPOT_COUNTER,
+      JILI_JACKPOT_COUNTER,
+      computeNextJackpotAmount,
+      normalizeHydratedJackpotAmount,
+    } = await import('../composables/useJackpotCounter.ts')
+
+    assert.equal(JDB_JACKPOT_COUNTER.initial(), 1_500)
+    assert.equal(JDB_JACKPOT_COUNTER.min, 1_500)
+    assert.equal(JDB_JACKPOT_COUNTER.max, 8_000)
+    assert.equal(JDB_JACKPOT_COUNTER.resetOnMax, true)
+
+    // Reaching or crossing 8000 resets JDB jackpot back to 1500 instead of stalling at 8k
+    assert.equal(computeNextJackpotAmount(8_000, JDB_JACKPOT_COUNTER, () => 0.1), 1_500)
+    assert.equal(computeNextJackpotAmount(7_999, JDB_JACKPOT_COUNTER, () => 0.5), 1_500)
+    // Below ceiling and at 1500 baseline moves upward cleanly without jumping back to old 2500 floor
+    const nextFromStart = computeNextJackpotAmount(1_500, JDB_JACKPOT_COUNTER, () => 0.5)
+    assert.ok(nextFromStart > 1_500 && nextFromStart < 1_510)
+
+    // Hydrating stale 8000 cache/server value resets cleanly to 1500
+    assert.equal(normalizeHydratedJackpotAmount(8_000, JDB_JACKPOT_COUNTER), 1_500)
+    assert.equal(normalizeHydratedJackpotAmount(4_200.5, JDB_JACKPOT_COUNTER), 4_200.5)
+
+    // Counters without resetOnMax keep existing clamp behavior
+    const jiliAtMax = computeNextJackpotAmount(15_000, JILI_JACKPOT_COUNTER, () => 0.5)
+    assert.ok(jiliAtMax < 15_000 && jiliAtMax > 14_980)
   })
 })

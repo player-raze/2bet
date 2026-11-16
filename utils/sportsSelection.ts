@@ -28,3 +28,37 @@ export function matchesSportsSelection(
   return false
 }
 
+type SportFixtureLike = { sport?: string; sport_key?: string }
+
+const FIXTURE_SPORT_LABELS: Record<string, string> = {
+  soccer: 'Football',
+  basketball: 'Basketball',
+  tennis: 'Tennis',
+  baseball: 'Baseball',
+}
+
+/** Normalize a fixture sport identifier to canonical lowercase key ('football' -> 'soccer'). */
+export function getFixtureSportKey(fixture: SportFixtureLike): string {
+  const rawSport = (fixture.sport || fixture.sport_key?.split('_')[0] || '').trim().toLowerCase()
+  return rawSport === 'football' ? 'soccer' : rawSport
+}
+
+/** Return the display label for a fixture sport key. */
+export function getFixtureSportLabel(fixture: SportFixtureLike): string {
+  return FIXTURE_SPORT_LABELS[getFixtureSportKey(fixture)] || 'Sports'
+}
+
+/** Prioritize football/soccer fixtures first while preserving relative order in each group. */
+export function prioritizeFootballFixtures<T extends SportFixtureLike>(fixtures: readonly T[]): T[] {
+  const football: T[] = []
+  const others: T[] = []
+  for (const fixture of fixtures) {
+    if (getFixtureSportKey(fixture) === 'soccer') {
+      football.push(fixture)
+    } else {
+      others.push(fixture)
+    }
+  }
+  return [...football, ...others]
+}
+

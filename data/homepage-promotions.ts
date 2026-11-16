@@ -52,19 +52,9 @@ const presentation: Array<{
     accentColor: '#8b5cf6',
     imagePosition: '76% center',
   },
-  {
-    id: 'share-and-earn',
-    tone: 'rankings',
-    bannerImage: '/images/promotions/share_and_earn_header.webp',
-    title: 'Programa Compartilhe e Ganhe',
-    description: 'Comissões Contínuas por Convite',
-    slug: 'share-and-earn',
-    accentColor: '#019440',
-    imagePosition: '76% center',
-  },
 ]
 
-export const HOMEPAGE_PROMOTIONS = presentation.map(visual => {
+export const HOMEPAGE_PROMOTIONS = presentation.slice(0, 4).map(visual => {
   const match = FEATURED_PROMOTIONS.find(promotion => promotion.id === visual.id || promotion.slug === visual.slug)
   return {
     ...visual,

@@ -14,10 +14,11 @@ import {
   getPromoHeaderUrl,
   type BonusDetail,
 } from '~/data/promotions'
+import { resolveSeoImageUrl } from '~/composables/useAppSeo'
 
 const route = useRoute()
 const { translate } = useSiteLocale()
-const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
+const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode, siteUrl: rawSiteUrl } = useRuntimeConfig().public
 const bybetRedirectUrl = `${(rawRedirectUrl || 'https://bybet.com').replace(/\/+$/, '')}/login?p=${bybetRedirectCode || 'xjSD'}`
 const { markAsViewed } = useViewedPromotions()
 const { selectedCurrency } = useBonusPayments()
@@ -82,7 +83,7 @@ const seoKeywords = computed(() => {
 
 const seoImage = computed(() => {
   const raw = bonusHeaderImageSrc.value || (typeof bonus.value.bannerImage === 'string' ? bonus.value.bannerImage : bonus.value.bannerImage?.banner) || bonus.value.thumbnailImage || '/brand/2bet-og.webp'
-  return raw.startsWith('http') ? raw : `https://2bet.com${raw}`
+  return resolveSeoImageUrl(raw, String(rawSiteUrl || 'https://2bet.com'))
 })
 
 const canonicalUrl = computed(() => `https://2bet.com/bonus/${bonus.value.slug}`)

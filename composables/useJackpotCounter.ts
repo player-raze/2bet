@@ -1,6 +1,6 @@
 const DEFAULT_JACKPOT_AMOUNTS: Record<string, number> = {
   mega: 1_008_450.25,
-  jdb: 4_147.80,
+  jdb: 1_500,
   jili: 8_017.37,
   cq9: 6_503.35,
   grand: 354_120.50,
@@ -27,8 +27,10 @@ export interface JackpotCounterOptions {
   initialDelayMs?: readonly [number, number]
   /** Minimum baseline amount; when at or below this, the counter only increases. */
   min?: number
-  /** Maximum threshold; when at or above this, the counter only decreases. */
+  /** Maximum threshold; when at or above this, the counter only decreases (or resets if resetOnMax is true). */
   max?: number
+  /** When true, reaching or exceeding `max` resets the counter back to `min` instead of clamping near `max`. */
+  resetOnMax?: boolean
 }
 
 interface ActiveTicker {
@@ -94,6 +96,54 @@ const getInitialJackpotAmount = (key: string, fallback: number): number => {
   return typeof value === 'number' && !Number.isNaN(value) ? value : fallback
 }
 
+/** Normalize a cached or persisted jackpot amount against configured min/max and reset-on-max bounds. */
+export const normalizeHydratedJackpotAmount = (
+  value: number,
+  options: Pick<JackpotCounterOptions, 'min' | 'max' | 'resetOnMax'>,
+): number | null => {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) return null
+  const minBound = options.min ?? 0
+  const maxBound = options.max ?? Number.POSITIVE_INFINITY
+  if (options.resetOnMax && value >= maxBound) return toCents(minBound)
+  if (value < minBound) return toCents(minBound)
+  if (value > maxBound) return toCents(maxBound)
+  return toCents(value)
+}
+
+/** Advance a jackpot counter by one tick, resetting back to `min` when `resetOnMax` triggers at `max`. */
+export const computeNextJackpotAmount = (
+  current: number,
+  options: Pick<JackpotCounterOptions, 'min' | 'max' | 'step' | 'decreaseStep' | 'increaseProbability' | 'resetOnMax'>,
+  randomFn: () => number = Math.random,
+): number => {
+  const minBound = options.min ?? 0
+  const maxBound = options.max ?? Number.POSITIVE_INFINITY
+  if (options.resetOnMax && current >= maxBound) {
+    return toCents(minBound)
+  }
+
+  let isIncrease: boolean
+  if (current <= minBound) {
+    isIncrease = true
+  } else if (current >= maxBound) {
+    isIncrease = false
+  } else {
+    const prob = options.increaseProbability ?? 0.6
+    isIncrease = randomFn() < prob
+  }
+
+  const deltaRange = isIncrease
+    ? options.step
+    : (options.decreaseStep ?? [options.step[0] * 0.7, options.step[1] * 0.85])
+
+  const delta = deltaRange[0] + randomFn() * (deltaRange[1] - deltaRange[0])
+  const nextRaw = isIncrease ? current + delta : current - delta
+  if (options.resetOnMax && nextRaw >= maxBound) {
+    return toCents(minBound)
+  }
+  return toCents(Math.max(minBound, Math.min(maxBound, nextRaw)))
+}
+
 export const MEGA_JACKPOT_COUNTER: JackpotCounterOptions = {
   key: 'mega',
   initial: () => getInitialJackpotAmount('mega', 1_008_450.25),
@@ -108,9 +158,10 @@ export const MEGA_JACKPOT_COUNTER: JackpotCounterOptions = {
 
 export const JDB_JACKPOT_COUNTER: JackpotCounterOptions = {
   key: 'jdb',
-  initial: () => getInitialJackpotAmount('jdb', 3_015.46),
-  min: 2_500,
+  initial: () => getInitialJackpotAmount('jdb', 1_500),
+  min: 1_500,
   max: 8_000,
+  resetOnMax: true,
   step: [0.5, 6],
   decreaseStep: [0.3, 4.5],
   increaseProbability: 0.6,
@@ -202,7 +253,9 @@ export const useJackpotCounter = (options: JackpotCounterOptions) => {
     }
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion || from === target) {
+    const maxDecreaseStep = Math.max(...(options.decreaseStep ?? options.step))
+    const isResetJump = Boolean(options.resetOnMax && target === toCents(options.min ?? 0) && from - target > maxDecreaseStep)
+    if (prefersReducedMotion || from === target || isResetJump) {
       displayAmount.value = target
       return
     }
@@ -231,27 +284,7 @@ export const useJackpotCounter = (options: JackpotCounterOptions) => {
     const waitTime = delay ?? randomBetween(minDelay, maxDelay)
     ticker.timer = setTimeout(() => {
       if (!document.hidden) {
-        const current = amount.value
-        const minBound = options.min ?? 0
-        const maxBound = options.max ?? Number.POSITIVE_INFINITY
-
-        let isIncrease: boolean
-        if (current <= minBound) {
-          isIncrease = true
-        } else if (current >= maxBound) {
-          isIncrease = false
-        } else {
-          const prob = options.increaseProbability ?? 0.6
-          isIncrease = Math.random() < prob
-        }
-
-        const deltaRange = isIncrease
-          ? options.step
-          : (options.decreaseStep ?? [options.step[0] * 0.7, options.step[1] * 0.85])
-
-        const delta = randomBetween(deltaRange[0], deltaRange[1])
-        const nextRaw = isIncrease ? current + delta : current - delta
-        amount.value = toCents(Math.max(minBound, Math.min(maxBound, nextRaw)))
+        amount.value = computeNextJackpotAmount(amount.value, options)
         queueJackpotSave(options.key, amount.value)
       }
       scheduleTick(ticker)
@@ -266,8 +299,12 @@ export const useJackpotCounter = (options: JackpotCounterOptions) => {
       const cached = localStorage.getItem(`2bet-jackpot:${options.key}`) || localStorage.getItem(`bybet-jackpot:${options.key}`)
       if (cached) {
         const parsed = Number(cached)
-        if (!Number.isNaN(parsed) && parsed > 0) {
-          amount.value = parsed
+        const normalized = normalizeHydratedJackpotAmount(parsed, options)
+        if (normalized !== null) {
+          amount.value = normalized
+          if (Math.abs(normalized - parsed) > 0.01) {
+            queueJackpotSave(options.key, normalized)
+          }
         }
       }
     }
@@ -277,13 +314,19 @@ export const useJackpotCounter = (options: JackpotCounterOptions) => {
     fetchLatestJackpots().then((serverData) => {
       if (serverData && typeof serverData[options.key] === 'number') {
         const serverVal = serverData[options.key]
-        if (serverVal > 0 && Math.abs(serverVal - amount.value) > 0.01) {
-          amount.value = serverVal
-          displayAmount.value = serverVal
-          if (typeof localStorage !== 'undefined') {
-            try {
-              localStorage.setItem(`2bet-jackpot:${options.key}`, String(serverVal))
-            } catch {}
+        const normalized = normalizeHydratedJackpotAmount(serverVal, options)
+        if (normalized !== null) {
+          if (Math.abs(normalized - amount.value) > 0.01) {
+            amount.value = normalized
+            displayAmount.value = normalized
+            if (typeof localStorage !== 'undefined') {
+              try {
+                localStorage.setItem(`2bet-jackpot:${options.key}`, String(normalized))
+              } catch {}
+            }
+          }
+          if (Math.abs(normalized - serverVal) > 0.01) {
+            queueJackpotSave(options.key, normalized)
           }
         }
       }

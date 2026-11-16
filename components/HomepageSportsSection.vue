@@ -4,6 +4,7 @@ import HomepageContentSlider from '~/components/HomepageContentSlider.vue'
 import HomepageSportsCard from '~/components/HomepageSportsCard.vue'
 import { getTournamentLogo } from '~/data/sports'
 import type { SportsEvent } from '~/types/sports'
+import { getFixtureSportKey, getFixtureSportLabel, prioritizeFootballFixtures } from '~/utils/sportsSelection'
 
 const props = defineProps<{ fixtures: SportsEvent[] }>()
 const { translate } = useSiteLocale()
@@ -82,27 +83,19 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', handleFilterOu
 
 function matchesSportFilter(fixture: SportsEvent, filterKey: string): boolean {
   if (filterKey === 'all') return true
-  const rawSport = (fixture.sport || fixture.sport_key?.split('_')[0] || '').toLowerCase()
-  if (filterKey === 'soccer') {
-    return rawSport === 'soccer' || rawSport === 'football'
-  }
-  return rawSport === filterKey
+  return getFixtureSportKey(fixture) === filterKey
 }
 
-const availableFixtures = computed(() => props.fixtures.filter(fixture => fixture.home_team && fixture.away_team))
+const availableFixtures = computed(() => prioritizeFootballFixtures(
+  props.fixtures.filter(fixture => fixture.home_team && fixture.away_team),
+))
 const fixtureCount = (sport: string) => availableFixtures.value.filter(fixture => matchesSportFilter(fixture, sport)).length
 const sportLabel = computed(() => filters.find(filter => filter.key === activeSport.value)?.label || 'All Sports')
 const matches = computed(() => availableFixtures.value.filter(fixture => matchesSportFilter(fixture, activeSport.value)))
 const currentFixture = (position: number) => matches.value[position - 1] || matches.value[0]
 const currentSport = (position: number) => {
   const fixture = currentFixture(position)
-  if (!fixture) return 'Sports'
-  const rawSport = (fixture.sport || fixture.sport_key?.split('_')[0] || '').toLowerCase()
-  if (rawSport === 'soccer' || rawSport === 'football') return 'Football'
-  if (rawSport === 'basketball') return 'Basketball'
-  if (rawSport === 'baseball') return 'Baseball'
-  if (rawSport === 'tennis') return 'Tennis'
-  return 'Sports'
+  return fixture ? getFixtureSportLabel(fixture) : 'Sports'
 }
 const viewAllTarget = computed(() => {
   if (activeSport.value === 'all') return '/sports/live'
@@ -177,7 +170,7 @@ const viewAllTarget = computed(() => {
           </div>
         </div>
         <div v-if="currentFixture(firstVisible)" class="sports-browse-league flex items-center" :class="{ 'sports-browse-league--nba': currentFixture(firstVisible)!.sport_key.includes('_nba') }">
-          <img :src="getTournamentLogo(currentFixture(firstVisible)!.sport_key)" :alt="currentFixture(firstVisible)!.sport_title" width="30" height="42" loading="lazy">
+          <img :src="currentFixture(firstVisible)!.competition_logo || getTournamentLogo(`${currentFixture(firstVisible)!.sport || ''} ${currentFixture(firstVisible)!.sport_title || ''} ${currentFixture(firstVisible)!.sport_key || ''}`)" :alt="currentFixture(firstVisible)!.sport_title" width="30" height="42" loading="lazy">
           <div class="min-w-0"><strong class="text-white light:text-[#10261c]">{{ currentFixture(firstVisible)!.sport_title }}</strong><span class="text-[#8ca89a] light:text-[#5d7066]">{{ translate(currentSport(firstVisible)) }}</span></div>
         </div>
       </aside>
@@ -243,7 +236,7 @@ const viewAllTarget = computed(() => {
 .homepage-sports-section--basketball .sports-progress > span { background: #ff5252; }
 .sports-browse-league { grid-column: 2; grid-row: 2; gap: 12px; min-width: 0; }
 .sports-browse-league img { width: 26px; height: 40px; flex-shrink: 0; object-fit: contain; }
-.sports-browse-league--nba img { width: 22px; height: 42px; object-fit: cover; }
+.sports-browse-league--nba img { width: 30px; height: 42px; object-fit: contain; }
 .sports-browse-league strong { display: block; font-size: 14px; font-weight: 800; line-height: 1.3; overflow-wrap: anywhere; }
 .sports-browse-league div > span { display: block; margin-top: 2px; color: var(--sports-muted); font-size: 12px; }
 .sports-toolbar { grid-column: 1; grid-row: 3; gap: 12px; min-width: 0; min-height: 28px; }

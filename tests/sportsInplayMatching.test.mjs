@@ -3,9 +3,15 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { matchesSportsSelection } from '../utils/sportsSelection.ts'
+import {
+  getFixtureSportKey,
+  getFixtureSportLabel,
+  matchesSportsSelection,
+  prioritizeFootballFixtures,
+} from '../utils/sportsSelection.ts'
 import { getSportsTabRedirectPath, resolveSportsTabRedirectUrl, getEnvRedirectUrl } from '../utils/sportsRedirect.ts'
 import { useSportsRouteBase } from '../composables/useSportsRouteBase.ts'
+import { SAMPLE_SPORTS, getTournamentLogo } from '../data/sports.ts'
 
 describe('Sports In-Play Matching & Football Route Suite', () => {
   const kadarioBasketballEvent = {
@@ -155,5 +161,51 @@ describe('Sports In-Play Matching & Football Route Suite', () => {
       /matchesSportsSelection\(event,\s*effectiveSelectedSports\.value\)/,
     )
     assert.match(popularSource, /football:\s*['"]Soccer['"]/)
+  })
+
+  test('Case 13: homepage sports section prioritizes football/soccer fixtures ahead of other sports while preserving relative order', () => {
+    const mixedFixtures = [
+      { id: 'b1', sport: 'basketball', sport_key: 'basketball_nba' },
+      { id: 'f1', sport: 'football', sport_key: 'football_kadario_20' },
+      { id: 't1', sport: 'tennis', sport_key: 'tennis_atp' },
+      { id: 's1', sport: '', sport_key: 'soccer_epl' },
+      { id: 'b2', sport: 'basketball', sport_key: 'basketball_euroleague' },
+    ]
+    const ordered = prioritizeFootballFixtures(mixedFixtures)
+    assert.deepEqual(ordered.map(item => item.id), ['f1', 's1', 'b1', 't1', 'b2'])
+    assert.equal(getFixtureSportKey(mixedFixtures[1]), 'soccer')
+    assert.equal(getFixtureSportLabel(mixedFixtures[1]), 'Football')
+    assert.equal(getFixtureSportLabel(mixedFixtures[3]), 'Football')
+    assert.equal(getFixtureSportLabel(mixedFixtures[0]), 'Basketball')
+
+    const homepageSportsSource = fs.readFileSync(
+      path.resolve(process.cwd(), 'components/HomepageSportsSection.vue'),
+      'utf-8',
+    )
+    assert.match(homepageSportsSource, /prioritizeFootballFixtures\(/)
+  })
+
+  test('Case 14: soccer leagues map to specific /images/sports logos that exist on disk without wrong-league fallback', () => {
+    const soccerEntries = SAMPLE_SPORTS.filter(sport => sport.group === 'Soccer')
+    assert.ok(soccerEntries.length > 0, 'SAMPLE_SPORTS must define Soccer entries')
+
+    for (const league of soccerEntries) {
+      const resolvedLogo = getTournamentLogo(league)
+      assert.ok(resolvedLogo.startsWith('/'), `Logo for ${league.key} must be a root-relative path`)
+      const filePath = path.resolve(process.cwd(), 'public', resolvedLogo.replace(/^\//, ''))
+      assert.equal(fs.existsSync(filePath), true, `Missing logo file for ${league.key}: ${resolvedLogo}`)
+    }
+
+    assert.equal(getTournamentLogo('soccer_conmebol_copa_sudamericana'), '/images/sports/suda americana.webp')
+    assert.equal(getTournamentLogo('soccer_belgium_first_div'), '/images/sports/belgium first div.webp')
+    assert.equal(getTournamentLogo('soccer_brazil_campeonato'), '/images/sports/brazil serie a.webp')
+    assert.equal(getTournamentLogo('soccer_brazil_serie_b'), '/images/sports/brazil serie b.webp')
+    assert.equal(getTournamentLogo('soccer_italy_serie_b'), '/images/sports/serie b.webp')
+    assert.equal(getTournamentLogo('soccer_france_ligue_two'), '/images/sports/france ligue 2.webp')
+    assert.equal(getTournamentLogo('soccer_russia_premier_league'), '/images/sports/russia premier league.webp')
+    assert.equal(getTournamentLogo('soccer_efl_champ'), '/images/sports/efl champions .webp')
+    assert.equal(getTournamentLogo('soccer_korea_kleague1'), '/images/sports/k league.webp')
+    assert.equal(getTournamentLogo('soccer_germany_dfb_pokal'), '/images/sports/pokal.webp')
+    assert.equal(getTournamentLogo('soccer_portugal_primeira_liga'), '/images/sports/portugal primeira.webp')
   })
 })

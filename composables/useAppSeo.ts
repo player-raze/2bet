@@ -423,6 +423,26 @@ export const isHomepageRoute = (routePath?: string): boolean => {
   return cleanPath === '/'
 }
 
+export const DEFAULT_OG_IMAGE_PATH = '/brand/2bet-og.webp'
+
+/** Resolve a relative SEO image path against siteUrl while preserving full external URLs. */
+export const resolveSeoImageUrl = (
+  rawImage: string | undefined | null,
+  siteUrl: string = 'https://2bet.com',
+  fallbackPath: string = DEFAULT_OG_IMAGE_PATH,
+): string => {
+  const baseOrigin = String(siteUrl || 'https://2bet.com').trim().replace(/\/+$/, '') || 'https://2bet.com'
+  const candidate = (typeof rawImage === 'string' ? rawImage.trim() : '') || fallbackPath
+  if (/^https?:\/\//i.test(candidate)) {
+    return candidate
+  }
+  if (candidate.startsWith('//')) {
+    return `https:${candidate}`
+  }
+  const normalizedPath = candidate.startsWith('/') ? candidate : `/${candidate}`
+  return `${baseOrigin}${normalizedPath}`
+}
+
 export const formatSeoDescription = (
   rawDescription: string | undefined,
   siteName: string = '2bet',
@@ -530,7 +550,8 @@ export const useAppSeo = (options: AppSeoOptions) => {
   })
 
   const image = computed(() => {
-    return resolveVal(options.image) || '/brand/2bet-og.webp'
+    const raw = resolveVal(options.image) || '/brand/2bet-og.webp'
+    return resolveSeoImageUrl(raw, siteUrl.value)
   })
 
   const canonicalUrl = computed(() => {
@@ -554,6 +575,7 @@ export const useAppSeo = (options: AppSeoOptions) => {
     title,
     ogTitle: title,
     ogSiteName: siteName,
+    ogUrl: canonicalUrl,
     twitterTitle: title,
     description,
     ogDescription: description,

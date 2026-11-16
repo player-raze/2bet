@@ -5,7 +5,21 @@ const returnDuration = 240
 
 function isMagnetExcluded(element: HTMLElement): boolean {
   for (let current: HTMLElement | null = element; current; current = current.parentElement) {
-    if (current.classList?.contains('getting-started-faq') || current.classList?.contains('allgames-footer')) return true
+    if (
+      current.classList?.contains('getting-started-faq')
+      || current.classList?.contains('allgames-footer')
+      || current.classList?.contains('homepage-slots-section')
+      || current.classList?.contains('homepage-sports-section')
+      || current.classList?.contains('homepage-slider-dots')
+      || current.classList?.contains('sports-preview')
+    ) return true
+  }
+  return false
+}
+
+function isSportsPreviewTarget(element: EventTarget | null): boolean {
+  for (let current = element as HTMLElement | null; current; current = current.parentElement) {
+    if (current.classList?.contains('sports-preview')) return true
   }
   return false
 }
@@ -29,6 +43,7 @@ export function setupHomepageMagnet(root: HTMLElement): () => void {
   // short pressed-state response when interacting with homepage controls.
   function press(event: PointerEvent) {
     if (event.pointerType !== 'touch' || !root.contains(event.target as Node)) return
+    if (isSportsPreviewTarget(event.target)) return
     const target = event.target instanceof view!.Element ? event.target.closest(controls) : null
     if (!(target instanceof view!.HTMLElement) || target.matches(':disabled, [aria-disabled="true"]')
       || target.closest('[inert]') || isMagnetExcluded(target)) return
@@ -68,6 +83,10 @@ export function setupHomepageMagnet(root: HTMLElement): () => void {
 
   function move(event: PointerEvent) {
     if (!motion.matches || event.pointerType !== 'mouse') return
+    if (isSportsPreviewTarget(event.target)) {
+      release()
+      return
+    }
     const target = event.target instanceof view!.Element ? event.target.closest(controls) : null
     if (!(target instanceof view!.HTMLElement) || !root.contains(target)
       || target.matches(':disabled, [aria-disabled="true"]')

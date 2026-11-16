@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ChevronLeft } from 'lucide-vue-next'
-import { formatSeoTitle, formatSeoDescription, isHomepageRoute } from '~/composables/useAppSeo'
+import { formatSeoTitle, formatSeoDescription, isHomepageRoute, resolveSeoImageUrl } from '~/composables/useAppSeo'
 
 interface Props {
   title: string
@@ -47,6 +47,8 @@ const siteName = computed(() =>
     .replace(/^['"]+|['"]+$/g, ''),
 )
 const siteUrl = computed(() => String(config.public.siteUrl || 'https://2bet.com').replace(/\/+$/, ''))
+const canonicalUrl = computed(() => `${siteUrl.value}${route.path || '/'}`)
+const resolvedOgImage = computed(() => resolveSeoImageUrl(props.ogImage, siteUrl.value))
 
 const isHomepage = computed(() => isHomepageRoute(route.path))
 
@@ -99,14 +101,15 @@ if (props.metaTitle || props.description) {
     title: fullTitle,
     ogTitle: fullTitle,
     ogSiteName: siteName,
+    ogUrl: canonicalUrl,
     description: fullDescription,
     ogDescription: fullDescription,
     keywords,
-    ogImage: () => props.ogImage,
+    ogImage: resolvedOgImage,
     ogType: () => props.ogType || 'website',
     twitterTitle: fullTitle,
     twitterDescription: fullDescription,
-    twitterImage: () => props.ogImage,
+    twitterImage: resolvedOgImage,
     twitterCard: 'summary_large_image',
     robots,
   })
@@ -116,7 +119,7 @@ useHead(() => ({
   link: [
     {
       rel: 'canonical',
-      href: `${siteUrl.value}${route.path}`,
+      href: canonicalUrl.value,
     },
   ],
 }))

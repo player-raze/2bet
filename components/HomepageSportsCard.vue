@@ -2,6 +2,7 @@
 import { ArrowRight } from 'lucide-vue-next'
 import { getTournamentLogo } from '~/data/sports'
 import type { SportsEvent } from '~/types/sports'
+import { getFixtureSportKey, getFixtureSportLabel } from '~/utils/sportsSelection'
 
 const props = withDefaults(defineProps<{ fixture: SportsEvent; highlighted?: boolean }>(), { highlighted: false })
 const { timeZone } = useTimeZonePreference()
@@ -164,26 +165,10 @@ const teams = computed(() => [
 const competitionLogo = computed(() => {
   return props.fixture.competition_logo || getTournamentLogo(`${props.fixture.sport || ''} ${props.fixture.sport_title || ''} ${props.fixture.sport_key || ''}`)
 })
-const destination = computed(() => {
-  const rawSport = (props.fixture.sport || props.fixture.sport_key?.split('_')[0] || 'basketball').toLowerCase()
-  const sport = rawSport === 'football' ? 'soccer' : rawSport
-  return `/sports/${sport}/inplay`
-})
-const sportName = computed(() => {
-  const rawSport = (props.fixture.sport || props.fixture.sport_key?.split('_')[0] || '').toLowerCase()
-  const names: Record<string, string> = {
-    basketball: 'Basketball',
-    soccer: 'Football',
-    football: 'Football',
-    tennis: 'Tennis',
-    baseball: 'Baseball',
-  }
-  return translate(names[rawSport] || 'Sports')
-})
-const isBasketball = computed(() => {
-  const rawSport = (props.fixture.sport || props.fixture.sport_key?.split('_')[0] || '').toLowerCase()
-  return rawSport === 'basketball'
-})
+const sportKey = computed(() => getFixtureSportKey(props.fixture))
+const destination = computed(() => `/sports/${sportKey.value || 'basketball'}/inplay`)
+const sportName = computed(() => translate(getFixtureSportLabel(props.fixture)))
+const isBasketball = computed(() => sportKey.value === 'basketball')
 </script>
 
 <template>
@@ -205,7 +190,7 @@ const isBasketball = computed(() => {
   >
     <div class="sports-match-heading flex items-center justify-between border-b border-white/[0.07] light:border-b-[#009440]/15 bg-gradient-to-b from-[#1a2b2b] to-[#0a1718] light:from-white light:to-[#eaf5ee]">
       <span class="sports-league flex items-center min-w-0">
-        <img :src="getTournamentLogo(fixture.sport_key)" :class="{ 'sports-league-logo--nba': fixture.sport_key.includes('_nba') }" :alt="fixture.sport_title || sportName" width="18" height="26" loading="lazy" decoding="async">
+        <img :src="competitionLogo" :class="{ 'sports-league-logo--nba': fixture.sport_key.includes('_nba') }" :alt="fixture.sport_title || sportName" width="18" height="26" loading="lazy" decoding="async">
         <span class="sports-league-copy flex items-center min-w-0 text-[#e8eeeb] light:text-[#2a3c33]"><strong :title="fixture.sport_title">{{ fixture.sport_title }}</strong><span aria-hidden="true">&middot;</span><span class="sports-league-sport">{{ sportName }}</span></span>
       </span>
       <span class="sports-match-status inline-flex items-center" :class="{ 'sports-match-status--live': isLive }">
@@ -294,7 +279,7 @@ const isBasketball = computed(() => {
 .sports-match-heading { min-height: 40px; gap: 10px; padding: 5px 12px; }
 .sports-league { gap: 7px; }
 .sports-league img { flex-shrink: 0; width: 15px; height: 26px; object-fit: contain; }
-.sports-league img.sports-league-logo--nba { object-fit: cover; }
+.sports-league img.sports-league-logo--nba { width: 22px; height: 22px; object-fit: contain; }
 .sports-league-copy { gap: 5px; font-size: 10px; line-height: 1.3; }
 .sports-league strong { min-width: 0; overflow: hidden; max-width: 90px; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; }
 .sports-league-sport { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

@@ -157,7 +157,7 @@ export const JACKPOT_SECTIONS: JackpotSection[] = [
     count: 30,
     jackpotCharacter: 'panda',
     showCounter: true,
-    jackpotAmount: 3015.46,
+    jackpotAmount: 1500,
     games: [
       {
         id: 'piggy-bank',

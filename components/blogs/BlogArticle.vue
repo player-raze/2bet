@@ -9,6 +9,7 @@ import BlogImage from './BlogImage.vue'
 import { formatBlogReadTime } from './formatReadTime'
 import type { BlogPost } from '~/types/blog'
 import { extractBlogFaqSchema } from '~/utils/blog-content'
+import { resolveSeoImageUrl } from '~/composables/useAppSeo'
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 interface BlogDetailResponse {
@@ -127,11 +128,14 @@ const shareLinks = computed(() => {
 
 const faqSchema = computed(() => (post.value ? extractBlogFaqSchema(post.value, canonical.value, data.value) : null))
 
+const ogImage = computed(() => resolveSeoImageUrl(post.value?.featuredImage, siteUrl.value))
+
 useSeoMeta({
   title: metaTitle, ogTitle: metaTitle, twitterTitle: metaTitle,
+  ogUrl: canonical,
   description, ogDescription: description, twitterDescription: description,
-  ogImage: () => post.value?.featuredImage || '/brand/2bet-logo.webp',
-  twitterImage: () => post.value?.featuredImage || '/brand/2bet-logo.webp',
+  ogImage,
+  twitterImage: ogImage,
   ogType: 'article', twitterCard: 'summary_large_image',
   articlePublishedTime: () => post.value?.publishedAt || undefined,
   articleModifiedTime: () => post.value?.updatedAt || undefined,

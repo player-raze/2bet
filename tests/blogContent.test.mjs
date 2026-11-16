@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { blogDate, blogUrl, extractBlogFaqSchema, isPublishedBlog, normalizeBlogPost, sanitizeBlogHtml } from '../utils/blog-content.ts'
+import { resolveSeoImageUrl } from '../composables/useAppSeo.ts'
 
 const origin = 'http://127.0.0.1:8082'
 
@@ -188,12 +189,19 @@ test('OG image configurations across routes', async () => {
   const seoHeaderVue = fs.readFileSync(path.resolve(process.cwd(), 'components/SeoHeader.vue'), 'utf-8')
   assert.match(seoHeaderVue, /ogImage:\s*['"]\/brand\/2bet-og\.webp['"]/, 'SeoHeader must default to /brand/2bet-og.webp')
 
-  // Verify blog listing pages (/blogs, /blogs/{category}) use /brand/2bet-og.webp
+  // Verify blog listing pages (/blogs, /blogs/{category}) resolve /brand/2bet-og.webp to an absolute URL
   const listingVue = fs.readFileSync(path.resolve(process.cwd(), 'components/blogs/BlogListing.vue'), 'utf-8')
-  assert.match(listingVue, /ogImage:\s*['"]\/brand\/2bet-og\.webp['"]/, 'Blog listing must use /brand/2bet-og.webp')
+  assert.match(listingVue, /resolveSeoImageUrl\(['"]\/brand\/2bet-og\.webp['"]/, 'Blog listing must use resolveSeoImageUrl for /brand/2bet-og.webp')
 
-  // Verify blog article (/blog/{blog-slug}) preserves post.value.featuredImage
+  // Verify blog article (/blog/{blog-slug}) resolves post.value?.featuredImage via resolveSeoImageUrl
   const articleVue = fs.readFileSync(path.resolve(process.cwd(), 'components/blogs/BlogArticle.vue'), 'utf-8')
-  assert.match(articleVue, /ogImage:\s*\(\)\s*=>\s*post\.value\?\.featuredImage/, 'Blog article must retain post.value.featuredImage for og:image')
+  assert.match(articleVue, /resolveSeoImageUrl\(post\.value\?\.featuredImage,\s*siteUrl\.value\)/, 'Blog article must resolve post.value?.featuredImage via resolveSeoImageUrl for og:image')
+
+  // Verify resolveSeoImageUrl turns root-relative paths into full URLs and preserves absolute URLs
+  assert.equal(resolveSeoImageUrl('/brand/2bet-og.webp', 'https://2bet.com/'), 'https://2bet.com/brand/2bet-og.webp')
+  assert.equal(resolveSeoImageUrl('/hero/editorial/sports.webp', 'https://2bet.com'), 'https://2bet.com/hero/editorial/sports.webp')
+  assert.equal(resolveSeoImageUrl('', 'https://2bet.com'), 'https://2bet.com/brand/2bet-og.webp')
+  assert.equal(resolveSeoImageUrl(undefined, 'https://2bet.com'), 'https://2bet.com/brand/2bet-og.webp')
+  assert.equal(resolveSeoImageUrl('https://cdn.2bet.com/custom.webp', 'https://2bet.com'), 'https://cdn.2bet.com/custom.webp')
 })
 

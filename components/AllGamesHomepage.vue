@@ -104,7 +104,7 @@ const fixtures = computed(() => {
   }
   return fallbackFixtures
 })
-const promotions = HOMEPAGE_PROMOTIONS
+const promotions = HOMEPAGE_PROMOTIONS.slice(0, 4)
 let inplayInterval: ReturnType<typeof setInterval> | undefined
 
 function initializeSectionEffects() {

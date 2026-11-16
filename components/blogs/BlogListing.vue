@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, RefreshCw } from 'luci
 import BlogHeader from './BlogHeader.vue'
 import BlogImage from './BlogImage.vue'
 import { formatBlogReadTime } from './formatReadTime'
+import { resolveSeoImageUrl } from '~/composables/useAppSeo'
 import type { BlogCategory, BlogPost } from '~/types/blog'
 
 interface BlogListResponse {
@@ -98,11 +99,14 @@ const description = computed(() => {
   }
   return copy.value.intro
 })
+const ogUrl = computed(() => `${siteUrl.value}${route.path || '/blogs'}`)
+const ogImage = computed(() => resolveSeoImageUrl('/brand/2bet-og.webp', siteUrl.value))
 useSeoMeta({
   title, ogTitle: title, twitterTitle: title,
+  ogUrl,
   description, ogDescription: description, twitterDescription: description,
-  ogImage: '/brand/2bet-og.webp',
-  twitterImage: '/brand/2bet-og.webp',
+  ogImage,
+  twitterImage: ogImage,
   ogType: 'website', twitterCard: 'summary_large_image',
   robots: () => (isPreview.value ? 'noindex, nofollow, noarchive' : undefined),
 })

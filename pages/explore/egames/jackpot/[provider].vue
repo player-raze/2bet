@@ -10,6 +10,7 @@ import {
   JDB_JACKPOT_COUNTER,
   JILI_JACKPOT_COUNTER,
   CQ9_JACKPOT_COUNTER,
+  formatJackpotAmount,
   useJackpotCounter,
 } from '~/composables/useJackpotCounter'
 import GameCard from '~/components/game-cards/GameCard.vue'
@@ -45,11 +46,6 @@ const JACKPOT_INCREMENT_RANGES: Record<string, readonly [number, number]> = {
 }
 
 const JACKPOT_SECTION_ORDER = ['jdb']
-
-const jackpotNumberFormatter = new Intl.NumberFormat('en-US', {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
 
 const route = useRoute()
 const router = useRouter()
@@ -105,7 +101,6 @@ const standaloneJackpotGames = computed(() => getStandaloneJackpotGames())
 const jackpotAmounts = ref<Record<string, number>>(
   Object.fromEntries(JACKPOT_SECTIONS.map(section => [section.id, section.jackpotAmount])),
 )
-const jackpotRevision = ref(0)
 let jackpotClockTimer: ReturnType<typeof setInterval> | null = null
 
 const { displayAmount: jdbDisplay } = useJackpotCounter(JDB_JACKPOT_COUNTER)
@@ -118,10 +113,6 @@ const storeAmounts: Record<string, Ref<number>> = {
   cq9: cq9Display,
 }
 
-watch([jdbDisplay, jiliDisplay, cq9Display], () => {
-  jackpotRevision.value += 1
-})
-
 const getJackpotAmount = (section: JackpotSection): number => {
   if (storeAmounts[section.id]) {
     return storeAmounts[section.id].value
@@ -130,7 +121,7 @@ const getJackpotAmount = (section: JackpotSection): number => {
 }
 
 const getJackpotCharacters = (section: JackpotSection): string[] => {
-  return [...jackpotNumberFormatter.format(getJackpotAmount(section))]
+  return [...formatJackpotAmount(getJackpotAmount(section))]
 }
 
 const getJackpotDigitImage = (character: string): string | undefined => {
@@ -142,7 +133,7 @@ const getJackpotSeparatorImage = (character: string): string | undefined => {
 }
 
 const getJackpotLabel = (section: JackpotSection): string => {
-  return `${section.provider} live jackpot: R$${jackpotNumberFormatter.format(getJackpotAmount(section))}`
+  return `${section.provider} live jackpot: R$${formatJackpotAmount(getJackpotAmount(section))}`
 }
 
 const refreshJackpotAmounts = (): void => {
@@ -155,7 +146,6 @@ const refreshJackpotAmounts = (): void => {
   })
 
   jackpotAmounts.value = nextAmounts
-  jackpotRevision.value += 1
 }
 
 const handleDocumentClick = (event: MouseEvent): void => {
@@ -234,7 +224,7 @@ const filteredSections = computed<JackpotSection[]>(() => {
   return sections.map((section) => {
     const seenIds = new Set<string>()
     const amount = section.showCounter ? getJackpotAmount(section) : 0
-    const poolText = amount > 0 ? `R$${jackpotNumberFormatter.format(amount)}` : undefined
+    const poolText = amount > 0 ? `R$${formatJackpotAmount(amount)}` : undefined
 
     const jackpotGames = SLOTS.filter((game) => {
       if (game.jackpot !== true && game.Jackpot !== true) return false
@@ -353,7 +343,7 @@ watch(
           <div class="jackpot-counter" aria-hidden="true">
             <template
               v-for="(character, index) in getJackpotCharacters(section)"
-              :key="`${section.id}-${jackpotRevision}-${index}-${character}`"
+              :key="`${section.id}-${index}`"
             >
               <span v-if="/\d/.test(character)" class="jackpot-counter-character border border-[#848484]/80 light:border-[#d8e2dc] bg-gradient-to-b from-[#4b4b4b] via-[#333] to-[#3e3e3e] light:from-[#ffffff] light:via-[#f4f8f5] light:to-[#eaf5ee]">
                 <img
@@ -361,6 +351,8 @@ watch(
                   :src="getJackpotDigitImage(character)"
                   :alt="character"
                   class="jackpot-digit-image"
+                  width="34"
+                  height="45"
                 />
                 <span v-else class="jackpot-digit-fallback">{{ character }}</span>
               </span>
@@ -578,7 +570,6 @@ watch(
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 2px 3px rgba(0, 0, 0, 0.4);
-  animation: jackpot-digit-pop 420ms cubic-bezier(0.2, 0.85, 0.35, 1.2) both;
 }
 
 .jackpot-digit-image {
@@ -627,17 +618,6 @@ watch(
   max-height: 15px;
   object-fit: contain;
   filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.48));
-}
-
-@keyframes jackpot-digit-pop {
-  0% {
-    opacity: 0;
-    transform: translateY(-7px) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
 
 @media (max-width: 767px) {
@@ -704,12 +684,6 @@ watch(
     width: 8px;
   }
 
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .jackpot-counter-character {
-    animation: none;
-  }
 }
 
 </style>

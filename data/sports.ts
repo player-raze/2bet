@@ -4,45 +4,84 @@ const now = () => Date.now()
 const hoursFromNow = (h: number) => new Date(now() + h * 3600 * 1000).toISOString()
 const hoursAgo = (h: number) => new Date(now() - h * 3600 * 1000).toISOString()
 
+const TOURNAMENT_LOGO_RULES: ReadonlyArray<[RegExp, string]> = [
+  [/(?:^|[_\s-])nba(?:$|[_\s-])/, '/images/sports/nba.webp'],
+  [/euroleague/, '/images/sports/euroleague.webp'],
+  [/ncaa|ncaab|march_madness/, '/images/sports/ncaab.webp'],
+  [/\bpba\b|philippine|pilipinas/, '/images/sports/pba.webp'],
+  [/\bnbl\b/, '/images/sports/nbl.webp'],
+  [/\bnfl\b/, '/images/sports/nfl.webp'],
+  [/sudamericana|suda_americana|suda americana/, '/images/sports/suda americana.webp'],
+  [/libertadores|conmebol/, '/images/sports/conmebol-libertadores.webp'],
+  [/conference/, '/images/sports/uefa-europa-conference-league.webp'],
+  [/europa_league|europa league/, '/images/sports/uefa-europa-league.webp'],
+  [/nations_league|nations league/, '/images/sports/uefa-nations-league.webp'],
+  [/champions_league|champs_league|uefa_champions|\bucl\b/, '/images/sports/uefa-champions-league.webp'],
+  [/\bmls\b/, '/images/sports/mls.webp'],
+  [/austria_bundesliga|austrian/, '/images/sports/austria bundesliga.webp'],
+  [/dfb_pokal|pokal/, '/images/sports/pokal.webp'],
+  [/liga3|liga_3|3\.\s*liga/, '/images/sports/liga 3 germany.webp'],
+  [/bundesliga/, '/images/sports/bundesliga.webp'],
+  [/belgium_first_div|belgium first|belgian first/, '/images/sports/belgium first div.webp'],
+  [/brazil_campeonato|brazil_serie_a|brazil serie a|brasileir[aã]o/, '/images/sports/brazil serie a.webp'],
+  [/brazil_serie_b|brazil serie b/, '/images/sports/brazil serie b.webp'],
+  [/italy_serie_b|serie_b|serie b/, '/images/sports/serie b.webp'],
+  [/serie_a|serie a/, '/images/sports/serie-a.webp'],
+  [/la_liga|laliga|la liga/, '/images/sports/la-liga.webp'],
+  [/france_ligue_two|ligue_two|ligue 2/, '/images/sports/france ligue 2.webp'],
+  [/ligue_1|ligue_one|ligue 1/, '/images/sports/ligue-1.webp'],
+  [/russia_premier_league|premier league - russia|russian soccer/, '/images/sports/russia premier league.webp'],
+  [/\bepl\b|premier_league|premier league/, '/images/sports/premier-league.webp'],
+  [/chile_campeonato|campeonato chileno|primera divisi[oó]n - chile/, '/images/sports/chile primera division.webp'],
+  [/argentina_primera|argentine primera|primera divisi[oó]n - argentina/, '/images/sports/Primera Division.webp'],
+  [/aleague|a-league|a league/, '/images/sports/a league.webp'],
+  [/china_super_league|chinese super league/, "/images/sports/china super league'.webp"],
+  [/denmark_superliga|denmark superliga|danish soccer/, '/images/sports/denmark super liga.webp'],
+  [/efl_champ|england league championship|(?:soccer.*\bchampionship\b)|^\s*championship\s*$/, '/images/sports/efl champions .webp'],
+  [/efl_cup|efl cup|league cup/, '/images/sports/efl cup.webp'],
+  [/kleague|k_league|\bk league/, '/images/sports/k league.webp'],
+  [/england_league1|efl league 1|^\s*league 1\s*$/, '/images/sports/england league 1.webp'],
+  [/england_league2|efl league 2|^\s*league 2\s*$/, '/images/sports/england league 2.webp'],
+  [/veikkausliiga|veikkausliga/, '/images/sports/veikkausliga.webp'],
+  [/greece_super_league|super league - greece|greek soccer/, '/images/sports/greece super league.webp'],
+  [/j_league|jleague|\bj league\b|\bj2 league\b/, '/images/sports/jleague.webp'],
+  [/league_of_ireland|league of ireland|airtricity/, '/images/sports/league of irelanf.webp'],
+  [/ligamx|liga_mx|liga mx/, '/images/sports/liga mx.webp'],
+  [/eredivisie/, '/images/sports/eredivisie.webp'],
+  [/eliteserien/, '/images/sports/eliteserien.webp'],
+  [/ekstraklasa/, '/images/sports/exstraklasa.webp'],
+  [/primeira_liga|primeira liga/, '/images/sports/portugal primeira.webp'],
+  [/saudi_arabia_pro_league|saudi pro/, '/images/sports/saudi pro.webp'],
+  [/\bsoccer_spl\b|scottish premiership|premiership - scotland/, '/images/sports/scot primerl.webp'],
+  [/allsvenskan/, '/images/sports/allsvenkan.webp'],
+  [/superettan/, '/images/sports/supertan.webp'],
+  [/switzerland_superleague|swiss superleague/, '/images/sports/swiss super league.webp'],
+  [/turkey_super_league|turkey super league|turkish soccer/, '/images/sports/turk super leage.webp'],
+  [/\bmlb\b|world_series/, '/images/sports/mlb.webp'],
+  [/\bnpb\b/, '/images/sports/npb.webp'],
+  [/wimbledon/, '/images/sports/wimbledon.webp'],
+  [/us_open|us open/, '/images/sports/us-open.webp'],
+  [/aus_open|australian/, '/images/sports/australian-open.webp'],
+  [/roland_garros|french_open/, '/images/sports/roland-garros.webp'],
+  [/\batp\b/, '/images/sports/atp.webp'],
+  [/\bwta\b/, '/images/sports/wta.webp'],
+  [/\butr\b/, '/images/sports/utr.webp'],
+  [/basketball/, '/icons/sports/basketball.webp'],
+  [/soccer|football/, '/icons/sports/soccer.webp'],
+  [/tennis/, '/icons/sports/tennis.webp'],
+  [/baseball/, '/icons/sports/baseball.webp'],
+]
+
 export const getTournamentLogo = (sport: Sport | string | undefined | null): string => {
   if (!sport) return '/images/sports/popular.webp'
   if (typeof sport === 'object' && sport.logo) return sport.logo
 
-  const key = (typeof sport === 'object' ? `${sport.key} ${sport.title} ${sport.group}` : sport).toLowerCase()
+  const key = (typeof sport === 'object' ? `${sport.key} ${sport.title} ${sport.group} ${sport.description || ''}` : sport).toLowerCase()
+  for (const [pattern, logo] of TOURNAMENT_LOGO_RULES) {
+    if (pattern.test(key)) return logo
+  }
 
-  if (key.includes('nba')) return '/images/sports/nba.webp'
-  if (key.includes('euroleague')) return '/images/sports/euroleague.webp'
-  if (key.includes('ncaa') || key.includes('ncaab') || key.includes('march_madness')) return '/images/sports/ncaab.webp'
-  if (key.includes('pba') || key.includes('philippine') || key.includes('pilipinas')) return '/images/sports/pba.webp'
-  if (key.includes('epl') || key.includes('premier_league') || key.includes('premier league')) return '/images/sports/premier-league.webp'
-  if (key.includes('conference')) return '/images/sports/uefa-europa-conference-league.webp'
-  if (key.includes('europa_league') || key.includes('europa league')) return '/images/sports/uefa-europa-league.webp'
-  if (key.includes('nations_league') || key.includes('nations league')) return '/images/sports/uefa-nations-league.webp'
-  if (key.includes('champions_league') || key.includes('champs_league') || key.includes('uefa_champions') || key.includes('ucl')) return '/images/sports/uefa-champions-league.webp'
-  if (key.includes('libertadores') || key.includes('conmebol')) return '/images/sports/conmebol-libertadores.webp'
-  if (key.includes('mls')) return '/images/sports/mls.webp'
-  if (key.includes('bundesliga')) return '/images/sports/bundesliga.webp'
-  if (key.includes('serie_a') || key.includes('serie a')) return '/images/sports/serie-a.webp'
-  if (key.includes('la_liga') || key.includes('laliga') || key.includes('la liga')) return '/images/sports/la-liga.webp'
-  if (key.includes('ligue_1') || key.includes('ligue 1') || key.includes('ligue_one')) return '/images/sports/ligue-1.webp'
-  if (key.includes('mlb') || key.includes('world_series')) return '/images/sports/mlb.webp'
-  if (key.includes('npb')) return '/images/sports/npb.webp'
-  if (key.includes('wimbledon')) return '/images/sports/wimbledon.webp'
-  if (key.includes('us_open') || key.includes('us open')) return '/images/sports/us-open.webp'
-  if (key.includes('aus_open') || key.includes('australian')) return '/images/sports/australian-open.webp'
-  if (key.includes('roland_garros') || key.includes('french_open')) return '/images/sports/roland-garros.webp'
-  if (key.includes('atp')) return '/images/sports/atp.webp'
-  if (key.includes('wta')) return '/images/sports/wta.webp'
-  if (key.includes('utr')) return '/images/sports/utr.webp'
-  if (key.includes('nfl')) return '/images/sports/nfl.webp'
-  if (key.includes('nbl')) return '/images/sports/nbl.webp'
-
-  if (key.includes('basketball')) return '/icons/sports/basketball.webp'
-  if (key.includes('soccer') || key.includes('football')) return '/icons/sports/soccer.webp'
-  if (key.includes('tennis')) return '/icons/sports/tennis.webp'
-  if (key.includes('baseball')) return '/icons/sports/baseball.webp'
-
-  return '/images/sports/popular.webp'
+  return getSportBall(sport) || '/images/sports/popular.webp'
 }
 
 export const getSportBall = (sport: Sport | string | undefined | null, sportParam?: string): string => {
@@ -194,7 +233,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Belgium",
-    logo: "/images/sports/bundesliga.webp",
+    logo: "/images/sports/belgium first div.webp",
   },
   {
     key: "soccer_brazil_campeonato",
@@ -204,6 +243,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Brazil",
+    logo: "/images/sports/brazil serie a.webp",
   },
   {
     key: "soccer_brazil_serie_b",
@@ -213,7 +253,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Brazil",
-    logo: "/images/sports/serie-a.webp",
+    logo: "/images/sports/brazil serie b.webp",
   },
   {
     key: "soccer_chile_campeonato",
@@ -223,6 +263,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Chile",
+    logo: "/images/sports/chile primera division.webp",
   },
   {
     key: "soccer_conmebol_copa_libertadores",
@@ -242,6 +283,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "America",
+    logo: "/images/sports/suda americana.webp",
   },
   {
     key: "soccer_denmark_superliga",
@@ -251,6 +293,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Denmark",
+    logo: "/images/sports/denmark super liga.webp",
   },
   {
     key: "soccer_efl_champ",
@@ -260,7 +303,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "England",
-    logo: ''
+    logo: "/images/sports/efl champions .webp",
   },
   {
     key: "soccer_england_efl_cup",
@@ -270,6 +313,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "England",
+    logo: "/images/sports/efl cup.webp",
   },
   {
     key: "soccer_england_league1",
@@ -279,6 +323,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "England",
+    logo: "/images/sports/england league 1.webp",
   },
   {
     key: "soccer_england_league2",
@@ -288,6 +333,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "England",
+    logo: "/images/sports/england league 2.webp",
   },
   {
     key: "soccer_epl",
@@ -307,6 +353,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Finland",
+    logo: "/images/sports/veikkausliga.webp",
   },
   {
     key: "soccer_france_ligue_one",
@@ -326,7 +373,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "France",
-    logo: "/images/sports/ligue-1.webp",
+    logo: "/images/sports/france ligue 2.webp",
   },
   {
     key: "soccer_germany_bundesliga",
@@ -356,6 +403,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Germany",
+    logo: "/images/sports/pokal.webp",
   },
   {
     key: "soccer_germany_liga3",
@@ -365,6 +413,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Germany",
+    logo: "/images/sports/liga 3 germany.webp",
   },
   {
     key: "soccer_greece_super_league",
@@ -374,6 +423,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Greece",
+    logo: "/images/sports/greece super league.webp",
   },
   {
     key: "soccer_italy_serie_a",
@@ -393,7 +443,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Italy",
-    logo: "/images/sports/serie-a.webp",
+    logo: "/images/sports/serie b.webp",
   },
   {
     key: "soccer_japan_j_league",
@@ -403,6 +453,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Japan",
+    logo: "/images/sports/jleague.webp",
   },
   {
     key: "soccer_league_of_ireland",
@@ -412,6 +463,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Ireland",
+    logo: "/images/sports/league of irelanf.webp",
   },
   {
     key: "soccer_mexico_ligamx",
@@ -421,6 +473,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Mexico",
+    logo: "/images/sports/liga mx.webp",
   },
   {
     key: "soccer_netherlands_eredivisie",
@@ -430,6 +483,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Netherlands",
+    logo: "/images/sports/eredivisie.webp",
   },
   {
     key: "soccer_norway_eliteserien",
@@ -439,6 +493,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Norway",
+    logo: "/images/sports/eliteserien.webp",
   },
   {
     key: "soccer_poland_ekstraklasa",
@@ -448,6 +503,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Poland",
+    logo: "/images/sports/exstraklasa.webp",
   },
   {
     key: "soccer_portugal_primeira_liga",
@@ -457,6 +513,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Portugal",
+    logo: "/images/sports/portugal primeira.webp",
   },
   {
     key: "soccer_russia_premier_league",
@@ -466,6 +523,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Russia",
+    logo: "/images/sports/russia premier league.webp",
   },
   {
     key: "soccer_saudi_arabia_pro_league",
@@ -475,6 +533,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Saudi Arabia",
+    logo: "/images/sports/saudi pro.webp",
   },
   {
     key: "soccer_spain_la_liga",
@@ -494,6 +553,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Spain",
+    logo: "/images/sports/la-liga.webp",
   },
   {
     key: "soccer_spl",
@@ -503,6 +563,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Scotland",
+    logo: "/images/sports/scot primerl.webp",
   },
   {
     key: "soccer_sweden_allsvenskan",
@@ -512,6 +573,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Sweden",
+    logo: "/images/sports/allsvenkan.webp",
   },
   {
     key: "soccer_sweden_superettan",
@@ -521,6 +583,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Sweden",
+    logo: "/images/sports/supertan.webp",
   },
   {
     key: "soccer_switzerland_superleague",
@@ -530,6 +593,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Switzerland",
+    logo: "/images/sports/swiss super league.webp",
   },
   {
     key: "soccer_turkey_super_league",
@@ -539,6 +603,7 @@ export const SAMPLE_SPORTS: Sport[] = [
     active: true,
     has_outrights: false,
     country: "Turkey",
+    logo: "/images/sports/turk super leage.webp",
   },
   {
     key: "soccer_uefa_champs_league",
