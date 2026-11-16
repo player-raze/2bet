@@ -90,3 +90,14 @@ Verify
 ```
 git remote -v
 ```
+
+regenerate sitemap
+
+``` 
+node scripts/generate-sitemap.mjs 
+```
+
+### Add Bonus
+1. screenshot the whole page of the new bonus
+2. ask ai (recommended Codex cause it can copy the whole page) to create new bonus and refer to the screenshot given. Completely copy the image
+3. download the thumbnail, banner and header image and change it in promotion.ts PROMO_IMAGE_MAP array (if the image is bad)

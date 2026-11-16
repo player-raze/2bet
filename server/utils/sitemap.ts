@@ -45,10 +45,10 @@ export function getSitemapEntries(): SitemapEntry[] {
     { path: '/sports/popular/pre-match', changefreq: 'hourly', priority: 0.8 },
     { path: '/sports/popular/outright', changefreq: 'hourly', priority: 0.8 },
     { path: '/sports/live', changefreq: 'hourly', priority: 0.9 },
-    { path: '/sports/basketball', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/soccer', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/baseball', changefreq: 'hourly', priority: 0.8 },
-    { path: '/sports/tennis', changefreq: 'hourly', priority: 0.8 },
+    // { path: '/sports/basketball', changefreq: 'hourly', priority: 0.8 },
+    // { path: '/sports/soccer', changefreq: 'hourly', priority: 0.8 },
+    // { path: '/sports/baseball', changefreq: 'hourly', priority: 0.8 },
+    // { path: '/sports/tennis', changefreq: 'hourly', priority: 0.8 },
 
     // Promotions & Bonuses
     { path: '/bonuses', changefreq: 'daily', priority: 0.8 },
@@ -81,14 +81,14 @@ export function getSitemapEntries(): SitemapEntry[] {
 
     // Trust, Compliance & Legal
     { path: '/about-us', changefreq: 'monthly', priority: 0.7 },
-    { path: '/responsible-gaming', changefreq: 'monthly', priority: 0.7 },
-    { path: '/privacy-policy', changefreq: 'monthly', priority: 0.6 },
-    { path: '/terms-of-use', changefreq: 'monthly', priority: 0.6 },
+    // { path: '/responsible-gaming', changefreq: 'monthly', priority: 0.7 },
+    // { path: '/privacy-policy', changefreq: 'monthly', priority: 0.6 },
+    // { path: '/terms-of-use', changefreq: 'monthly', priority: 0.6 },
     { path: '/download-app', changefreq: 'weekly', priority: 0.8 },
     { path: '/affiliate', changefreq: 'monthly', priority: 0.7 },
-    { path: '/help/contact-us', changefreq: 'monthly', priority: 0.6 },
-    { path: '/legal/general-terms', changefreq: 'monthly', priority: 0.6 },
-    { path: '/legal/cookie-policy', changefreq: 'monthly', priority: 0.6 },
+    // { path: '/help/contact-us', changefreq: 'monthly', priority: 0.6 },
+    // { path: '/legal/general-terms', changefreq: 'monthly', priority: 0.6 },
+    // { path: '/legal/cookie-policy', changefreq: 'monthly', priority: 0.6 },
     { path: '/egames/customer-service', changefreq: 'monthly', priority: 0.6 },
 
     // Live Plaza
@@ -121,15 +121,15 @@ export function getSitemapEntries(): SitemapEntry[] {
   }
 
   // Dynamic Bingo Categories
-  for (const cat of BINGO_CATEGORIES) {
-    if (cat.key && cat.key !== 'home') {
-      entries.push({
-        path: `/egames/bingo/${cat.key}`,
-        changefreq: 'daily',
-        priority: 0.8,
-      })
-    }
-  }
+  // for (const cat of BINGO_CATEGORIES) {
+  //   if (cat.key && cat.key !== 'home') {
+  //     entries.push({
+  //       path: `/egames/bingo/${cat.key}`,
+  //       changefreq: 'daily',
+  //       priority: 0.8,
+  //     })
+  //   }
+  // }
 
   // Dynamic Live Casino Categories
   for (const cat of LIVE_CASINO_CATEGORIES) {
