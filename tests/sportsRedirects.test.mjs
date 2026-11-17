@@ -8,6 +8,8 @@ import {
   getEnvRedirectCode,
   getEnvRedirectUrl,
   getSportsTabRedirectPath,
+  getSportsMatchRedirectPath,
+  resolveSportsMatchRedirectUrl,
   resolveSportsTabRedirectUrl,
   resolveTennisRedirectUrl,
 } from '../utils/sportsRedirect.ts'
@@ -208,5 +210,52 @@ describe('Sports Navigation External Redirects Suite', () => {
       assert.match(source, /buildBybetRedirectUrl\('login',\s*rawRedirectUrl,\s*bybetRedirectCode\)/, `${file} must build external login redirect URL`)
       assert.doesNotMatch(source, /to="\/affiliate"/, `${file} must no longer link to /affiliate`)
     }
+  })
+})
+
+describe('Match card destinations', () => {
+  const destinations = [
+    ['/sports/popular/upcoming', 'sportEvents/hotGame/incoming'],
+    ['/sports/popular/league', 'sportEvents/hotGame/tournament'],
+    ['/sports/popular/pre-match', 'sportEvents/hotGame/early'],
+    ['/sports/basketball/inplay', 'sportEvents/inplay/basketball'],
+    ['/sports/basketball/league', 'sportEvents/tournament/basketball'],
+    ['/sports/basketball/upcoming', 'sportEvents/incoming/basketball'],
+    ['/sports/basketball/pre-match', 'sportEvents/early/basketball/'],
+    ['/sports/soccer/inplay', 'sportEvents/inplay/football'],
+    ['/sports/soccer/league', 'sportEvents/tournament/football'],
+    ['/sports/soccer/upcoming', 'sportEvents/incoming/football'],
+    ['/sports/soccer/pre-match', 'sportEvents/early/football/'],
+    ['/sports/live', 'sportEvents/liveGame/all'],
+    ['/sports/live/basketball', 'sportEvents/liveGame/basketball'],
+    ['/sports/live/soccer', 'sportEvents/liveGame/football'],
+  ]
+
+  for (const [route, destination] of destinations) {
+    test(`${route} match cards open ${destination}`, () => {
+      assert.equal(getSportsMatchRedirectPath(route), destination)
+      assert.equal(getSportsMatchRedirectPath(`/explore${route}`), destination)
+      assert.equal(
+        resolveSportsMatchRedirectUrl(route, 'https://sports.example/', 'PROMO 99'),
+        `https://sports.example/${destination}?p=PROMO%2099`,
+      )
+    })
+  }
+
+  test('filtered routes and football aliases retain the matching sports destination', () => {
+    assert.equal(getSportsMatchRedirectPath('/sports/popular/upcoming/24?sort=time#matches'), 'sportEvents/hotGame/incoming')
+    assert.equal(getSportsMatchRedirectPath('/sports/basketball/pre-match/11-18-2026'), 'sportEvents/early/basketball/')
+    assert.equal(getSportsMatchRedirectPath('/sports/soccer/league/premier-league'), 'sportEvents/tournament/football')
+    assert.equal(getSportsMatchRedirectPath('/sports/football/inplay'), 'sportEvents/inplay/football')
+    assert.equal(getSportsMatchRedirectPath('/sports/live/football/'), 'sportEvents/liveGame/football')
+    assert.equal(resolveSportsMatchRedirectUrl('/sports/live', 'https://sports.example', ''), 'https://sports.example/sportEvents/liveGame/all')
+  })
+
+  test('match destinations do not turn local sports tabs into external links', () => {
+    assert.equal(getSportsTabRedirectPath('popular', 'league'), null)
+    assert.equal(getSportsTabRedirectPath('basketball', 'inplay'), null)
+    assert.equal(getSportsTabRedirectPath('soccer', 'upcoming'), null)
+    assert.equal(getSportsMatchRedirectPath('/entertainment/poker'), null)
+    assert.equal(getSportsMatchRedirectPath('/sports/soccer/replay'), null)
   })
 })

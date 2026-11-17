@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { buildBybetRedirectUrl, resolveSportsMatchRedirectUrl } from '~/utils/sportsRedirect'
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
 const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const route = useRoute()
+const matchRedirectUrl = computed(() => resolveSportsMatchRedirectUrl(route.path, rawRedirectUrl, bybetRedirectCode) ?? bybetRedirectUrl)
 import { ExternalLink, Star } from 'lucide-vue-next'
 import MatchVideoThumbnail from './MatchVideoThumbnail.vue'
 import type { SportsEvent } from '~/types/sports'
@@ -192,6 +194,13 @@ const copyMatchLink = async (): Promise<void> => {
 
 <template>
   <article :id="`match-${match.id}`" class="winner-match border-b border-[#292929] last:border-b-0 light:border-[#d8e2dc] text-white light:text-[#10261c]">
+    <a
+      class="winner-match-link"
+      :href="matchRedirectUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      :aria-label="`${match.home_team} vs ${match.away_team}`"
+    />
     <div class="desktop-live-summary">
       <time class="desktop-live-status" :datetime="match.commence_time">{{ liveClock }}</time>
       <div class="desktop-live-teams">
@@ -229,7 +238,7 @@ const copyMatchLink = async (): Promise<void> => {
         </button>
         <a
           v-if="marketCount"
-          :href="bybetRedirectUrl"
+          :href="matchRedirectUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="desktop-live-market-count border border-[#303030] light:border-[#d8e2dc] text-[#999] light:text-[#5d7066] hover:text-white light:hover:text-[#10261c] bg-transparent light:bg-[#edf4f0]"
@@ -251,7 +260,7 @@ const copyMatchLink = async (): Promise<void> => {
         :disabled="!isOutcomeValid(outcome)"
         :aria-label="`${outcome.name}, implied decimal odds ${formatDecimalOdds(outcome.price)}`"
         :aria-pressed="selectedOutcome === outcome.name"
-        @click="emit('select', outcome.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+        @click="emit('select', outcome.name); navigateTo(matchRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
       >
         <span class="text-[#999] light:text-[#5d7066]">{{ outcome.label }}</span>
         <strong class="text-white light:text-[#10261c]">{{ formatDecimalOdds(outcome.price) }}</strong>
@@ -291,7 +300,7 @@ const copyMatchLink = async (): Promise<void> => {
         :disabled="!market.valid"
         :aria-label="`${market.name}, ${market.label}, decimal odds ${market.price}`"
         :aria-pressed="(market.key === 'h2h' ? selectedOutcome : selectedMarkets[market.key]) === market.name"
-        @click="selectMarket(market.key, market.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+        @click="selectMarket(market.key, market.name); navigateTo(matchRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
       >
         <span class="text-[#999] light:text-[#5d7066]">{{ market.label }}</span>
         <strong class="text-white light:text-[#10261c]">{{ market.price }}</strong>
@@ -376,7 +385,7 @@ const copyMatchLink = async (): Promise<void> => {
           :disabled="!isMarketValid(market)"
           :aria-label="`${row.team}, ${market.key}, ${market.label ?? ''}, ${market.key === 'h2h' ? 'implied decimal odds ' + formatDecimalOdds(market.outcome?.price) : 'odds ' + (market.outcome?.price ?? 'unavailable')}`"
           :aria-pressed="(market.key === 'h2h' ? selectedOutcome : selectedMarkets[market.key]) === market.name"
-          @click="selectMarket(market.key, market.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+          @click="selectMarket(market.key, market.name); navigateTo(matchRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
         >
           <template v-if="isMarketValid(market)">
             <span class="text-[#999]">{{ market.label }}</span>
@@ -407,7 +416,7 @@ const copyMatchLink = async (): Promise<void> => {
         :disabled="!isOutcomeValid(outcome)"
         :aria-label="`${outcome.name}, implied decimal odds ${formatDecimalOdds(outcome.price)}`"
         :aria-pressed="selectedOutcome === outcome.name"
-        @click="emit('select', outcome.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+        @click="emit('select', outcome.name); navigateTo(matchRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
       >
         <template v-if="isOutcomeValid(outcome)">
           <span>{{ outcome.label }}</span>
@@ -434,8 +443,26 @@ const copyMatchLink = async (): Promise<void> => {
 }
 
 .winner-match {
+  position: relative;
   padding: 0.5rem 16px 16px;
   scroll-margin-top: calc(var(--content-sticky-top) + 16px);
+}
+
+.winner-match-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.winner-match :is(button, a:not(.winner-match-link)) {
+  position: relative;
+  z-index: 2;
+}
+
+.winner-match-link:focus-visible {
+  outline: 2px solid var(--main-color);
+  outline-offset: -2px;
 }
 .winner-match:hover {
   background: rgb(var(--color-primary) / 0.1);

@@ -484,6 +484,13 @@ a.poker-section-count:hover { color: var(--text); }
 .poker-category-nav::-webkit-scrollbar,
 .poker-providers::-webkit-scrollbar { display: none; }
 
+.poker-category-tab--active, .poker-provider-pill--active{
+  color: #fff;
+}
+html[data-theme="light"] .poker-category-tab--active, html[data-theme="light"] .poker-provider-pill--active{
+  background-color: var(--main-color)!important;
+  color: #fff!important;
+}
 @media (min-width: 640px) {
   .poker-games-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .poker-games-row { grid-auto-columns: calc((100% - 24px) / 4.3); }

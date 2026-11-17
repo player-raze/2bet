@@ -5,9 +5,14 @@ const props = withDefaults(defineProps<{
   sportKey: string
   limit?: number
   sortBy?: 'league' | 'time'
+  compact?: boolean
+  market?: 'h2h' | 'spreads'
+  searchQuery?: string
 }>(), {
   sortBy: 'league',
   limit: 2,
+  market: 'h2h',
+  searchQuery: '',
 })
 
 const emit = defineEmits<{
@@ -36,12 +41,14 @@ onMounted(() => {
 })
 onBeforeUnmount(() => observer?.disconnect())
 
-const showFullMarkets = computed(() => /^(basketball|baseball)_/.test(props.sportKey))
+const showFullMarkets = computed(() => !props.compact && /^(basketball|baseball)_/.test(props.sportKey))
 
 const isSoccer = computed(() => props.sportKey.startsWith('soccer_'))
 
 const matches = computed(() => {
-  const events = [...(data.value?.events ?? [])]
+  const query = props.searchQuery.trim().toLowerCase()
+  const events = (data.value?.events ?? []).filter(event => !query
+    || `${event.home_team ?? ''} ${event.away_team ?? ''} ${event.sport_title ?? ''}`.toLowerCase().includes(query))
   if (props.sortBy === 'time') {
     events.sort((a, b) => Date.parse(a.commence_time) - Date.parse(b.commence_time))
   }
@@ -99,9 +106,10 @@ const selectOutcome = (eventId: string, market: string, name: string): void => {
         :match="match"
         :soccer="isSoccer"
         :full-markets="showFullMarkets"
-        :selected-outcome="selectedOutcomes[`${match.id}:h2h`]"
-        :compact="sportsRouteBase.endsWith('/sports/popular')"
-        @select="selectOutcome(match.id, 'h2h', $event)"
+        :market="market"
+        :selected-outcome="selectedOutcomes[`${match.id}:${market}`]"
+        :compact="compact || sportsRouteBase.endsWith('/sports/popular')"
+        @select="selectOutcome(match.id, market, $event)"
       />
     </template>
 

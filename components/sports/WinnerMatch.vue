@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { buildBybetRedirectUrl, resolveSportsMatchRedirectUrl } from '~/utils/sportsRedirect'
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
 const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const route = useRoute()
+const matchRedirectUrl = computed(() => resolveSportsMatchRedirectUrl(route.path, rawRedirectUrl, bybetRedirectCode) ?? bybetRedirectUrl)
 import { MessageCircle, Share2, Star } from 'lucide-vue-next'
 import type { SportsEvent } from '~/types/sports'
 import ShareMatchModal from '~/components/modals/ShareMatchModal.vue'
@@ -12,6 +14,7 @@ const props = defineProps<{
   soccer: boolean
   fullMarkets?: boolean
   compact?: boolean
+  market?: 'h2h' | 'spreads'
   selectedOutcome?: string
 }>()
 
@@ -21,19 +24,28 @@ const emit = defineEmits<{
 
 const actionMessage = ref('')
 const isShareModalOpen = ref(false)
+const marketCount = computed(() => props.match.bookmakers?.[0]?.markets.length ?? 0)
 
 const outcomes = computed(() => {
-  const market = props.match.bookmakers?.[0]?.markets.find(item => item.key === 'h2h')
+  const marketKey = props.market ?? 'h2h'
+  const market = props.match.bookmakers?.[0]?.markets.find(item => item.key === marketKey)
   const selections = [
     { label: props.soccer ? '1' : 'H', name: props.match.home_team ?? '' },
-    ...(props.soccer ? [{ label: 'X', name: 'Draw' }] : []),
+    ...(props.soccer && marketKey === 'h2h' ? [{ label: 'X', name: 'Draw' }] : []),
     { label: props.soccer ? '2' : 'A', name: props.match.away_team ?? '' },
   ]
 
-  return selections.map(selection => ({
-    ...selection,
-    price: market?.outcomes.find(outcome => outcome.name === selection.name)?.price,
-  }))
+  return selections.map(selection => {
+    const outcome = market?.outcomes.find(outcome => outcome.name === selection.name)
+    return {
+      ...selection,
+      label: marketKey === 'spreads' && outcome?.point != null
+        ? `${outcome.point > 0 ? '+' : ''}${outcome.point}`
+        : selection.label,
+      price: outcome?.price,
+      point: outcome?.point,
+    }
+  })
 })
 
 const selectedMarkets = ref<Record<string, string>>({})
@@ -82,8 +94,9 @@ const isMarketValid = (market: { key: string; outcome?: { price?: number; point?
   return true
 }
 
-const isOutcomeValid = (outcome: { price?: number }): boolean => {
+const isOutcomeValid = (outcome: { price?: number; point?: number }): boolean => {
   return outcome.price != null && outcome.price > 0
+    && (props.market !== 'spreads' || Number.isFinite(outcome.point))
 }
 
 const isFullDateSport = computed(() => {
@@ -142,6 +155,13 @@ const copyMatchLink = async (): Promise<void> => {
     class="winner-match bg-[#131313] light:bg-white text-white light:text-[#10261c] border-b border-[#292929] last:border-b-0 light:border-[#d8e2dc]"
     :class="{ 'winner-match--compact': compact && !fullMarkets }"
   >
+    <a
+      class="winner-match-link"
+      :href="matchRedirectUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      :aria-label="`${match.home_team} vs ${match.away_team}`"
+    />
     <div class="winner-header">
       <time v-if="!fullMarkets" class="winner-date text-[12px] text-[#eee] light:text-[#5d7066]" :datetime="match.commence_time" >
         <span>{{ matchDate }}</span>
@@ -174,15 +194,14 @@ const copyMatchLink = async (): Promise<void> => {
           <Star :size="16"  aria-hidden="true" />
         </button>
         <button
-          v-if="compact && !fullMarkets"
+          v-if="compact && !fullMarkets && marketCount"
           type="button"
           class="winner-market-count text-[#b6b9bb] light:text-[#5d7066]"
           aria-label="More match markets"
           title="More match markets"
-          @click="navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+          @click="navigateTo(matchRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
         >
-          <!-- Reference mock count until the sports feed includes market totals. -->
-          26
+          {{ marketCount }}
         </button>
       </div>
     </div>
@@ -219,7 +238,7 @@ const copyMatchLink = async (): Promise<void> => {
           :disabled="!isMarketValid(market)"
           :aria-label="`${row.team}, ${market.key}, ${market.label ?? ''}, odds ${market.outcome?.price ?? 'unavailable'}`"
           :aria-pressed="(market.key === 'h2h' ? selectedOutcome : selectedMarkets[market.key]) === market.name"
-          @click="selectMarket(market.key, market.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+          @click="selectMarket(market.key, market.name); navigateTo(matchRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
         >
           <template v-if="isMarketValid(market)">
             <span class="text-[#999] light:text-[#5d7066]">{{ market.label }}</span>
@@ -238,7 +257,7 @@ const copyMatchLink = async (): Promise<void> => {
       class="winner-markets"
       :class="{ 'winner-markets--soccer': soccer }"
       role="group"
-      :aria-label="`${match.home_team} vs ${match.away_team}, match winner`"
+      :aria-label="`${match.home_team} vs ${match.away_team}, ${market === 'spreads' ? 'handicap' : 'match winner'}`"
     >
       <button
         v-for="outcome in outcomes"
@@ -249,7 +268,7 @@ const copyMatchLink = async (): Promise<void> => {
         :disabled="!isOutcomeValid(outcome)"
         :aria-label="`${outcome.name}, odds ${outcome.price ?? 'unavailable'}`"
         :aria-pressed="selectedOutcome === outcome.name"
-        @click="emit('select', outcome.name); navigateTo(bybetRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
+        @click="emit('select', outcome.name); navigateTo(matchRedirectUrl, { external: true, open: { target: '_blank', windowFeatures: { noopener: true, noreferrer: true } } })"
       >
         <template v-if="isOutcomeValid(outcome)">
           <span class="text-[#999] light:text-[#5d7066]">{{ outcome.label }}</span>
@@ -266,8 +285,26 @@ const copyMatchLink = async (): Promise<void> => {
 
 <style scoped>
 .winner-match {
+  position: relative;
   padding: 0.5rem 16px 16px;
   scroll-margin-top: calc(var(--content-sticky-top) + 16px);
+}
+
+.winner-match-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.winner-match :is(button, a:not(.winner-match-link)) {
+  position: relative;
+  z-index: 2;
+}
+
+.winner-match-link:focus-visible {
+  outline: 2px solid var(--main-color);
+  outline-offset: -2px;
 }
 .winner-match:hover {
   background: rgb(var(--color-primary) / 0.1);
@@ -427,6 +464,7 @@ const copyMatchLink = async (): Promise<void> => {
 
 .winner-match--compact {
   padding: 8px 8px 10px;
+  border-bottom-style: dashed;
 }
 
 .winner-match--compact .winner-header {

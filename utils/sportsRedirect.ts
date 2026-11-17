@@ -159,3 +159,41 @@ export const resolveSportsTabRedirectUrl = (
   if (!path) return null
   return buildBybetRedirectUrl(path, bybetRedirectUrl, redirectCode)
 }
+
+/** Match cards follow the current page without changing the local sports tabs. */
+export const getSportsMatchRedirectPath = (routePath: string): string | null => {
+  const pathname = routePath.split(/[?#]/)[0].replace(/^\/explore(?=\/)/, '')
+  const match = pathname.match(/^\/sports\/(popular|basketball|soccer|football|tennis|baseball|live)(?:\/([^/]+))?(?:\/|$)/)
+  if (!match) return null
+
+  const [, section, tab] = match
+  const sport = section === 'soccer' ? 'football' : section
+
+  if (section === 'live') {
+    const liveSport = tab === 'soccer' ? 'football' : (tab || 'all')
+    return ['all', 'basketball', 'football', 'tennis', 'baseball'].includes(liveSport)
+      ? `sportEvents/liveGame/${liveSport}`
+      : null
+  }
+
+  const modes: Record<string, string> = {
+    league: 'tournament',
+    upcoming: 'incoming',
+    'pre-match': 'early',
+    prematch: 'early',
+    ...(section === 'popular' ? {} : { inplay: 'inplay' }),
+  }
+  const mode = modes[tab || (section === 'popular' ? 'league' : 'inplay')]
+  if (!mode) return null
+  if (section === 'popular') return `sportEvents/hotGame/${mode}`
+  return `sportEvents/${mode}/${sport}${mode === 'early' ? '/' : ''}`
+}
+
+export const resolveSportsMatchRedirectUrl = (
+  routePath: string,
+  bybetRedirectUrl?: string,
+  redirectCode?: string,
+): string | null => {
+  const path = getSportsMatchRedirectPath(routePath)
+  return path ? buildBybetRedirectUrl(path, bybetRedirectUrl, redirectCode) : null
+}

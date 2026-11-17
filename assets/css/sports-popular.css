@@ -1,4 +1,20 @@
 /* The Popular sportsbook follows the compact reference at every viewport size. */
+.sports-page--tournament .sports-tabs {
+  height: 44px;
+  min-height: 44px;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 13px;
+  background: #1e1e1e;
+}
+
+.sports-page--tournament .sports-tabs a {
+  height: 28px;
+  min-height: 28px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
 .sports-page.sports-page--popular {
   padding: 0;
   color: var(--text);

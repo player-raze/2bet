@@ -2700,7 +2700,7 @@ export function getSampleSportsData(query: SportsApiQuery = {}): { sports: Sport
 
   if (mode === 'league-odds') {
     const events = SAMPLE_MATCH_EVENTS[sportKey] ?? []
-    return { sports: [], events: events.slice(0, 2) }
+    return { sports: [], events }
   }
 
   if (mode === 'upcoming' || mode === 'prematch') {

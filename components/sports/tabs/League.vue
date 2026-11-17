@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineComponent, h } from 'vue'
-import { ChevronDown, Search, Trophy } from 'lucide-vue-next'
+import { ChevronDown, ChevronLeft, Search, Trophy } from 'lucide-vue-next'
 import LeagueMatches from '~/components/sports/LeagueMatches.vue'
 import Sort from '~/components/buttons/Sort.vue'
 import Collapse from '~/components/buttons/Collapse.vue'
@@ -18,6 +18,7 @@ const props = withDefaults(defineProps<{
   maxMatchesPerGroup?: number
   matchLimitPerTournament?: number
   hideSportTitle?: boolean
+  tournamentDetail?: boolean
   loading?: boolean
 }>(), {
   sortBy: 'league',
@@ -85,7 +86,7 @@ const toggleTournament = (key: string): void => {
 const effectiveSports = computed(() => {
   const base = props.sports ?? props.filteredSports ?? []
   const q = search.value.toLowerCase().trim()
-  if (!q) {
+  if (!q || props.tournamentDetail) {
     return base
   }
   return base.filter((sport) => {
@@ -107,7 +108,7 @@ const matchLimit = (sport: Sport): number => {
   return 0
 }
 const visibleSports = computed(() => effectiveSports.value.filter(sport =>
-  matchCounts.value[sport.key] !== 0 && matchLimit(sport) > 0,
+  (props.tournamentDetail || matchCounts.value[sport.key] !== 0) && matchLimit(sport) > 0,
 ))
 
 const allCollapsed = computed(() => {
@@ -167,15 +168,18 @@ const sortedGroups = computed(() => {
 </script>
 
 <template>
-  <div class="league-tab">
+  <div class="league-tab" :class="{ 'league-tab--tournament': tournamentDetail }">
     <div v-if="!sportsRouteBase.endsWith('/sports/popular')" class="toolbar">
+      <NuxtLink v-if="tournamentDetail" :to="`${sportsRouteBase}/league`" class="toolbar-circle-btn" :aria-label="translate('Return to all leagues')" :title="translate('Back')">
+        <ChevronLeft :size="18" aria-hidden="true" />
+      </NuxtLink>
       <Ai
         v-if="aiTo"
         :to="aiTo"
         title="Smart Pick AI"
       />
 
-      <SportsMobileSportsRoulette />
+      <SportsMobileSportsRoulette v-if="!tournamentDetail" />
       <label class="search">
         <span class="search-icons">
           <Search :size="16" aria-hidden="true" />
@@ -183,10 +187,11 @@ const sortedGroups = computed(() => {
         <input
           v-model="search"
           type="search"
-          :placeholder="translate('Search tournaments')"
-          :aria-label="translate('Search tournaments')"
+          :placeholder="translate(tournamentDetail ? 'Search league or team' : 'Search tournaments')"
+          :aria-label="translate(tournamentDetail ? 'Search league or team' : 'Search tournaments')"
         >
       </label>
+      <Sort v-if="tournamentDetail" v-model="currentSort" />
       <!-- Collapse all / Expand all button -->
       <Collapse
         :model-value="allCollapsed"
@@ -199,7 +204,7 @@ const sortedGroups = computed(() => {
     <template v-else-if="visibleSports.length">
       <SportsCategorySection
         v-for="group in sortedGroups"
-        v-show="visibleSports.some(sport => sport.group === group)"
+        v-show="visibleSports.some(sport => sport.group === group || sport.country === group)"
         :key="group"
         :sport="group"
         :label="group"
@@ -209,7 +214,7 @@ const sortedGroups = computed(() => {
         <div class="league-matches-list">
           <article
             v-for="sport in getGroupTournaments(group)"
-            v-show="matchCounts[sport.key] !== 0 && matchLimit(sport) > 0"
+            v-show="(tournamentDetail || matchCounts[sport.key] !== 0) && matchLimit(sport) > 0"
             :key="sport.key"
             class="league-preview"
           >
@@ -222,7 +227,7 @@ const sortedGroups = computed(() => {
               @click="toggleTournament(sport.key)"
             >
               <span class="league-name text-[12px] text-[#999] truncate" :title="sport.title">
-                {{ sport.title }} {{ sport.description || sport.group }}
+                {{ tournamentDetail ? `${sport.country || sport.group} ${sport.title}` : `${sport.title} ${sport.description || sport.group}` }}
               </span>
               <CollapseIcon :expanded="isExpanded(sport.key)" />
             </button>
@@ -233,10 +238,13 @@ const sortedGroups = computed(() => {
               :aria-labelledby="`league-trigger-${sport.key}`"
             >
               <LeagueMatches
-                v-if="isExpanded(sport.key) && matchCounts[sport.key] !== 0 && matchLimit(sport) > 0"
+                v-if="isExpanded(sport.key) && (tournamentDetail || matchCounts[sport.key] !== 0) && matchLimit(sport) > 0"
                 :sport-key="sport.key"
                 :limit="matchLimit(sport)"
                 :sort-by="currentSort"
+                :compact="tournamentDetail"
+                :market="tournamentDetail && sport.group === 'Basketball' ? 'spreads' : 'h2h'"
+                :search-query="tournamentDetail ? search : ''"
                 @loaded="handleMatchLoaded"
               />
             </div>
@@ -289,5 +297,45 @@ const sortedGroups = computed(() => {
 
 .league-chevron--expanded {
   transform: rotate(180deg);
+}
+
+.league-tab--tournament .toolbar {
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.league-tab--tournament :deep(.toolbar-circle-btn) {
+  width: 36px;
+  height: 36px;
+}
+
+.league-tab--tournament .search input {
+  min-height: 36px;
+}
+
+.league-tab--tournament :deep(.league-group) {
+  margin: 0;
+}
+
+.league-tab--tournament .league-preview {
+  border-radius: 16px;
+  background: #131313;
+}
+
+.league-tab--tournament .league-preview-heading {
+  min-height: 48px;
+  padding: 8px;
+  background: transparent;
+}
+
+.league-tab--tournament .league-preview-heading .league-name {
+  color: #999;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+[data-theme='light'] .league-tab--tournament .league-preview {
+  background: #fff;
 }
 </style>

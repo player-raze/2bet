@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronDown, ChevronLeft, Search, Trophy } from 'lucide-vue-next'
+import { ChevronDown, Search, Trophy } from 'lucide-vue-next'
 import Ai from '~/components/buttons/Ai.vue'
 import Collapse from '~/components/buttons/Collapse.vue'
 import type { Sport } from '~/types/sports'
@@ -264,22 +264,14 @@ const COUNTRY_FLAGS: Record<string, string> = {
   <div class="league-directory">
     <!-- Single Tournament Detail View -->
     <template v-if="tournamentKey">
-         <NuxtLink
-          :to="base || '/sports/popular'"
-          class="toolbar-circle-btn"
-          aria-label="Back"
-          title="Back"
-        >
-          <ChevronLeft :size="18"  />
-        </NuxtLink>
       <League
         v-if="tournament"
         :key="tournament.key"
-        class="mt-2"
         :sports="[tournament]"
         :match-limit-per-tournament="Infinity"
         :ai-to="bybetRedirectUrl"
         hide-sport-title
+        tournament-detail
       />
       <div v-else class="py-12 text-center text-neutral-400">
         <p>{{ translate('League not available.') }}</p>
@@ -458,7 +450,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
                 <div class="flex items-center gap-2.5 shrink-0">
                   <span
                     v-if="league.inplay"
-                    class="bg-[#093E2C] text-white light:!text-white text-[12px] px-2 py-0.5 rounded-md whitespace-nowrap"
+                    class="bg-[#019440] text-white light:!text-white text-[12px] px-2 py-0.5 rounded-md whitespace-nowrap"
                   >
                     {{ translate('In-Play') }}
                   </span>

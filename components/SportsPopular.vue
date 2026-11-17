@@ -444,7 +444,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="sports-page" :class="{ 'sports-page--popular': isPopular }">
+  <section class="sports-page" :class="{ 'sports-page--popular': isPopular, 'sports-page--tournament': Boolean(route.params.leagueTournament) }">
     <h1 class="sr-only">{{ pageHeading }}</h1>
     <div class="sports-navigation">
       <MobileSportsNav />
