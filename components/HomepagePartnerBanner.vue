@@ -2,7 +2,7 @@
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectUrl = buildBybetRedirectUrl('franchise', rawRedirectUrl, bybetRedirectCode)
 const banner = ref<HTMLElement | null>(null)
 const video = ref<HTMLVideoElement | null>(null)
 

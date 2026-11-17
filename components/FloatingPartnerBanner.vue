@@ -3,7 +3,7 @@ import { X } from 'lucide-vue-next'
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectUrl = buildBybetRedirectUrl('franchise', rawRedirectUrl, bybetRedirectCode)
 const visible = useState('floating-partner-banner-visible', () => true)
 </script>
 
