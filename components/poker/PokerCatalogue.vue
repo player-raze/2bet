@@ -52,10 +52,10 @@ const POKER_SEO_COPY: Record<string, PokerCategorySeoCopy> = {
     headingEn: '2Bet Poker — Popular Card & Table Games',
   },
   all: {
-    titlePt: 'Todos os Jogos de Poker e Mesa Online | 2Bet Casino',
-    descriptionPt: 'Confira o catálogo completo de jogos de cartas, pesca, mahjong e mesa online na 2Bet Brasil com provedores oficiais e saques ágeis.',
+    titlePt: 'Todos os Jogos de Poker e Mesa Online | 2Bet Real Money Casino',
+    descriptionPt: 'Conheça os jogos de cartas, pesca, mahjong e mesa da 2Bet Brasil. Encontre opções de real money casino com provedores oficiais e saques rápidos.',
     headingPt: 'Todos os Jogos de Pôquer e Mesa Online',
-    titleEn: 'All Poker & Table Games Online | 2Bet Casino',
+    titleEn: 'All Poker & Table Games Online | 2Bet Real Money Casino',
     descriptionEn: 'Browse the complete 2Bet catalog of online poker, fishing, mahjong, and table games from official providers with fast payouts.',
     headingEn: 'All Online Poker & Table Games',
   },
@@ -100,7 +100,7 @@ const POKER_SEO_COPY: Record<string, PokerCategorySeoCopy> = {
     headingEn: 'Online Baccarat Card & Table Games',
   },
   other: {
-    titlePt: 'Outros Jogos de Mesa — Fan Tan e Paigow | 2Bet Poker',
+    titlePt: 'Outros Jogos de Mesa — Fan Tan e Paigow | 2Bet Casino',
     descriptionPt: 'Descubra jogos de Fan Tan, Xoc Dia, Paigow, Rummy e Hi-Lo online na 2Bet Brasil. Mesas rápidas com provedores oficiais no cassino.',
     headingPt: 'Outros Jogos de Mesa — Fan Tan, Rummy e Paigow',
     titleEn: 'Other Table Games — Fan Tan, Rummy & Paigow | 2Bet',
@@ -121,39 +121,6 @@ const activeSeoCopy = computed(() => POKER_SEO_COPY[props.category] || POKER_SEO
 const activeRoutePath = computed(() => isPopular.value ? basePath : `${basePath}/${props.category}`)
 const isEmptyFallbackCategory = computed(() => props.category === 'blackjack' && games.value.length === 0)
 const pageHeading = computed(() => locale.value === 'pt' ? activeSeoCopy.value.headingPt : activeSeoCopy.value.headingEn)
-
-useAppSeo({
-  title: computed(() => locale.value === 'pt' ? activeSeoCopy.value.titlePt : activeSeoCopy.value.titleEn),
-  description: computed(() => locale.value === 'pt' ? activeSeoCopy.value.descriptionPt : activeSeoCopy.value.descriptionEn),
-  keywords: '2bet poker, pôquer online, texas holdem, pesca cassino, bull bull, mahjong, jogos de cartas',
-  image: '/brand/2bet-og.webp',
-  type: 'website',
-  canonicalPath: computed(() => isEmptyFallbackCategory.value ? basePath : activeRoutePath.value),
-  robots: computed(() => isEmptyFallbackCategory.value ? 'noindex, follow' : undefined),
-  breadcrumbs: computed(() => [
-    { name: translate('Home'), path: '/' },
-    { name: translate('Poker'), path: basePath },
-    ...(isPopular.value ? [] : [{ name: categoryLabel.value, path: `${basePath}/${props.category}` }]),
-  ]),
-  schema: computed(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: pageHeading.value,
-    description: locale.value === 'pt' ? activeSeoCopy.value.descriptionPt : activeSeoCopy.value.descriptionEn,
-    url: `${siteUrl.value}${activeRoutePath.value}`,
-    mainEntity: {
-      '@type': 'ItemList',
-      name: pageHeading.value,
-      numberOfItems: games.value.length,
-      itemListElement: games.value.slice(0, 20).map((game, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        name: `${game.title} (${game.provider})`,
-        url: `${siteUrl.value}${activeRoutePath.value}#${encodeURIComponent(game.id)}`,
-      })),
-    },
-  })),
-})
 
 const filterState = ref<{ provider: string; sort: 'default' | 'title-asc' | 'title-desc' }>({ provider: 'all', sort: 'default' })
 const searchQuery = ref('')
@@ -189,6 +156,40 @@ const games = computed(() => {
   if (filterState.value.sort === 'default') return results
   const direction = filterState.value.sort === 'title-asc' ? 1 : -1
   return [...results].sort((left, right) => direction * left.title.localeCompare(right.title))
+})
+
+// SEO resolves the schema immediately on the client, so initialize its game data first.
+useAppSeo({
+  title: computed(() => locale.value === 'pt' ? activeSeoCopy.value.titlePt : activeSeoCopy.value.titleEn),
+  description: computed(() => locale.value === 'pt' ? activeSeoCopy.value.descriptionPt : activeSeoCopy.value.descriptionEn),
+  keywords: '2bet poker, pôquer online, texas holdem, pesca cassino, bull bull, mahjong, jogos de cartas',
+  image: '/brand/2bet-og.webp',
+  type: 'website',
+  canonicalPath: computed(() => isEmptyFallbackCategory.value ? basePath : activeRoutePath.value),
+  robots: computed(() => isEmptyFallbackCategory.value ? 'noindex, follow' : undefined),
+  breadcrumbs: computed(() => [
+    { name: translate('Home'), path: '/' },
+    { name: translate('Poker'), path: basePath },
+    ...(isPopular.value ? [] : [{ name: categoryLabel.value, path: `${basePath}/${props.category}` }]),
+  ]),
+  schema: computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: pageHeading.value,
+    description: locale.value === 'pt' ? activeSeoCopy.value.descriptionPt : activeSeoCopy.value.descriptionEn,
+    url: `${siteUrl.value}${activeRoutePath.value}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      name: pageHeading.value,
+      numberOfItems: games.value.length,
+      itemListElement: games.value.slice(0, 20).map((game, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: `${game.title} (${game.provider})`,
+        url: `${siteUrl.value}${activeRoutePath.value}#${encodeURIComponent(game.id)}`,
+      })),
+    },
+  })),
 })
 
 const sections = computed(() => {

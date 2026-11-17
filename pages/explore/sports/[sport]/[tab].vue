@@ -41,7 +41,7 @@ const activeTabInfo = computed(() => {
   }
   if (t === 'inplay') {
     return {
-      title: formatSeoTitle(`Apostas ao Vivo em ${s} — Cotações em Tempo Real | 2Bet Login App`),
+      title: formatSeoTitle(`Apostas ao Vivo em ${s} | Cotações em Tempo Real | 2Bet `),
       description: formatSeoDescription(`Acompanhe partidas de ${s.toLowerCase()} ao vivo na 2Bet login app. Linhas dinâmicas em tempo real, placar atualizado e cash out rápido.`),
     }
   }
@@ -53,8 +53,8 @@ const activeTabInfo = computed(() => {
   }
   if (t === 'pre-match' || t === 'prematch') {
     return {
-      title: formatSeoTitle(`Odds Pré-Jogo de ${s} e Análises de Partidas | 2bet`),
-      description: formatSeoDescription(`Analise as cotações pré-jogo de ${s.toLowerCase()} na 2bet Brasil. Estatísticas de equipes, retrospecto recente e mercados variados.`),
+      title: formatSeoTitle(`Partidas de ${s} e odds pré-jogo | 2bet Cassino Online`),
+      description: formatSeoDescription(`Analise as cotações pré-jogo de ${s.toLowerCase()} na 2bet cassino online. Estatísticas de equipes, retrospecto recente e mercados variados.`),
     }
   }
   if (t === 'smart-pick') {

@@ -433,7 +433,7 @@ export const faqItems: FaqItem[] = [
   {
     question: 'What is 2Bet Casino?',
     answer:
-      '2Bet Casino is a premium online gaming destination that offers a comprehensive collection of high-quality digital slot machines. We provide a secure environment where users can explore various themes, from ancient civilizations to futuristic adventures. Our platform integrates the 2Bet slots casino library with advanced technology, allowing you to enjoy seamless gameplay whether you are using a desktop browser or the 2Bet app slot for mobile convenience.',
+      "2Bet Casino is a premium online sports betting and casino platform designed for players in Brazil. The platform allows users to explore a variety of betting markets across popular sports, including football, basketball, esports, and tennis. \n 2Bet combines sports betting and online casino entertainment in one convenient platform, allowing users to browse sporting events, compare betting odds, and explore different wagering options. Before placing real-money bets, players can review the platform's terms and conditions, follow betting tutorials, and explore mock betting features to better understand how sports betting works.",
   },
   {
     question: 'How does the 2Bet online casino work?',
@@ -448,11 +448,11 @@ export const faqItems: FaqItem[] = [
   {
     question: 'How do I create an account on 2Bet Brazil?',
     answer:
-      "To create an account on 2Bet Brazil, click Register button. Enter the required information and complete any applicable identity verification steps. Before making deposits or placing bets, review the terms and conditions and the legal eligibility requirements.",
+      'To create an account on 2Bet Brazil, click "Sign Up" button. Enter the required information and complete any applicable identity verification steps. Before making deposits or placing bets, review the terms and conditions and the legal eligibility requirements.',
   },
   {
     question: 'Is 2Bet safe and trustworthy in Brazil?',
     answer:
-      "To determine whether 2Bet is trustworthy in Brazil, it is essential to verify whether the operator holds valid authorization from the Secretariat of Prizes and Betting under Brazil's Ministry of Finance. Users should also review the privacy policy, customer support options, and deposit and withdrawal rules. Betting is intended exclusively for adults aged 18 and older and should always be approached responsibly.",
+      "Yes, 2Bet is a safe and trustworthy platform for sports betting and online casino entertainment. At 2Bet, we prioritize transparency, responsible gaming, and a reliable betting experience for our players. \n Our gaming license is issued under Section 007 of the 2005 Computer Gaming Licensing Act by the Anjouan Offshore Financial Authority, with regulatory oversight managed in collaboration with Anjouan Licensing Services Inc. \n We aim to provide a convenient environment where players can explore sports betting markets, review odds, and enjoy online casino entertainment with confidence. We also encourage players to review our licensing information, terms and conditions, and responsible gaming policies.",
   },
 ]

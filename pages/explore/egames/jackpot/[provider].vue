@@ -63,14 +63,14 @@ useAppSeo({
     formatSeoTitle(
       activeProvider.value === 'all'
         ? '2Bet Slot Gacor Jackpots | Acumulados e Melhores Provedores'
-        : `Jackpots ${providerName.value} com Prêmios Acumulados | 2Bet`,
+        : `Jackpots ${providerName.value} | Ganhe Prêmios na 2Bet Slots Casino Online`,
     ),
   ),
   description: computed(() =>
     formatSeoDescription(
       activeProvider.value === 'all'
         ? 'Dispute jackpots acumulados nos caça-níqueis da 2Bet Slot Gacor. Acompanhe contadores em R$ em tempo real e concorra a prêmios milionários.'
-        : `Jogue caça-níqueis com jackpot da ${providerName.value} na 2bet Brasil. Prêmios acumulados em R$ em tempo real e grandes chances de vitória.`,
+        : `Jogue caça-níqueis com jackpot da ${providerName.value} na 2bet slots casino online. Prêmios acumulados em R$ em tempo real e grandes chances de vitória.`,
     ),
   ),
   breadcrumbs: computed(() => [

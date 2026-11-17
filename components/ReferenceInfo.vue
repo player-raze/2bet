@@ -87,7 +87,7 @@ const toggleFaq = (index: number): void => {
             <h3>{{ translate(faqItem.question) }}</h3>
             <ChevronDown :size="12" :class="{ open: openFaqIndex === index }" />
           </button>
-          <p v-if="openFaqIndex === index">{{ translate(faqItem.answer) }}</p>
+          <p v-if="openFaqIndex === index" class="whitespace-pre-line">{{ translate(faqItem.answer) }}</p>
         </article>
       </div>
     </section>

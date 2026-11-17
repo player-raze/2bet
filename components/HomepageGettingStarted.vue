@@ -68,7 +68,7 @@ function showAllFaqs() {
             {{ translate(faq.question) }}
             <span class="getting-started-faq-toggle text-[#62ddb0] light:bg-emerald-500/10 light:border-emerald-500/20 light:text-emerald-700" aria-hidden="true"><Plus class="faq-plus" :size="22" /><Minus class="faq-minus" :size="22" /></span>
           </summary>
-          <p class="text-[#a8bcb1] light:text-[#5d7066]">{{ translate(faq.answer) }}</p>
+          <p class="text-[#a8bcb1] light:text-[#5d7066] whitespace-pre-line">{{ translate(faq.answer) }}</p>
         </details>
       </div>
     </section>

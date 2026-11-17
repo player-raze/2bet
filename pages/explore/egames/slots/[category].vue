@@ -74,8 +74,8 @@ const categoryLabel = computed(() => {
 })
 
 useAppSeo({
-  title: computed(() => formatSeoTitle(`${translate(categoryLabel.value)} — Slots e Caça-Níqueis Online | 2bet`)),
-  description: computed(() => formatSeoDescription(`Jogue caça-níqueis de ${translate(categoryLabel.value).toLowerCase()} na 2bet Brasil. Slots com alto RTP, jackpots progressivos e rodadas bônus exclusivas.`)),
+  title: computed(() => formatSeoTitle(`${translate(categoryLabel.value)} Slots | 2bet Online Casinos Real Money`)),
+  description: computed(() => formatSeoDescription(`Explore caça-níqueis ${translate(categoryLabel.value).toLowerCase()} na 2Bet Brasil. Veja slots, jackpots e bônus em online casinos real money. Confira os jogos!`)),
   breadcrumbs: computed(() => [
     { name: 'Início', path: '/' },
     { name: 'Slots', path: '/egames/slots' },

@@ -9,7 +9,7 @@ const { locale, translate } = useSiteLocale()
 const siteUrl = useSiteUrl()
 
 useAppSeo({
-  title: 'Apostas ao Vivo — Cotações em Tempo Real e Jogos | 2bet',
+  title: 'Apostas ao Vivo — Cotações em Tempo Real e Jogos | 2bet Login App',
   description: 'Acompanhe partidas esportivas em tempo real com a 2bet Brasil. Mercados dinâmicos, atualização instantânea de odds e cash out rápido.',
   breadcrumbs: [
     { name: 'Início', path: '/' },
