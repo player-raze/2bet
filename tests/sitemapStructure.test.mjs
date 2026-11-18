@@ -312,4 +312,14 @@ describe('Sitemap Architecture & Structure Suite', () => {
     assert.ok(generatedLocs.includes('https://2bet.com/about-us'), 'Active /about-us route from server/utils/sitemap.ts must be included')
     assert.ok(generatedLocs.includes('https://2bet.com/bonuses/new-member'), 'Active /bonuses/new-member route from server/utils/sitemap.ts must be included')
   })
+
+  test('Case 14: robots.txt route resolves root robots.txt across .output/.output/server cwds with no-cache headers', () => {
+    const robotsRouteSrc = fs.readFileSync(path.join(rootDir, 'server/routes/robots.txt.ts'), 'utf8')
+    assert.match(robotsRouteSrc, /\.\.\/\.\.\/robots\.txt/)
+    assert.match(robotsRouteSrc, /\.\.\/robots\.txt/)
+    assert.match(robotsRouteSrc, /no-cache,\s*max-age=0,\s*must-revalidate/)
+
+    const nuxtConfig = fs.readFileSync(path.join(rootDir, 'nuxt.config.ts'), 'utf8')
+    assert.match(nuxtConfig, /\*\*\/robots\.txt/)
+  })
 })

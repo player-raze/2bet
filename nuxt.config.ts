@@ -91,8 +91,8 @@ export default defineNuxtConfig({
   },
   nitro: {
     // Bloggerist is executable PHP, not static website content.
-    // Ignore build-generated sitemaps in Nitro's static asset manifest so dynamic server routes stay fresh if .env changes.
-    ignore: ['**/bloggerist/**', '**/sitemap-index.xml', '**/sitemap-pages.xml', '**/sitemap.xml'],
+    // Ignore build-generated sitemaps and robots.txt in Nitro's static asset manifest so dynamic server routes stay fresh if .env or root robots.txt changes.
+    ignore: ['**/bloggerist/**', '**/sitemap-index.xml', '**/sitemap-pages.xml', '**/sitemap.xml', '**/robots.txt'],
     devHandlers: [{
       route: '/',
       handler: (event) => {

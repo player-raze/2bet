@@ -4,11 +4,28 @@ import { defineEventHandler, setResponseHeader, type H3Event } from 'h3'
 import { resolveRuntimeSiteUrl } from '~/server/utils/siteUrl'
 
 async function readCustomRobotsTxt(): Promise<string | null> {
-  const candidates = [
-    path.resolve(process.cwd(), 'robots.txt'),
-    path.resolve(process.cwd(), 'public/robots.txt'),
-    path.resolve(process.cwd(), '.output/public/robots.txt'),
-  ]
+  const cwd = path.resolve(process.cwd())
+  const isOutputDir = cwd === path.resolve(cwd, '..', '.output')
+  const isOutputServerDir = cwd === path.resolve(cwd, '../..', '.output', 'server')
+
+  const candidates = isOutputServerDir
+    ? [
+        path.resolve(cwd, '../../robots.txt'),
+        path.resolve(cwd, '../public/robots.txt'),
+        path.resolve(cwd, '../../public/robots.txt'),
+      ]
+    : isOutputDir
+      ? [
+          path.resolve(cwd, '../robots.txt'),
+          path.resolve(cwd, 'public/robots.txt'),
+          path.resolve(cwd, '../public/robots.txt'),
+        ]
+      : [
+          path.resolve(cwd, 'robots.txt'),
+          path.resolve(cwd, '.output/public/robots.txt'),
+          path.resolve(cwd, 'public/robots.txt'),
+        ]
+
   for (const candidate of candidates) {
     try {
       return await fs.readFile(candidate, 'utf8')
@@ -25,6 +42,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const siteUrl = await resolveRuntimeSiteUrl(event)
 
   setResponseHeader(event, 'content-type', 'text/plain; charset=utf-8')
+  setResponseHeader(event, 'cache-control', 'no-cache, max-age=0, must-revalidate')
 
   const customRobotsTxt = await readCustomRobotsTxt()
   if (customRobotsTxt !== null) {
