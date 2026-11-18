@@ -5,6 +5,7 @@ import type { LiveStreamCatalog } from '~/types/livestream'
 import StreamPlayer from './StreamPlayer.vue'
 import ByBetSpinner from '~/components/ByBetSpinner.vue'
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { getFixtureSportKey, prioritizeFootballFixtures } from '~/utils/sportsSelection'
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
 const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
@@ -19,12 +20,13 @@ const streams = computed(() => {
   const list = (catalog.value?.results ?? [])
     .filter(stream => !endedStreamIds.value.has(stream.id)
       && (!stream.status || stream.status === 'live'))
-  return list.toSorted((a, b) => {
+  const sorted = list.toSorted((a, b) => {
     const aHasVideo = (a.hasStream || (a.sources && a.sources.length > 0)) ? 1 : 0
     const bHasVideo = (b.hasStream || (b.sources && b.sources.length > 0)) ? 1 : 0
     if (bHasVideo !== aHasVideo) return bHasVideo - aHasVideo
     return (Date.parse(b.startTime ?? '') || 0) - (Date.parse(a.startTime ?? '') || 0)
   })
+  return prioritizeFootballFixtures(sorted)
 })
 const selectedStream = computed(() => streams.value.find(stream => stream.id === selectedStreamId.value) ?? streams.value[0])
 watch(selectedStream, stream => {
@@ -36,9 +38,15 @@ watch(selectedStreamId, () => {
   thumbnailError.value = false
 })
 
+const fallbackThumbnail = computed(() =>
+  getFixtureSportKey(selectedStream.value ?? {}) === 'soccer'
+    ? '/images/sports/category-banners/background-football.webp'
+    : '/images/sports/category-banners/background-basketball.webp',
+)
+
 const streamThumbnail = computed(() => {
-  if (thumbnailError.value) return '/images/sports/category-banners/background-basketball.webp'
-  return selectedStream.value?.thumbnail || '/images/sports/category-banners/background-basketball.webp'
+  if (thumbnailError.value) return fallbackThumbnail.value
+  return selectedStream.value?.thumbnail || fallbackThumbnail.value
 })
 
 function handleThumbnailError() {

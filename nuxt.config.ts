@@ -1,4 +1,24 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import { readdirSync } from 'node:fs'
+
+const staticAssetCacheControl = 'public, max-age=2592000'
+const staticAssetRoutes = [
+  '/images/**',
+  '/icons/**',
+  '/hero/**',
+  '/brand/**',
+  '/category-icons/**',
+  '/footer-logos/**',
+  '/reference/**',
+  '/tutorial-assets/**',
+  '/favicon.webp',
+  // These folders also contain page URLs; cache their asset files individually.
+  ...['tutorial', 'responsible-gaming'].flatMap(directory =>
+    readdirSync(new URL(`./public/${directory}/`, import.meta.url), { recursive: true })
+      .filter(file => /\.(?:avif|gif|ico|jpe?g|png|svg|webp|mp4|webm|mp3|ogg|wav|woff2?|ttf|otf|eot|css|m?js|pdf)$/i.test(file))
+      .map(file => `/${directory}/${file.split(/[\\/]/).join('/')}`),
+  ),
+]
 
 const processGlobal = (
   globalThis as typeof globalThis & {
@@ -37,7 +57,11 @@ const googleSiteVerification = (
 ).trim().replace(/^['"]+|['"]+$/g, '')
 
 export default defineNuxtConfig({
+
   compatibilityDate: '2024-11-01',
+  routeRules: Object.fromEntries(staticAssetRoutes.map(route => [route, {
+    headers: { 'cache-control': staticAssetCacheControl },
+  }])),
   buildDir: environment?.NODE_ENV === 'production' && !isPrepare ? 'node_modules/.cache/2bet-nuxt-build' : '.nuxt',
   ignore: [
     '**/data/*.json',

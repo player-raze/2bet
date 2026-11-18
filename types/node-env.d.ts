@@ -1,4 +1,5 @@
 declare module 'node:fs' {
+  export function readdirSync(path: string | URL, options?: { recursive?: boolean }): string[]
   export namespace promises {
     function readFile(path: string, encoding: string): Promise<string>
     function writeFile(path: string, data: string, encoding: string): Promise<void>

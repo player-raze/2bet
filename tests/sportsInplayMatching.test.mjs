@@ -212,4 +212,21 @@ describe('Sports In-Play Matching & Football Route Suite', () => {
     assert.equal(getTournamentLogo('soccer_germany_dfb_pokal'), '/images/sports/pokal.webp')
     assert.equal(getTournamentLogo('soccer_portugal_primeira_liga'), '/images/sports/portugal primeira.webp')
   })
+
+  test('Case 15: Sports TV (/api/livestream and SportsPreview.vue) fetches and prioritizes football matches ahead of other sports', () => {
+    const livestreamApiSource = fs.readFileSync(
+      path.resolve(process.cwd(), 'server/api/livestream.get.ts'),
+      'utf-8',
+    )
+    assert.match(livestreamApiSource, /\['football',\s*'basketball'\]/)
+    assert.match(livestreamApiSource, /prioritizeFootballFixtures\(/)
+
+    const sportsPreviewSource = fs.readFileSync(
+      path.resolve(process.cwd(), 'components/comments/SportsPreview.vue'),
+      'utf-8',
+    )
+    assert.match(sportsPreviewSource, /prioritizeFootballFixtures\(/)
+    assert.match(sportsPreviewSource, /getFixtureSportKey\(/)
+    assert.match(sportsPreviewSource, /background-football\.webp/)
+  })
 })

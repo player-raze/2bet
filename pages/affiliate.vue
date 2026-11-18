@@ -244,7 +244,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="affiliate-page bg-black light:bg-[#f4f8f5] text-white light:text-[#10261c]" :class="{ 'affiliate-page--commission': activeTab === 'commission' }">
+  <div class="affiliate-page  text-white light:text-[#10261c]" :class="{ 'affiliate-page--commission': activeTab === 'commission', 'affiliate-page--products': activeTab === 'products' }">
     <SubpageHeader
       title="Affiliate"
       back-to="/account/me"
@@ -325,18 +325,18 @@ onBeforeUnmount(() => {
           aria-labelledby="products-title"
         >
           <h2 id="products-title" class="affiliate-section-title">Our Products</h2>
-          <div class="affiliate-surface bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]">
+          <div class="affiliate-surface products-surface bg-[#131313] light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm text-white light:text-[#10261c]">
             <h3 class="section-label">Games</h3>
             <div class="product-grid">
               <article v-for="product in products" :key="product.label" class="product-card bg-[#1f201f] light:bg-[#f4f8f5] text-white light:text-[#10261c]">
-                <h4 class="m-0 font-bold">{{ product.label }}</h4>
-                <img :src="product.image" :alt="product.label" loading="lazy">
+                <h4 class="m-0">{{ product.label }}</h4>
+                <img :src="product.image" :alt="product.label" width="109" height="112" loading="lazy">
               </article>
             </div>
-            <p class="products-copy text-[#929292] light:text-[#5d7066]">
-              2bet has brought together the elite of the global gaming industry. Since 2011, 2bet has established an excellent reputation based on its secure and professional services. Creating a top-notch gaming experience is our unwavering pursuit, whether players use a mobile phone, smart computer, laptop, or desktop.
-            </p>
           </div>
+          <p class="products-copy text-[#929292] light:text-[#5d7066]">
+            2bet has brought together the elite of the global gaming industry. Since 2011, 2bet has established an excellent reputation based on its secure and professional services. Creating a top-notch gaming experience is our unwavering pursuit, whether players use a mobile phone, smart computer, laptop, or desktop.
+          </p>
         </section>
 
         <section
@@ -716,43 +716,72 @@ onBeforeUnmount(() => {
   font-size: 16px;
 }
 
+.products-panel .products-surface {
+  padding: 12px 8px 24px;
+  border-radius: 12px;
+}
+
+.products-panel .section-label {
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.affiliate-page--products .affiliate-tabs {
+  border: 0;
+  background: #131313;
+}
+
+.affiliate-page--products .affiliate-tabs button {
+  color: inherit;
+}
+
+.affiliate-page--products .affiliate-tabs .affiliate-tab--active {
+  background: var(--main-color);
+  color: #fff;
+}
+
 .product-grid {
   display: grid;
-  width: min(500px, 100%);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px 20px;
 }
 
 .product-card {
   position: relative;
-  aspect-ratio: 0.74;
+  width: min(109px, 100%);
+  height: 150px;
   overflow: hidden;
   border-radius: 12px;
-}
-
-.product-card::after {
-  position: absolute;
-  inset: 0;
-  content: '';
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.34), transparent 34%, rgba(0, 0, 0, 0.18));
+  background-image: radial-gradient(ellipse at 50% 75%, #556f6338, transparent 70%);
 }
 
 .product-card h4 {
   position: absolute;
   z-index: 2;
-  top: 14px;
-  left: 16px;
-  font-size: 13px;
+  top: 12px;
+  left: 0;
+  width: 100%;
+  font-size: clamp(11px, 2.8vw, 14px);
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .product-card img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 112px;
+  object-fit: contain;
+  object-position: center bottom;
 }
 
 .products-copy {
-  margin: 26px 0 0;
+  margin: 0;
+  line-height: 16px;
 }
 
 .advantages-panel {
@@ -935,14 +964,25 @@ onBeforeUnmount(() => {
 }
 
 @media (min-width: 768px) {
-  .products-panel .affiliate-surface {
-    min-height: 320px;
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 109px));
   }
 
   .questions-content {
     min-height: 280px;
   }
 
+}
+
+@media (min-width: 64rem) {
+  .product-grid {
+    width: min(1012px, 100%);
+    grid-template-columns: repeat(8, minmax(0, 109px));
+  }
+
+  .product-card h4 {
+    font-size: clamp(11px, 0.9vw, 14px);
+  }
 }
 
 @media (max-width: 767px) {
@@ -1014,15 +1054,6 @@ onBeforeUnmount(() => {
     font-size: 21px;
   }
 
-  .product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .product-card {
-    aspect-ratio: 1.1;
-  }
-
   .commission-flag {
     top: 16px;
     right: 12px;
@@ -1037,6 +1068,29 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 63.99rem) {
+  :global(.page-content:has(> .affiliate-page--products)) { margin-left: 0; }
+  :global(.site-shell:has(.affiliate-page--products) .mobile-bottom-nav) { display: none; }
+
+  .affiliate-page--products :deep(.subpage-header) {
+    margin-bottom: 0;
+    padding-inline: 10px;
+    box-shadow: none;
+  }
+  .affiliate-page--products :deep(.subpage-header__back-btn) { width: 30px; height: 30px; }
+  .affiliate-page--products .affiliate-content-container { padding-inline: 6px; }
+  .affiliate-page--products .affiliate-tabs {
+    height: 48px;
+    margin-top: 0;
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
+  .affiliate-page--products .affiliate-tabs button {
+    min-height: 32px;
+    padding: 6px 13px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
   :global(.page-content:has(> .affiliate-page--commission)) { margin-left: 0; }
   :global(.site-shell:has(.affiliate-page--commission) .mobile-bottom-nav) { display: none; }
 
