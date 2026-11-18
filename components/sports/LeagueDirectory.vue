@@ -340,20 +340,22 @@ const COUNTRY_FLAGS: Record<string, string> = {
           v-if="popularLeaguesList.length"
           class="rounded-[12px] bg-[#181a19] overflow-hidden light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm"
         >
-          <button
-            type="button"
-            class="w-full  flex items-center justify-between px-2 py-1 text-left  transition-colors"
-            :aria-expanded="isGroupExpanded('__popular__')"
-            @click="toggleGroup('__popular__')"
-          >
-            <span class="text-[15px] font-semibold text-white light:text-[#10261c]">{{ translate('Popular Leagues') }}</span>
-            <ChevronDown
-              :size="18"
-              class="text-neutral-400 transition-transform duration-200"
-              :class="{ 'rotate-180': isGroupExpanded('__popular__') }"
-              aria-hidden="true"
-            />
-          </button>
+          <h2 class="league-directory-heading">
+            <button
+              type="button"
+              class="w-full  flex items-center justify-between px-2 py-1 text-left  transition-colors"
+              :aria-expanded="isGroupExpanded('__popular__')"
+              @click="toggleGroup('__popular__')"
+            >
+              <span class="text-[15px] font-semibold text-white light:text-[#10261c]">{{ translate('Popular Leagues') }}</span>
+              <ChevronDown
+                :size="18"
+                class="text-neutral-400 transition-transform duration-200"
+                :class="{ 'rotate-180': isGroupExpanded('__popular__') }"
+                aria-hidden="true"
+              />
+            </button>
+          </h2>
 
           <div
             v-show="isGroupExpanded('__popular__')"
@@ -382,9 +384,9 @@ const COUNTRY_FLAGS: Record<string, string> = {
                   />
                 </div>
 
-                <span class="text-[11px] font-medium text-[#ccc] light:text-[#10261c] leading-tight line-clamp-2 mt-2">
+                <h3 class="m-0 text-[11px] font-medium text-[#ccc] light:text-[#10261c] leading-tight line-clamp-2 mt-2">
                   {{ league.title }}
-                </span>
+                </h3>
               </NuxtLink>
             </div>
           </div>
@@ -398,40 +400,42 @@ const COUNTRY_FLAGS: Record<string, string> = {
             class="rounded-[12px] bg-[#181a19] overflow-hidden light:bg-white light:border light:border-[#d8e2dc] light:shadow-sm"
           >
             <!-- Group Accordion Header -->
-            <button
-              type="button"
-              class="w-full flex items-center justify-between px-2 py-1 text-left transition-colors"
-              :aria-expanded="isGroupExpanded(section.title)"
-              @click="toggleGroup(section.title)"
-            >
-              <div class="flex items-center gap-2">
-                <!-- Country Flag -->
-                <span
-                  v-if="COUNTRY_FLAGS[section.title]"
-                  class="text-[17px] leading-none"
-                  aria-hidden="true"
-                >
-                  {{ COUNTRY_FLAGS[section.title] }}
-                </span>
+            <h2 class="league-directory-heading">
+              <button
+                type="button"
+                class="w-full flex items-center justify-between px-2 py-1 text-left transition-colors"
+                :aria-expanded="isGroupExpanded(section.title)"
+                @click="toggleGroup(section.title)"
+              >
+                <div class="flex items-center gap-2">
+                  <!-- Country Flag -->
+                  <span
+                    v-if="COUNTRY_FLAGS[section.title]"
+                    class="text-[17px] leading-none"
+                    aria-hidden="true"
+                  >
+                    {{ COUNTRY_FLAGS[section.title] }}
+                  </span>
 
-                <!-- General icon fallback -->
-                <Trophy
-                  v-else
-                  :size="16"
-                  class="text-[#48daa6]"
+                  <!-- General icon fallback -->
+                  <Trophy
+                    v-else
+                    :size="16"
+                    class="text-[#48daa6]"
+                    aria-hidden="true"
+                  />
+
+                  <span class="text-[15px] font-semibold text-white light:text-[#10261c]">{{ translate(section.title) }}</span>
+                </div>
+
+                <ChevronDown
+                  :size="18"
+                  class="text-neutral-400 transition-transform duration-200"
+                  :class="{ 'rotate-180': isGroupExpanded(section.title) }"
                   aria-hidden="true"
                 />
-
-                <span class="text-[15px] font-semibold text-white light:text-[#10261c]">{{ translate(section.title) }}</span>
-              </div>
-
-              <ChevronDown
-                :size="18"
-                class="text-neutral-400 transition-transform duration-200"
-                :class="{ 'rotate-180': isGroupExpanded(section.title) }"
-                aria-hidden="true"
-              />
-            </button>
+              </button>
+            </h2>
 
             <!-- Group Accordion Body: League Rows -->
             <div
@@ -457,9 +461,9 @@ const COUNTRY_FLAGS: Record<string, string> = {
                   </div>
 
                   <!-- Title -->
-                  <span class="text-[13.5px] text-[#e0e2e1] truncate light:text-[#10261c]">
+                  <h3 class="m-0 font-normal text-[13.5px] text-[#e0e2e1] truncate light:text-[#10261c]">
                     {{ league.title }}
-                  </span>
+                  </h3>
                 </div>
 
                 <!-- Right: In-Play Badge + Match Count -->
@@ -489,6 +493,14 @@ const COUNTRY_FLAGS: Record<string, string> = {
 </template>
 
 <style scoped>
+.league-directory-heading {
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

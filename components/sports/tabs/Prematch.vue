@@ -254,19 +254,21 @@ const toggleCollapseAll = (): void => {
             :key="sport.key"
             class="league-preview"
           >
-            <button
-              :id="`league-trigger-${sport.key}`"
-              class="league-card league-preview-heading"
-              type="button"
-              :aria-expanded="isExpanded(sport.key)"
-              :aria-controls="`league-panel-${sport.key}`"
-              @click="toggleTournament(sport.key)"
-            >
-              <span class="league-name text-[12px] text-[#999] truncate" :title="sport.title">
-                {{ sport.title }} {{ sport.description }}
-              </span>
-              <CollapseIcon :expanded="isExpanded(sport.key)" />
-            </button>
+            <component :is="isPopular ? 'h3' : 'h2'" class="league-preview-title">
+              <button
+                :id="`league-trigger-${sport.key}`"
+                class="league-card league-preview-heading"
+                type="button"
+                :aria-expanded="isExpanded(sport.key)"
+                :aria-controls="`league-panel-${sport.key}`"
+                @click="toggleTournament(sport.key)"
+              >
+                <span class="league-name text-[12px] text-[#999] truncate" :title="sport.title">
+                  {{ sport.title }} {{ sport.description }}
+                </span>
+                <CollapseIcon :expanded="isExpanded(sport.key)" />
+              </button>
+            </component>
             <div
               v-show="isExpanded(sport.key)"
               :id="`league-panel-${sport.key}`"

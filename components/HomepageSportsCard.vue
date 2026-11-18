@@ -226,7 +226,7 @@ const isBasketball = computed(() => sportKey.value === 'basketball')
           <img
             v-if="competitionLogo"
             :src="competitionLogo"
-            :alt="fixture.sport_title || ''"
+            :alt="fixture.sport_title || sportName"
             class="sports-center-watermark"
             width="64"
             height="64"

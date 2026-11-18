@@ -49,6 +49,12 @@ describe('PageSpeed & Core Web Vitals Optimizations', () => {
     const sportsCard = read('components/HomepageSportsCard.vue')
     assert.match(sportsCard, /class="sports-center-watermark"[\s\S]*?width="64"[\s\S]*?height="64"/)
 
+    const sportsSection = read('components/HomepageSportsSection.vue')
+    assert.doesNotMatch(sportsSection, /\balt=""/)
+    assert.match(sportsSection, /:alt="translate\('Sports'\)"/)
+    assert.match(sportsSection, /:alt="translate\(sportLabel\)"/)
+    assert.match(sportsSection, /:alt="translate\(filter\.label\)"/)
+
     const footer = read('components/AppFooter.vue')
     assert.match(footer, /:width="logo\.width"[\s\S]*?:height="logo\.height"/)
     assert.match(footer, /width="108"[\s\S]*?height="41"/)

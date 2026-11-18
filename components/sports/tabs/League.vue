@@ -36,6 +36,8 @@ const emit = defineEmits<{
 const search = ref('')
 const { translate } = useSiteLocale()
 const sportsRouteBase = useSportsRouteBase()
+const isPopular = computed(() => sportsRouteBase.value.endsWith('/sports/popular'))
+const leagueHeadingTag = computed(() => (!isPopular.value && props.hideSportTitle) ? 'h2' : 'h3')
 const localSortBy = ref<'league' | 'time'>(props.sortBy)
 const localCollapsed = ref<string[]>([])
 const earliestTimes = ref<Record<string, number>>({})
@@ -222,19 +224,21 @@ const sortedGroups = computed(() => {
             :key="sport.key"
             class="league-preview"
           >
-            <button
-              :id="`league-trigger-${sport.key}`"
-              class="league-card league-preview-heading"
-              type="button"
-              :aria-expanded="isExpanded(sport.key)"
-              :aria-controls="`league-panel-${sport.key}`"
-              @click="toggleTournament(sport.key)"
-            >
-              <span class="league-name text-[12px] text-[#999] truncate" :title="sport.title">
-                {{ tournamentDetail ? `${sport.country || sport.group} ${sport.title}` : `${sport.title} ${sport.description || sport.group}` }}
-              </span>
-              <CollapseIcon :expanded="isExpanded(sport.key)" />
-            </button>
+            <component :is="leagueHeadingTag" class="league-preview-title">
+              <button
+                :id="`league-trigger-${sport.key}`"
+                class="league-card league-preview-heading"
+                type="button"
+                :aria-expanded="isExpanded(sport.key)"
+                :aria-controls="`league-panel-${sport.key}`"
+                @click="toggleTournament(sport.key)"
+              >
+                <span class="league-name text-[12px] text-[#999] truncate" :title="sport.title">
+                  {{ tournamentDetail ? `${sport.country || sport.group} ${sport.title}` : `${sport.title} ${sport.description || sport.group}` }}
+                </span>
+                <CollapseIcon :expanded="isExpanded(sport.key)" />
+              </button>
+            </component>
             <div
               v-show="isExpanded(sport.key)"
               :id="`league-panel-${sport.key}`"

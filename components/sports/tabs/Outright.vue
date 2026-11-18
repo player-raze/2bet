@@ -13,6 +13,7 @@ const props = defineProps<{
 const search = ref('')
 const { translate } = useSiteLocale()
 const sportsRouteBase = useSportsRouteBase()
+const isPopular = computed(() => sportsRouteBase.value.endsWith('/sports/popular'))
 
 const searchedSports = computed(() => {
   const q = search.value.toLowerCase().trim()
@@ -81,10 +82,10 @@ const tournamentPath = (key: string): string => {
           <span class="league-icon">
             <Trophy :size="19" aria-hidden="true" />
           </span>
-          <span class="league-name">
-            <strong>{{ sport.title }}</strong>
+          <div class="league-name">
+            <component :is="isPopular ? 'h3' : 'h2'" class="league-card-title">{{ sport.title }}</component>
             <small>{{ sport.description || sport.group }}</small>
-          </span>
+          </div>
           <ChevronUp :size="16" aria-hidden="true" />
         </NuxtLink>
       </div>

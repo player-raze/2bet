@@ -125,6 +125,7 @@ useAppSeo({
     <BonusEmptyState v-if="!featuredPromotions.length" />
 
     <section v-if="featuredPromotions.length" class="featured-promotions" :aria-label="translate('Featured promotions')">
+      <h2 class="sr-only">{{ translate('Featured promotions') }}</h2>
       <button
         v-if="featuredPromotions.length > 1"
         type="button"
@@ -155,7 +156,7 @@ useAppSeo({
           </div>
 
           <div class="featured-card__copy bg-[#015D25]  ">
-            <strong class="text-white light:text-white">{{ translate(promotion.title) }}</strong>
+            <h3 class="text-white light:text-white">{{ translate(promotion.title) }}</h3>
             <span class="text-white/70">{{ translate(getFeaturedMeta(promotion)) }}</span>
           </div>
         </NuxtLink>
@@ -182,7 +183,7 @@ useAppSeo({
           :to="categoryPath(section.category)"
           class="promotion-group__heading text-[#f5f5f5] light:text-[#10261c]"
         >
-          <span>{{ translate(section.title) }}</span>
+          <h2 class="promotion-group__title">{{ translate(section.title) }}</h2>
           <ChevronRight :size="16" aria-hidden="true" class="text-[#808481] light:text-[#5d7066]" />
         </NuxtLink>
 
@@ -203,7 +204,7 @@ useAppSeo({
             >
 
             <span class="promotion-row__copy">
-              <strong class="text-[#efefef] light:text-[#10261c]">{{ translate(promotion.title) }}</strong>
+              <h3 class="text-[#efefef] light:text-[#10261c]">{{ translate(promotion.title) }}</h3>
               <small class="text-[#959799] light:text-[#5d7066]">{{ translate(promotion.description) }}</small>
             </span>
 
@@ -368,13 +369,16 @@ useAppSeo({
 }
 
 .featured-card__copy strong,
+.featured-card__copy h3,
 .featured-card__copy span {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.featured-card__copy strong {
+.featured-card__copy strong,
+.featured-card__copy h3 {
+  margin: 0;
   font-size: 0.58rem;
   font-weight: 800;
   line-height: 1.25;
@@ -436,6 +440,13 @@ useAppSeo({
   cursor: pointer;
 }
 
+.promotion-group__title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
 .promotion-group__heading svg {
   color: #808481;
 }
@@ -473,13 +484,16 @@ useAppSeo({
 }
 
 .promotion-row__copy strong,
+.promotion-row__copy h3,
 .promotion-row__copy small {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.promotion-row__copy strong {
+.promotion-row__copy strong,
+.promotion-row__copy h3 {
+  margin: 0;
   font-size: 0.6rem;
   font-weight: 750;
   line-height: 1.25;
@@ -544,7 +558,8 @@ useAppSeo({
     height: 2.75rem;
   }
 
-  .promotion-row__copy strong {
+  .promotion-row__copy strong,
+  .promotion-row__copy h3 {
     font-size: 0.68rem;
   }
 

@@ -33,20 +33,21 @@ const toggleExpanded = (): void => {
 
 <template>
   <section class="sports-category-section" :class="{ 'sports-category-section--compact': isPopular }">
-    <button
-      v-if="shouldShowBanner"
-      type="button"
-      class="sports-category-banner bg-[#051a16] light:bg-[#eaf5ee] text-white light:text-white"
-      :style="{ backgroundImage: `url(${banner}), url(${background})` }"
-      :aria-expanded="expanded"
-      :aria-controls="panelId"
-      @click="toggleExpanded"
-    >
-      <span class="light:text-white">{{ title }}</span>
-      <span class="sports-category-banner__toggle bg-white/20 border border-white/20 text-white light:bg-white light:border-[#d8e2dc] light:text-[#10261c] light:shadow-sm" aria-hidden="true">
-        <ChevronDown :size="17" :class="{ 'rotate-180': expanded }" />
-      </span>
-    </button>
+    <h2 v-if="shouldShowBanner" class="sports-category-section__heading">
+      <button
+        type="button"
+        class="sports-category-banner bg-[#051a16] light:bg-[#eaf5ee] text-white light:text-white"
+        :style="{ backgroundImage: `url(${banner}), url(${background})` }"
+        :aria-expanded="expanded"
+        :aria-controls="panelId"
+        @click="toggleExpanded"
+      >
+        <span class="light:text-white">{{ title }}</span>
+        <span class="sports-category-banner__toggle bg-white/20 border border-white/20 text-white light:bg-white light:border-[#d8e2dc] light:text-[#10261c] light:shadow-sm" aria-hidden="true">
+          <ChevronDown :size="17" :class="{ 'rotate-180': expanded }" />
+        </span>
+      </button>
+    </h2>
 
     <div v-show="expanded" :id="panelId" class="sports-category-section__content">
       <slot />
@@ -57,6 +58,14 @@ const toggleExpanded = (): void => {
 <style scoped>
 .sports-category-section {
   min-width: 0;
+}
+
+.sports-category-section__heading {
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
 }
 
 .sports-category-banner {

@@ -99,6 +99,7 @@ watch(selectedCurrency, async () => {
     <BonusEmptyState v-if="showCurrencyEmptyState" />
 
     <section v-if="cards.length" class="mobile-bonuses__banners" :aria-label="category === 'all' ? translate('Featured bonuses') : `${translate(PROMO_CATEGORIES.find(item => item.key === category)?.label || '')} bonuses`">
+      <h2 v-if="category === 'all'" class="sr-only">{{ translate('Featured promotions') }}</h2>
       <div ref="track" :class="category === 'all' ? 'mobile-bonuses__carousel' : 'mobile-bonuses__stack'" @scroll.passive="updateSlide">
         <NuxtLink v-for="(promotion, index) in cards" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="mobile-bonus-card light:text-white" @click="markAsViewed(promotion.slug)">
           <div class="mobile-bonus-card__image light:bg-[#dce8e1]">
@@ -106,7 +107,7 @@ watch(selectedCurrency, async () => {
             <span v-if="promotion.showSaveBadge" class="mobile-bonus-card__save">◎ {{ translate('Save') }}</span>
           </div>
           <div class="mobile-bonus-card__copy">
-            <strong>{{ translate(promotion.title) }}</strong>
+            <component :is="category === 'all' ? 'h3' : 'h2'">{{ translate(promotion.title) }}</component>
             <span>{{ translate(countdown(promotion)) }}</span>
           </div>
         </NuxtLink>
@@ -126,7 +127,7 @@ watch(selectedCurrency, async () => {
         </NuxtLink>
         <NuxtLink v-for="promotion in section.items" :key="promotion.id" :to="`/bonus/${promotion.slug}`" class="mobile-bonus-row" @click="markAsViewed(promotion.slug)">
           <img :src="getPromoThumbnailUrl(promotion.thumbnailImage, promotion.slug)" :alt="translate(promotion.title)" loading="lazy" width="54" height="54">
-          <span class="mobile-bonus-row__copy"><strong class="text-white light:text-[#10261c]">{{ translate(promotion.title) }}</strong><small class="text-[#999] light:text-[#5d7066]">{{ translate(promotion.description) }}</small></span>
+          <span class="mobile-bonus-row__copy"><h3 class="text-white light:text-[#10261c]">{{ translate(promotion.title) }}</h3><small class="text-[#999] light:text-[#5d7066]">{{ translate(promotion.description) }}</small></span>
           <span class="mobile-bonus-row__details bg-[#242424] text-white light:bg-[#eaf5ee] light:text-[#019440]">{{ translate('Details') }}</span>
         </NuxtLink>
       </section>
@@ -156,7 +157,9 @@ watch(selectedCurrency, async () => {
   .mobile-bonus-card__image img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .mobile-bonus-card__save { position: absolute; top: 8px; left: 8px; padding: 2px 7px; border-radius: 20px; background: #ef174c; font-size: 12px; font-weight: 700; }
   .mobile-bonus-card__copy { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px 10px; }
-  .mobile-bonus-card__copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; font-weight: 800; line-height: 22px; }
+  .mobile-bonus-card__copy strong,
+  .mobile-bonus-card__copy h2,
+  .mobile-bonus-card__copy h3 { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; font-weight: 800; line-height: 22px; }
   .mobile-bonus-card__copy span { font-size: 12px; line-height: 18px; }
   .mobile-bonuses__next { position: absolute; top: 32%; right: 14px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; }
   .mobile-bonuses__dots { display: flex; align-items: center; justify-content: center; gap: 3px; height: 20px; }
@@ -172,8 +175,8 @@ watch(selectedCurrency, async () => {
   .mobile-bonus-row { display: grid; grid-template-columns: 54px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 78px; padding: 12px; }
   .mobile-bonus-row > img { width: 54px; height: 54px; object-fit: cover; border-radius: 8px; }
   .mobile-bonus-row__copy { display: flex; min-width: 0; flex-direction: column; }
-  .mobile-bonus-row__copy strong, .mobile-bonus-row__copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .mobile-bonus-row__copy strong { font-size: 16px; font-weight: 800; line-height: 22px; }
+  .mobile-bonus-row__copy strong, .mobile-bonus-row__copy h3, .mobile-bonus-row__copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mobile-bonus-row__copy strong, .mobile-bonus-row__copy h3 { margin: 0; font-size: 16px; font-weight: 800; line-height: 22px; }
   .mobile-bonus-row__copy small { font-size: 12px; line-height: 18px; }
   .mobile-bonus-row__details { padding: 7px 8px; border-radius: 8px; font-size: 12px; }
 }

@@ -115,7 +115,7 @@ useAppSeo({
       <SeoHeader
         title="Bonuses"
         heading-tag="span"
-        :meta-title="`${translate(categoryLabel)} — Bônus e Promoções de Cassino Online | 2bet Casino`"
+        :meta-title="`${translate(categoryLabel)} — Bônus e Promoções de 2bet Cassino Online`"
         :description="`Explore os bônus de ${translate(categoryLabel).toLowerCase()} recompensas e promoções disponíveis na 2bet Brasil. Aproveite recompensas, cashbacks e ofertas exclusivas.`"
         keywords="2bet bônus, promoções, recompensas de depósito, rebates"
         back-to="/bonuses"
@@ -160,7 +160,7 @@ useAppSeo({
           <span v-if="promotion.showSaveBadge" class="category-card__save text-white bg-[#ef174c]">◎ {{ translate('Save') }}</span>
         </div>
         <div class="category-card__copy bg-[#015D25]">
-          <strong class="text-white light:text-white">{{ translate(promotion.title) }}</strong>
+          <h2 class="text-white light:text-white">{{ translate(promotion.title) }}</h2>
           <span class="text-white/80">{{ translate(countdown(promotion)) }}</span>
         </div>
       </NuxtLink>
@@ -189,7 +189,7 @@ useAppSeo({
           <span v-if="promotion.showSaveBadge" class="category-card__save text-white bg-[#ef174c]">◎ {{ translate('Save') }}</span>
         </div>
         <div class="category-card__copy bg-[#015D25]">
-          <strong class="text-white light:text-white">{{ translate(promotion.title) }}</strong>
+          <h2 class="text-white light:text-white">{{ translate(promotion.title) }}</h2>
           <span class="text-white/80">{{ translate(countdown(promotion)) }}</span>
         </div>
       </NuxtLink>
@@ -330,13 +330,16 @@ useAppSeo({
 }
 
 .category-card__copy strong,
+.category-card__copy h2,
 .category-card__copy span {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.category-card__copy strong {
+.category-card__copy strong,
+.category-card__copy h2 {
+  margin: 0;
   font-size: 0.6rem;
   font-weight: 800;
   line-height: 1.25;
@@ -407,7 +410,8 @@ useAppSeo({
     padding: 0.45rem 0.7rem 0.55rem;
   }
 
-  .category-card__copy strong {
+  .category-card__copy strong,
+  .category-card__copy h2 {
     font-size: 0.9rem;
   }
 

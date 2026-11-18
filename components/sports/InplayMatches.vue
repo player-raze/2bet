@@ -32,6 +32,8 @@ const SPORT_CATEGORIES: Record<string, Omit<SportCategory, 'events'>> = {
 
 const SPORT_ORDER = ['basketball', 'soccer', 'tennis', 'baseball']
 
+const sportsRouteBase = useSportsRouteBase()
+const isPopular = computed(() => sportsRouteBase.value.endsWith('/sports/popular'))
 const collapsed = ref<string[]>([])
 const selectedOutcomes = ref<Record<string, string>>({})
 const sportType = (event: SportsEvent) => (event.sport || event.sport_key.split('_')[0] || '').toLowerCase()
@@ -132,17 +134,19 @@ const sportCategories = computed(() => {
           :key="tournament.key"
           class="league-preview bg-[#141414] light:bg-white border border-white/5 light:border-[#d8e2dc] light:shadow-sm"
         >
-          <button
-            :id="`inplay-trigger-${tournament.key}`"
-            class="league-card league-preview-heading"
-            type="button"
-            :aria-expanded="isExpanded(tournament.key)"
-            :aria-controls="`inplay-panel-${tournament.key}`"
-            @click="toggleTournament(tournament.key)"
-          >
-            <span class="league-name truncate text-[12px] text-[#999] light:text-[#5d7066]" :title="tournament.title">{{ tournament.title }}</span>
-            <ChevronDown :size="16" class="shrink-0 text-[#999] light:text-[#5d7066]" :class="{ 'rotate-180': isExpanded(tournament.key) }" aria-hidden="true" />
-          </button>
+          <component :is="isPopular ? 'h3' : 'h2'" class="league-preview-title">
+            <button
+              :id="`inplay-trigger-${tournament.key}`"
+              class="league-card league-preview-heading"
+              type="button"
+              :aria-expanded="isExpanded(tournament.key)"
+              :aria-controls="`inplay-panel-${tournament.key}`"
+              @click="toggleTournament(tournament.key)"
+            >
+              <span class="league-name truncate text-[12px] text-[#999] light:text-[#5d7066]" :title="tournament.title">{{ tournament.title }}</span>
+              <ChevronDown :size="16" class="shrink-0 text-[#999] light:text-[#5d7066]" :class="{ 'rotate-180': isExpanded(tournament.key) }" aria-hidden="true" />
+            </button>
+          </component>
           <div
             v-show="isExpanded(tournament.key)"
             :id="`inplay-panel-${tournament.key}`"

@@ -37,9 +37,12 @@ interface Props {
   game: Game
   activeId?: string | null
   displayCategory?: string | null
+  titleTag?: 'span' | 'h2' | 'h3'
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  titleTag: 'span',
+})
 const route = useRoute()
 const { effectiveTheme } = useSiteTheme()
 const { translate } = useSiteLocale()
@@ -499,9 +502,9 @@ onUnmounted(() => {
 
   <!-- Bottom Caption: Title & Provider Logo -->
   <div class="my-0.5 flex items-center justify-between gap-1 px-1">
-    <span class="truncate text-[12px] font-semibold text-[#e5e7eb] transition-colors">
+    <component :is="titleTag" class="m-0 min-w-0 truncate text-[12px] font-semibold text-[#e5e7eb] transition-colors">
       {{ game.title }}
-    </span>
+    </component>
 
     <div class="flex items-center shrink-0">
       <img

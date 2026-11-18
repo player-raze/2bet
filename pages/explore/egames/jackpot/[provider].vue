@@ -286,6 +286,7 @@ watch(
         :class="{ 'jackpot-provider-header--with-counter': section.showCounter }"
       >
         <div class="jackpot-provider-identity">
+          <h2 class="sr-only">{{ section.provider }}</h2>
           <img
             :src="themedProviderLogo(section.providerLogo)"
             :alt="section.provider"
@@ -338,6 +339,7 @@ watch(
           :game="game"
           :activeId="activeGameId"
           :displayCategory="section.id === 'jdb' || activeProvider === 'jdb' ? 'jackpot-jdb' : 'jackpot'"
+          title-tag="h3"
           @select="handleCardClick"
           @info="showGameDetails"
           @start="handleStartNow"
@@ -355,14 +357,16 @@ watch(
       aria-labelledby="standalone-jackpot-title"
     >
       <div class="mb-2 flex items-center justify-between gap-3">
-        <NuxtLink
-          id="standalone-jackpot-title"
-          to="/egames/jackpot/standalone"
-          class="flex min-w-0 items-center gap-1.5 text-[15px] font-bold text-white light:text-[#10261c] transition-colors hover:text-[var(--main-color)]"
-        >
-          <span aria-hidden="true">🎰</span>
-          <span class="truncate">{{ translate('Standalone Jackpot Game') }}</span>
-        </NuxtLink>
+        <h2 class="m-0 flex min-w-0 items-center">
+          <NuxtLink
+            id="standalone-jackpot-title"
+            to="/egames/jackpot/standalone"
+            class="flex min-w-0 items-center gap-1.5 text-[15px] font-bold text-white light:text-[#10261c] transition-colors hover:text-[var(--main-color)]"
+          >
+            <span aria-hidden="true">🎰</span>
+            <span class="truncate">{{ translate('Standalone Jackpot Game') }}</span>
+          </NuxtLink>
+        </h2>
         <NuxtLink
           to="/egames/jackpot/standalone"
           class="flex shrink-0 items-center gap-0.5 rounded-full bg-[#202220] px-2.5 py-0.5 text-[11px] font-medium text-[#8e9491] light:bg-[#edf4f0] light:text-[#2a3c33] light:hover:text-[#019440] light:border light:border-[#d8e2dc] transition-colors hover:bg-[#282a29] hover:text-white"
@@ -380,6 +384,7 @@ watch(
           :game="game"
           :activeId="activeGameId"
           displayCategory="jackpot"
+          title-tag="h3"
           @select="handleCardClick"
           @info="showGameDetails"
           @start="handleStartNow"

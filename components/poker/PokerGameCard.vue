@@ -31,7 +31,7 @@ watch(() => props.game.image, () => { failedImage.value = false })
     <span class="poker-game-artwork">
       <img :src="image" :alt="game.title" loading="lazy" decoding="async" @error="failedImage = true" />
     </span>
-    <span class="poker-game-title" :title="game.title">{{ game.title }}</span>
+    <h3 class="poker-game-title" :title="game.title">{{ game.title }}</h3>
     <img v-if="providerLogo" :src="providerLogo" :alt="provider?.label || game.provider" class="poker-game-provider-logo" />
     <span v-else class="poker-game-provider">{{ provider?.label || game.provider }}</span>
   </button>
@@ -79,6 +79,7 @@ watch(() => props.game.image, () => { failedImage.value = false })
 
 .poker-game-title {
   display: block;
+  margin: 0;
   max-width: 100%;
   overflow: hidden;
   font-size: 12px;

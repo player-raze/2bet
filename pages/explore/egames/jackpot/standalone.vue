@@ -188,6 +188,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
+    <h2 v-if="filteredGames.length" class="sr-only">{{ translate('Standalone jackpot games') }}</h2>
     <div
       v-if="filteredGames.length"
       class="mb-36 grid grid-cols-3 gap-2.5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-11"
@@ -199,6 +200,7 @@ onBeforeUnmount(() => {
         :game="game"
         :activeId="activeGameId"
         displayCategory="jackpot"
+        title-tag="h3"
         @select="handleCardClick"
         @info="showGameDetails"
         @start="handleStartNow"

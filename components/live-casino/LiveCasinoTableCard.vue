@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<{
   showRoadmap?: boolean
   compact?: boolean
   layout?: 'vertical' | 'horizontal'
-  titleTag?: 'h2' | 'span'
+  titleTag?: 'h2' | 'h3' | 'span'
 }>(), { showRoadmap: true, compact: false, layout: 'vertical', titleTag: 'span' })
 const emit = defineEmits<{ select: [table: LiveCasinoTable] }>()
 const tableImage = ref<HTMLImageElement | null>(null)

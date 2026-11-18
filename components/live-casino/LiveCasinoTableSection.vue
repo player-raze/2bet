@@ -80,7 +80,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
           :key="table.id"
           :table="table"
           :elapsed-ms="elapsedMs"
-          :title-tag="computedHeaderTag === 'span' ? 'h2' : 'span'"
+          :title-tag="featured ? 'h3' : (computedHeaderTag === 'span' ? 'h2' : 'span')"
           compact
           @select="emit('select', $event)"
         />

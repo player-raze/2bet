@@ -16,6 +16,8 @@ const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig()
 const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
 const { translate } = useSitePreferences()
 const route = useRoute()
+const sportsRouteBase = useSportsRouteBase()
+const isPopular = computed(() => sportsRouteBase.value.endsWith('/sports/popular'))
 const search = ref('')
 
 const searchedSports = computed(() => {
@@ -194,32 +196,34 @@ const toggleCollapseAll = (): void => {
           :key="sport.key"
           class="outright-accordion"
         >
-          <button
-            :id="`outright-trigger-${sport.key}`"
-            type="button"
-            class="league-card outright-trigger"
-            :aria-expanded="expandedOutrights.includes(sport.key)"
-            :aria-controls="`outright-panel-${sport.key}`"
-            @click="toggleOutright(sport.key)"
-          >
-            <span class="league-icon">
-              <Trophy :size="19" aria-hidden="true" />
-            </span>
-            <span class="league-name">
-              <strong>{{ sport.title }}</strong>
-              <time
-                v-if="commencementDates[sport.key]"
-                :datetime="commencementDates[sport.key]?.value"
-                class="mt-1 block text-[12px] font-normal text-[#999]"
-              >{{ translate('End Time') }} : {{ commencementDates[sport.key]?.label }}</time>
-            </span>
-            <ChevronUp
-              :size="16"
-              class="outright-chevron"
-              :class="{ 'outright-chevron--expanded': expandedOutrights.includes(sport.key) }"
-              aria-hidden="true"
-            />
-          </button>
+          <component :is="isPopular ? 'h3' : 'h2'" class="league-preview-title">
+            <button
+              :id="`outright-trigger-${sport.key}`"
+              type="button"
+              class="league-card outright-trigger"
+              :aria-expanded="expandedOutrights.includes(sport.key)"
+              :aria-controls="`outright-panel-${sport.key}`"
+              @click="toggleOutright(sport.key)"
+            >
+              <span class="league-icon">
+                <Trophy :size="19" aria-hidden="true" />
+              </span>
+              <span class="league-name">
+                <strong>{{ sport.title }}</strong>
+                <time
+                  v-if="commencementDates[sport.key]"
+                  :datetime="commencementDates[sport.key]?.value"
+                  class="mt-1 block text-[12px] font-normal text-[#999]"
+                >{{ translate('End Time') }} : {{ commencementDates[sport.key]?.label }}</time>
+              </span>
+              <ChevronUp
+                :size="16"
+                class="outright-chevron"
+                :class="{ 'outright-chevron--expanded': expandedOutrights.includes(sport.key) }"
+                aria-hidden="true"
+              />
+            </button>
+          </component>
 
           <div
             v-show="expandedOutrights.includes(sport.key)"
@@ -244,7 +248,7 @@ const toggleCollapseAll = (): void => {
                 :key="event.id"
                 class="outright-market"
               >
-                <h4 class="pb-1.5">{{ translate('Winner') }}</h4>
+                <component :is="isPopular ? 'h4' : 'h3'" class="outright-market-title pb-1.5">{{ translate('Winner') }}</component>
                 <div
                   v-for="bookmaker in (event.bookmakers ?? []).slice(0, 1)"
                   :key="bookmaker.key"

@@ -57,11 +57,11 @@ const appDownloadUrl = buildBybetRedirectUrl('downloadApp', bybetRedirectUrl, by
           @click="showInstallationGuide = true"
         >
           <span class="native-app-icon" aria-hidden="true">
-            <img src="/icons/2bet-square.webp" alt="" width="36" height="36">
+            <img src="/icons/2bet-square.webp" alt="2bet logo" width="36" height="36" >
             <span class="text-[#08743b] bg-white">Native</span>
           </span>
           <span class="native-app-copy">
-            <strong class="text-white light:text-[#10261c]">Native APP</strong>
+            <h2 class="text-white light:text-[#10261c]">Native APP</h2>
             <span class="text-[#999] light:text-[#5d7066]">Standard App</span>
           </span>
           <span class="native-app-arrow" aria-hidden="true"><ChevronRight :size="18" /></span>

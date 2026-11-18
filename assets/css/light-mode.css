@@ -1776,7 +1776,8 @@ html[data-theme='light']:not(#_) .promotion-row__thumbnail {
   background: #edf4f0;
 }
 
-html[data-theme='light']:not(#_) .promotion-row__copy strong {
+html[data-theme='light']:not(#_) .promotion-row__copy strong,
+html[data-theme='light']:not(#_) .promotion-row__copy h3 {
   color: var(--heading);
 }
 

@@ -351,7 +351,6 @@ watch(() => props.category, () => {
   z-index: 30;
   top: var(--content-sticky-top);
   padding-bottom: 6px;
-  background: var(--page);
 }
 
 .poker-category-nav {
@@ -359,7 +358,7 @@ watch(() => props.category, () => {
   gap: 9px;
   padding: 10px 8px;
   overflow-x: auto;
-  border-radius: 14px 14px 0 0;
+  border-radius: 14px ;
   background: color-mix(in srgb, var(--surface) 94%, var(--text) 6%);
 }
 

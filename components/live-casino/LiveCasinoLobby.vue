@@ -51,10 +51,10 @@ const baccaratSections = computed(() => tableTypes.slice(1).map(item => ({
 })))
 const featuredSections = computed(() => [
   { key: 'baccarat', title: 'Baccarat', headerTag: 'h2' as const },
-  { key: 'live-show', title: 'Live Show', headerTag: 'span' as const },
-  { key: 'dragon-tiger', title: 'Dragon Tiger', headerTag: 'span' as const },
-  { key: 'roulette', title: 'Roulette', headerTag: 'span' as const },
-  { key: 'sicbo', title: 'Sicbo', headerTag: 'span' as const },
+  { key: 'live-show', title: 'Live Show', headerTag: 'h2' as const },
+  { key: 'dragon-tiger', title: 'Dragon Tiger', headerTag: 'h2' as const },
+  { key: 'roulette', title: 'Roulette', headerTag: 'h2' as const },
+  { key: 'sicbo', title: 'Sicbo', headerTag: 'h2' as const },
 ].map(section => ({ ...section, tables: tablesForCategory(section.key) })))
 
 const filteredTables = computed(() => baccaratTables.value.filter(table =>

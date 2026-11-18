@@ -122,7 +122,7 @@ const viewAllTarget = computed(() => {
     <template #header="{ firstVisible, atStart, atEnd, move }">
       <header class="sports-header flex items-center justify-between">
         <div class="sports-heading flex items-center min-w-0">
-          <h2 id="sports-title" class="flex items-center text-white light:text-[#10261c]"><img src="/icons/sports/popular.webp" class="allgames-heading-symbol allgames-heading-image" alt="" width="28" height="28" loading="lazy" decoding="async">{{ translate('Sports') }}</h2>
+          <h2 id="sports-title" class="flex items-center text-white light:text-[#10261c]"><img src="/icons/sports/popular.webp" class="allgames-heading-symbol allgames-heading-image" :alt="translate('Sports')" width="28" height="28" loading="lazy" decoding="async">{{ translate('Sports') }}</h2>
           <p class="text-[#a9bdb4] light:text-[#5d7066] border-l border-white/10 light:border-l-[#d8e2dc]">{{ translate('Big games. Your front-row seat.') }}</p>
         </div>
         <HomepagePartnerBanner class="sports-partner-banner" />
@@ -146,7 +146,7 @@ const viewAllTarget = computed(() => {
             @keydown.up.prevent="openFilter"
             @keydown.esc.stop="closeFilter(true)"
           >
-            <img :src="`/images/sports/sidebar/${activeSport}.webp`" class="sports-filter-icon" alt="" width="24" height="24" loading="lazy" decoding="async">
+            <img :src="`/images/sports/sidebar/${activeSport}.webp`" class="sports-filter-icon" :alt="translate(sportLabel)" width="24" height="24" loading="lazy" decoding="async">
             <span id="sports-filter-value" class="sports-filter-name min-w-0 flex-1">{{ translate(sportLabel) }}</span>
             <span id="sports-filter-count" class="sports-filter-count">{{ fixtureCount(activeSport) }}</span>
             <ChevronDown class="sports-filter-chevron shrink-0" :size="16" aria-hidden="true" />
@@ -164,7 +164,7 @@ const viewAllTarget = computed(() => {
               @focus="focusedFilter = index"
               @click="selectFilter(filter.key)"
             >
-              <span class="sports-filter-option-icon flex shrink-0 items-center justify-center"><img :src="`/images/sports/sidebar/${filter.key}.webp`" class="sports-filter-icon" alt="" width="24" height="24"></span>
+              <span class="sports-filter-option-icon flex shrink-0 items-center justify-center"><img :src="`/images/sports/sidebar/${filter.key}.webp`" class="sports-filter-icon" :alt="translate(filter.label)" width="24" height="24" loading="lazy" decoding="async"></span>
               <span class="min-w-0 flex-1">{{ translate(filter.label) }}</span>
               <span class="sports-filter-count">{{ fixtureCount(filter.key) }}</span>
               <Check class="sports-filter-check shrink-0" :class="{ invisible: activeSport !== filter.key }" :size="16" aria-hidden="true" />

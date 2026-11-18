@@ -252,6 +252,25 @@
   margin: 0 0 12px;
 }
 
+.sports-page .sports-category-section__heading,
+.sports-page .league-preview-title,
+.sports-page .league-group .league-preview-title {
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.sports-page .league-name .league-card-title {
+  display: block;
+  margin: 0;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: inherit;
+}
+
 .sports-page .league-grid,
 .sports-page .event-grid {
   gap: 12px;
@@ -469,6 +488,7 @@
   margin-top: 20px;
 }
 
+.sports-page .outright-market .outright-market-title,
 .sports-page .outright-market h4 {
   margin: 0;
   font-size: 14px;
