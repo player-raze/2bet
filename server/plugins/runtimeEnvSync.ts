@@ -55,6 +55,15 @@ export default defineNitroPlugin((nitroApp) => {
       config.public.indexFollow = indexFollowRaw.trim() === 'true'
     }
 
+    const googleSiteVerificationRaw = resolveEnvOverride(
+      dotEnv,
+      'NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION',
+      'GOOGLE_SITE_VERIFICATION',
+    )
+    if (googleSiteVerificationRaw !== undefined) {
+      config.public.googleSiteVerification = googleSiteVerificationRaw.trim().replace(/^['"]+|['"]+$/g, '')
+    }
+
     const useOddsApiRaw = resolveEnvOverride(dotEnv, 'NUXT_PUBLIC_USE_ODDS_API', 'USE_ODDS_API')
     if (useOddsApiRaw !== undefined) {
       const enabled = useOddsApiRaw.trim() === 'true'

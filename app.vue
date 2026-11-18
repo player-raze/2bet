@@ -4,6 +4,10 @@ import { defineAsyncComponent } from 'vue'
 const LightModeTheme = defineAsyncComponent(() => import('~/components/LightModeTheme.vue'))
 const { locale, restoreLocale } = useSiteLocale()
 const { restoreTimeZone } = useTimeZonePreference()
+const runtimeConfig = useRuntimeConfig()
+const googleSiteVerification = computed(() =>
+  String(runtimeConfig.public.googleSiteVerification || '').trim().replace(/^['"]+|['"]+$/g, ''),
+)
 const {
   applyTheme,
   effectiveTheme,
@@ -26,6 +30,15 @@ useHead(() => ({
       name: 'theme-color',
       content: effectiveTheme.value === 'light' ? '#eef5f1' : '#080D0B',
     },
+    ...(googleSiteVerification.value
+      ? [
+          {
+            key: 'google-site-verification',
+            name: 'google-site-verification',
+            content: googleSiteVerification.value,
+          },
+        ]
+      : []),
   ],
 }))
 

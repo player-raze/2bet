@@ -322,4 +322,20 @@ describe('Sitemap Architecture & Structure Suite', () => {
     const nuxtConfig = fs.readFileSync(path.join(rootDir, 'nuxt.config.ts'), 'utf8')
     assert.match(nuxtConfig, /\*\*\/robots\.txt/)
   })
+
+  test('Case 15: google-site-verification meta tag reads runtime config and syncs from GOOGLE_SITE_VERIFICATION env', () => {
+    const nuxtConfig = fs.readFileSync(path.join(rootDir, 'nuxt.config.ts'), 'utf8')
+    assert.match(nuxtConfig, /GOOGLE_SITE_VERIFICATION/)
+    assert.match(nuxtConfig, /googleSiteVerification/)
+    assert.match(nuxtConfig, /iMHXS_4N09-cqe9bTddjAfgTyYx53sg6yFsVkhaZWEk/)
+
+    const runtimeEnvSyncSrc = fs.readFileSync(path.join(rootDir, 'server/plugins/runtimeEnvSync.ts'), 'utf8')
+    assert.match(runtimeEnvSyncSrc, /GOOGLE_SITE_VERIFICATION/)
+    assert.match(runtimeEnvSyncSrc, /NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION/)
+    assert.match(runtimeEnvSyncSrc, /config\.public\.googleSiteVerification/)
+
+    const appVueSrc = fs.readFileSync(path.join(rootDir, 'app.vue'), 'utf8')
+    assert.match(appVueSrc, /name:\s*'google-site-verification'/)
+    assert.match(appVueSrc, /runtimeConfig\.public\.googleSiteVerification/)
+  })
 })

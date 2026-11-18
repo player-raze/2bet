@@ -16,6 +16,8 @@ const processGlobal = (
         SITE_URL?: string
         NUXT_PUBLIC_SITE_URL?: string
         INDEX_FOLLOW?: string
+        GOOGLE_SITE_VERIFICATION?: string
+        NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION?: string
         LIVESTREAM_API?: string
         INPLAY_API?: string
         BLOGGERIST_URL?: string
@@ -28,6 +30,11 @@ const environment = processGlobal?.env
 const isPrepare = Boolean(processGlobal?.argv?.some(arg => arg.includes('prepare')))
 
 const isIndexFollow = environment?.INDEX_FOLLOW === 'true'
+const googleSiteVerification = (
+  environment?.NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+  ?? environment?.GOOGLE_SITE_VERIFICATION
+  ?? 'iMHXS_4N09-cqe9bTddjAfgTyYx53sg6yFsVkhaZWEk'
+).trim().replace(/^['"]+|['"]+$/g, '')
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -51,6 +58,7 @@ export default defineNuxtConfig({
       siteName: environment?.SITE_NAME || '2bet',
       siteUrl: (environment?.SITE_URL || 'https://2bet.com').replace(/\/+$/, ''),
       indexFollow: isIndexFollow,
+      googleSiteVerification,
     },
     kadarioApi: environment?.KADARIO_API || 'https://live88.eu.cc/',
     kadarioSite: 'YBa-BnymZ6iN8pkfAUFTWIKn',
