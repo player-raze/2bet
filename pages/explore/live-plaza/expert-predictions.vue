@@ -7,7 +7,7 @@ import {
   type PredictionsResponse,
 } from '~/data/predictions'
 import type { LivePlazaSportFilter } from '~/components/live-plaza/LivePlazaSportFilters.vue'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { resolveLivePlazaRedirectUrl } from '~/utils/sportsRedirect'
 
 type PredictionSort = 'featured' | 'hit' | 'win-streak'
 
@@ -18,7 +18,7 @@ const predictionSortOptions: Array<{ value: PredictionSort; label: string }> = [
 ]
 
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectUrl = resolveLivePlazaRedirectUrl('expert-predictions', rawRedirectUrl, bybetRedirectCode)
 const siteUrl = useSiteUrl()
 
 useAppSeo({

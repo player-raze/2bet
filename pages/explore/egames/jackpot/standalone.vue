@@ -6,7 +6,7 @@ import GameEmptyState from '~/components/game-cards/GameEmptyState.vue'
 import JackpotWinnersCard from '~/components/jackpot/JackpotWinnersCard.vue'
 import SlotFilterModal from '~/components/slots/SlotFilterModal.vue'
 import { getStandaloneJackpotGames, normalizeSlotProvider, type SlotGame } from '~/data/slots'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { resolveJackpotRedirectUrl } from '~/utils/sportsRedirect'
 
 useAppSeo({
   title: 'Jackpots Exclusivos Betsoft com Prêmios em Dinheiro | 2bet',
@@ -33,10 +33,9 @@ const filterState = ref({
 })
 
 const currentWinners = useJackpotWinners()
-const { showDemoMessage } = useDemoInteraction()
 const { addRecentGame } = useRecentGames()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
+const bybetRedirectUrl = resolveJackpotRedirectUrl('standalone', bybetBaseUrl, bybetRedirectCode)
 
 const matchesWinningLine = (game: SlotGame): boolean => {
   const selection = filterState.value.winningLine
@@ -80,20 +79,15 @@ const handleCardClick = (game: SlotGame): void => {
   activeGameId.value = activeGameId.value === game.id ? null : game.id
 }
 
-const showGameDetails = (game: SlotGame): void => {
-  const jackpotPool = game.jackpotPrice || game.JackpotPrice || 'Active'
-  showDemoMessage(`${game.title} (${game.provider}) — Jackpot Pool: ${jackpotPool} • RTP: ${game.rtpPercent || '97.0%'}`)
-}
+const showGameDetails = (_game: SlotGame): void => {}
 
 const handleStartNow = (game: SlotGame): void => {
   addRecentGame(game)
-  showDemoMessage(`Starting ${game.title} (${game.provider})...`)
   if (import.meta.client) window.open(game.href || bybetRedirectUrl, '_blank')
 }
 
 const handleDemo = (game: SlotGame): void => {
-  addRecentGame(game)
-  showDemoMessage(`Launching Demo mode for ${game.title} (${game.provider})...`)
+  handleStartNow(game)
 }
 
 const handleDocumentClick = (event: MouseEvent): void => {

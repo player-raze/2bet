@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import LiveCasinoLobby from '~/components/live-casino/LiveCasinoLobby.vue'
 import { LIVE_CASINO_CATEGORIES, LIVE_CASINO_TABLES, type LiveCasinoTable } from '~/data/live-casino'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { resolveLiveCasinoRedirectUrl } from '~/utils/sportsRedirect'
 
 const route = useRoute()
 const router = useRouter()
@@ -33,7 +33,7 @@ useAppSeo({
 const { context: commentContext, openGameComments, closeComments } = useCommentPanel()
 const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectUrl = computed(() => resolveLiveCasinoRedirectUrl(activeCategory.value, rawRedirectUrl, bybetRedirectCode))
 
 const isReminderOpen = ref(false)
 const isMaintenanceOpen = ref(false)
@@ -71,7 +71,7 @@ const handleTableClick = (event: MouseEvent): void => {
 
 const handleOkClick = (): void => {
   isReminderOpen.value = false
-  window.location.href = bybetRedirectUrl
+  window.location.href = bybetRedirectUrl.value
 }
 
 const filteredTables = computed<LiveCasinoTable[]>(() => {

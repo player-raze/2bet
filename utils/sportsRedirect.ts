@@ -197,3 +197,123 @@ export const resolveSportsMatchRedirectUrl = (
   const path = getSportsMatchRedirectPath(routePath)
   return path ? buildBybetRedirectUrl(path, bybetRedirectUrl, redirectCode) : null
 }
+
+const normalizeMappedKey = (value: string | undefined, routePrefixPattern: RegExp): string => {
+  const pathname = (value || '').split(/[?#]/)[0].replace(/^\/explore(?=\/)/, '')
+  const stripped = pathname.replace(routePrefixPattern, '').replace(/^\/+|\/+$/g, '').toLowerCase()
+  return stripped.split('/')[0] || ''
+}
+
+export const LIVE_CASINO_REDIRECT_PATHS: Record<string, string> = {
+  featured: 'liveCasino/46?option=0',
+  'good-road': 'liveCasino/46?option=1',
+  'live-show': 'liveCasino/46?option=19',
+  'game-show': 'liveCasino/46?option=19',
+  baccarat: 'liveCasino/46?option=18',
+  'multi-table': 'liveCasino/46?option=18',
+  multitable: 'liveCasino/46?option=18',
+  'dragon-tiger': 'liveCasino/46?option=20',
+  roulette: 'liveCasino/46?option=21',
+  sicbo: 'liveCasino/46?option=23',
+}
+
+export const getLiveCasinoRedirectPath = (categoryOrPath?: string): string => {
+  const key = normalizeMappedKey(categoryOrPath, /^\/?entertainment\/live-casino(?:\/|$)/i)
+  return LIVE_CASINO_REDIRECT_PATHS[key] ?? 'liveCasino/46?option=0'
+}
+
+export const resolveLiveCasinoRedirectUrl = (
+  categoryOrPath?: string,
+  bybetRedirectUrl?: string,
+  redirectCode?: string,
+): string => {
+  return buildBybetRedirectUrl(getLiveCasinoRedirectPath(categoryOrPath), bybetRedirectUrl, redirectCode)
+}
+
+export const POKER_REDIRECT_PATHS: Record<string, string> = {
+  '': 'board/hot',
+  popular: 'board/hot',
+  all: 'board/all',
+  fishing: 'board/fishing',
+  mahjong: 'board/mahjong',
+  bullbull: 'board/bullbull',
+  poker: 'board/poker',
+  baccarat: 'board/hundred',
+  other: 'board/other',
+}
+
+export const getPokerRedirectPath = (categoryOrPath?: string): string => {
+  const key = normalizeMappedKey(categoryOrPath, /^\/?entertainment\/poker(?:\/|$)/i)
+  return POKER_REDIRECT_PATHS[key] ?? 'board/hot'
+}
+
+export const resolvePokerRedirectUrl = (
+  categoryOrPath?: string,
+  bybetRedirectUrl?: string,
+  redirectCode?: string,
+): string => {
+  return buildBybetRedirectUrl(getPokerRedirectPath(categoryOrPath), bybetRedirectUrl, redirectCode)
+}
+
+export const SLOTS_REDIRECT_PATHS: Record<string, string> = {
+  '': 'slotMachine/main',
+  home: 'slotMachine/main',
+  'top-pick': 'slotMachine/recommend',
+  new: 'slotMachine/new',
+  hot: 'slotMachine/hot',
+  cold: 'slotMachine/cold',
+  'max-rpt': 'slotMachine/high',
+  'max-rtp': 'slotMachine/high',
+}
+
+export const getSlotsRedirectPath = (categoryOrPath?: string): string => {
+  const key = normalizeMappedKey(categoryOrPath, /^\/?egames\/slots(?:\/|$)/i)
+  return SLOTS_REDIRECT_PATHS[key] ?? 'slotMachine/main'
+}
+
+export const resolveSlotsRedirectUrl = (
+  categoryOrPath?: string,
+  bybetRedirectUrl?: string,
+  redirectCode?: string,
+): string => {
+  return buildBybetRedirectUrl(getSlotsRedirectPath(categoryOrPath), bybetRedirectUrl, redirectCode)
+}
+
+export const JACKPOT_REDIRECT_PATHS: Record<string, string> = {
+  '': 'jackpot/list',
+  all: 'jackpot/list',
+  jdb: 'jackpot/18',
+  standalone: 'jackpot/singleJackpot',
+}
+
+export const getJackpotRedirectPath = (providerOrPath?: string): string => {
+  const key = normalizeMappedKey(providerOrPath, /^\/?egames\/jackpot(?:\/|$)/i)
+  return JACKPOT_REDIRECT_PATHS[key] ?? 'jackpot/list'
+}
+
+export const resolveJackpotRedirectUrl = (
+  providerOrPath?: string,
+  bybetRedirectUrl?: string,
+  redirectCode?: string,
+): string => {
+  return buildBybetRedirectUrl(getJackpotRedirectPath(providerOrPath), bybetRedirectUrl, redirectCode)
+}
+
+export const LIVE_PLAZA_REDIRECT_PATHS: Record<string, string> = {
+  '': 'squareHome',
+  home: 'squareHome',
+  'expert-predictions': 'expertHome',
+}
+
+export const getLivePlazaRedirectPath = (pageOrPath?: string): string => {
+  const key = normalizeMappedKey(pageOrPath, /^\/?live-plaza(?:\/|$)/i)
+  return LIVE_PLAZA_REDIRECT_PATHS[key] ?? 'squareHome'
+}
+
+export const resolveLivePlazaRedirectUrl = (
+  pageOrPath?: string,
+  bybetRedirectUrl?: string,
+  redirectCode?: string,
+): string => {
+  return buildBybetRedirectUrl(getLivePlazaRedirectPath(pageOrPath), bybetRedirectUrl, redirectCode)
+}

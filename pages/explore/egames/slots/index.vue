@@ -38,7 +38,7 @@ import GameEmptyState from '~/components/game-cards/GameEmptyState.vue'
 import { sortRailGames } from '~/utils/gameSort'
 import SlotFilterModal from '~/components/slots/SlotFilterModal.vue'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { resolveSlotsRedirectUrl } from '~/utils/sportsRedirect'
 
 const { effectiveTheme } = useSiteTheme()
 const siteUrl = useSiteUrl()
@@ -93,7 +93,7 @@ const filterState = ref({
 const { showDemoMessage } = useDemoInteraction()
 const { addRecentGame } = useRecentGames()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectUrl = resolveSlotsRedirectUrl('home', rawRedirectUrl, bybetRedirectCode)
 const { context: commentContext, openGameComments, closeComments } = useCommentPanel()
 
 const toggleChat = (): void => {
@@ -189,9 +189,7 @@ const resetSearch = (): void => {
   activeProviders.value = ['all']
 }
 
-const showGameDetails = (game: any): void => {
-  showDemoMessage(`${game.title} (${game.provider}) — RTP: 96.8% • Volatility: High`)
-}
+const showGameDetails = (_game: any): void => {}
 
 const showSectionHelp = (title: string): void => {
   showDemoMessage(`${title} reflects real-time payout statistics and RTP trends across active slot sessions.`)
@@ -210,15 +208,13 @@ const handleCardClick = (game: any): void => {
 
 const handleStartNow = (game: any): void => {
   addRecentGame(game)
-  showDemoMessage(`Starting ${game.title} (${game.provider})...`)
   if (import.meta.client) {
     window.open(game.href || bybetRedirectUrl, '_blank')
   }
 }
 
 const handleDemo = (game: any): void => {
-  addRecentGame(game)
-  showDemoMessage(`Launching Demo mode for ${game.title} (${game.provider})...`)
+  handleStartNow(game)
 }
 
 const handleDocumentClick = (event: MouseEvent): void => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ChevronRight, Unlock } from 'lucide-vue-next'
 import type { Prediction, PredictionOption } from '~/data/predictions'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { resolveLivePlazaRedirectUrl } from '~/utils/sportsRedirect'
 
 const props = defineProps<{
   prediction: Prediction
@@ -13,8 +13,9 @@ const emit = defineEmits<{
   selectOdd: [prediction: Prediction, option: PredictionOption]
 }>()
 
+const route = useRoute()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectUrl = computed(() => resolveLivePlazaRedirectUrl(route.path, rawRedirectUrl, bybetRedirectCode))
 const { translate } = useSiteLocale()
 
 const formattedHitRate = computed(() => {
@@ -37,7 +38,7 @@ const handleAvatarError = (event: Event): void => {
 }
 
 const redirectTo2Bet = (): void => {
-  void navigateTo(bybetRedirectUrl, { external: true })
+  void navigateTo(bybetRedirectUrl.value, { external: true })
 }
 
 const handleCardClick = (event: MouseEvent): void => {

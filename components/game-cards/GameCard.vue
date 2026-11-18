@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue'
 import { User, X } from 'lucide-vue-next'
-import ReminderModal from '~/components/modals/ReminderModal.vue'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
 import { JACKPOT_SECTIONS } from '~/data/jackpot'
 import { normalizeSlotProvider } from '~/utils/slotProvider'
@@ -105,20 +104,14 @@ const toggleTooltip = () => {
   emit('info', props.game)
 }
 
-const showReminderModal = ref(false)
-
 const handleStartNowClick = () => {
-  showReminderModal.value = true
-}
-
-const handleReminderOk = () => {
-  showReminderModal.value = false
   emit('close')
   emit('start', props.game)
 }
 
-const handleReminderClose = () => {
-  showReminderModal.value = false
+const handleDemoClick = () => {
+  emit('close')
+  emit('start', props.game)
 }
 
 watch(
@@ -126,8 +119,6 @@ watch(
   (newId) => {
     if (newId === props.game.id) {
       closeTooltipNow()
-    } else {
-      showReminderModal.value = false
     }
   }
 )
@@ -492,7 +483,7 @@ onUnmounted(() => {
           v-if="canShowDemo(game.provider)"
           type="button"
           class="w-full max-w-[85px] py-1.5 px-0.5 rounded-full bg-[#242624]/90  text-white font-bold text-[11px] leading-tight text-center transition-all active:scale-95 cursor-pointer"
-          @click.stop="emit('demo', game)"
+          @click.stop="handleDemoClick"
         >
           {{ translate('Demo') }}
         </button>
@@ -524,15 +515,6 @@ onUnmounted(() => {
       </span>
     </div>
   </div>
-
-  <!-- Login Reminder Modal -->
-  <ReminderModal
-    v-if="showReminderModal"
-    title="Reminder"
-    message="Please login first"
-    @close="handleReminderClose"
-    @ok="handleReminderOk"
-  />
 </div>
 </template>
 

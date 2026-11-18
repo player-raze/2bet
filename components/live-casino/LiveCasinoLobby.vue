@@ -10,10 +10,13 @@ import ReminderModal from '~/components/modals/ReminderModal.vue'
 import UnderMaintenance from '~/components/modals/UnderMaintenance.vue'
 import { LIVE_CASINO_CATEGORIES, LIVE_CASINO_TABLES, type LiveCasinoTable } from '~/data/live-casino'
 import { matchesTableRoadPattern, type LiveCasinoRoadPatternKey } from '~/utils/liveCasinoRoadPatterns'
+import { buildBybetRedirectUrl, resolveLiveCasinoRedirectUrl } from '~/utils/sportsRedirect'
 
 const props = defineProps<{ category: string }>()
-const bybetRedirectUrl = useRuntimeConfig().public.bybetRedirectUrl
+const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
 const activeCategory = computed(() => props.category === 'game-show' ? 'live-show' : props.category)
+const bybetRedirectUrl = computed(() => resolveLiveCasinoRedirectUrl(activeCategory.value, rawRedirectUrl, bybetRedirectCode))
+const multiTableRedirectUrl = buildBybetRedirectUrl('liveCasino/46?option=18', rawRedirectUrl, bybetRedirectCode)
 const isFeatured = computed(() => activeCategory.value === 'featured')
 const isGoodRoad = computed(() => activeCategory.value === 'good-road')
 const isBaccarat = computed(() => activeCategory.value === 'baccarat')
@@ -69,7 +72,7 @@ const selectTable = (table: LiveCasinoTable): void => {
   selectedTable.value = table
 }
 const startTable = (): void => {
-  if (import.meta.client) window.location.href = selectedTable.value?.href || bybetRedirectUrl
+  if (import.meta.client) window.location.href = selectedTable.value?.href || bybetRedirectUrl.value
   selectedTable.value = null
 }
 const resetFilters = (): void => {
@@ -106,7 +109,7 @@ watch(activeCategory, (category) => {
             <LiveCasinoCategoryIcon :name="item.key" />
             <span v-if="activeCategory === item.key">{{ item.label }}</span>
           </NuxtLink>
-          <a v-if="item.key === 'baccarat' && isBaccarat" :href="bybetRedirectUrl" class="casino-multitable-button bg-[#282828] text-[#959799] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc] light:shadow-sm" aria-label="Open Multi-table">
+          <a v-if="item.key === 'baccarat' && isBaccarat" :href="multiTableRedirectUrl" class="casino-multitable-button bg-[#282828] text-[#959799] light:bg-white light:text-[#5d7066] light:border light:border-[#d8e2dc] light:shadow-sm" aria-label="Open Multi-table">
             <LiveCasinoCategoryIcon name="multi-table" /><span>Multi-table</span>
           </a>
         </div>

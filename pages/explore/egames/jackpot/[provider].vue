@@ -13,7 +13,7 @@ import {
   formatJackpotAmount,
   useJackpotCounter,
 } from '~/composables/useJackpotCounter'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { resolveJackpotRedirectUrl } from '~/utils/sportsRedirect'
 import GameCard from '~/components/game-cards/GameCard.vue'
 import GameRail from '~/components/game-cards/GameRail.vue'
 import JackpotWinnersCard from '~/components/jackpot/JackpotWinnersCard.vue'
@@ -147,9 +147,8 @@ onBeforeUnmount(() => {
   }
 })
 
-const { showDemoMessage } = useDemoInteraction()
 const { bybetRedirectUrl: rawRedirectUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', rawRedirectUrl, bybetRedirectCode)
+const bybetRedirectUrl = computed(() => resolveJackpotRedirectUrl(activeProvider.value, rawRedirectUrl, bybetRedirectCode))
 const { context: commentContext, openGameComments, closeComments } = useCommentPanel()
 
 const toggleChat = (): void => {
@@ -164,9 +163,7 @@ const selectTab = (key: string): void => {
   router.push(`/egames/jackpot/${key.toLowerCase()}`)
 }
 
-const showGameDetails = (game: any): void => {
-  showDemoMessage(`${game.title} (${game.provider}) — Jackpot Pool: ${game.jackpotPool || 'Active'} • RTP: ${game.rtpPercent || '97.0%'}`)
-}
+const showGameDetails = (_game: any): void => {}
 
 const handleCardClick = (game: any): void => {
   if (activeGameId.value === game.id) {
@@ -177,14 +174,13 @@ const handleCardClick = (game: any): void => {
 }
 
 const handleStartNow = (game: any): void => {
-  showDemoMessage(`Starting ${game.title} (${game.provider})...`)
   if (import.meta.client) {
-    window.open(game.href || bybetRedirectUrl, '_blank')
+    window.open(game.href || bybetRedirectUrl.value, '_blank')
   }
 }
 
 const handleDemo = (game: any): void => {
-  showDemoMessage(`Launching Demo mode for ${game.title} (${game.provider})...`)
+  handleStartNow(game)
 }
 
 const filteredSections = computed<JackpotSection[]>(() => {

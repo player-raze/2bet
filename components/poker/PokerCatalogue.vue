@@ -8,7 +8,7 @@ import PokerFilterModal from '~/components/poker/PokerFilterModal.vue'
 import PokerGameCard from '~/components/poker/PokerGameCard.vue'
 import { POKER_CATEGORIES, POKER_PROVIDERS, getPokerGames, getPokerProvidersByCategory, isGameInPokerCategory, type PokerGame } from '~/data/poker'
 import { getProviderLogoForTheme } from '~/utils/providerLogo'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { resolvePokerRedirectUrl } from '~/utils/sportsRedirect'
 
 const props = withDefaults(defineProps<{ category?: string }>(), { category: 'popular' })
 const isPopular = computed(() => props.category === 'popular')
@@ -130,7 +130,7 @@ const filterOpen = ref(false)
 const selectedGame = ref<PokerGame | null>(null)
 const { addRecentGame } = useRecentGames()
 const { bybetRedirectUrl: bybetBaseUrl, bybetRedirectCode } = useRuntimeConfig().public
-const bybetRedirectUrl = buildBybetRedirectUrl('login', bybetBaseUrl, bybetRedirectCode)
+const bybetRedirectUrl = computed(() => resolvePokerRedirectUrl(props.category, bybetBaseUrl, bybetRedirectCode))
 
 const availableProviders = computed(() => getPokerProvidersByCategory(props.category))
 
@@ -231,7 +231,7 @@ const startGame = (): void => {
   if (!game) return
   addRecentGame(game)
   selectedGame.value = null
-  if (import.meta.client) window.open(game.href || bybetRedirectUrl, '_blank', 'noopener,noreferrer')
+  if (import.meta.client) window.open(game.href || bybetRedirectUrl.value, '_blank', 'noopener,noreferrer')
 }
 
 watch(() => props.category, () => {
