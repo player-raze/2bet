@@ -30,6 +30,7 @@ const emit = defineEmits<{
   'update:collapsedTournaments': [keys: string[]]
   'update:sortBy': [val: 'league' | 'time']
   toggle: [key: string]
+  empty: []
 }>()
 
 const search = ref('')
@@ -126,6 +127,9 @@ const toggleCollapseAll = (): void => {
 
 const handleMatchLoaded = (payload: { sportKey: string; earliestTime: number | null; count: number }): void => {
   matchCounts.value[payload.sportKey] = payload.count
+  if (props.tournamentDetail && payload.count === 0) {
+    emit('empty')
+  }
   if (payload.earliestTime != null) {
     earliestTimes.value[payload.sportKey] = payload.earliestTime
   }

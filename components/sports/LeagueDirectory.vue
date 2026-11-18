@@ -4,7 +4,7 @@ import Ai from '~/components/buttons/Ai.vue'
 import Collapse from '~/components/buttons/Collapse.vue'
 import type { Sport } from '~/types/sports'
 import { SAMPLE_SPORTS, getTournamentLogo, getSportBall } from '~/data/sports'
-import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
+import { buildBybetRedirectUrl, resolveSportsMatchRedirectUrl } from '~/utils/sportsRedirect'
 import League from './tabs/League.vue'
 
 interface DirectoryLeague extends Sport {
@@ -101,14 +101,30 @@ const tournament = computed(() => {
   )
 })
 
+const emptyLeagueRedirectUrl = computed(() => {
+  const sport = String(route.params.sport ?? '').toLowerCase()
+  if (!['basketball', 'soccer', 'football'].includes(sport)) return null
+  return resolveSportsMatchRedirectUrl(`/sports/${sport}/league`, rawRedirectUrl, bybetRedirectCode)
+})
+let redirectingTo = ''
+const redirectEmptyLeague = (): void => {
+  const destination = emptyLeagueRedirectUrl.value
+  if (!destination || redirectingTo === destination) return
+  redirectingTo = destination
+  void navigateTo(destination, { external: true, replace: true })
+}
+
+// Missing tournaments use the same fallback once the directory has finished loading.
+watch([tournamentKey, tournament, () => props.loading], ([key, league, loading]) => {
+  if (import.meta.client && key && !league && !loading) redirectEmptyLeague()
+}, { immediate: true })
+
 const filteredLeagues = computed(() => {
   const q = search.value.toLowerCase().trim()
-  if (!q) {
-    return allLeagues.value
-  }
-  return allLeagues.value.filter(sport =>
-    `${sport.title} ${sport.description ?? ''} ${sport.group} ${sport.country ?? ''}`.toLowerCase().includes(q),
-  )
+  return allLeagues.value.filter(sport => {
+    if (/^basketball_pba(?:_|$)/i.test(sport.key) || /\bpba\b/i.test(sport.title)) return false
+    return !q || `${sport.title} ${sport.description ?? ''} ${sport.group} ${sport.country ?? ''}`.toLowerCase().includes(q)
+  })
 })
 
 const isPopular = (key: string): boolean => {
@@ -121,7 +137,6 @@ const isPopular = (key: string): boolean => {
   const defaultPopular = [
     'basketball_nba',
     'basketball_euroleague',
-    'basketball_pba',
     'soccer_epl',
     'soccer_uefa_champs_league',
     'soccer_uefa_europa_league',
@@ -272,6 +287,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
         :ai-to="bybetRedirectUrl"
         hide-sport-title
         tournament-detail
+        @empty="redirectEmptyLeague"
       />
       <div v-else class="py-12 text-center text-neutral-400">
         <p>{{ translate('League not available.') }}</p>

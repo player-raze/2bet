@@ -55,12 +55,13 @@ const matches = computed(() => {
   return events.slice(0, props.limit)
 })
 
-watch(() => data.value?.events, (events) => {
-  if (events && events.length > 0) {
+watch([() => data.value?.events, status, error], ([events, fetchStatus, fetchError]) => {
+  if (fetchStatus !== 'success' || fetchError || !Array.isArray(events)) return
+  if (events.length > 0) {
     const sorted = [...events].sort((a, b) => Date.parse(a.commence_time) - Date.parse(b.commence_time))
     const first = sorted[0]?.commence_time ? Date.parse(sorted[0].commence_time) : null
     emit('loaded', { sportKey: props.sportKey, earliestTime: first, count: events.length })
-  } else if (data.value) {
+  } else {
     emit('loaded', { sportKey: props.sportKey, earliestTime: null, count: 0 })
   }
 }, { immediate: true })
