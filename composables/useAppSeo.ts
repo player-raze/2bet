@@ -428,6 +428,103 @@ export const DEFAULT_SITE_URL = 'https://2bet.com'
 
 export const DEFAULT_OG_IMAGE_PATH = '/brand/2bet-og.webp'
 
+export const ROUTE_OG_IMAGE_MAP: Record<string, string> = {
+  '/': '/brand/homepage-og.webp',
+  '/egames/slots': '/images/og/egames-slots.webp',
+  '/egames/slots/bonus': '/images/og/egames-slots-bonus.webp',
+  '/egames/slots/bonuses': '/images/og/egames-slots-bonus.webp',
+  '/egames/slots/top-pick': '/images/og/egames-slots-top-pick.webp',
+  '/egames/slots/top': '/images/og/egames-slots-top.webp',
+  '/egames/slots/new': '/images/og/egames-slots-new.webp',
+  '/egames/slots/hot': '/images/og/egames-slots-hot.webp',
+  '/egames/slots/cold': '/images/og/egames-slots-cold.webp',
+  '/egames/slots/max-rpt': '/images/og/egames-slots-max-rpt.webp',
+  '/egames/slots/max-rtp': '/images/og/egames-slots-max-rpt.webp',
+  '/egames/jackpot/all': '/images/og/egames-jackpot-all.webp',
+  '/egames/jackpot/jdb': '/images/og/egames-jackpot-jdb.webp',
+  '/egames/jackpot/standalone': '/images/og/egames-jackpot-standalone.webp',
+  '/egames/customer-service': '/images/og/egames-customer-service.webp',
+  '/entertainment/live-casino/featured': '/images/og/entertainment-live-casino-featured.webp',
+  '/entertainment/live-casino/good-road': '/images/og/entertainment-live-casino-good-road.webp',
+  '/entertainment/live-casino/live-show': '/images/og/entertainment-live-casino-live-show.webp',
+  '/entertainment/live-casino/game-show': '/images/og/entertainment-live-casino-live-show.webp',
+  '/entertainment/live-casino/baccarat': '/images/og/entertainment-live-casino-baccarat.webp',
+  '/entertainment/live-casino/dragon-tiger': '/images/og/entertainment-live-casino-dragon-tiger.webp',
+  '/entertainment/live-casino/roulette': '/images/og/entertainment-live-casino-roulette.webp',
+  '/entertainment/live-casino/sicbo': '/images/og/entertainment-live-casino-sicbo.webp',
+  '/entertainment/live-casino/evolution': '/images/og/entertainment-live-casino-evolution.webp',
+  '/entertainment/poker': '/images/og/entertainment-poker.webp',
+  '/entertainment/poker/all': '/images/og/entertainment-poker-all.webp',
+  '/entertainment/poker/fishing': '/images/og/entertainment-poker-fishing.webp',
+  '/entertainment/poker/mahjong': '/images/og/entertainment-poker-mahjong.webp',
+  '/entertainment/poker/poker': '/images/og/entertainment-poker-poker.webp',
+  '/entertainment/poker/bullbull': '/images/og/entertainment-poker-bullbull.webp',
+  '/entertainment/poker/baccarat': '/images/og/entertainment-poker-baccarat.webp',
+  '/entertainment/poker/other': '/images/og/entertainment-poker-other.webp',
+  '/sports/popular': '/images/og/sports-popular-inplay.webp',
+  '/sports/popular/inplay': '/images/og/sports-popular-inplay.webp',
+  '/sports/popular/league': '/images/og/sports-popular-league.webp',
+  '/sports/popular/upcoming': '/images/og/sports-popular-upcoming.webp',
+  '/sports/popular/pre-match': '/images/og/sports-popular-pre-match.webp',
+  '/sports/live': '/images/og/sports-live.webp',
+  '/bonuses': '/images/og/bonuses.webp',
+  '/bonuses/most-popular': '/images/og/bonuses-most-popular.webp',
+  '/bonuses/slots': '/images/og/bonuses-slots.webp',
+  '/bonuses/live-casino': '/images/og/bonuses-live-casino.webp',
+  '/bonuses/sports': '/images/og/bonuses-sports.webp',
+  '/bonuses/others': '/images/og/bonuses-others.webp',
+  '/bonuses/deposit': '/images/og/bonuses-deposit.webp',
+  '/bonuses/deposits': '/images/og/bonuses-deposit.webp',
+  '/bonuses/new-member': '/images/og/bonuses-new-member.webp',
+  '/bonuses/terms-and-condition': '/images/og/bonuses-terms-and-condition.webp',
+  '/game-rules': '/images/og/game-rules-sports-betting-rules.webp',
+  '/game-rules/sports-betting-rules': '/images/og/game-rules-sports-betting-rules.webp',
+  '/game-rules/football': '/images/og/game-rules-football.webp',
+  '/game-rules/basketball': '/images/og/game-rules-basketball.webp',
+  '/game-rules/tennis': '/images/og/game-rules-tennis.webp',
+  '/game-rules/baseball': '/images/og/game-rules-baseball.webp',
+  '/game-rules/badminton': '/images/og/game-rules-badminton.webp',
+  '/game-rules/table-tennis': '/images/og/game-rules-table-tennis.webp',
+  '/game-rules/parlays-multiples': '/images/og/game-rules-parlays-multiples.webp',
+  '/game-rules/cash-out': '/images/og/game-rules-cash-out.webp',
+  '/game-rules/outright': '/images/og/game-rules-outright.webp',
+  '/tutorial': '/images/og/tutorial.webp',
+  '/tutorial/mock-betting': '/images/og/tutorial-mock-betting.webp',
+  '/about-us': '/images/og/about-us.webp',
+  '/download-app': '/images/og/download-app.webp',
+  '/affiliate': '/images/og/affiliate.webp',
+  '/live-plaza/home': '/images/og/live-plaza-home.webp',
+  '/live-plaza/streamer/all': '/images/og/live-plaza-streamer-all.webp',
+  '/live-plaza/expert-predictions': '/images/og/live-plaza-expert-predictions.webp',
+  '/live-plaza/experts': '/images/og/live-plaza-experts.webp',
+}
+
+const ROUTE_OG_PREFIX_FALLBACKS: ReadonlyArray<readonly [string, string]> = [
+  ['/sports/live/', '/images/og/sports-live.webp'],
+  ['/sports/popular/upcoming/', '/images/og/sports-popular-upcoming.webp'],
+  ['/sports/popular/pre-match/', '/images/og/sports-popular-pre-match.webp'],
+  ['/sports/popular/', '/images/og/sports-popular-league.webp'],
+  ['/sports/', '/images/og/sports-popular-inplay.webp'],
+  ['/egames/slots/', '/images/og/egames-slots.webp'],
+  ['/egames/jackpot/', '/images/og/egames-jackpot-all.webp'],
+  ['/egames/customer-service/', '/images/og/egames-customer-service.webp'],
+  ['/entertainment/live-casino/', '/images/og/entertainment-live-casino-featured.webp'],
+  ['/entertainment/poker/', '/images/og/entertainment-poker.webp'],
+  ['/bonuses/', '/images/og/bonuses.webp'],
+  ['/game-rules/', '/images/og/game-rules-sports-betting-rules.webp'],
+  ['/tutorial/', '/images/og/tutorial.webp'],
+  ['/live-plaza/', '/images/og/live-plaza-home.webp'],
+]
+
+export const getRouteOgImage = (routePath?: string): string | undefined => {
+  const clean = (routePath || '').split(/[?#]/)[0].replace(/^\/explore(?=\/|$)/, '').replace(/\/+$/, '') || '/'
+  if (ROUTE_OG_IMAGE_MAP[clean]) {
+    return ROUTE_OG_IMAGE_MAP[clean]
+  }
+  const match = ROUTE_OG_PREFIX_FALLBACKS.find(([prefix]) => clean.startsWith(prefix))
+  return match?.[1]
+}
+
 export const normalizeSiteUrl = (
   rawSiteUrl: unknown,
   fallback: string = DEFAULT_SITE_URL,
@@ -569,7 +666,9 @@ export const useAppSeo = (options: AppSeoOptions) => {
   })
 
   const image = computed(() => {
-    const raw = resolveVal(options.image) || '/brand/2bet-og.webp'
+    const explicit = resolveVal(options.image)
+    const fallback = resolveVal(options.image) || '/brand/2bet-og.webp'
+    const raw = explicit || getRouteOgImage(route.path) || fallback
     return resolveSeoImageUrl(raw, siteUrl.value)
   })
 

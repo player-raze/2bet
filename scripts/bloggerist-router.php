@@ -31,6 +31,36 @@ if ($path === '/' || $path === '/admin' || $path === '/admin/') {
     exit;
 }
 
+if ($path === '/admin/playnow-tracker') {
+    header('Location: /admin/playnow-tracker.php', true, 302);
+    exit;
+}
+
+$isPlaynowTrackerRoute = $path === '/api/playnow-tracker'
+    || $path === '/api/playnow-tracker.php'
+    || $path === '/api/playnow-click.php';
+
+if ($isPlaynowTrackerRoute) {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Accept, X-Requested-With');
+
+    $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+    if ($method === 'OPTIONS') {
+        http_response_code(204);
+        exit;
+    }
+
+    if ($path === '/api/playnow-tracker' || $path === '/api/playnow-tracker.php') {
+        if ($method === 'POST') {
+            $path = '/api/playnow-click.php';
+        } else {
+            header('Location: /admin/playnow-tracker.php', true, 302);
+            exit;
+        }
+    }
+}
+
 if (preg_match('~^/(login(?:-handler)?|logout)\.php$~', $path)) $path = '/admin' . $path;
 
 // Bloggerist stores uploaded files in admin/uploads but publishes /uploads URLs.

@@ -1,6 +1,160 @@
-import type { H3Event } from 'h3'
+import { promises as fs } from 'node:fs'
+import path from 'node:path'
+import { getHeader, readBody, sendRedirect, setHeader, setResponseStatus, type H3Event } from 'h3'
 import { asRecord, isPublishedBlog, normalizeBlogPost, sanitizeBlogHtml } from '../../utils/blog-content'
 import type { BlogArticle, BlogCategory, BlogListResponse } from '../../types/blog'
+
+export interface PlaynowClickResult {
+  ok: boolean
+  totalClicks: number
+  locationClicks: number
+  forwardedTo?: string
+}
+
+function cleanClickText(value: unknown, maxLength: number): string {
+  return String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, maxLength)
+}
+
+function extractClientIp(event: H3Event): string {
+  const candidates = [
+    getHeader(event, 'cf-connecting-ip'),
+    getHeader(event, 'x-real-ip'),
+    getHeader(event, 'x-forwarded-for'),
+    event.node?.req?.socket?.remoteAddress,
+  ]
+  for (const raw of candidates) {
+    if (!raw) continue
+    const first = raw.split(',')[0]?.trim().replace(/^::ffff:/, '') || ''
+    if (first && first !== 'unknown') {
+      return first
+    }
+  }
+  return '127.0.0.1'
+}
+
+export function normalizePlaynowClickPayload(
+  rawPayload: Record<string, unknown>,
+  fallbackReferer = '',
+): Record<string, unknown> {
+  const pageUrl = cleanClickText(rawPayload.pageUrl, 300)
+  let parsedPath = ''
+  if (pageUrl) {
+    try {
+      parsedPath = new URL(pageUrl).pathname
+    } catch {
+      parsedPath = pageUrl.split(/[?#]/)[0] || ''
+    }
+  }
+  const pagePath = cleanClickText(rawPayload.pagePath, 180)
+    || cleanClickText(parsedPath || fallbackReferer || '/', 180)
+  const pageTitle = cleanClickText(rawPayload.pageTitle, 180)
+  const referrer = cleanClickText(rawPayload.referrer, 300)
+  const targetUrl = cleanClickText(rawPayload.targetUrl, 300)
+  const buttonText = cleanClickText(rawPayload.buttonText, 120)
+  const buttonClass = cleanClickText(rawPayload.buttonClass, 220)
+  const buttonId = cleanClickText(rawPayload.buttonId, 120)
+  const buttonName = cleanClickText(rawPayload.buttonName, 120)
+  const buttonTag = cleanClickText(rawPayload.buttonTag, 40)
+  const section = cleanClickText(rawPayload.section, 140)
+  const selector = cleanClickText(rawPayload.selector, 220)
+  const location = cleanClickText(rawPayload.location, 220)
+    || cleanClickText(`${pagePath} | ${section || 'page'} | ${buttonText || 'playnow-link'}`, 220)
+
+  const xRaw = rawPayload.x
+  const yRaw = rawPayload.y
+  const x = typeof xRaw === 'number' && Number.isFinite(xRaw) ? Math.round(xRaw) : null
+  const y = typeof yRaw === 'number' && Number.isFinite(yRaw) ? Math.round(yRaw) : null
+
+  return {
+    pageUrl,
+    pagePath,
+    pageTitle,
+    referrer,
+    targetUrl,
+    buttonText,
+    buttonClass,
+    buttonId,
+    buttonName,
+    buttonTag,
+    section,
+    selector,
+    location,
+    x,
+    y,
+  }
+}
+
+let localPersistQueue: Promise<unknown> = Promise.resolve()
+
+async function persistPlaynowClickLocally(
+  payload: Record<string, unknown>,
+  clientIp: string,
+  userAgent: string,
+): Promise<PlaynowClickResult> {
+  const run = async (): Promise<PlaynowClickResult> => {
+    const storageDir = path.resolve(process.cwd(), 'data/bloggerist')
+    const filePath = path.resolve(storageDir, 'playnow-clicks.json')
+    await fs.mkdir(storageDir, { recursive: true })
+
+    let data: Record<string, any> = {}
+    try {
+      const raw = await fs.readFile(filePath, 'utf8')
+      const parsed = JSON.parse(raw)
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        data = parsed
+      }
+    } catch {
+      data = {}
+    }
+
+    const nowIso = new Date().toISOString()
+    const buttonText = String(payload.buttonText || '')
+    const buttonId = String(payload.buttonId || '')
+    const buttonKey = buttonText || (buttonId ? `#${buttonId}` : 'playnow-link')
+    const pagePath = String(payload.pagePath || '/')
+    const targetUrl = String(payload.targetUrl || '')
+    const location = String(payload.location || `${pagePath} | page | ${buttonKey}`)
+
+    data.totalClicks = Number(data.totalClicks || 0) + 1
+    data.updatedAt = nowIso
+    data.byLocation = data.byLocation && typeof data.byLocation === 'object' ? data.byLocation : {}
+    data.byIp = data.byIp && typeof data.byIp === 'object' ? data.byIp : {}
+    data.byPage = data.byPage && typeof data.byPage === 'object' ? data.byPage : {}
+    data.byButton = data.byButton && typeof data.byButton === 'object' ? data.byButton : {}
+    data.byTarget = data.byTarget && typeof data.byTarget === 'object' ? data.byTarget : {}
+    data.recent = Array.isArray(data.recent) ? data.recent : []
+
+    data.byLocation[location] = Number(data.byLocation[location] || 0) + 1
+    data.byIp[clientIp] = Number(data.byIp[clientIp] || 0) + 1
+    data.byPage[pagePath] = Number(data.byPage[pagePath] || 0) + 1
+    data.byButton[buttonKey] = Number(data.byButton[buttonKey] || 0) + 1
+    data.byTarget[targetUrl] = Number(data.byTarget[targetUrl] || 0) + 1
+
+    data.recent.push({
+      time: nowIso,
+      timestamp: Math.floor(Date.now() / 1000),
+      ip: clientIp,
+      ...payload,
+      buttonKey,
+      userAgent: cleanClickText(userAgent, 300),
+    })
+    if (data.recent.length > 2000) {
+      data.recent = data.recent.slice(-2000)
+    }
+
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8')
+    return {
+      ok: true,
+      totalClicks: data.totalClicks,
+      locationClicks: data.byLocation[location],
+      forwardedTo: 'local-fallback',
+    }
+  }
+
+  const next = localPersistQueue.then(run, run)
+  localPersistQueue = next.catch(() => {})
+  return next
+}
 
 export function bloggeristOrigin(event: H3Event): string {
   const configured = String(useRuntimeConfig(event).bloggeristUrl || '').replace(/\/+$/, '')
@@ -65,4 +219,122 @@ export async function readBlogArticle(event: H3Event, slug: string, preview = fa
     seoTitle: typeof data.blog.seoTitle === 'string' && data.blog.seoTitle ? data.blog.seoTitle : post.title,
     seoDescription: typeof data.blog.seoDescription === 'string' && data.blog.seoDescription ? data.blog.seoDescription : post.excerpt,
   }
+}
+
+export async function recordPlaynowClick(
+  event: H3Event,
+  rawPayload: Record<string, unknown>,
+): Promise<PlaynowClickResult> {
+  const refererHeader = getHeader(event, 'referer') || ''
+  const userAgentHeader = getHeader(event, 'user-agent') || ''
+  const clientIp = extractClientIp(event)
+  const payload = normalizePlaynowClickPayload(rawPayload, refererHeader)
+
+  let origin = ''
+  try {
+    origin = bloggeristOrigin(event)
+  } catch {
+    origin = ''
+  }
+
+  if (origin) {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-Forwarded-For': clientIp,
+      'X-Real-IP': clientIp,
+    }
+    if (userAgentHeader) {
+      headers['User-Agent'] = userAgentHeader
+    }
+    if (refererHeader) {
+      headers.Referer = refererHeader
+    }
+
+    const targets = [`${origin}/api/playnow-tracker`, `${origin}/api/playnow-click.php`]
+    const serializedBody = JSON.stringify(payload)
+
+    for (const target of targets) {
+      try {
+        const response = await fetch(target, {
+          method: 'POST',
+          headers,
+          body: serializedBody,
+          signal: AbortSignal.timeout(4000),
+        })
+        if (!response.ok) continue
+        const data = await response.json().catch(() => null)
+        if (data && typeof data === 'object' && data.ok === true) {
+          return {
+            ok: true,
+            totalClicks: Number(data.totalClicks || 0),
+            locationClicks: Number(data.locationClicks || 0),
+            forwardedTo: target,
+          }
+        }
+      } catch {
+        // Try the next Bloggerist endpoint or fall back to local storage.
+      }
+    }
+  }
+
+  return persistPlaynowClickLocally(payload, clientIp, userAgentHeader)
+}
+
+function parsePlaynowRequestBody(raw: unknown): Record<string, unknown> {
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+    return raw as Record<string, unknown>
+  }
+  if (typeof raw === 'string') {
+    const trimmed = raw.trim()
+    if (!trimmed) return {}
+    try {
+      const parsed = JSON.parse(trimmed)
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return parsed as Record<string, unknown>
+      }
+    } catch {
+      return Object.fromEntries(new URLSearchParams(trimmed))
+    }
+  }
+  return {}
+}
+
+export async function handlePlaynowTrackerRequest(event: H3Event) {
+  setHeader(event, 'Cache-Control', 'no-store, max-age=0')
+  setHeader(event, 'Access-Control-Allow-Origin', '*')
+  setHeader(event, 'Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+  setHeader(event, 'Access-Control-Allow-Headers', 'Content-Type, Accept, X-Requested-With')
+
+  const method = (event.method || event.node?.req?.method || 'GET').toUpperCase()
+  if (method === 'OPTIONS') {
+    setResponseStatus(event, 204)
+    return null
+  }
+
+  if (method === 'GET') {
+    let origin = ''
+    try {
+      origin = bloggeristOrigin(event)
+    } catch {
+      origin = ''
+    }
+    const accept = getHeader(event, 'accept') || ''
+    if (origin && accept.includes('text/html')) {
+      return sendRedirect(event, `${origin}/admin/playnow-tracker.php`, 302)
+    }
+    return {
+      ok: true,
+      endpoint: origin ? `${origin}/api/playnow-tracker` : '/api/playnow-tracker',
+    }
+  }
+
+  if (method !== 'POST') {
+    setResponseStatus(event, 405)
+    return { ok: false, error: 'Method not allowed.' }
+  }
+
+  const rawBody = await readBody<unknown>(event).catch(() => null)
+  const payload = parsePlaynowRequestBody(rawBody)
+  return recordPlaynowClick(event, payload)
 }

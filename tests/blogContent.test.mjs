@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { blogDate, blogUrl, extractBlogFaqSchema, isPublishedBlog, normalizeBlogPost, sanitizeBlogHtml } from '../utils/blog-content.ts'
-import { resolveSeoImageUrl } from '../composables/useAppSeo.ts'
+import { getRouteOgImage, resolveSeoImageUrl, ROUTE_OG_IMAGE_MAP } from '../composables/useAppSeo.ts'
 
 const origin = 'http://127.0.0.1:8082'
 
@@ -173,13 +173,25 @@ test('OG image configurations across routes', async () => {
   const fs = await import('node:fs')
   const path = await import('node:path')
 
-  // Verify the copied 2bet-og.webp asset exists in public/brand/
+  // Verify the copied 2bet-og.webp and homepage-og.webp assets exist in public/brand/
   const ogAssetPath = path.resolve(process.cwd(), 'public/brand/2bet-og.webp')
   assert.equal(fs.existsSync(ogAssetPath), true, 'public/brand/2bet-og.webp must exist')
+  const homeOgAssetPath = path.resolve(process.cwd(), 'public/brand/homepage-og.webp')
+  assert.equal(fs.existsSync(homeOgAssetPath), true, 'public/brand/homepage-og.webp must exist')
 
-  // Verify homepage uses the first hero slider image (/hero/editorial/sports.webp)
+  // Verify homepage uses the uploaded first-load screenshot (/brand/homepage-og.webp)
   const homeVue = fs.readFileSync(path.resolve(process.cwd(), 'pages/index.vue'), 'utf-8')
-  assert.match(homeVue, /image:\s*['"]\/hero\/editorial\/sports\.webp['"]/, 'Home page must use first hero slider image for og:image')
+  assert.match(homeVue, /image:\s*['"]\/brand\/homepage-og\.webp['"]/, 'Home page must use homepage-og.webp for og:image')
+
+  // Verify every route-specific first-load OG screenshot exists on disk and resolves cleanly
+  for (const imagePath of new Set(Object.values(ROUTE_OG_IMAGE_MAP))) {
+    const absPath = path.resolve(process.cwd(), 'public', imagePath.replace(/^\//, ''))
+    assert.equal(fs.existsSync(absPath), true, `Route OG screenshot must exist: ${imagePath}`)
+  }
+  assert.equal(getRouteOgImage('/'), '/brand/homepage-og.webp')
+  assert.equal(getRouteOgImage('/egames/slots'), '/images/og/egames-slots.webp')
+  assert.equal(getRouteOgImage('/bonuses'), '/images/og/bonuses.webp')
+  assert.equal(getRouteOgImage('/sports/popular/league'), '/images/og/sports-popular-league.webp')
 
   // Verify useAppSeo default og image is /brand/2bet-og.webp
   const useAppSeoTs = fs.readFileSync(path.resolve(process.cwd(), 'composables/useAppSeo.ts'), 'utf-8')

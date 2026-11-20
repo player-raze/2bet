@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ChevronLeft } from 'lucide-vue-next'
-import { formatSeoTitle, formatSeoDescription, isHomepageRoute, resolveSeoImageUrl } from '~/composables/useAppSeo'
+import { formatSeoTitle, formatSeoDescription, getRouteOgImage, isHomepageRoute, resolveSeoImageUrl } from '~/composables/useAppSeo'
 
 interface Props {
   title: string
@@ -50,7 +50,12 @@ const siteName = computed(() =>
 )
 const siteUrl = computed(() => String(config.public.siteUrl || 'https://2bet.com').replace(/\/+$/, ''))
 const canonicalUrl = computed(() => `${siteUrl.value}${route.path || '/'}`)
-const resolvedOgImage = computed(() => resolveSeoImageUrl(props.ogImage, siteUrl.value))
+const resolvedOgImage = computed(() => {
+  const raw = props.ogImage !== '/brand/2bet-og.webp'
+    ? props.ogImage
+    : (getRouteOgImage(route.path) || props.ogImage)
+  return resolveSeoImageUrl(raw, siteUrl.value)
+})
 
 const isHomepage = computed(() => isHomepageRoute(route.path))
 

@@ -96,9 +96,20 @@ export default defineNitroPlugin((nitroApp) => {
       config.livestreamApi = livestreamApiRaw.trim()
     }
 
+    const bloggeristPublicUrlRaw = resolveEnvOverride(
+      dotEnv,
+      'NUXT_PUBLIC_BLOGGERIST_URL',
+      'BLOGGERIST_URL',
+    )
     const bloggeristUrlRaw = resolveEnvOverride(dotEnv, 'NUXT_BLOGGERIST_URL', 'BLOGGERIST_URL')
-    if (bloggeristUrlRaw !== undefined && bloggeristUrlRaw.trim()) {
-      config.bloggeristUrl = bloggeristUrlRaw.trim()
+    const resolvedBloggeristUrl = (bloggeristPublicUrlRaw ?? bloggeristUrlRaw)
+      ?.trim()
+      .replace(/^['"]+|['"]+$/g, '')
+      .replace(/\/+$/, '')
+
+    if (resolvedBloggeristUrl) {
+      config.bloggeristUrl = resolvedBloggeristUrl
+      config.public.bloggeristUrl = resolvedBloggeristUrl
     }
   })
 })

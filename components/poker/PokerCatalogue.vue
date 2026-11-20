@@ -163,7 +163,6 @@ useAppSeo({
   title: computed(() => locale.value === 'pt' ? activeSeoCopy.value.titlePt : activeSeoCopy.value.titleEn),
   description: computed(() => locale.value === 'pt' ? activeSeoCopy.value.descriptionPt : activeSeoCopy.value.descriptionEn),
   keywords: '2bet poker, pôquer online, texas holdem, pesca cassino, bull bull, mahjong, jogos de cartas',
-  image: '/brand/2bet-og.webp',
   type: 'website',
   canonicalPath: computed(() => isEmptyFallbackCategory.value ? basePath : activeRoutePath.value),
   robots: computed(() => isEmptyFallbackCategory.value ? 'noindex, follow' : undefined),

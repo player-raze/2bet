@@ -41,6 +41,8 @@ const processGlobal = (
         LIVESTREAM_API?: string
         INPLAY_API?: string
         BLOGGERIST_URL?: string
+        NUXT_BLOGGERIST_URL?: string
+        NUXT_PUBLIC_BLOGGERIST_URL?: string
       }
     }
   }
@@ -55,6 +57,12 @@ const googleSiteVerification = (
   ?? environment?.GOOGLE_SITE_VERIFICATION
   ?? 'iMHXS_4N09-cqe9bTddjAfgTyYx53sg6yFsVkhaZWEk'
 ).trim().replace(/^['"]+|['"]+$/g, '')
+const bloggeristUrl = (
+  environment?.NUXT_PUBLIC_BLOGGERIST_URL
+  ?? environment?.NUXT_BLOGGERIST_URL
+  ?? environment?.BLOGGERIST_URL
+  ?? 'http://127.0.0.1:8082'
+).trim().replace(/^['"]+|['"]+$/g, '').replace(/\/+$/, '') || 'http://127.0.0.1:8082'
 
 export default defineNuxtConfig({
 
@@ -83,12 +91,13 @@ export default defineNuxtConfig({
       siteUrl: (environment?.SITE_URL || 'https://2bet.com').replace(/\/+$/, ''),
       indexFollow: isIndexFollow,
       googleSiteVerification,
+      bloggeristUrl,
     },
     kadarioApi: environment?.KADARIO_API || 'https://live88.eu.cc/',
     kadarioSite: 'YBa-BnymZ6iN8pkfAUFTWIKn',
     inplayApi: environment?.INPLAY_API || 'https://live88.eu.cc/api/v1/scores?site=YBa-BnymZ6iN8pkfAUFTWIKn',
     livestreamApi: environment?.LIVESTREAM_API || 'https://live88.eu.cc/api/v1/scores?site=YBa-BnymZ6iN8pkfAUFTWIKn',
-    bloggeristUrl: environment?.BLOGGERIST_URL || 'http://127.0.0.1:8082',
+    bloggeristUrl,
   },
   modules: ['@nuxtjs/tailwindcss'],
   tailwindcss: {
