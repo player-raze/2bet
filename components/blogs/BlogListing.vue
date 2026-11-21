@@ -9,9 +9,14 @@ import type { BlogCategory, BlogPost } from '~/types/blog'
 interface BlogListResponse {
   ok: boolean
   blogs: BlogPost[]
+  featured?: BlogPost[]
   categories: BlogCategory[]
   pagination: { total: number; count: number; page: number; totalPages: number; category: string | null }
 }
+
+const OVERVIEW_CATEGORY_LIMIT = 5
+const CATEGORY_PAGE_SIZE = 20
+const SLIDER_POST_LIMIT = 10
 
 const route = useRoute()
 const config = useRuntimeConfig()
@@ -33,26 +38,33 @@ const category = computed(() => typeof route.params.category === 'string' ? rout
 const page = computed(() => Math.max(1, Math.min(10000, Number.parseInt(String(route.query.page || '1'), 10) || 1)))
 const isPreview = computed(() => route.query.preview === '1' || route.query.preview === 'true')
 const query = computed(() => ({
-  count: 12,
-  page: page.value,
-  ...(category.value ? { category: category.value } : {}),
+  ...(category.value ? { category: category.value, count: CATEGORY_PAGE_SIZE, page: page.value } : { count: SLIDER_POST_LIMIT, page: 1 }),
   ...(isPreview.value ? { preview: '1' } : {}),
 }))
 const { data, error, status, refresh } = await useFetch<BlogListResponse>(() => '/api/blogs', {
   query,
-  key: computed(() => `blog-list-${category.value}-${page.value}-${isPreview.value}`),
+  key: computed(() => `blog-list-${category.value}-${category.value ? page.value : 1}-${isPreview.value}`),
   watch: [category, page, isPreview],
 })
 const posts = computed(() => (data.value?.blogs || []).filter(post => isPreview.value || post.status !== 'draft'))
 const categories = computed(() => (data.value?.categories || []).filter(item => Boolean(item && item.name && item.slug && (Number(item.postCount) || 0) > 0)))
 const pagination = computed(() => data.value?.pagination)
-const featured = computed(() => posts.value.slice(0, 4))
+const featured = computed(() => {
+  const source = data.value?.featured?.length ? data.value.featured : posts.value
+  return source
+    .filter(post => isPreview.value || post.status !== 'draft')
+    .slice(0, SLIDER_POST_LIMIT)
+})
 const groups = computed(() => {
   const groups = new Map<string, { name: string; slug: string; posts: BlogPost[] }>()
   for (const post of posts.value) {
     const slug = post.category?.slug || ''
     if (!groups.has(slug)) groups.set(slug, { name: post.category?.name || copy.value.latest, slug, posts: [] })
-    groups.get(slug)!.posts.push(post)
+    const entry = groups.get(slug)!
+    if (!category.value && entry.posts.length >= OVERVIEW_CATEGORY_LIMIT) {
+      continue
+    }
+    entry.posts.push(post)
   }
   return [...groups.values()]
 })
@@ -171,7 +183,7 @@ const listingSchema = computed(() => {
             url: `${siteUrl.value}/brand/2bet-logo.webp`,
           },
         },
-        blogPost: posts.value.slice(0, 10).map(p => ({
+        blogPost: featured.value.slice(0, SLIDER_POST_LIMIT).map(p => ({
           '@type': 'BlogPosting',
           headline: p.title,
           description: p.excerpt,
@@ -196,7 +208,7 @@ useHead(() => ({
     { name: 'robots', content: 'noindex, nofollow, noarchive' },
     { name: 'googlebot', content: 'noindex, nofollow, noarchive' },
   ] : [],
-  link: isPreview.value ? [] : [{ rel: 'canonical', href: `${siteUrl.value}${categoryLink(category.value).path}${page.value > 1 ? `?page=${page.value}` : ''}` }],
+  link: isPreview.value ? [] : [{ rel: 'canonical', href: `${siteUrl.value}${categoryLink(category.value).path}${category.value && page.value > 1 ? `?page=${page.value}` : ''}` }],
   script: listingSchema.value ? [{
     key: 'blog-listing-schema',
     type: 'application/ld+json',
@@ -252,7 +264,7 @@ watch([page, category], () => featuredTrack.value?.scrollTo({ left: 0 }))
           </section>
         </div>
 
-        <nav v-if="pagination && pagination.totalPages > 1" class="blog-pagination" :aria-label="locale === 'pt' ? 'Paginação do blog' : 'Blog pagination'">
+        <nav v-if="category && pagination && pagination.totalPages > 1" class="blog-pagination" :aria-label="locale === 'pt' ? 'Paginação do blog' : 'Blog pagination'">
           <NuxtLink v-if="page > 1" :to="pageLink(page - 1)" :aria-label="copy.previous"><ChevronLeft :size="18" aria-hidden="true" /></NuxtLink><span v-else class="blog-pagination__disabled" aria-hidden="true"><ChevronLeft :size="18" /></span>
           <span>{{ copy.page }} {{ page }} {{ copy.of }} {{ pagination.totalPages }}</span>
           <NuxtLink v-if="page < pagination.totalPages" :to="pageLink(page + 1)" :aria-label="copy.next"><ChevronRight :size="18" aria-hidden="true" /></NuxtLink><span v-else class="blog-pagination__disabled" aria-hidden="true"><ChevronRight :size="18" /></span>

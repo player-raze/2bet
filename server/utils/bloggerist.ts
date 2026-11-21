@@ -3,7 +3,7 @@ import path from 'node:path'
 import { getHeader, readBody, sendRedirect, setHeader, setResponseStatus, type H3Event } from 'h3'
 import { asRecord, isPublishedBlog, normalizeBlogPost, sanitizeBlogHtml } from '../../utils/blog-content'
 import { normalizeGoogleAnalyticsId, normalizeGoogleTagId } from '../../utils/googleTracking'
-import type { BlogArticle, BlogCategory, BlogListResponse } from '../../types/blog'
+import type { BlogArticle, BlogCategory, BlogListResponse, BlogPost } from '../../types/blog'
 
 export { normalizeGoogleAnalyticsId, normalizeGoogleTagId }
 
@@ -266,31 +266,117 @@ async function readBloggerist(event: H3Event, path: string, query: Record<string
   }
 }
 
+const BLOG_OVERVIEW_CATEGORY_LIMIT = 5
+const BLOG_CATEGORY_DEFAULT_COUNT = 20
+const BLOG_SLIDER_LIMIT = 10
+
+function normalizeBlogItems(items: unknown[], origin: string, preview: boolean): BlogPost[] {
+  return items
+    .filter((post: unknown) => preview || isPublishedBlog(post))
+    .map((post: unknown) => normalizeBlogPost(post, origin))
+    .filter((post: { slug: string; status?: string }) => Boolean(post.slug) && (preview || post.status !== 'draft'))
+}
+
 export async function readBlogList(event: H3Event, page: number, count: number, category: string, preview = false): Promise<BlogListResponse> {
   const origin = bloggeristOrigin(event)
-  const [data, taxonomy] = await Promise.all([
-    readBloggerist(event, 'blog-post-list.php', { page, count, ...(category ? { category } : {}), ...(preview ? { preview: '1' } : {}) }),
+
+  if (category) {
+    const safeCount = count > 0 ? Math.min(100, count) : BLOG_CATEGORY_DEFAULT_COUNT
+    const [data, taxonomy, sliderData] = await Promise.all([
+      readBloggerist(event, 'blog-post-list.php', { page, count: safeCount, category, ...(preview ? { preview: '1' } : {}) }),
+      readBloggerist(event, 'blog-category-list.php'),
+      page > 1
+        ? readBloggerist(event, 'blog-post-list.php', { page: 1, count: BLOG_SLIDER_LIMIT, category, ...(preview ? { preview: '1' } : {}) }).catch(() => null)
+        : Promise.resolve(null),
+    ])
+    if (!Array.isArray(data.blogs) || !Array.isArray(taxonomy.categories)) {
+      throw createError({ statusCode: 503, statusMessage: 'Blog service unavailable' })
+    }
+    const pagination = asRecord(data.pagination)
+    const total = Math.max(0, Number(pagination.total) || 0)
+    const categories: BlogCategory[] = taxonomy.categories.map((value: unknown) => {
+      const item = asRecord(value)
+      return { id: String(item.id ?? ''), name: String(item.name || ''), slug: String(item.slug || ''), postCount: Math.max(0, Number(item.postCount) || 0), parent_name: item.parent_name || null }
+    })
+    const blogs = normalizeBlogItems(data.blogs, origin, preview)
+    const featuredSource = Array.isArray(sliderData?.blogs) ? normalizeBlogItems(sliderData.blogs, origin, preview) : blogs
+    const featured = featuredSource.slice(0, BLOG_SLIDER_LIMIT)
+
+    return {
+      ok: true,
+      blogs,
+      featured,
+      categories,
+      pagination: { page: Number(pagination.page) || page, count: safeCount, total, totalPages: Math.max(1, Number(pagination.totalPages) || Math.ceil(total / safeCount)), category },
+    }
+  }
+
+  const [latestData, taxonomy] = await Promise.all([
+    readBloggerist(event, 'blog-post-list.php', { page: 1, count: BLOG_SLIDER_LIMIT, ...(preview ? { preview: '1' } : {}) }),
     readBloggerist(event, 'blog-category-list.php'),
   ])
-  if (!Array.isArray(data.blogs) || !Array.isArray(taxonomy.categories)) {
+  if (!Array.isArray(latestData.blogs) || !Array.isArray(taxonomy.categories)) {
     throw createError({ statusCode: 503, statusMessage: 'Blog service unavailable' })
   }
-  const pagination = asRecord(data.pagination)
-  const total = Math.max(0, Number(pagination.total) || 0)
+
   const categories: BlogCategory[] = taxonomy.categories.map((value: unknown) => {
     const item = asRecord(value)
     return { id: String(item.id ?? ''), name: String(item.name || ''), slug: String(item.slug || ''), postCount: Math.max(0, Number(item.postCount) || 0), parent_name: item.parent_name || null }
   })
-  const blogs = data.blogs
-    .filter((post: unknown) => preview || isPublishedBlog(post))
-    .map((post: unknown) => normalizeBlogPost(post, origin))
-    .filter((post: { slug: string; status?: string }) => post.slug && (preview || post.status !== 'draft'))
+
+  const latestOverall = normalizeBlogItems(latestData.blogs, origin, preview)
+  const featured = latestOverall.slice(0, BLOG_SLIDER_LIMIT)
+
+  const targetCategories = categories.filter(cat => Boolean(cat.slug) && (preview || cat.postCount > 0))
+  const perCategoryResponses = await Promise.all(
+    targetCategories.map(async (cat) => {
+      try {
+        const res = await readBloggerist(event, 'blog-post-list.php', {
+          page: 1,
+          count: BLOG_OVERVIEW_CATEGORY_LIMIT,
+          category: cat.slug,
+          ...(preview ? { preview: '1' } : {}),
+        })
+        const items = Array.isArray(res.blogs) ? normalizeBlogItems(res.blogs, origin, preview) : []
+        return { cat, posts: items.slice(0, BLOG_OVERVIEW_CATEGORY_LIMIT) }
+      } catch {
+        return { cat, posts: [] }
+      }
+    }),
+  )
+
+  // Order category sections by each category's newest post timestamp descending, then append uncategorized posts if any.
+  const latestTimestamp = (post?: { publishedAt: string | null }) => (post?.publishedAt ? Date.parse(post.publishedAt) || 0 : 0)
+  perCategoryResponses.sort((a, b) => latestTimestamp(b.posts[0]) - latestTimestamp(a.posts[0]))
+
+  const blogs: BlogPost[] = []
+  const seenSlugs = new Set<string>()
+  for (const group of perCategoryResponses) {
+    for (const post of group.posts) {
+      if (seenSlugs.has(post.slug)) continue
+      seenSlugs.add(post.slug)
+      blogs.push(post)
+    }
+  }
+
+  let uncategorizedCount = 0
+  for (const post of latestOverall) {
+    if (post.category?.slug || seenSlugs.has(post.slug)) continue
+    if (uncategorizedCount >= BLOG_OVERVIEW_CATEGORY_LIMIT) break
+    seenSlugs.add(post.slug)
+    blogs.push(post)
+    uncategorizedCount += 1
+  }
+
+  const pagination = asRecord(latestData.pagination)
+  const total = Math.max(blogs.length, Number(pagination.total) || 0)
 
   return {
     ok: true,
     blogs,
+    featured,
     categories,
-    pagination: { page: Number(pagination.page) || page, count, total, totalPages: Math.max(1, Number(pagination.totalPages) || Math.ceil(total / count)), category: category || null },
+    pagination: { page: 1, count: BLOG_OVERVIEW_CATEGORY_LIMIT, total, totalPages: 1, category: null },
   }
 }
 

@@ -50,6 +50,7 @@ export interface BlogArticle extends BlogPost {
 export interface BlogListResponse {
   ok: true
   blogs: BlogPost[]
+  featured?: BlogPost[]
   categories: BlogCategory[]
   pagination: { total: number; count: number; page: number; totalPages: number; category: string | null }
 }

@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict'
+import http from 'node:http'
 import { test } from 'node:test'
+import { createJiti } from 'jiti'
 import { blogDate, blogUrl, extractBlogFaqSchema, isPublishedBlog, normalizeBlogPost, sanitizeBlogHtml } from '../utils/blog-content.ts'
 import { getRouteOgImage, resolveSeoImageUrl, ROUTE_OG_IMAGE_MAP } from '../composables/useAppSeo.ts'
 
@@ -251,5 +253,113 @@ test('OG image configurations across routes', async () => {
   assert.equal(resolveSeoImageUrl('', 'https://2bet.com'), 'https://2bet.com/brand/2bet-og.webp')
   assert.equal(resolveSeoImageUrl(undefined, 'https://2bet.com'), 'https://2bet.com/brand/2bet-og.webp')
   assert.equal(resolveSeoImageUrl('https://cdn.2bet.com/custom.webp', 'https://2bet.com'), 'https://cdn.2bet.com/custom.webp')
+})
+
+test('/blogs overview shows latest 5 per category + latest 10 slider, and category pages paginate 20 per page', async () => {
+  const fs = await import('node:fs')
+  const path = await import('node:path')
+  const rootDir = process.cwd()
+  const jiti = createJiti(import.meta.url, { alias: { '~': rootDir, '@': rootDir } })
+  const { readBlogList } = jiti(path.resolve(rootDir, 'server/utils/bloggerist.ts'))
+
+  const makePost = (slug, categorySlug, categoryName, dayOffset) => ({
+    id: slug,
+    slug,
+    title: `Post ${slug}`,
+    status: 'published',
+    isPublic: true,
+    category: { name: categoryName, slug: categorySlug },
+    publishedAt: 1790000000 - dayOffset * 86400,
+    writer: { name: 'Editor', role_name: 'Writer', profile_image: '' },
+  })
+
+  const allSlots = Array.from({ length: 25 }, (_, i) => makePost(`slot-${i + 1}`, 'slots', 'Slots', i))
+  const allGuides = Array.from({ length: 7 }, (_, i) => makePost(`guide-${i + 1}`, 'guides', 'Guides', i + 1))
+  const allCombined = [...allSlots, ...allGuides].sort((a, b) => Date.parse(a.publishedAt ? new Date(a.publishedAt * 1000).toISOString() : '') < Date.parse(b.publishedAt ? new Date(b.publishedAt * 1000).toISOString() : '') ? 1 : -1)
+    .sort((a, b) => b.publishedAt - a.publishedAt)
+
+  const server = http.createServer((req, res) => {
+    const reqUrl = new URL(req.url, 'http://127.0.0.1')
+    res.writeHead(200, { 'Content-Type': 'application/json' })
+    if (reqUrl.pathname === '/api/blog-category-list.php') {
+      res.end(JSON.stringify({
+        ok: true,
+        categories: [
+          { id: 'slots', name: 'Slots', slug: 'slots', postCount: allSlots.length },
+          { id: 'guides', name: 'Guides', slug: 'guides', postCount: allGuides.length },
+          { id: 'empty', name: 'Empty', slug: 'empty', postCount: 0 },
+        ],
+      }))
+      return
+    }
+    if (reqUrl.pathname === '/api/blog-post-list.php') {
+      const cat = reqUrl.searchParams.get('category') || ''
+      const count = Number(reqUrl.searchParams.get('count') || 10)
+      const page = Number(reqUrl.searchParams.get('page') || 1)
+      const pool = cat === 'slots' ? allSlots : cat === 'guides' ? allGuides : allCombined
+      const slice = pool.slice((page - 1) * count, page * count)
+      res.end(JSON.stringify({
+        ok: true,
+        blogs: slice,
+        pagination: {
+          page,
+          count,
+          total: pool.length,
+          totalPages: Math.max(1, Math.ceil(pool.length / count)),
+        },
+      }))
+      return
+    }
+    res.end(JSON.stringify({ ok: false }))
+  })
+
+  await new Promise(done => server.listen(0, '127.0.0.1', done))
+  const { port } = server.address()
+  const mockOrigin = `http://127.0.0.1:${port}`
+
+  const prevFetch = globalThis.$fetch
+  const prevConfig = globalThis.useRuntimeConfig
+  globalThis.useRuntimeConfig = () => ({ bloggeristUrl: mockOrigin })
+  globalThis.$fetch = async (url, opts = {}) => {
+    const u = new URL(url)
+    if (opts.query) {
+      for (const [k, v] of Object.entries(opts.query)) u.searchParams.set(k, String(v))
+    }
+    const r = await fetch(u.href)
+    return r.json()
+  }
+
+  try {
+    const fakeEvent = { context: { nitro: { runtimeConfig: { bloggeristUrl: mockOrigin } } } }
+
+    // 1. Overview (/blogs): latest 10 in slider, up to latest 5 per category, single overview page
+    const overview = await readBlogList(fakeEvent, 1, 10, '')
+    assert.equal(overview.featured.length, 10, 'Slider on /blogs must hold latest 10 blogs')
+    assert.equal(overview.blogs.filter(p => p.category?.slug === 'slots').length, 5, 'Slots group on /blogs must show latest 5')
+    assert.equal(overview.blogs.filter(p => p.category?.slug === 'guides').length, 5, 'Guides group on /blogs must show latest 5')
+    assert.equal(overview.pagination.totalPages, 1)
+
+    // 2. Category page 1 (/blogs/slots): 20 blogs per page, slider latest 10
+    const catPage1 = await readBlogList(fakeEvent, 1, 20, 'slots')
+    assert.equal(catPage1.blogs.length, 20, 'Category page 1 must return 20 blogs')
+    assert.equal(catPage1.pagination.totalPages, 2)
+    assert.equal(catPage1.featured.length, 10, 'Slider in category page must show latest 10 blogs')
+
+    // 3. Category page 2 (/blogs/slots?page=2): remaining 5 blogs, slider still latest 10
+    const catPage2 = await readBlogList(fakeEvent, 2, 20, 'slots')
+    assert.equal(catPage2.blogs.length, 5, 'Category page 2 must return remaining 5 blogs')
+    assert.equal(catPage2.pagination.page, 2)
+    assert.equal(catPage2.featured.length, 10, 'Slider on page 2 must still show latest 10 blogs')
+  } finally {
+    globalThis.$fetch = prevFetch
+    globalThis.useRuntimeConfig = prevConfig
+    await new Promise(done => server.close(done))
+  }
+
+  const listingVue = fs.readFileSync(path.resolve(rootDir, 'components/blogs/BlogListing.vue'), 'utf-8')
+  assert.match(listingVue, /OVERVIEW_CATEGORY_LIMIT\s*=\s*5/)
+  assert.match(listingVue, /CATEGORY_PAGE_SIZE\s*=\s*20/)
+  assert.match(listingVue, /SLIDER_POST_LIMIT\s*=\s*10/)
+  assert.match(listingVue, /v-if="category && pagination && pagination\.totalPages > 1"/)
 })
 
