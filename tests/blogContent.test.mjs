@@ -25,20 +25,56 @@ test('CMS links and images reject encoded executable schemes and preserve valid 
 test('CMS URL normalization supports configured media origins and rejects unsafe URLs', () => {
   assert.equal(blogUrl('[insert_domain_here]/uploads/blogs/a.webp', origin), `${origin}/uploads/blogs/a.webp`)
   assert.equal(blogUrl('/uploads/blogs/a.webp', origin), `${origin}/uploads/blogs/a.webp`)
+  assert.equal(blogUrl('uploads/blogs/a.webp', origin), `${origin}/uploads/blogs/a.webp`)
+  assert.equal(blogUrl('/admin/uploads/blogs/a.webp', origin), `${origin}/uploads/blogs/a.webp`)
+  assert.equal(blogUrl('https://2bet.com/uploads/blogs/avatar.webp', origin), `${origin}/uploads/blogs/avatar.webp`)
+  assert.equal(blogUrl('https://cdn.example.com/custom.webp', origin), 'https://cdn.example.com/custom.webp')
   assert.equal(blogUrl('java&colon;script:bad', origin), '')
   assert.equal(blogUrl('javascript&colon;bad', origin, true), '')
   assert.equal(blogUrl(`${origin}/blog/guide/`, origin, true), '/blog/guide')
   assert.equal(blogUrl(`${origin}/blogs/guides?page=2`, origin, true), '/blogs/guides?page=2')
 })
 
-test('blog data normalizes timestamps, preserves authored titles and excludes private fields', () => {
-  const post = normalizeBlogPost({ id: 3, slug: 'guide', title: 'Guide | 2bet', featuredImage: '/uploads/a.webp', publishedAt: 1700000000, readTime: 3, writer: { name: 'Writer', role_name: 'Editor', password_hash: 'private' }, secret: 'private' }, origin)
+test('blog data normalizes timestamps, preserves authored titles, resolves writer upload avatar to BLOGGERIST_URL, and excludes private fields', () => {
+  const post = normalizeBlogPost({
+    id: 3,
+    slug: 'guide',
+    title: 'Guide | 2bet',
+    featuredImage: 'https://2bet.com/uploads/a.webp',
+    publishedAt: 1700000000,
+    readTime: 3,
+    writer: { name: 'Writer', role_name: 'Editor', profile_image: 'https://2bet.com/uploads/blogs/writer123.webp', password_hash: 'private' },
+    secret: 'private',
+  }, origin)
   assert.equal(post.title, 'Guide | 2bet')
   assert.equal(post.readTime, '3')
   assert.equal(post.publishedAt, '2023-11-14T22:13:20.000Z')
   assert.equal(post.writer.name, 'Writer')
+  assert.equal(post.featuredImage, `${origin}/uploads/a.webp`)
+  assert.equal(post.writer.profile_image, `${origin}/uploads/blogs/writer123.webp`)
   assert.doesNotMatch(JSON.stringify(post), /private|password_hash|secret/)
   assert.equal(blogDate('not a date'), null)
+
+  const emptyAvatarPost = normalizeBlogPost({
+    id: 4,
+    slug: 'no-avatar',
+    title: 'No Avatar',
+    writer: { name: 'Writer', role_name: 'Editor', profile_image: '' },
+  }, origin)
+  assert.equal(emptyAvatarPost.writer.profile_image, '')
+})
+
+test('BlogArticle resolves author avatar uploads via BLOGGERIST_URL and handles fallback image when empty or errored', async () => {
+  const fs = await import('node:fs')
+  const path = await import('node:path')
+  const articleVue = fs.readFileSync(path.resolve(process.cwd(), 'components/blogs/BlogArticle.vue'), 'utf-8')
+
+  assert.match(articleVue, /blogUrl\(raw,\s*bloggeristBaseUrl\.value\)/)
+  assert.match(articleVue, /config\.public\.bloggeristUrl/)
+  assert.match(articleVue, /effectiveTheme\.value\s*===\s*'light'\s*\?\s*'\/brand\/2bet-light\.webp'\s*:\s*'\/brand\/2bet-logo\.webp'/)
+  assert.match(articleVue, /@error="!isAuthorAvatarFallback && \(authorAvatarFailed = true\)"/)
+  assert.match(articleVue, /class="blog-author-box__avatar"/)
+  assert.match(articleVue, /blog-author-box__avatar--fallback/)
 })
 
 test('drafts, private and future scheduled posts cannot appear publicly', () => {

@@ -8,7 +8,7 @@ import BlogHeader from './BlogHeader.vue'
 import BlogImage from './BlogImage.vue'
 import { formatBlogReadTime } from './formatReadTime'
 import type { BlogPost } from '~/types/blog'
-import { extractBlogFaqSchema } from '~/utils/blog-content'
+import { blogUrl, extractBlogFaqSchema } from '~/utils/blog-content'
 import { resolveSeoImageUrl } from '~/composables/useAppSeo'
 import { buildBybetRedirectUrl } from '~/utils/sportsRedirect'
 
@@ -28,6 +28,7 @@ interface BlogDetailResponse {
 const route = useRoute()
 const config = useRuntimeConfig()
 const { locale } = useSiteLocale()
+const { effectiveTheme } = useSiteTheme()
 const slug = computed(() => String(route.params.slug || ''))
 const isPreview = computed(() => route.query.preview === '1' || route.query.preview === 'true')
 const { data, error, status, refresh } = await useFetch<BlogDetailResponse>(() => `/api/blogs/${encodeURIComponent(slug.value)}`, {
@@ -61,7 +62,7 @@ const copy = computed(() => locale.value === 'pt' ? {
   vipTitle: 'Grupo VIP High Roller',
   vipDesc: 'Cashback e Vantagens Exclusivas',
   ctaTitle: 'Pronto para testar esta estratégia vencedora?',
-  ctaSubtitle: 'Reivindique seu bônus de boas-vindas grátis de ₱180 no seu primeiro jogo!',
+  ctaSubtitle: 'Reivindique seu bônus de boas-vindas grátis de R$20 no seu primeiro jogo!',
   playNow: 'JOGAR AGORA',
 } : {
   blog: 'Blog', home: 'Home', breadcrumbs: 'Breadcrumbs', back: 'All articles', related: 'Read next', by: 'By', updated: 'Updated',
@@ -86,7 +87,7 @@ const copy = computed(() => locale.value === 'pt' ? {
   vipTitle: 'VIP High Roller Group',
   vipDesc: 'Exclusive Cashback & Perks',
   ctaTitle: 'Ready to test this winning strategy?',
-  ctaSubtitle: 'Claim your ₱180 free Welcome Bonus on your first game!',
+  ctaSubtitle: 'Claim your R$20 free Welcome Bonus on your first game!',
   playNow: 'PLAY NOW',
 })
 const displayDate = (value: string | null | undefined, fallback = '') => {
@@ -99,6 +100,23 @@ const canonical = computed(() => `${siteUrl.value}/blog/${encodeURIComponent(slu
 const metaTitle = computed(() => post.value?.seoTitle || post.value?.title || copy.value.blog)
 const description = computed(() => post.value?.seoDescription || post.value?.excerpt || '')
 const playNowUrl = computed(() => buildBybetRedirectUrl('login'))
+const bloggeristBaseUrl = computed(() => String(config.public.bloggeristUrl || '').trim().replace(/\/+$/, ''))
+const authorAvatarFailed = ref(false)
+const authorAvatarFallback = computed(() =>
+  effectiveTheme.value === 'light' ? '/brand/2bet-light.webp' : '/brand/2bet-logo.webp',
+)
+const resolvedAuthorAvatar = computed(() => {
+  const raw = String(post.value?.writer?.profile_image || '').trim()
+  if (!raw) return ''
+  return bloggeristBaseUrl.value ? (blogUrl(raw, bloggeristBaseUrl.value) || raw) : raw
+})
+const isAuthorAvatarFallback = computed(() => !resolvedAuthorAvatar.value || authorAvatarFailed.value)
+const authorAvatarSrc = computed(() =>
+  isAuthorAvatarFallback.value ? authorAvatarFallback.value : resolvedAuthorAvatar.value,
+)
+watch(resolvedAuthorAvatar, () => {
+  authorAvatarFailed.value = false
+})
 
 const copied = ref(false)
 let copyTimeout: ReturnType<typeof setTimeout> | null = null
@@ -166,7 +184,7 @@ useHead(() => ({
           '@type': 'Person',
           name: post.value.writer?.name || post.value.author || String(config.public.siteName || '2bet'),
           jobTitle: post.value.writer?.role_name || undefined,
-          image: post.value.writer?.profile_image || undefined,
+          image: resolvedAuthorAvatar.value || undefined,
         },
         publisher: {
           '@type': 'Organization',
@@ -300,8 +318,19 @@ useHead(() => ({
                 <span class="blog-author-box__badge"><Check :size="11" aria-hidden="true" /> {{ post.writer?.role_name || copy.writerBadge }}</span>
               </div>
               <div class="blog-author-box__body">
-                <div class="blog-author-box__avatar-wrap">
-                  <img :src="post.writer?.profile_image || '/brand/2bet-logo.webp'" :alt="post.writer?.name || post.author || copy.author" class="blog-author-box__avatar">
+                <div
+                  class="blog-author-box__avatar-wrap"
+                  :class="{ 'blog-author-box__avatar-wrap--fallback': isAuthorAvatarFallback }"
+                >
+                  <img
+                    :src="authorAvatarSrc"
+                    :alt="post.writer?.name || post.author || copy.author"
+                    class="blog-author-box__avatar"
+                    :class="{ 'blog-author-box__avatar--fallback': isAuthorAvatarFallback }"
+                    loading="lazy"
+                    decoding="async"
+                    @error="!isAuthorAvatarFallback && (authorAvatarFailed = true)"
+                  >
                   <span class="blog-author-box__verified" title="Verified Writer"><Check :size="11" aria-hidden="true" /></span>
                 </div>
                 <div class="blog-author-box__content">
@@ -455,7 +484,9 @@ useHead(() => ({
 .blog-author-box__badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: rgba(0, 148, 64, 0.18); border: 1px solid #009440; color: #45d892; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
 .blog-author-box__body { display: flex; gap: 16px; align-items: flex-start; }
 .blog-author-box__avatar-wrap { position: relative; flex-shrink: 0; width: 68px; height: 68px; border-radius: 12px; border: 2px solid #009440; overflow: visible; background: #10241b; }
+.blog-author-box__avatar-wrap--fallback { display: grid; place-items: center; padding: 8px; }
 .blog-author-box__avatar { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
+.blog-author-box__avatar--fallback { object-fit: contain; border-radius: 6px; }
 .blog-author-box__verified { position: absolute; bottom: -4px; right: -4px; width: 18px; height: 18px; border-radius: 999px; background: #009440; color: #fff; display: grid; place-items: center; border: 2px solid var(--surface); }
 .blog-author-box__content { flex: 1; min-width: 0; }
 .blog-author-box__name { margin: 0; color: var(--heading); font-size: 16px; font-weight: 800; }

@@ -13,13 +13,24 @@ const decodeUrl = (value: string) => value.replace(/&#(x[0-9a-f]+|\d+);?/gi, (_,
 export function blogUrl(value: unknown, origin: string, link = false): string {
   let raw = decodeUrl(string(value))
   if (!raw) return ''
-  if (raw.startsWith('[insert_domain_here]')) raw = raw.replace('[insert_domain_here]', origin)
+  const cleanOrigin = origin.replace(/\/+$/, '')
+  if (raw.startsWith('[insert_domain_here]')) raw = raw.replace('[insert_domain_here]', cleanOrigin)
   if (link && /^#[\w-]+$/.test(raw)) return `#blog-content-${raw.slice(1)}`
+  if (!cleanOrigin) {
+    if (!link && /^\/(?:admin\/)?uploads\//i.test(raw)) {
+      return raw.replace(/^\/admin(\/uploads\/)/i, '$1')
+    }
+    return !link && /^uploads\//i.test(raw) ? `/${raw}` : ''
+  }
   try {
-    const url = new URL(raw, `${origin.replace(/\/+$/, '')}/`)
+    const url = new URL(raw, `${cleanOrigin}/`)
     if (link && ['mailto:', 'tel:'].includes(url.protocol)) return url.href
     if (!['http:', 'https:'].includes(url.protocol)) return ''
-    if (link && url.origin === new URL(origin).origin) {
+    if (!link && /^\/(?:admin\/)?uploads\//i.test(url.pathname)) {
+      const normalizedPath = url.pathname.replace(/^\/admin(\/uploads\/)/i, '$1')
+      return `${cleanOrigin}${normalizedPath}${url.search}${url.hash}`
+    }
+    if (link && url.origin === new URL(cleanOrigin).origin) {
       if (/^\/blog\//.test(url.pathname)) return `/blog/${url.pathname.split('/')[2]}${url.search}${url.hash}`
       if (/^\/(?:blogs?|bonuses?|sports|egames|entertainment|tutorial|game-rules|account|help|legal)(?:\/|$)/.test(url.pathname)) return `${url.pathname}${url.search}${url.hash}`
     }
@@ -39,7 +50,13 @@ export function blogDate(value: unknown): string | null {
 export function normalizeBlogPost(value: unknown, origin: string): BlogPost {
   const post = asRecord(value)
   const category = asRecord(post.category)
-  const writer = asRecord(post.writer || post.about_author)
+  const writer = asRecord(post.writer)
+  const aboutAuthor = asRecord(post.about_author)
+  const writerName = string(writer.name) || string(aboutAuthor.name) || string(post.author) || 'Editorial Team'
+  const writerProfileRaw = string(writer.profile_image)
+    || string(aboutAuthor.profile_image)
+    || string(writer.avatar)
+    || string(aboutAuthor.avatar)
   return {
     id: String(post.id ?? ''),
     slug: string(post.slug),
@@ -47,12 +64,12 @@ export function normalizeBlogPost(value: unknown, origin: string): BlogPost {
     status: string(post.status || 'published'),
     excerpt: string(post.excerpt),
     featuredImage: blogUrl(post.featuredImage, origin),
-    author: string(writer.name) || string(post.author) || 'Editorial Team',
+    author: writerName,
     writer: {
-      name: string(writer.name) || string(post.author) || 'Editorial Team',
-      role_name: string(writer.role_name),
-      profile_image: blogUrl(writer.profile_image, origin),
-      bio: string(writer.bio),
+      name: writerName,
+      role_name: string(writer.role_name) || string(aboutAuthor.role_name),
+      profile_image: blogUrl(writerProfileRaw, origin),
+      bio: string(writer.bio) || string(aboutAuthor.bio),
     },
     category: category.slug ? { id: String(category.id ?? ''), name: string(category.name), slug: string(category.slug) } : null,
     tags: Array.isArray(post.tags) ? post.tags.map((tag: unknown) => ({ name: string(asRecord(tag).name), slug: string(asRecord(tag).slug) })).filter((tag: { name: string }) => tag.name) : [],
