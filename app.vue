@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
+import { normalizeGoogleAnalyticsId, normalizeGoogleTagId } from '~/utils/googleTracking'
 
 const LightModeTheme = defineAsyncComponent(() => import('~/components/LightModeTheme.vue'))
 const { locale, restoreLocale } = useSiteLocale()
@@ -7,6 +8,12 @@ const { restoreTimeZone } = useTimeZonePreference()
 const runtimeConfig = useRuntimeConfig()
 const googleSiteVerification = computed(() =>
   String(runtimeConfig.public.googleSiteVerification || '').trim().replace(/^['"]+|['"]+$/g, ''),
+)
+const googleAnalyticsId = computed(() =>
+  normalizeGoogleAnalyticsId(runtimeConfig.public.googleAnalyticsId),
+)
+const googleTagId = computed(() =>
+  normalizeGoogleTagId(runtimeConfig.public.googleTagId),
 )
 const {
   applyTheme,
@@ -36,6 +43,34 @@ useHead(() => ({
             key: 'google-site-verification',
             name: 'google-site-verification',
             content: googleSiteVerification.value,
+          },
+        ]
+      : []),
+  ],
+  script: [
+    ...(googleTagId.value
+      ? [
+          {
+            key: 'google-tag-gtm',
+            async: true,
+            src: `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(googleTagId.value)}`,
+          },
+          {
+            key: 'google-tag-init',
+            innerHTML: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());",
+          },
+        ]
+      : []),
+    ...(googleAnalyticsId.value
+      ? [
+          {
+            key: 'google-analytics-gtag',
+            async: true,
+            src: `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(googleAnalyticsId.value)}`,
+          },
+          {
+            key: 'google-analytics-init',
+            innerHTML: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config",${JSON.stringify(googleAnalyticsId.value)});`,
           },
         ]
       : []),

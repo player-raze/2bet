@@ -38,6 +38,10 @@ const processGlobal = (
         INDEX_FOLLOW?: string
         GOOGLE_SITE_VERIFICATION?: string
         NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION?: string
+        GOOGLE_ANALYTICS_ID?: string
+        NUXT_PUBLIC_GOOGLE_ANALYTICS_ID?: string
+        GOOGLE_TAG_ID?: string
+        NUXT_PUBLIC_GOOGLE_TAG_ID?: string
         LIVESTREAM_API?: string
         INPLAY_API?: string
         BLOGGERIST_URL?: string
@@ -56,6 +60,16 @@ const googleSiteVerification = (
   environment?.NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION
   ?? environment?.GOOGLE_SITE_VERIFICATION
   ?? 'iMHXS_4N09-cqe9bTddjAfgTyYx53sg6yFsVkhaZWEk'
+).trim().replace(/^['"]+|['"]+$/g, '')
+const googleAnalyticsId = (
+  environment?.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID
+  ?? environment?.GOOGLE_ANALYTICS_ID
+  ?? ''
+).trim().replace(/^['"]+|['"]+$/g, '')
+const googleTagId = (
+  environment?.NUXT_PUBLIC_GOOGLE_TAG_ID
+  ?? environment?.GOOGLE_TAG_ID
+  ?? ''
 ).trim().replace(/^['"]+|['"]+$/g, '')
 const bloggeristUrl = (
   environment?.NUXT_PUBLIC_BLOGGERIST_URL
@@ -91,6 +105,8 @@ export default defineNuxtConfig({
       siteUrl: (environment?.SITE_URL || 'https://2bet.com').replace(/\/+$/, ''),
       indexFollow: isIndexFollow,
       googleSiteVerification,
+      googleAnalyticsId,
+      googleTagId,
       bloggeristUrl,
     },
     kadarioApi: environment?.KADARIO_API || 'https://live88.eu.cc/',

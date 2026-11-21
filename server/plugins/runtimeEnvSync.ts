@@ -1,4 +1,5 @@
 import { readDotEnvMap } from '~/server/utils/siteUrl'
+import { normalizeGoogleAnalyticsId, normalizeGoogleTagId, readBloggeristSeoSettings } from '~/server/utils/bloggerist'
 
 function resolveEnvOverride(
   dotEnv: Record<string, string>,
@@ -111,5 +112,25 @@ export default defineNitroPlugin((nitroApp) => {
       config.bloggeristUrl = resolvedBloggeristUrl
       config.public.bloggeristUrl = resolvedBloggeristUrl
     }
+
+    const googleAnalyticsIdRaw = resolveEnvOverride(
+      dotEnv,
+      'NUXT_PUBLIC_GOOGLE_ANALYTICS_ID',
+      'GOOGLE_ANALYTICS_ID',
+    )
+    const envGaId = normalizeGoogleAnalyticsId(
+      googleAnalyticsIdRaw !== undefined ? googleAnalyticsIdRaw : config.public.googleAnalyticsId,
+    )
+    const googleTagIdRaw = resolveEnvOverride(
+      dotEnv,
+      'NUXT_PUBLIC_GOOGLE_TAG_ID',
+      'GOOGLE_TAG_ID',
+    )
+    const envGoogleTagId = normalizeGoogleTagId(
+      googleTagIdRaw !== undefined ? googleTagIdRaw : config.public.googleTagId,
+    )
+    const bloggeristSeo = await readBloggeristSeoSettings(event)
+    config.public.googleAnalyticsId = bloggeristSeo.googleAnalyticsId || envGaId
+    config.public.googleTagId = bloggeristSeo.googleTagId || envGoogleTagId
   })
 })

@@ -2,13 +2,100 @@ import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { getHeader, readBody, sendRedirect, setHeader, setResponseStatus, type H3Event } from 'h3'
 import { asRecord, isPublishedBlog, normalizeBlogPost, sanitizeBlogHtml } from '../../utils/blog-content'
+import { normalizeGoogleAnalyticsId, normalizeGoogleTagId } from '../../utils/googleTracking'
 import type { BlogArticle, BlogCategory, BlogListResponse } from '../../types/blog'
+
+export { normalizeGoogleAnalyticsId, normalizeGoogleTagId }
 
 export interface PlaynowClickResult {
   ok: boolean
   totalClicks: number
   locationClicks: number
   forwardedTo?: string
+}
+
+export interface BloggeristSeoSettings {
+  googleAnalyticsId: string
+  googleTagId: string
+  raw: Record<string, unknown>
+}
+
+const SEO_SETTINGS_CACHE_TTL_MS = 5000
+const seoSettingsCache = new Map<string, { value: BloggeristSeoSettings; expiresAt: number }>()
+const seoSettingsInFlight = new Map<string, Promise<BloggeristSeoSettings>>()
+
+export function clearBloggeristSeoSettingsCache(): void {
+  seoSettingsCache.clear()
+  seoSettingsInFlight.clear()
+}
+
+export async function readBloggeristSeoSettings(event: H3Event): Promise<BloggeristSeoSettings> {
+  let origin = ''
+  try {
+    origin = bloggeristOrigin(event)
+  } catch {
+    return { googleAnalyticsId: '', googleTagId: '', raw: {} }
+  }
+
+  const now = Date.now()
+  const cached = seoSettingsCache.get(origin)
+  if (cached && cached.expiresAt > now) {
+    return cached.value
+  }
+
+  const pending = seoSettingsInFlight.get(origin)
+  if (pending) {
+    return pending
+  }
+
+  const task = (async (): Promise<BloggeristSeoSettings> => {
+    try {
+      const response = await fetch(`${origin}/api/settings/seo.php`, {
+        headers: { Accept: 'application/json' },
+        signal: AbortSignal.timeout(2500),
+      })
+      if (!response.ok) {
+        const empty: BloggeristSeoSettings = { googleAnalyticsId: '', googleTagId: '', raw: {} }
+        seoSettingsCache.set(origin, { value: empty, expiresAt: Date.now() + SEO_SETTINGS_CACHE_TTL_MS })
+        return empty
+      }
+
+      const json = await response.json().catch(() => null)
+      const data = asRecord(json)
+      const settings = asRecord(data.settings)
+      const googleAnalyticsId = data.ok === true
+        ? normalizeGoogleAnalyticsId(settings.google_analytics_id)
+        : ''
+      const googleTagId = data.ok === true
+        ? (
+            [
+              settings.google_tag_id,
+              settings.google_tag,
+              settings.google_tag_manager_id,
+              settings.gtm_id,
+            ]
+              .map(normalizeGoogleTagId)
+              .find(Boolean) || ''
+          )
+        : ''
+      const result: BloggeristSeoSettings = {
+        googleAnalyticsId,
+        googleTagId,
+        raw: data.ok === true ? settings : {},
+      }
+      seoSettingsCache.set(origin, { value: result, expiresAt: Date.now() + SEO_SETTINGS_CACHE_TTL_MS })
+      return result
+    } catch {
+      const empty: BloggeristSeoSettings = { googleAnalyticsId: '', googleTagId: '', raw: {} }
+      seoSettingsCache.set(origin, { value: empty, expiresAt: Date.now() + SEO_SETTINGS_CACHE_TTL_MS })
+      return empty
+    } finally {
+      seoSettingsInFlight.delete(origin)
+    }
+  })()
+
+  seoSettingsInFlight.set(origin, task)
+  return task
 }
 
 function cleanClickText(value: unknown, maxLength: number): string {
